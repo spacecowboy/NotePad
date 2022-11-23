@@ -16,10 +16,8 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,20 +26,28 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
+import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
+
 /**
- * Full copy of DialogPassword, but extending native fragment class instead.
- * It is called when the user changes the existing password. It asks to input the old password.
+ * Full copy of {@link DialogPassword}, but extending native fragment class
+ * {@link android.app.DialogFragment} instead.
+ * It is called when the user changes the existing password.
+ * It asks to input the old password.
  */
 @EFragment(resName = "fragment_dialog_password")
 public class DialogPasswordV11 extends DialogFragment {
+
+	// TODO DialogPassword.java is better. Try to put the functions of this dialog back into that file, then delete this file
+
 	@ViewById(resName = "passwordField")
 	EditText passwordField;
 

@@ -25,7 +25,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -43,6 +45,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -67,7 +70,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
@@ -103,32 +106,41 @@ public class ActivityMain extends AppCompatActivity
 	private static final String SHOWCASED_MAIN = "showcased_main_window";
 	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
 	protected boolean reverseAnimation = false;
+
 	@ViewById(resName = "leftDrawer")
 	ListView leftDrawer;
+
 	@ViewById(resName = "drawerLayout")
 	DrawerLayout drawerLayout;
+
 	@ViewById(resName = "fragment1")
 	View fragment1;
+
 	// Only present on tablets
 	@ViewById(resName = "fragment2")
 	View fragment2;
+
 	// Shown on tablets on start up. Hide on selection
 	@ViewById(resName = "taskHint")
 	View taskHint;
+
 	@SystemService
 	LayoutInflater layoutInflater;
+
 	@SystemService
 	InputMethodManager inputManager;
-	// private MenuItem mSyncMenuItem;
+
 	boolean mAnimateExit = false;
-	// Changes depending on what we're showing since the started activity can
-	// receive new intents
+
+	// Changes depending on what we're showing since the started activity can receive new intents
 	@InstanceState
 	boolean showingEditor = false;
+
 	boolean isDrawerClosed = true;
 	boolean alreadyShowcased = false;
 	boolean alreadyShowcasedDrawer = false;
 	SyncStatusMonitor syncStatusReceiver = null;
+
 	// WIll only be the viewpager fragment
 	ListOpener listOpener = null;
 
@@ -139,8 +151,8 @@ public class ActivityMain extends AppCompatActivity
 
 	// Only not if opening note directly
 	private boolean shouldAddToBackStack = true;
-	private Bundle state;
 
+	private Bundle state;
 	private boolean shouldRestart = false;
 
 	// TODO should we add a FAB ? it's ~useless
@@ -186,7 +198,7 @@ public class ActivityMain extends AppCompatActivity
 				final View focusView = ActivityMain.this.getCurrentFocus();
 				if (inputManager != null && focusView != null) {
 					inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
-									InputMethodManager.HIDE_NOT_ALWAYS);
+							InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 
 				// Should load the same list again
@@ -267,23 +279,17 @@ public class ActivityMain extends AppCompatActivity
 					intent.getData().getPath()
 							.startsWith(TaskList.URI.getPath()))) {
 				try {
-					retval = Long.parseLong(
-							intent.getData().getLastPathSegment());
-				} catch (NumberFormatException e) {
-					retval = -1;
+					retval = Long.parseLong(intent.getData().getLastPathSegment());
+				} catch (NumberFormatException ignored) {
+					// retval remains = -1
 				}
-			} else if (-1 !=
-					intent.getLongExtra(
-							LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
-							-1)) {
+			} else if (-1 != intent
+					.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
 				retval = intent.getLongExtra(
 						LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-			} else if (-1 !=
-					intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-							-1)) {
-				retval =
-						intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-								-1);
+			} else if (-1 != intent
+					.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
+				retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
 			} else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
 				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
 			}
@@ -296,10 +302,10 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	void openList(final long id) {
 		// Open list
-		Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
-		i.setAction(Intent.ACTION_VIEW);
-		i.setData(TaskList.getUri(id));
-		i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		Intent i = new Intent(ActivityMain.this, ActivityMain_.class)
+				.setAction(Intent.ACTION_VIEW)
+				.setData(TaskList.getUri(id))
+				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		// If editor is on screen, we need to reload fragments
 		if (listOpener == null) {
@@ -606,11 +612,8 @@ public class ActivityMain extends AppCompatActivity
 				if (getNoteId(intent) > 0) {
 					right = TaskDetailFragment_.getInstance(getNoteId(intent));
 				} else if (isNoteIntent(intent)) {
-					right = TaskDetailFragment_
-							.getInstance(getNoteShareText(intent),
-									TaskListViewPagerFragment.getAShowList(this,
-											getListId(intent))
-							);
+					right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+							TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
 				}
 			}
 		} else if (isNoteIntent(intent)) {
@@ -1011,13 +1014,18 @@ public class ActivityMain extends AppCompatActivity
 		};
 
 		// Load actual data
-		getSupportLoaderManager().restartLoader(0, null, callbacks);
+		LoaderManager
+				.getInstance(this)
+				.restartLoader(0, null, callbacks);
 		// special views
-		getSupportLoaderManager()
+		LoaderManager
+				.getInstance(this)
 				.restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
-		getSupportLoaderManager()
+		LoaderManager
+				.getInstance(this)
 				.restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
-		getSupportLoaderManager()
+		LoaderManager
+				.getInstance(this)
 				.restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
 	}
 
@@ -1128,9 +1136,10 @@ public class ActivityMain extends AppCompatActivity
 			// Set intent to preserve state when rotating
 			setIntent(intent);
 			// Replace editor fragment
-			getSupportFragmentManager().beginTransaction()
+			getSupportFragmentManager()
+					.beginTransaction()
 					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
-					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId))
+					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		} else {
@@ -1178,7 +1187,7 @@ public class ActivityMain extends AppCompatActivity
 			// it happens sometimes during Espresso tests
 			return;
 		}
-		if (key.equals(MainPrefs.KEY_THEME) || key.equals(getString(R.string.pref_locale))) {
+		if (key.equals(AppearancePrefs.KEY_THEME) || key.equals(getString(R.string.pref_locale))) {
 			shouldRestart = true;
 		} else if (key.startsWith("pref_restart")) {
 			shouldRestart = true;

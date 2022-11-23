@@ -81,17 +81,13 @@ public class MyContentProvider extends ContentProvider {
 		}
 
 		// Legacy URIs, above didn't work for some reason
-		if (uri.toString().startsWith(
-				LegacyDBHelper.NotePad.Lists.CONTENT_URI.toString())
+		if (uri.toString().startsWith(LegacyDBHelper.NotePad.Lists.CONTENT_URI.toString())
 				|| uri.toString().startsWith(
-				LegacyDBHelper.NotePad.Lists.CONTENT_VISIBLE_URI
-						.toString())) {
+				LegacyDBHelper.NotePad.Lists.CONTENT_VISIBLE_URI.toString())) {
 			return TaskList.CONTENT_TYPE;
-		} else if (uri.toString().startsWith(
-				LegacyDBHelper.NotePad.Notes.CONTENT_URI.toString())
+		} else if (uri.toString().startsWith(LegacyDBHelper.NotePad.Notes.CONTENT_URI.toString())
 				|| uri.toString().startsWith(
-				LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI
-						.toString())) {
+						LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI.toString())) {
 			return Task.CONTENT_TYPE;
 		}
 

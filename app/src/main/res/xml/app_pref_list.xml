@@ -15,30 +15,23 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:robobunny="http://schemas.android.com/apk/res-auto"
+
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="preference_screen_list">
 
 	<ListPreference
 		android:key="key_default_list_id"
 		android:title="@string/default_list"/>
 
-	<com.robobunny.SeekBarPreference
-		android:defaultValue="3"
-		android:key="@string/key_pref_item_max_height"
-		android:title="@string/item_max_height"
-		robobunny:max="50"
-		robobunny:min="1"
-		robobunny:unitsRight="@string/rows"/>
-
-	<!-- TODO ready to be replaced. but first we must migrate to androidx preferences
 	<SeekBarPreference
 		android:defaultValue="3"
+		android:key="@string/key_pref_item_max_height"
 		android:max="50"
 		app:min="1"
-		android:summary="write something for the summary"
 		app:showSeekBarValue="true"
-		android:title="@string/item_max_height"/> -->
+		android:title="@string/item_max_height"/>
 
 	<ListPreference
 		android:defaultValue="@string/default_sorttype"
@@ -47,6 +40,7 @@
 		android:key="@string/pref_sorttype"
 		android:summary="Selected option should be here"
 		android:title="@string/sort_list_default"/>
+
 	<ListPreference
 		android:defaultValue="@string/default_listtype"
 		android:entries="@array/listtype_preference"

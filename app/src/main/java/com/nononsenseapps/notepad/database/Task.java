@@ -1050,68 +1050,60 @@ public class Task extends DAO {
 	 */
 	private String getSQLMoveItem(final String edgeCol, final Long edgeVal) {
 		boolean movingLeft = Columns.LEFT.equals(edgeCol);
-		return String
-				.format("UPDATE %1$s SET " +
-								/*
-								 * Left item follows Left = Left + ...
-								 */
-								"%2$s = %2$s + " +
-								" CASE " +
-								// Moving item jumps to target pos
-								" WHEN %2$s IS %5$d " +
-								// ex: left = 5, target = 2, --> left = 5 + (2 - 5) == 2
-								// ex left = 5, target = 9(right), --> left = 5 + (9 - 5
-								// - 1) = 8
-								" THEN " +
-								" (%7$d - %5$d" +
-								(movingLeft ? ") " : " -1) ") +
-								// Sub items take one step opposite
-								// Careful if moving inside subtree, which can only
-								// happen when moving right.
-								// Then only left position changes
-								" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) " +
-								" THEN " +
-								(movingLeft ? " 1 " : " -1 ") +
-								// Items in between from and to positions take two steps
-								// opposite
-								" WHEN %2$s BETWEEN " +
-								(movingLeft ? "%7$d" : "%6$d") +
-								" AND " +
-								(movingLeft ? "%5$d" : "%7$d") +
-								" THEN " +
-								(movingLeft ? " 2 " : " -2 ") +
-								// Not in target range, no change
-								" ELSE 0 END, " +
-								/*
-								 * Right item follows Right = Right + ...
-								 */
-								" %3$s = %3$s + " +
-								" CASE " +
-								// Moving item jumps to target pos
-								" WHEN %3$s IS %6$d " +
-								// ex: right = 7, target = 3(left), --> right = 7 + (3 -
-								// 7 + 1) == 4
-								// ex right = 2, target = 9(right), --> right = 2 + (9 -
-								// 2) = 9
-								" THEN " +
-								" (%7$d - %6$d" +
-								(movingLeft ? " +1) " : ") ") +
-								// Sub items take one step opposite
-								" WHEN %3$s BETWEEN (%5$d + 1) AND (%6$d - 1) " +
-								" THEN " +
-								(movingLeft ? " 1 " : " -1 ") +
-								// Items in between from and to positions take two steps
-								// opposite
-								" WHEN %3$s BETWEEN " +
-								(movingLeft ? "%7$d" : "%6$d") + " AND " +
-								(movingLeft ? "%5$d" : "%7$d") + " THEN " +
-								(movingLeft ? " 2 " : " -2 ") +
-								// Not in target range, no change
-								" ELSE 0 END " +
-								// And limit to the list in question
-								" WHERE %8$s IS %9$d;", TABLE_NAME,
-						Columns.LEFT, Columns.RIGHT, edgeCol, left, right,
-						edgeVal, Columns.DBLIST, dblist);
+		return String.format("UPDATE %1$s SET " +
+						// Left item follows Left = Left + ...
+						"%2$s = %2$s + " +
+						" CASE " +
+						// Moving item jumps to target pos
+						" WHEN %2$s IS %5$d " +
+						// ex: left = 5, target = 2, --> left = 5 + (2 - 5) == 2
+						// ex left = 5, target = 9(right), --> left = 5 + (9 - 5 - 1) = 8
+						" THEN " +
+						" (%7$d - %5$d" +
+						(movingLeft ? ") " : " -1) ") +
+						// Sub items take one step opposite
+						// Careful if moving inside subtree, which can only
+						// happen when moving right.
+						// Then only left position changes
+						" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) " +
+						" THEN " +
+						(movingLeft ? " 1 " : " -1 ") +
+						// Items in between from and to positions take two steps opposite
+						" WHEN %2$s BETWEEN " +
+						(movingLeft ? "%7$d" : "%6$d") +
+						" AND " +
+						(movingLeft ? "%5$d" : "%7$d") +
+						" THEN " +
+						(movingLeft ? " 2 " : " -2 ") +
+						// Not in target range, no change
+						" ELSE 0 END, " +
+						/*
+						 * Right item follows Right = Right + ...
+						 */
+						" %3$s = %3$s + " +
+						" CASE " +
+						// Moving item jumps to target pos
+						" WHEN %3$s IS %6$d " +
+						// ex: right = 7, target = 3(left), --> right = 7 + (3 - 7 + 1) == 4
+						// ex right = 2, target = 9(right), --> right = 2 + (9 -  2) = 9
+						" THEN " +
+						" (%7$d - %6$d" +
+						(movingLeft ? " +1) " : ") ") +
+						// Sub items take one step opposite
+						" WHEN %3$s BETWEEN (%5$d + 1) AND (%6$d - 1) " +
+						" THEN " +
+						(movingLeft ? " 1 " : " -1 ") +
+						// Items in between from and to positions take two steps opposite
+						" WHEN %3$s BETWEEN " +
+						(movingLeft ? "%7$d" : "%6$d") + " AND " +
+						(movingLeft ? "%5$d" : "%7$d") + " THEN " +
+						(movingLeft ? " 2 " : " -2 ") +
+						// Not in target range, no change
+						" ELSE 0 END " +
+						// And limit to the list in question
+						" WHERE %8$s IS %9$d;", TABLE_NAME,
+				Columns.LEFT, Columns.RIGHT, edgeCol, left, right, edgeVal, Columns.DBLIST,
+				dblist);
 	}
 
 	/*

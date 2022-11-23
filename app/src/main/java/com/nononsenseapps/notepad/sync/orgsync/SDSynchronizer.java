@@ -101,14 +101,11 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		// TODO handle errors
 		if (this.configured) {
 			File d = new File(ORG_DIR);
-			if (!d.isDirectory()) {
-				d.mkdir();
-			}
-
-			return this.configured && d.isDirectory();
+			if (!d.isDirectory()) d.mkdir();
+			return d.isDirectory();
+		} else {
+			return false;
 		}
-
-		return this.configured;
 	}
 
 	/**
@@ -195,11 +192,10 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		if (file.exists()) {
 			try {
 				br = new BufferedReader(new FileReader(file));
-			} catch (FileNotFoundException e) {
-				br = null;
+			} catch (FileNotFoundException ignored) {
+				// br remains = null;
 			}
 		}
-
 		return br;
 	}
 

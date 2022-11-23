@@ -16,12 +16,9 @@
   limitations under the License.
 -->
 
-<!-- after switching to androidx fragments, use the suggested view -->
-<fragment
+<androidx.fragment.app.FragmentContainerView
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/fragment"
-	android:name="com.nononsenseapps.notepad.dashclock.TaskSettingsFragment"
+	android:name="com.nononsenseapps.notepad.dashclock.DashclockPrefsFragment"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:layout="@layout/fragment_dialog_prefs"/>
+	android:layout_height="match_parent"/>

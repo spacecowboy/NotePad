@@ -19,21 +19,22 @@ package com.nononsenseapps.notepad.prefs;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
+
+import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 
 import java.util.ArrayList;
 
-public class ListPrefs extends PreferenceFragment {
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+public class ListPrefs extends PreferenceFragmentCompat {
 
+	@Override
+	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_list);
 
@@ -41,18 +42,15 @@ public class ListPrefs extends PreferenceFragment {
 		setEntries((ListPreference) findPreference(getString(R.string.pref_defaultlist)));
 
 		// Bind summaries
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorttype)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_defaultlist)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontfamily)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontstyle)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_body_fontfamily)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
+		PrefsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorttype)));
+		PrefsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_defaultlist)));
+		PrefsActivity.bindPreferenceSummaryToValue(
+				findPreference(getString(R.string.pref_list_title_fontfamily)));
+		PrefsActivity.bindPreferenceSummaryToValue(
+				findPreference(getString(R.string.pref_list_title_fontstyle)));
+		PrefsActivity.bindPreferenceSummaryToValue(
+				findPreference(getString(R.string.pref_list_body_fontfamily)));
+		PrefsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
 
 		//PrefsActivity
 		//		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_listtype)));
@@ -77,16 +75,15 @@ public class ListPrefs extends PreferenceFragment {
 				preference.setSummary(stringValue);
 			}
 
-			hideCheckboxes.setEnabled(
-					stringValue.equals(getString(R.string.const_listtype_tasks)));
-
+			hideCheckboxes.setEnabled(stringValue.equals(getString(R.string.const_listtype_tasks)));
 			return true;
 		};
 		final Preference listtype = findPreference(getString(R.string.pref_listtype));
 		listtype.setOnPreferenceChangeListener(listener);
-		listener.onPreferenceChange(listtype, PreferenceManager.getDefaultSharedPreferences(
-				listtype.getContext()).getString(listtype.getKey(),
-				""));
+		listener.onPreferenceChange(listtype,
+				PreferenceManager
+						.getDefaultSharedPreferences(listtype.getContext())
+						.getString(listtype.getKey(), ""));
 	}
 
 	/**

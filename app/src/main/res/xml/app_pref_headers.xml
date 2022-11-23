@@ -15,51 +15,56 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<header
-		android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
+<!-- a list of all the categories in the preferences page.
+ 	 It is inflated by IndexPrefs.java,
+ 	 which lives in the layout of activity_settings.xml,
+ 	 which is inflated by PrefsActivity.java -->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<Preference
+		android:fragment="com.nononsenseapps.notepad.prefs.AppearancePrefs"
 		android:icon="@drawable/ic_brightness_6_24dp_white"
 		android:summary=""
 		android:title="@string/settings_cat_appearance"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
 		android:icon="@drawable/ic_folder_24dp_white"
 		android:summary=""
 		android:title="@string/settings_list"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
 		android:icon="@drawable/ic_refresh_24dp_white"
 		android:summary=""
 		android:title="@string/settings_cat_syncing"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
 		android:icon="@drawable/ic_alarm_24dp_white"
 		android:summary=""
 		android:title="@string/notifications"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
 		android:icon="@drawable/ic_lock_closed_24dp_white"
 		android:summary=""
 		android:title="@string/password"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
 		android:icon="@drawable/ic_sd_storage_24dp_white"
 		android:summary=""
 		android:title="@string/backup"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
 		android:icon="@drawable/ic_help_24dp_white"
 		android:summary=""
 		android:title="@string/changelog_full_title"/>
-	<header
+	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
 		android:icon="@drawable/ic_info_24dp_white"
 		android:summary=""
 		android:title="@string/about"/>
 
 	<!--
-	<header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
+	<Preference android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
 			android:title="Appereance"
 			android:summary="Set the theme and background transparency">
 		Arbitrary key/value pairs can be included with a header as
@@ -68,4 +73,4 @@
 	</header>
 	-->
 
-</preference-headers>
+</PreferenceScreen>

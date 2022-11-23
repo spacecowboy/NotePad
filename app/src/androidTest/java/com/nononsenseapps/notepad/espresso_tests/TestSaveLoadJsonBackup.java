@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -39,7 +40,9 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		// make a backup
 		openContextualActionModeOverflowMenu();
 		String SETTINGS_TEXT = getStringResource(R.string.menu_preferences);
-		onView(withText(SETTINGS_TEXT)).perform(click());
+		onView(withText(SETTINGS_TEXT))
+				.perform(scrollTo()) // in case the keyboard is covering the menu
+				.perform(click());
 
 		String SETTINGS_BACKUP_TEXT = getStringResource(R.string.backup);
 		onView(withText(SETTINGS_BACKUP_TEXT)).perform(click());

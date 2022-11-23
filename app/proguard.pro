@@ -11,6 +11,7 @@
 
 # Everything in the app is essential
 -keep class com.nononsenseapps.** { *; }
+-keep class com.mobeta.android.** { *; }
 
 # gradle (and stackoverflow) agree that suppressing the warning is appropriate
 -dontwarn com.google.appengine.api.urlfetch.**

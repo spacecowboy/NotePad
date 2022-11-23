@@ -29,7 +29,6 @@
 			app:showAsAction="ifRoom"/>
 
 		<item
-			android:id="@+id/menu_sort"
 			android:icon="@drawable/ic_sort_24dp_white"
 			android:orderInCategory="400"
 			app:showAsAction="ifRoom"

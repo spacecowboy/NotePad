@@ -49,7 +49,6 @@
 			android:src="@drawable/app_icon"/>
 
 		<LinearLayout
-			android:id="@+id/header_spacer"
 			android:layout_width="8dp"
 			android:layout_height="fill_parent"
 			android:orientation="vertical"
@@ -87,7 +86,6 @@
 	</LinearLayout>
 
 	<FrameLayout
-		android:id="@+id/widget_list_container"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1"

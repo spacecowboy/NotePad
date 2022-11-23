@@ -17,15 +17,14 @@
 
 package com.nononsenseapps.notepad;
 
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.widget.Toast;
+
+import com.nononsenseapps.notepad.database.Task;
 
 public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
@@ -40,15 +39,11 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 			Task.setCompleted(context, true,
 					extras.getLong(BaseColumns._ID, -1));
 
-			Toast.makeText(context, context.getString(R.string.completed), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(context, R.string.completed, Toast.LENGTH_SHORT).show();
 
-			// Broadcast that it has been completed, primarily for
-			// AndroidAgendaWidget
-			context.sendBroadcast(new Intent(
-					context.getString(R.string.note_completed_broadcast_intent)));
+			// Broadcast that it has been completed, primarily for AndroidAgendaWidget
+			Intent i = new Intent(context.getString(R.string.note_completed_broadcast_intent));
+			context.sendBroadcast(i);
 		}
-
-
 	}
 }

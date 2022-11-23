@@ -17,8 +17,9 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.util.FileHelper;
@@ -32,6 +33,7 @@ public class DialogExportBackup extends DialogConfirmBaseV11 {
 		DialogExportBackup d = new DialogExportBackup();
 		d.setListener(listener);
 		d.setArguments(new Bundle());
+
 		d.show(fm, TAG);
 	}
 

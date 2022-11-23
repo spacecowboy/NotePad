@@ -16,6 +16,7 @@
 -->
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="app_preference_screen_sync">
 
 	<!--
@@ -29,6 +30,7 @@
 		android:enabled="false"
 		android:key="pref_gtask_section_key"
 		android:persistent="false"
+		app:initialExpandedChildrenCount="0"
 		android:title="@string/gtasks_not_working">
 
 		<SwitchPreference

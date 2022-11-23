@@ -15,7 +15,9 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="preference_screen">
 
 	<PreferenceCategory android:title="@string/dashclock_pref_header_general">
@@ -28,12 +30,14 @@
 			android:key="key_current_theme"
 			android:summary="Selected option should be here"
 			android:title="@string/settings_theme"/>
+
 		<ListPreference
 			android:defaultValue=""
 			android:dialogTitle="@string/settings_lang_dialog"
 			android:key="@string/pref_locale"
 			android:summary="Selected option should be here"
 			android:title="@string/settings_lang"/>
+
 		<!-- Cant set first day of week on Square's calendar, so remove option -->
 		<!--
 		 <ListPreference
@@ -51,6 +55,7 @@
 			android:key="@string/key_pref_dateformat_short"
 			android:title="@string/short_date_format"/>
 	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/editor">
 		<SwitchPreference
 			android:defaultValue="true"

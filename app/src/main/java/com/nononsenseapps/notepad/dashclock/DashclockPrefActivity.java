@@ -18,7 +18,6 @@
 package com.nononsenseapps.notepad.dashclock;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 import android.view.Window;
 
@@ -27,17 +26,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.nononsenseapps.notepad.R;
 
 /**
- * A {@link PreferenceActivity} that presents a set of application settings. On
- * handset devices, settings are presented as a single list. On tablets,
- * settings are split by category, with category headers shown to the left of
- * the list of settings.
- * <p/>
- * See <a href="http://developer.android.com/design/patterns/settings.html">
- * Android Design: Settings</a> for design guidelines and the <a
- * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
- * API Guide</a> for more information on developing a Settings UI.
+ * holds the preferences for dashclock integration. See {@link DashclockPrefsFragment}
  */
-public class TasksSettings extends AppCompatActivity {
+public class DashclockPrefActivity extends AppCompatActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR);
@@ -46,13 +37,10 @@ public class TasksSettings extends AppCompatActivity {
 
 		setContentView(R.layout.activity_dashclock_settings);
 
-		setupActionBar();
-	}
-
-	protected void setupActionBar() {
-		if (getSupportActionBar() == null) return;
-		getSupportActionBar().setIcon(R.drawable.ic_stat_notification_edit);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null){
+			getSupportActionBar().setIcon(R.drawable.ic_stat_notification_edit);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 	}
 
 	@Override

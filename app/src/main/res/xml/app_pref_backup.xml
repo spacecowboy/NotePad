@@ -14,19 +14,22 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="app_preference_backup">
 
 	<ListPreference
-		android:key="key_backup_location"
 		android:dialogIcon="@drawable/ic_folder_24dp_white"
+		android:key="key_backup_location"
 		android:summary="added in BackupPrefs.java, it shows the chosen folder"
 		android:title="@string/choose_backup_folder"/>
 
-	<Preference android:key="backup_import"
+	<Preference
+		android:key="backup_import"
 		android:title="@string/backup_import"/>
 
-	<Preference android:key="backup_export"
+	<Preference
+		android:key="backup_export"
 		android:title="@string/backup_export"/>
 
 </PreferenceScreen>

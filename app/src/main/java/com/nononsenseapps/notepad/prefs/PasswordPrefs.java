@@ -16,21 +16,22 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
-
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
 
 public class PasswordPrefs extends Fragment {
 
@@ -127,9 +128,9 @@ public class PasswordPrefs extends Fragment {
 					.getDefaultSharedPreferences(getActivity()).edit()
 					.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
 					.commit();
-			Toast.makeText(
-					getActivity(),
-					("".equals(newPassword)) ? getText(R.string.password_cleared)
+			Toast.makeText(getActivity(),
+					("".equals(newPassword))
+							? getText(R.string.password_cleared)
 							: getText(R.string.password_set),
 					Toast.LENGTH_SHORT).show();
 		});

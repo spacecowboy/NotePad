@@ -21,6 +21,7 @@
 -->
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:installLocation="internalOnly">
 
 	<!-- For Google tasks synchronization: re-enable them if you want to test it -->
@@ -44,7 +45,7 @@
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.VIBRATE"/>
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
-	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
 	<!-- Define my permissions for the provider -->
 	<permission
@@ -76,7 +77,9 @@
 		<!-- Broadcast receiver for accepting actions from widget for example -->
 		<receiver
 			android:name="com.nononsenseapps.notepad.NotePadBroadcastReceiver"
-			android:exported="true">
+			android:enabled="true"
+			android:exported="true"
+			tools:ignore="ExportedReceiver">
 			<intent-filter>
 				<action android:name="com.nononsenseapps.completenote"/>
 			</intent-filter>
@@ -97,7 +100,9 @@
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
-			<intent-filter android:label="@string/resolve_edit">
+			<intent-filter
+				android:label="@string/resolve_edit"
+				tools:ignore="AppLinkUrlError">
 				<action android:name="android.intent.action.VIEW"/>
 				<action android:name="android.intent.action.EDIT"/>
 
@@ -105,7 +110,9 @@
 
 				<data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list"/>
 			</intent-filter>
-			<intent-filter android:label="@string/resolve_edit">
+			<intent-filter
+				android:label="@string/resolve_edit"
+				tools:ignore="AppLinkUrlError">
 				<action android:name="android.intent.action.INSERT"/>
 				<action android:name="android.intent.action.VIEW"/>
 				<action android:name="android.intent.action.EDIT"/>
@@ -162,9 +169,8 @@
 			android:exported="true"
 			android:label="@string/menu_preferences"
 			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
-			android:theme="@android:style/Theme.DeviceDefault">
-			<!-- TODO migrate to androidx preferences, THEN you can use an appcompat
-			      theme in the settings activity. You can definitely use a day & night theme,
+			android:theme="@style/Theme.AppCompat">
+			<!-- TODO you can definitely use a day & night theme,
 			       but the icons should have ?attr/iconTint in the settings xml files -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
@@ -278,11 +284,11 @@
 				android:value="Displays your tasks from NoNonsense Notes."/>
 			<meta-data
 				android:name="settingsActivity"
-				android:value="com.nononsenseapps.notepad.dashclock.TasksSettings"/>
+				android:value="com.nononsenseapps.notepad.dashclock.DashclockPrefActivity"/>
 		</service>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
+			android:name="com.nononsenseapps.notepad.dashclock.DashclockPrefActivity"
 			android:exported="true"
 			android:label="@string/dashclock_title_activity_tasks_settings"
 			android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"

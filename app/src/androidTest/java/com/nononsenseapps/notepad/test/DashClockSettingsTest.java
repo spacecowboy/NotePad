@@ -23,7 +23,7 @@ import android.Manifest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
-import com.nononsenseapps.notepad.dashclock.TasksSettings;
+import com.nononsenseapps.notepad.dashclock.DashclockPrefActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -36,8 +36,8 @@ public class DashClockSettingsTest {
 	// the replacement, ActivityScenarioRule does not work
 	@SuppressWarnings("deprecation")
 	@Rule
-	public ActivityTestRule<TasksSettings> mActivityRule
-			= new ActivityTestRule<>(TasksSettings.class, false);
+	public ActivityTestRule<DashclockPrefActivity> mActivityRule
+			= new ActivityTestRule<>(DashclockPrefActivity.class, false);
 
 	@Rule
 	public GrantPermissionRule writePermission

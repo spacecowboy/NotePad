@@ -17,8 +17,10 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.app.FragmentManager;
+
 import android.os.Bundle;
+
+import androidx.fragment.app.FragmentManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.util.FileHelper;

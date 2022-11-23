@@ -58,17 +58,6 @@
 		<item name="android:textColor">@android:color/secondary_text_light</item>
 	</style>
 
-	<style name="ViewPagerStyleDarkGrey">
-		<item name="android:background">@android:drawable/dark_header</item>
-		<item name="android:paddingTop">4dp</item>
-		<item name="android:paddingBottom">4dp</item>
-		<item name="android:textColor">?android:attr/textColorSecondary</item>
-	</style>
-
-	<style name="ViewPagerStyleDarkTransparent" parent="@style/ViewPagerStyleDarkGrey">
-		<item name="android:background">@null</item>
-	</style>
-
 	<style name="FragmentHint">
 		<item name="android:enabled">false</item>
 		<item name="android:fontFamily">sans-serif-light</item>
@@ -124,11 +113,6 @@
 	<style name="ListSpaceDividerStyle">
 		<item name="android:divider">@android:color/transparent</item>
 		<item name="android:dividerHeight">4dp</item>
-	</style>
-
-	<style name="ListNarrowDividerStyle">
-		<item name="android:divider">@android:color/transparent</item>
-		<item name="android:dividerHeight">1dp</item>
 	</style>
 
 	<style name="ListOnePxDividerStyle">

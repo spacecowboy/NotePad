@@ -20,23 +20,23 @@ package com.nononsenseapps.notepad.dashclock;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+
+import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 
 import java.util.ArrayList;
 
-public class TaskSettingsFragment extends PreferenceFragment {
-
-	public TaskSettingsFragment() {
-	}
+/**
+ * This app can be used with dashclock. This fragment shows the settings to configure
+ * the dashclock plug-in
+ */
+public class DashclockPrefsFragment extends PreferenceFragmentCompat {
 
 	/**
 	 * A preference value change listener that updates the preference's summary
@@ -69,8 +69,7 @@ public class TaskSettingsFragment extends PreferenceFragment {
 	};
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
 		addPreferencesFromResource(R.xml.dashclock_pref_general);
 
@@ -79,18 +78,9 @@ public class TaskSettingsFragment extends PreferenceFragment {
 		// updated to reflect the new value, per the Android Design
 		// guidelines.
 		bindPreferenceSummaryToValue(findPreference("list_spinner"));
-		setEntries(getActivity(),
-				(ListPreference) findPreference("list_spinner"));
+		setEntries(getActivity(), findPreference("list_spinner"));
 
 		bindPreferenceSummaryToValue(findPreference("list_due_upper_limit"));
-	}
-
-	/**
-	 * Use my own layout to override android's default margins
-	 */
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
-		return inflater.inflate(R.layout.fragment_dialog_prefs, container, false);
 	}
 
 	/**
@@ -109,8 +99,7 @@ public class TaskSettingsFragment extends PreferenceFragment {
 
 		// Trigger the listener immediately with the preference's
 		// current value.
-		sBindPreferenceSummaryToValueListener.onPreferenceChange(
-				preference,
+		sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
 				PreferenceManager
 						.getDefaultSharedPreferences(preference.getContext())
 						.getString(preference.getKey(), "")

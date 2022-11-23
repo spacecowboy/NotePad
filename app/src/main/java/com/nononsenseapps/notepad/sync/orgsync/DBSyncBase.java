@@ -92,23 +92,16 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 		}
 		// Follow with remaining remotes where task is null
 		for (RemoteTask remote : remotes.values()) {
-			Task task = null;
 			OrgNode node = nodes.remove(remote.remoteId.toUpperCase());
-			result.add(new Pair<>(node,
-					new Pair<>(remote, task)));
+			result.add(new Pair<>(node, new Pair<>(remote, null)));
 		}
 		for (RemoteTask remote : remotesDeleted) {
-			Task task = null;
 			OrgNode node = nodes.remove(remote.remoteId.toUpperCase());
-			result.add(new Pair<>(node,
-					new Pair<>(remote, task)));
+			result.add(new Pair<>(node, new Pair<>(remote, null)));
 		}
 		// Last, nodes with no database connections
 		for (OrgNode node : nodes.values()) {
-			Task task = null;
-			RemoteTask remote = null;
-			result.add(new Pair<>(node,
-					new Pair<>(remote, task)));
+			result.add(new Pair<>(node, new Pair<>(/*task=*/ null, /*remote=*/ null)));
 		}
 
 		return result;
@@ -230,63 +223,56 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			if (remote != null && filenames.remove(remote.remoteId)) {
 				final BufferedReader br = getRemoteFile(remote.remoteId);
 				if (br != null) {
-					file = OrgFile.createFromBufferedReader(new RegexParser(), remote.remoteId, br);
+					file = OrgFile.createFromBufferedReader(
+							new RegexParser(), remote.remoteId, br);
 				}
 			}
-			String l = list.title;
+			// list title, if available
+			String l = list == null ? null : list.title;
+
 			String r = null;
-			if (remote != null)
-				r = remote.remoteId;
+			if (remote != null) r = remote.remoteId;
 			String f = null;
-			if (file != null)
-				f = file.getFilename();
+			if (file != null) f = file.getFilename();
 			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-			result.add(new Pair<>(file,
-					new Pair<>(remote, list)));
+			result.add(new Pair<>(file, new Pair<>(remote, list)));
 		}
 
 		// Add remotes that no longer have a list
 		for (RemoteTaskList remote : remotes.values()) {
-			TaskList list = null;
 			OrgFile file = null;
 			// Can be null
 			if (remote != null && filenames.remove(remote.remoteId)) {
 				final BufferedReader br = getRemoteFile(remote.remoteId);
 				if (br != null) {
-					file = OrgFile.createFromBufferedReader(new RegexParser(), remote.remoteId, br);
+					file = OrgFile.createFromBufferedReader(
+							new RegexParser(), remote.remoteId, br);
 				}
 			}
-			String l = null;
 			String r = null;
 			if (remote != null)
 				r = remote.remoteId;
 			String f = null;
 			if (file != null)
 				f = file.getFilename();
-			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
+			Log.d(Synchronizer.TAG, "Pair:" + "(null)" + ", " + r + ", " + f);
 			result.add(new Pair<>(file,
-					new Pair<>(remote, list)));
+					new Pair<>(remote, null)));
 		}
 
 		// Add files that do not exist in database
 		for (String filename : filenames) {
-			TaskList list = null;
-			RemoteTaskList remote = null;
 			OrgFile file = null;
 			final BufferedReader br = getRemoteFile(filename);
 			if (br != null) {
 				file = OrgFile.createFromBufferedReader(new RegexParser(), filename, br);
 			}
-			String l = null;
-			String r = null;
 			String f;
-			// An obvious precaution. If everything is null,
-			// there's nothing to add.
+			// An obvious precaution. If everything is null, there's nothing to add.
 			if (file != null) {
 				f = file.getFilename();
-				Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-				result.add(new Pair<>(file,
-						new Pair<>(remote, list)));
+				Log.d(Synchronizer.TAG, "Pair:" + "(null)" + ", " + "(null)" + ", " + f);
+				result.add(new Pair<>(file, new Pair<>(/*remote=*/null, /*list=*/null)));
 			}
 		}
 
@@ -344,10 +330,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 		}
 	}
 
-	protected boolean wasRenamed(final TaskList list,
-								 final RemoteTaskList dbEntry, final OrgFile file) {
-		return !(OrgConverter.getTitleAsFilename(list)).equals(file.getFilename
-				());
+	protected boolean wasRenamed(final TaskList list, final OrgFile file) {
+		return !(OrgConverter.getTitleAsFilename(list)).equals(file.getFilename());
 	}
 
 	/**

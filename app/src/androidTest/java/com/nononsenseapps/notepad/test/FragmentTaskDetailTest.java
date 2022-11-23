@@ -3,31 +3,21 @@ package com.nononsenseapps.notepad.test;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import android.content.Intent;
-
 import androidx.fragment.app.Fragment;
 
-import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.espresso_tests.BaseTestClass;
+import com.nononsenseapps.notepad.espresso_tests.EspressoHelper;
 
-import org.junit.Before;
 import org.junit.Test;
 
 
 public class FragmentTaskDetailTest extends BaseTestClass {
 
-	@Before
-	public void setUp() {
-		// Set activity Intent
-		// Intent should be task id
-		Intent i = new Intent();
-		i.setAction(Intent.ACTION_EDIT).setData(Task.getUri(1L));
-
-		mActRule.launchActivity(i);
-	}
-
 	@Test
 	public void testFragmentLoaded() {
+
+		EspressoHelper.hideShowCaseViewIfShown();
+		EspressoHelper.createNoteWithName("test note content");
 
 		Fragment fragment = mActRule
 				.getActivity()
@@ -39,7 +29,5 @@ public class FragmentTaskDetailTest extends BaseTestClass {
 
 		Helper.takeScreenshot("Editor_loaded");
 
-		// putting this here avoids crashes
-		mActRule.finishActivity();
 	}
 }

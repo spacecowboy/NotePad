@@ -15,15 +15,16 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="app_preference_screen_notifications">
 
-	<RingtonePreference
+	<!-- RingtonePreference is not supported in androidx: we use the official hack,
+	     see NotificationPrefs.java -->
+	<Preference
 		android:key="@string/key_pref_ringtone"
-		android:ringtoneType="notification"
-		android:showDefault="true"
-		android:showSilent="true"
+		android:summary="filled in NotificationPrefs.java"
 		android:title="@string/sound"/>
 
 	<CheckBoxPreference

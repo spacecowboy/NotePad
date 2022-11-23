@@ -17,51 +17,163 @@
 
 package com.nononsenseapps.notepad.prefs;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.provider.Settings;
+
+import androidx.annotation.Nullable;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 
-public class NotificationPrefs extends PreferenceFragment {
+public class NotificationPrefs extends PreferenceFragmentCompat {
 
-	private Preference disableBatteryOptimizationPref;
+	private static final int REQUEST_CODE_ALERT_RINGTONE = 1;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_notifications);
 
 		PrefsActivity.bindPreferenceSummaryToValue(
 				findPreference(getString(R.string.key_pref_prio)));
-		PrefsActivity.bindPreferenceSummaryToValue(
-				findPreference(getString(R.string.key_pref_ringtone)));
 
-		disableBatteryOptimizationPref
-				= findPreference(getString(R.string.key_pref_ignore_battery_optimizations));
+		// show the initial value of the selected ringtone
+		updateRingtonePrefSummary(
+				findPreference(getString(R.string.key_pref_ringtone)),
+				this.getContext());
+	}
 
-		findPreference(getString(R.string.key_pref_allow_exact_reminders))
-				.setOnPreferenceClickListener(p -> {
-					if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-						// open a settings page to enable exact reminders for this app.
-						// they're enabled by default in the Android 12 emulator
-						Intent i = new Intent()
-								.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-								.setData(Uri.parse("package:" + getContext().getPackageName()));
-						startActivity(i);
-					} else {
-						// not needed before android S
-					}
-					// we don't care about the value
-					return false;
-				});
+	@Override
+	public boolean onPreferenceTreeClick(Preference preference) {
+		final String key = preference.getKey();
+		final String ringtonePrefKey = getString(R.string.key_pref_ringtone);
+		final String allowExactRemindersKey = getString(R.string.key_pref_allow_exact_reminders);
+		final String ignoreBatteryOptimizationKey
+				= getString(R.string.key_pref_ignore_battery_optimizations);
+
+		if (key.equals(ringtonePrefKey)) {
+			// the pseudo-ringtonePreference was clicked => open a system page to pick a ringtone
+			Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+					.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE,
+							RingtoneManager.TYPE_NOTIFICATION)
+					.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+					.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+					.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+							Settings.System.DEFAULT_NOTIFICATION_URI);
+
+			String existingValue = PreferenceManager
+					.getDefaultSharedPreferences(this.getContext())
+					.getString(ringtonePrefKey, null);
+			if (existingValue != null) {
+				Uri existing = existingValue.length() == 0
+						? null // Select "Silent"
+						: Uri.parse(existingValue);
+				intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, existing);
+			} else {
+				// No ringtone has been selected, set to the default
+				intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+						Settings.System.DEFAULT_NOTIFICATION_URI);
+			}
+
+			startActivityForResult(intent, REQUEST_CODE_ALERT_RINGTONE);
+			return true;
+		} else if (key.equals(allowExactRemindersKey)) {
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+				// open a settings page to enable exact reminders for this app.
+				// they're enabled by default in the Android 12 emulator
+				Intent i = new Intent()
+						.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+						.setData(Uri.parse("package:" + getContext().getPackageName()));
+				startActivity(i);
+			} else {
+				// not needed before android S
+			}
+			// we don't care about the value
+			return false;
+		} else if (key.equals(ignoreBatteryOptimizationKey)) {
+			// open the battery settings when clicked
+			Intent i = new Intent()
+					.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+			startActivity(i);
+
+			// the value of this preference is never used,
+			// it's just something the user can click to open a settings page
+			return false;
+		} else {
+			return super.onPreferenceTreeClick(preference);
+		}
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (resultCode != Activity.RESULT_OK || data == null) {
+			// canceled by the user
+			super.onActivityResult(requestCode, resultCode, data);
+			return;
+		}
+
+		if (requestCode == REQUEST_CODE_ALERT_RINGTONE) {
+			// the user picked a ringtone => save it
+			Uri ringtone = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+			String ringtonePrefKey = getString(R.string.key_pref_ringtone);
+			Preference pref = findPreference(ringtonePrefKey);
+
+			// ringtone == null means that "Silent" was selected in the picker
+			String newPrefVal = ringtone == null ? null : ringtone.toString();
+
+			// save the new value
+			PreferenceManager
+					.getDefaultSharedPreferences(this.getContext())
+					.edit()
+					.putString(ringtonePrefKey, newPrefVal)
+					.commit();
+			// show it
+			updateRingtonePrefSummary(pref, this.getContext());
+		} else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+
+	/**
+	 * Get the ringtone name and show it in the summary
+	 *
+	 * @param theRingtonePref a reference to the {@link Preference} object of the ringtone
+	 */
+	private static void updateRingtonePrefSummary(Preference theRingtonePref, Context con) {
+
+		// get the URI saved in the preferences
+		String ringtonePrefKey = con.getString(R.string.key_pref_ringtone);
+		final String ringtonePrefVal = PreferenceManager
+				.getDefaultSharedPreferences(con)
+				.getString(ringtonePrefKey, null);
+		final Uri newVal = ringtonePrefVal == null ? null : Uri.parse(ringtonePrefVal);
+
+		// look up the correct display value using RingtoneManager
+		if (newVal == null) {
+			// Empty values correspond to 'silent' (no ringtone)
+			theRingtonePref.setSummary(R.string.silent);
+		} else {
+			Ringtone ringtone = RingtoneManager.getRingtone(con, newVal);
+			if (ringtone == null) {
+				// Clear the summary if there was a lookup error
+				theRingtonePref.setSummary(null);
+			} else {
+				// Set the summary to reflect the new ringtone display name
+				String name = ringtone.getTitle(con);
+				theRingtonePref.setSummary(name);
+			}
+		}
 	}
 
 	@Override
@@ -73,19 +185,9 @@ public class NotificationPrefs extends PreferenceFragment {
 		int summaryResId = pm.isIgnoringBatteryOptimizations(getContext().getPackageName())
 				? R.string.battery_optimizations_inactive
 				: R.string.battery_optimizations_active;
-		disableBatteryOptimizationPref.setSummary(summaryResId);
 
-		// (if needed) add a listener to open the settings when clicked
-		if (disableBatteryOptimizationPref.getOnPreferenceClickListener() == null)
-			disableBatteryOptimizationPref.setOnPreferenceClickListener(y -> {
-				Intent i = new Intent()
-						.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-				startActivity(i);
-
-				// the value of this preference is never used,
-				// it's just something the user can click to open a settings page
-				return false;
-			});
+		findPreference(getString(R.string.key_pref_ignore_battery_optimizations))
+				.setSummary(summaryResId);
 	}
 
 	// TODO test the app in doze mode: see

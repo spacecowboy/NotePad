@@ -30,10 +30,12 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -140,6 +142,23 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
 		channel.setDescription(description);
+
+		AudioAttributes audioAttrib = new AudioAttributes.Builder()
+				.setUsage(AudioAttributes.USAGE_NOTIFICATION)
+				.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+				.build();
+
+		// get user-chosen ringtone from preferences
+		String ringtone1 = PreferenceManager
+				.getDefaultSharedPreferences(context)
+				.getString(context.getString(R.string.key_pref_ringtone), null);
+		Uri ringtone2 = ringtone1 == null ? null : Uri.parse(ringtone1);
+
+		// channel.setLockscreenVisibility(); // TODO choose a value for this
+
+		// channel.enableVibration(true); // TODO we have to update the vibration and light settings HERE, or they won't work in newer android version
+
+		channel.setSound(ringtone2, audioAttrib); // TODO does it work ?
 		nm.createNotificationChannel(channel);
 	}
 
@@ -249,8 +268,10 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setPriority(priority) // TODO always use NotificationCompat.PRIORITY_DEFAULT instead ?
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
-				.setOnlyAlertOnce(true)
-				.setSound(ringtone);
+				// it's overwritten by the value in the notification channel,
+				// but only in newer android versions
+				.setSound(ringtone)
+				.setOnlyAlertOnce(true);
 	}
 
 	/**

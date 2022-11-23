@@ -20,28 +20,26 @@ package com.nononsenseapps.notepad.prefs;
 import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.view.MenuItem;
 
-import androidx.core.app.NavUtils;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 
-import java.util.List;
 import java.util.Locale;
 
-public class PrefsActivity extends PreferenceActivity {
-
-	private boolean mIsRoot = false;
+/**
+ * The preferences page, holds a list of all preference categories
+ */
+public class PrefsActivity extends AppCompatActivity implements
+		PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +47,37 @@ public class PrefsActivity extends PreferenceActivity {
 		setLanguage();
 
 		// Add the arrow to go back
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		// TODO we should migrate to androidx preferences, and then use getSupportActionbar() with an appcompat theme. see the xml manifest
+
+		// inflates a layout with a fragmentcontainerview, which will
+		// automatically start an instance of IndexPrefs
+		setContentView(R.layout.activity_settings);
+	}
+
+	/**
+	 * called when a settings category is clicked. It opens the appropriate
+	 * preference fragment. From:
+	 * https://developer.android.com/develop/ui/views/components/settings/organize-your-settings
+	 */
+	@Override
+	public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller,
+											 Preference pref) {
+		// Instantiate the new Fragment
+		final Bundle args = pref.getExtras();
+		final Fragment fragment = getSupportFragmentManager()
+				.getFragmentFactory()
+				.instantiate(getClassLoader(), pref.getFragment());
+		fragment.setArguments(args);
+		fragment.setTargetFragment(caller, 0);
+		// Replace the existing Fragment with the new Fragment
+		getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.fragment, fragment)
+				.addToBackStack(null)
+				.commit();
+		return true;
 	}
 
 	private void setLanguage() {
@@ -84,30 +109,13 @@ public class PrefsActivity extends PreferenceActivity {
 	}
 
 	@Override
-	protected boolean isValidFragment(String fragmentName) {
-		return true;
-	}
-
-	/**
-	 * Populate the activity with the top-level headers.
-	 */
-	@Override
-	public void onBuildHeaders(List<Header> target) {
-		loadHeadersFromResource(R.xml.app_pref_headers, target);
-		// When headers show, it is the root activity which should navigate up and not back.
-		mIsRoot = true; // TODO but nobody ever sets it to false ??
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure.
-			if (mIsRoot)
-				NavUtils.navigateUpFromSameTask(this);
-			else
-				finish();
+			// This ID represents the Home or Up button. In this activity, the Up button is shown.
+			// To get a consistent behavior, both pressing "back" and clicking the Up arrow
+			// will navigate back, so if a preference category is shown, pressing the Up
+			// button won't close the settings, it will go back to the Index
+			super.onBackPressed();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -115,11 +123,11 @@ public class PrefsActivity extends PreferenceActivity {
 
 	/**
 	 * A preference value change listener that updates the preference's summary
-	 * to reflect its new value.
+	 * to reflect its new value. Handles the {@link ListPreference} specially.
 	 */
 	private static final Preference.OnPreferenceChangeListener
 			sBindPreferenceSummaryToValueListener = (preference, value) -> {
-		String stringValue = value.toString();
+		final String stringValue = value.toString();
 
 		if (preference instanceof ListPreference) {
 			// For list preferences, look up the correct display value in
@@ -127,32 +135,8 @@ public class PrefsActivity extends PreferenceActivity {
 			ListPreference listPreference = (ListPreference) preference;
 			int index = listPreference.findIndexOfValue(stringValue);
 
-			// Set the summary to reflect the new value.
-			preference
-					.setSummary(index >= 0 ? listPreference.getEntries()[index]
-							: null);
-
-		} else if (preference instanceof RingtonePreference) {
-			// For ringtone preferences, look up the correct display value
-			// using RingtoneManager.
-			if (TextUtils.isEmpty(stringValue)) {
-				// Empty values correspond to 'silent' (no ringtone).
-				preference.setSummary(R.string.silent);
-			} else {
-				Ringtone ringtone = RingtoneManager.getRingtone(
-						preference.getContext(), Uri.parse(stringValue));
-
-				if (ringtone == null) {
-					// Clear the summary if there was a lookup error.
-					preference.setSummary(null);
-				} else {
-					// Set the summary to reflect the new ringtone display
-					// name.
-					String name = ringtone
-							.getTitle(preference.getContext());
-					preference.setSummary(name);
-				}
-			}
+			// Set the summary to reflect the new value, if possible
+			preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
 		} else {
 			// For all other preferences, set the summary to the value's
@@ -173,13 +157,10 @@ public class PrefsActivity extends PreferenceActivity {
 	 */
 	public static void bindPreferenceSummaryToValue(Preference preference) {
 		// Set the listener to watch for value changes.
-		preference
-				.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-		// Trigger the listener immediately with the preference's
-		// current value.
-		sBindPreferenceSummaryToValueListener.onPreferenceChange(
-				preference,
+		// Trigger the listener immediately with the preference's current value.
+		sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
 				PreferenceManager
 						.getDefaultSharedPreferences(preference.getContext())
 						.getString(preference.getKey(), ""));

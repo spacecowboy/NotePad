@@ -19,6 +19,4 @@
 	<!-- Scrollview in editor -->
 	<bool name="fillEditor">true</bool>
 
-	<bool name="yes">true</bool>
-	<bool name="no">false</bool>
 </resources>
