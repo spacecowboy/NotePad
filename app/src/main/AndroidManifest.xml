@@ -289,7 +289,7 @@
 		</service>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
+			android:name="com.nononsenseapps.notepad.dashclock.DashclockPrefActivity"
 			android:exported="true"
 			android:label="@string/dashclock_title_activity_tasks_settings"
 			android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
