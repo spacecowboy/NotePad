@@ -17,8 +17,9 @@
 package com.nononsenseapps.notepad.prefs;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -37,6 +38,7 @@ import com.nononsenseapps.util.PermissionsHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.concurrent.Executors;
 
 public class BackupPrefs extends PreferenceFragmentCompat {
 
@@ -46,8 +48,6 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 	public static final String KEY_BACKUP_LOCATION = "key_backup_location";
 
 	private JSONBackup mTool;
-	private BackupTask mRestoreTaskHolder;
-	private BackupTask mCreateTaskHolder;
 
 	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
@@ -60,24 +60,97 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		setupFolderListPreference(this.getContext(), this, KEY_BACKUP_LOCATION);
 
 		findPreference(KEY_IMPORT).setOnPreferenceClickListener(preference -> {
-			DialogRestoreBackup.showDialog(getFragmentManager(), this::runRestore);
+			DialogRestoreBackup.showDialog(getFragmentManager(),
+					// callback when confirmed:
+					() -> runBackupOrRestore(true));
 			return true;
 		});
 
 		findPreference(KEY_EXPORT).setOnPreferenceClickListener(preference -> {
-			DialogExportBackup.showDialog(getFragmentManager(), this::runBackup);
+			DialogExportBackup.showDialog(getFragmentManager(),
+					() -> runBackupOrRestore(false));
 			return true;
 		});
 	}
 
-	private void runRestore() {
-		mRestoreTaskHolder = new BackupTask(super.getContext(), mTool, true);
-		mRestoreTaskHolder.execute();
+	/**
+	 * Run the backup (or restore) in the background. Locking the UI-thread for up to a few
+	 * seconds is not nice...
+	 */
+	private void runBackupOrRestore(boolean isRestoring) {
+		// get them in this thread
+		Handler handler = new Handler(Looper.getMainLooper());
+		Context context = this.getContext();
+
+		// replacement for AsyncTask<,,>
+		Executors.newSingleThreadExecutor().execute(() -> {
+			// Background work here
+			int result = asyncTask_doInBackground(isRestoring, mTool);
+
+			handler.post(() -> {
+				// UI Thread work here
+				asyncTask_onPostExecute(context, isRestoring, result);
+			});
+		});
 	}
 
-	private void runBackup() {
-		mCreateTaskHolder = new BackupTask(super.getContext(), mTool, false);
-		mCreateTaskHolder.execute();
+	/**
+	 * the backup/restore work for the background thread
+	 *
+	 * @param isRestoring TRUE if this task should RESTORE a backup from a file,
+	 *                    FALSE if it should CREATE a backup file
+	 * @return a result code used by {@link #asyncTask_onPostExecute(Context, boolean, int)}
+	 */
+	private static int asyncTask_doInBackground(boolean isRestoring, JSONBackup backupMaker) {
+		try {
+			if (isRestoring)
+				backupMaker.restoreBackup();
+			else
+				backupMaker.writeBackup();
+			return 0;
+		} catch (FileNotFoundException e) {
+			return 1;
+		} catch (SecurityException e) {
+			// can't read from that folder: missing permission ?
+			return 2;
+		} catch (Exception e) {
+			NnnLogger.exception(e);
+			return 3;
+		}
+	}
+
+	/**
+	 * after the backup/restore is finished, show a toast on the UI thread
+	 *
+	 * @param isRestoring FALSE if it is "save backup" operation
+	 * @param result      from {@link #asyncTask_doInBackground(boolean, JSONBackup)}
+	 */
+	private static void asyncTask_onPostExecute(@NonNull Context mContext,
+												boolean isRestoring, int result) {
+		int msgId;
+		switch (result) {
+			case 0:
+				msgId = isRestoring
+						? R.string.backup_import_success
+						: R.string.backup_export_success;
+				break;
+			case 1:
+				msgId = R.string.backup_file_not_found;
+				break;
+			case 2:
+				// can't read from / write to that folder: missing permission ?
+				msgId = R.string.permission_denied;
+				break;
+			case 3:
+				msgId = isRestoring
+						? R.string.backup_import_failed
+						: R.string.backup_export_failed;
+				break;
+			default:
+				// won't happen, anyway
+				return;
+		}
+		Toast.makeText(mContext, msgId, Toast.LENGTH_SHORT).show();
 	}
 
 	/**
@@ -118,78 +191,5 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 			}
 			return true;
 		});
-	}
-
-	/**
-	 * Run the backup/restore in the background. Locking the UI-thread for up to a few
-	 * seconds is not nice...
-	 */
-	private static class BackupTask extends AsyncTask<Void, Void, Integer> {
-		// TODO replace this class with calls to Executors.newSingleThreadExecutor()
-		private final JSONBackup backupMaker;
-		private final Context mContext;
-		private final boolean mIsRestoring;
-
-		/**
-		 * Creates a new asynchronous task. This constructor must be invoked on the UI thread.
-		 *
-		 * @param restore TRUE if this task should RESTORE a backup from a file,
-		 *                FALSE if it should CREATE a backup file
-		 */
-		public BackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker,
-						  boolean restore) {
-			super();
-			this.backupMaker = backupMaker;
-			mContext = context;
-			mIsRestoring = restore;
-		}
-
-		protected Integer doInBackground(Void... params) {
-			try {
-				if (mIsRestoring)
-					backupMaker.restoreBackup();
-				else
-					backupMaker.writeBackup();
-				return 0;
-			} catch (FileNotFoundException e) {
-				return 1;
-			} catch (SecurityException e) {
-				// can't read from that folder: missing permission ?
-				return 2;
-			} catch (Exception e) {
-				NnnLogger.exception(e);
-				return 3;
-			}
-		}
-
-		protected void onPostExecute(final Integer result) {
-			if (mContext == null) {
-				return;
-			}
-			int msgId;
-			switch (result) {
-				case 0:
-					msgId = mIsRestoring
-							? R.string.backup_import_success
-							: R.string.backup_export_success;
-					break;
-				case 1:
-					msgId = R.string.backup_file_not_found;
-					break;
-				case 2:
-					// can't read from / write to that folder: missing permission ?
-					msgId = R.string.permission_denied;
-					break;
-				case 3:
-					msgId = mIsRestoring
-							? R.string.backup_import_failed
-							: R.string.backup_export_failed;
-					break;
-				default:
-					// won't happen, anyway
-					return;
-			}
-			Toast.makeText(mContext, msgId, Toast.LENGTH_SHORT).show();
-		}
 	}
 }
