@@ -33,15 +33,16 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.NnnLogger;
@@ -55,8 +56,6 @@ import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.io.IOException;
-
-// import com.nononsenseapps.notepad.NotePad;
 
 public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
@@ -80,7 +79,6 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
 	public static final String KEY_SD_DIR = "pref_sync_sd_dir";
 	private static final int PICK_SD_DIR_CODE = 1;
-
 
 	private Activity activity;
 
@@ -122,8 +120,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_sync);

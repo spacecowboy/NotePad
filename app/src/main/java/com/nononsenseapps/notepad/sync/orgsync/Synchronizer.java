@@ -403,7 +403,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 
 		final Long nodedue = OrgConverter.getDeadline(node);
 
-		if (!task.due.equals(basedue)) {
+		if (!Objects.equals(task.due, basedue)) {
 			shouldSave = SAVEORG;
 			OrgConverter.setDeadline(node, task.due);
 		} else if (!Objects.equals(nodedue, basedue)) {
