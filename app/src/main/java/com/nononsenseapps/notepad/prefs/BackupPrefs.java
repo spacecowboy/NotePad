@@ -60,20 +60,24 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		setupFolderListPreference(this.getContext(), this, KEY_BACKUP_LOCATION);
 
 		findPreference(KEY_IMPORT).setOnPreferenceClickListener(preference -> {
-			DialogRestoreBackup.showDialog(getFragmentManager(), () -> {
-				mRestoreTaskHolder = new BackupTask(super.getContext(), mTool, true);
-				mRestoreTaskHolder.execute();
-			});
+			DialogRestoreBackup.showDialog(getFragmentManager(), this::runRestore);
 			return true;
 		});
 
 		findPreference(KEY_EXPORT).setOnPreferenceClickListener(preference -> {
-			DialogExportBackup.showDialog(getFragmentManager(), () -> {
-				mCreateTaskHolder = new BackupTask(super.getContext(), mTool, false);
-				mCreateTaskHolder.execute();
-			});
+			DialogExportBackup.showDialog(getFragmentManager(), this::runBackup);
 			return true;
 		});
+	}
+
+	private void runRestore() {
+		mRestoreTaskHolder = new BackupTask(super.getContext(), mTool, true);
+		mRestoreTaskHolder.execute();
+	}
+
+	private void runBackup() {
+		mCreateTaskHolder = new BackupTask(super.getContext(), mTool, false);
+		mCreateTaskHolder.execute();
 	}
 
 	/**
@@ -121,7 +125,7 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 	 * seconds is not nice...
 	 */
 	private static class BackupTask extends AsyncTask<Void, Void, Integer> {
-		// TODO move this class into its own java file
+		// TODO replace this class with calls to Executors.newSingleThreadExecutor()
 		private final JSONBackup backupMaker;
 		private final Context mContext;
 		private final boolean mIsRestoring;
