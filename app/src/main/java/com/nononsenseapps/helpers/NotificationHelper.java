@@ -140,6 +140,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
 		channel.setDescription(description);
+		// channel.setSound(); // TODO we have to update it when the user changes the ringtone in the preferences screen
 		nm.createNotificationChannel(channel);
 	}
 
@@ -249,8 +250,8 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setPriority(priority) // TODO always use NotificationCompat.PRIORITY_DEFAULT instead ?
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
-				.setOnlyAlertOnce(true)
-				.setSound(ringtone);
+				.setSound(ringtone) // TODO it's overwritten by the value in the notification channel! => we still have to update the notification channel!
+				.setOnlyAlertOnce(true);
 	}
 
 	/**

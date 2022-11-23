@@ -140,7 +140,7 @@
 	<string name="hide_checkbox_summary_on">La casella di spunta verrà nascosta</string>
 	<string name="hide_checkbox_summary_off">La casella di spunta verrà mostrata</string>
 	<string name="hide_date">Nascondi la data di scadenza</string>
-	<string name="item_max_height">Altezza massima</string>
+	<string name="item_max_height">Altezza massima della nota, in righe</string>
 	<string name="long_date_format">Formato data estesa</string>
 	<string name="short_date_format">Formato data compatta</string>
 	<string name="rows">righe</string>
