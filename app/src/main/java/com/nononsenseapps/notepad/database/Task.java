@@ -889,18 +889,17 @@ public class Task extends DAO {
 		}
 
 		final ContentValues values = new ContentValues();
-		values.put(Columns.COMPLETED, completed ? Calendar
-				.getInstance().getTimeInMillis() : null);
-		values.put(Columns.UPDATED, Calendar.getInstance()
-				.getTimeInMillis());
+		values.put(Columns.COMPLETED, completed ? Calendar.getInstance().getTimeInMillis() : null);
+		values.put(Columns.UPDATED, Calendar.getInstance().getTimeInMillis());
+
 		String idStrings = "(";
 		for (Long id : ids) {
 			idStrings += id + ",";
 		}
 		idStrings = idStrings.substring(0, idStrings.length() - 1);
 		idStrings += ")";
-		context.getContentResolver().update(URI, values,
-				Columns._ID + " IN " + idStrings, null);
+		context.getContentResolver()
+				.update(URI, values, Columns._ID + " IN " + idStrings, null);
 	}
 
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {

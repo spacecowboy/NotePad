@@ -34,6 +34,7 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.SystemClock;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -558,8 +559,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * Does not touch db
 	 */
 	public static void cancelNotification(final Context context, final Uri uri) {
-		if (uri != null)
-			cancelNotification(context, Integer.parseInt(uri.getLastPathSegment()));
+		if (uri == null) return;
+		cancelNotification(context, Integer.parseInt(uri.getLastPathSegment()));
 	}
 
 	/**
@@ -625,6 +626,16 @@ public class NotificationHelper extends BroadcastReceiver {
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
 			// Handle change but don't spam
+
+			// TODO when clicking "completed" on a notification, sometimes it goes away
+			//  but then reappears a 2° time. It's because the code here runs too soon
+			//  (it's in its own thread) and does not yet see that the notification got
+			//  canceled. This is a design flaw, and probably this whole "ContextObserver" class
+			//  is useless: NotificationHelper.onReceive() should be enough. The temporary
+			//  fix is to just wait for the main thread to delete the notification from
+			//  the db (1,2 seconds are enough), but please try to solve this.
+			SystemClock.sleep(1200);
+
 			notifyPast(context);
 		}
 	}
