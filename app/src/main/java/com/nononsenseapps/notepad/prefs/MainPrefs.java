@@ -19,8 +19,10 @@ package com.nononsenseapps.notepad.prefs;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
+
+import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceFragment;
 
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -30,6 +32,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class MainPrefs extends PreferenceFragment {
+
 	public static final String KEY_THEME = "key_current_theme";
 
 	public static final String SANS = "Sans";
@@ -43,22 +46,15 @@ public class MainPrefs extends PreferenceFragment {
 	public static final String WEEK_START_MONDAY = "2";
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_main);
 
 		// Fill listpreferences
-		setLangEntries(
-				(ListPreference) findPreference(getString(R.string.pref_locale)),
-				getContext());
-		setDateEntries(
-				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
-				R.array.dateformat_short_values);
-		setDateEntries(
-				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_long)),
-				R.array.dateformat_long_values);
+		setLangEntries(findPreference(getString(R.string.pref_locale)), getContext());
+		setDateEntries(findPreference(getString(R.string.key_pref_dateformat_short)), R.array.dateformat_short_values);
+		setDateEntries(findPreference(getString(R.string.key_pref_dateformat_long)), R.array.dateformat_long_values);
 
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
@@ -87,8 +83,8 @@ public class MainPrefs extends PreferenceFragment {
 				2099, 2, 27, 0, 59);
 
 		for (final String val : values) {
-			entries.add(TimeFormatter
-					.getLocalDateString(getActivity(), val, cal.getTimeInMillis()));
+			entries.add(TimeFormatter.getLocalDateString(
+					getActivity(), val, cal.getTimeInMillis()));
 		}
 
 		prefDate.setEntries(entries.toArray(new CharSequence[0]));
