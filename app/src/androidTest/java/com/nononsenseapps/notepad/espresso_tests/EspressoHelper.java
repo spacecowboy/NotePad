@@ -90,12 +90,12 @@ public class EspressoHelper {
 	}
 
 	public static void navigateUp() {
+		onView(isRoot()).perform(closeSoftKeyboard());
 		if (isInTabletMode()) {
 			// we are in tablet mode: press "+" to make a note appear in the list
 			onView(withId(R.id.menu_add)).perform(click());
 		} else {
 			// we are in phone mode: close the keyboard & press the back button
-			onView(isRoot()).perform(closeSoftKeyboard());
 			Espresso.pressBack();
 		}
 	}

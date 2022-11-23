@@ -25,7 +25,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.preference.PreferenceManager;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -610,11 +612,8 @@ public class ActivityMain extends AppCompatActivity
 				if (getNoteId(intent) > 0) {
 					right = TaskDetailFragment_.getInstance(getNoteId(intent));
 				} else if (isNoteIntent(intent)) {
-					right = TaskDetailFragment_
-							.getInstance(getNoteShareText(intent),
-									TaskListViewPagerFragment.getAShowList(this,
-											getListId(intent))
-							);
+					right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+							TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
 				}
 			}
 		} else if (isNoteIntent(intent)) {
@@ -1137,9 +1136,10 @@ public class ActivityMain extends AppCompatActivity
 			// Set intent to preserve state when rotating
 			setIntent(intent);
 			// Replace editor fragment
-			getSupportFragmentManager().beginTransaction()
+			getSupportFragmentManager()
+					.beginTransaction()
 					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
-					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId))
+					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		} else {
