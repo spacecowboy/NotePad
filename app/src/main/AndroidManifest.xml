@@ -284,7 +284,7 @@
 				android:value="Displays your tasks from NoNonsense Notes."/>
 			<meta-data
 				android:name="settingsActivity"
-				android:value="com.nononsenseapps.notepad.dashclock.TasksSettings"/>
+				android:value="com.nononsenseapps.notepad.dashclock.DashclockPrefActivity"/>
 		</service>
 
 		<activity
