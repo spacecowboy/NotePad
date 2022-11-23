@@ -29,12 +29,12 @@ import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 
-public class NotificationPrefs extends PreferenceFragment {
+public class NotificationPrefs extends PreferenceFragmentCompat {
 
 	private static final int REQUEST_CODE_ALERT_RINGTONE = 1;
 

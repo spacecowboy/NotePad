@@ -40,7 +40,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
@@ -57,7 +57,8 @@ import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.io.IOException;
 
-public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+public class SyncPrefs extends PreferenceFragmentCompat
+		implements OnSharedPreferenceChangeListener {
 
 	// TODO these 6 are useles. Maybe we can reuse them if we find a newer sync service
 	//  to replace google tasks

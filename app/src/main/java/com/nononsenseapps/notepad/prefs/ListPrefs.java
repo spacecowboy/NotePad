@@ -23,7 +23,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
@@ -31,7 +31,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 
 import java.util.ArrayList;
 
-public class ListPrefs extends PreferenceFragment {
+public class ListPrefs extends PreferenceFragmentCompat {
 
 	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {

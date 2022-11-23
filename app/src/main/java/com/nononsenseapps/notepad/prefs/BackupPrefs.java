@@ -24,7 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -38,7 +38,7 @@ import com.nononsenseapps.util.PermissionsHelper;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-public class BackupPrefs extends PreferenceFragment {
+public class BackupPrefs extends PreferenceFragmentCompat {
 
 	// settings IDs from app_pref_backup.xml
 	private static final String KEY_IMPORT = "backup_import";
@@ -83,7 +83,7 @@ public class BackupPrefs extends PreferenceFragment {
 	 * <code>setupFolderListPreference(this.getContext(),this,this.KEY_BACKUP_LOCATION);</code>
 	 */
 	public static void setupFolderListPreference(@NonNull Context context,
-												 @NonNull PreferenceFragment prefPage,
+												 @NonNull PreferenceFragmentCompat prefPage,
 												 @NonNull String PREFERENCE_KEY) {
 		// list preference to choose the backup folder
 		String[] choices = FileHelper.getPathsOfPossibleFolders(context);
@@ -92,7 +92,7 @@ public class BackupPrefs extends PreferenceFragment {
 		String chosen = sharPrefs.getString(PREFERENCE_KEY, null);
 		String summary = chosen != null ? chosen : context.getString(R.string.default_location);
 
-		ListPreference lPref = (ListPreference) prefPage.findPreference(PREFERENCE_KEY);
+		ListPreference lPref = prefPage.findPreference(PREFERENCE_KEY);
 		lPref.setSummary(summary);
 		lPref.setEntryValues(choices);
 		lPref.setEntries(choices);
