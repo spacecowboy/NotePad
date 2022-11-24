@@ -213,8 +213,8 @@ public class TaskDetailFragment extends Fragment {
 	private Task mTaskOrg;
 	// To save orgState
 	// TODO
-	// AND with task.locked. If result is true, note is locked and has not been
-	// unlocked, otherwise good to show
+	//  AND with task.locked. If result is true, note is locked and has not been
+	//  unlocked, otherwise good to show
 	private boolean mLocked = true;
 
 	private OnFragmentInteractionListener mListener;
@@ -442,21 +442,6 @@ public class TaskDetailFragment extends Fragment {
 		dpDiag.show();
 	}
 
-	/* TODO is it needed somewhere ?  check git history
-	@Override
-	 public void onDialogTimeSet(int hourOfDay, int minute) {
-	 final Calendar localTime = Calendar.getInstance();
-	 if (mTask.due != null) {
-	 localTime.setTimeInMillis(mTask.due);
-	 }
-	 localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-	 localTime.set(Calendar.MINUTE, minute);
-
-	 mTask.due = localTime.getTimeInMillis();
-	 setDueText();
-	 }
-	*/
-
 	private void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
@@ -466,8 +451,7 @@ public class TaskDetailFragment extends Fragment {
 		localTime.set(Calendar.MONTH, monthOfYear);
 		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-		// set to 23:59 to be more or less consistent with earlier date only
-		// implementation
+		// set to 23:59 to be more or less consistent with earlier date only implementation
 		localTime.set(Calendar.HOUR_OF_DAY, 23);
 		localTime.set(Calendar.MINUTE, 59);
 

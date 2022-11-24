@@ -506,6 +506,10 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
+	/**
+	 * Restarts the activity using the same intent that started it.
+	 * Disables animations to get a seamless restart.
+	 */
 	private void restartAndRefresh() {
 		shouldRestart = false;
 		Intent intent = getIntent();

@@ -268,7 +268,7 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setWhen(0)
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
 				.setLargeIcon(largeIcon)
-				.setPriority(priority) // TODO always use NotificationCompat.PRIORITY_DEFAULT instead ?
+				.setPriority(priority)
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
 				.setSound(ringtone)
