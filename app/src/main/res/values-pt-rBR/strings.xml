@@ -24,7 +24,6 @@
 	<string name="done">Pronto</string>
 	<string name="saved">Salvo</string>
 	<string name="distance">Distância</string>
-	<string name="need_location_help">Pressione continuamente para definir um local</string>
 	<string name="menu_save_and_add">Salvar e abrir nova nota</string>
 	<string name="menu_delete">Eliminar</string>
 	<string name="menu_deletelist">Apagar lista</string>
@@ -54,7 +53,6 @@
 	<string name="sort_list_manual">Ordenar manualmente</string>
 	<string name="search_description">Notas e tarefas</string>
 	<string name="archive">Arquivar</string>
-	<string name="location">Local</string>
 	<string name="restore">Restaurar</string>
 	<string name="restore_to">Restaurar para</string>
 	<string name="search_hint">Procurar</string>

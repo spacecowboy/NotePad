@@ -24,7 +24,6 @@
 	<string name="done">Končano</string>
 	<string name="saved">Shranjene</string>
 	<string name="distance">Oddaljenost</string>
-	<string name="need_location_help">Dolgo pritisnite, da nastavite na lokaciji</string>
 	<string name="near">Blizu</string>
 	<string name="menu_save_and_add">Shrani in dodaj opombo</string>
 	<string name="menu_delete">Izbriši</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Naročite ročno</string>
 	<string name="search_description">Opombe in opravila</string>
 	<string name="archive">Arhiv</string>
-	<string name="location">Lokacija</string>
 	<string name="restore">Obnovitev</string>
 	<string name="restore_to">Obnovi v </string>
 	<string name="search_hint">Išči</string>

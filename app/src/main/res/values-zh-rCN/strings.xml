@@ -24,7 +24,6 @@
 	<string name="done">完成</string>
 	<string name="saved">已保存</string>
 	<string name="distance">距离</string>
-	<string name="need_location_help">长按以设置一个位置</string>
 	<string name="menu_save_and_add">保存并打开一个新便签</string>
 	<string name="menu_delete">删除</string>
 	<string name="menu_deletelist">删除列表</string>
@@ -54,7 +53,6 @@
 	<string name="sort_list_manual">手动排序</string>
 	<string name="search_description">便签与任务</string>
 	<string name="archive">归档</string>
-	<string name="location">位置</string>
 	<string name="restore">还原</string>
 	<string name="restore_to">还原至</string>
 	<string name="search_hint">搜索</string>

@@ -24,7 +24,6 @@
 	<string name="done">Dokončeno</string>
 	<string name="saved">Uloženo</string>
 	<string name="distance">Vzdálenost</string>
-	<string name="need_location_help">Dlouhý stisk pro polohu</string>
 	<string name="near">V blízskosti</string>
 	<string name="menu_save_and_add">Uložit a přidat poznámku</string>
 	<string name="menu_delete">Odstranit</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Seřadit manuálně</string>
 	<string name="search_description">Poznámky a úkoly</string>
 	<string name="archive">Archiv</string>
-	<string name="location">Lokace</string>
 	<string name="restore">Obnovit</string>
 	<string name="restore_to">Obnovit do</string>
 	<string name="search_hint">Hledat</string>

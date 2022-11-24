@@ -24,7 +24,6 @@
 	<string name="done">Valmis</string>
 	<string name="saved">Tallennettu</string>
 	<string name="distance">Etäisyys</string>
-	<string name="need_location_help">Paina pitkään asettaaksesi sijainnin</string>
 	<string name="near">Lähellä</string>
 	<string name="menu_save_and_add">Tallenna ja avaa uusi muistiinpano</string>
 	<string name="menu_delete">Poista</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Järjestä itse</string>
 	<string name="search_description">Muistiinpanot ja tehtävät</string>
 	<string name="archive">Arkistoi</string>
-	<string name="location">Sijainti</string>
 	<string name="restore">Palauta</string>
 	<string name="restore_to">Palauta sijaintiin</string>
 	<string name="search_hint">Hae</string>

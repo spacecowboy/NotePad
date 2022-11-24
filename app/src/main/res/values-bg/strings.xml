@@ -24,7 +24,6 @@
 	<string name="done">Готово</string>
 	<string name="saved">Запазено</string>
 	<string name="distance">Разстояние</string>
-	<string name="need_location_help">Задръжте за задаване на местоположение</string>
 	<string name="near">Близо</string>
 	<string name="menu_save_and_add">Запазване и отваряне на нова бележка</string>
 	<string name="menu_delete">Изтриване</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Ръчно подреждане</string>
 	<string name="search_description">Бележки и задачи</string>
 	<string name="archive">Архив</string>
-	<string name="location">Местоположение</string>
 	<string name="restore">Връщане</string>
 	<string name="restore_to">Връщане към</string>
 	<string name="search_hint">Търсене</string>
