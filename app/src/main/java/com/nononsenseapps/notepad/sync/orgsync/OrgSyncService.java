@@ -54,8 +54,6 @@ import java.util.Calendar;
 
 public class OrgSyncService extends Service {
 
-	private static final String TAG = "OrgSyncService";
-
 	public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".sync.START";
 	public static final String ACTION_PAUSE = BuildConfig.APPLICATION_ID + ".sync.PAUSE";
 
@@ -197,7 +195,7 @@ public class OrgSyncService extends Service {
 		}
 
 		public void onMonitorChange() {
-			Log.d(TAG, "OnMonitorChange");
+			NnnLogger.debug(OrgSyncService.class, "OnMonitorChange");
 			// Increment the changeId
 			changeId++;
 
@@ -242,18 +240,18 @@ public class OrgSyncService extends Service {
 				 */
 				switch (msg.arg1) {
 					case SYNC_QUEUE:
-						Log.d(TAG, "Sync-Queue: " + msg.arg2);
+						NnnLogger.debug(OrgSyncService.class, "Sync-Queue: " + msg.arg2);
 						lastChangeId = msg.arg2;
 						break;
 					case SYNC_RUN:
-						Log.d(TAG, "Sync-Run: " + msg.arg2);
+						NnnLogger.debug(OrgSyncService.class, "Sync-Run: " + msg.arg2);
 						if (msg.arg2 != lastChangeId) {
 							// Wait...
 							return;
 						}
 						// Falling through
 					case TWO_WAY_SYNC:
-						Log.d(TAG, "Sync-Two-Way: " + msg.arg2);
+						NnnLogger.debug(OrgSyncService.class, "Sync-Two-Way: " + msg.arg2);
 						// Pause monitors
 						for (final Monitor monitor : monitors) {
 							monitor.pauseMonitor();

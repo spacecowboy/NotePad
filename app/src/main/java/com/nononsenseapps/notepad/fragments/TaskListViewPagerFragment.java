@@ -43,6 +43,7 @@ import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
 import com.nononsenseapps.notepad.R;
@@ -254,7 +255,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		super.onSaveInstanceState(outState);
 		if (mTaskListsAdapter != null && pager != null) {
 			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(pager.getCurrentItem()));
-			Log.d("nononsenseapps list", "Save state: "
+			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state: "
 					+ mTaskListsAdapter.getItemId(pager.getCurrentItem()));
 		}
 	}

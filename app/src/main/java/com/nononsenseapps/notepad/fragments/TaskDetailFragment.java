@@ -554,7 +554,7 @@ public class TaskDetailFragment extends Fragment {
 			NnnLogger.error(TaskDetailFragment.class, "taskText or taskCompleted is null");
 			return;
 		}
-		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
+		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
 		if (isLocked()) {
 			taskText.setText(mTask.title);
 			DialogPassword_ pflock = new DialogPassword_();

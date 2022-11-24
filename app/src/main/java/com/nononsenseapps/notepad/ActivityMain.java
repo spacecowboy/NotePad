@@ -878,7 +878,7 @@ public class ActivityMain extends AppCompatActivity
 		adapter.setExtraData(extraData);
 
 		// Load count of tasks in each one
-		Log.d("nononsenseapps drawer", TaskList.CREATE_COUNT_VIEW);
+		NnnLogger.debug(ActivityMain.class, TaskList.CREATE_COUNT_VIEW);
 
 		leftDrawer.setAdapter(adapter);
 		// Set click handler
