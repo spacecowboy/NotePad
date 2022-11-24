@@ -790,11 +790,10 @@ public class ActivityMain extends AppCompatActivity
 					R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
 				/**
-				 * Called when a drawer has settled in a completely closed
-				 * state.
+				 * Called when a drawer has settled in a completely closed state.
 				 */
-				public void onDrawerClosed(View view) { // TODO needs @Override ?
-
+				@Override
+				public void onDrawerClosed(View view) {
 					getSupportActionBar().setTitle(R.string.app_name_short);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
@@ -810,7 +809,8 @@ public class ActivityMain extends AppCompatActivity
 					showcaseDrawerPress();
 				}
 
-				public void onDrawerStateChanged(int newState) { // TODO needs @Override ?
+				@Override
+				public void onDrawerStateChanged(int newState) {
 					super.onDrawerStateChanged(newState);
 
 					// If it's not idle, it isn't closed
@@ -818,8 +818,7 @@ public class ActivityMain extends AppCompatActivity
 						getSupportActionBar().setTitle(R.string.show_from_all_lists);
 						// Is in motion, hide action items
 						isDrawerClosed = false;
-						invalidateOptionsMenu(); // creates call to
-						// onPrepareOptionsMenu()
+						invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 					}
 				}
 			};

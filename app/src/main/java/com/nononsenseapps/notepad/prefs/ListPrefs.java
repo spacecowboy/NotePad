@@ -97,9 +97,11 @@ public class ListPrefs extends PreferenceFragmentCompat {
 		// TODO fix from old version
 		// listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(getActivity(), -1)));
 
-		Cursor cursor = getActivity().getContentResolver().query(TaskList.URI,
-				new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE },
-				null, null, TaskList.Columns.TITLE);
+		Cursor cursor = getActivity()
+				.getContentResolver()
+				.query(TaskList.URI,
+						new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE },
+						null, null, TaskList.Columns.TITLE);
 		if (cursor != null) {
 			if (!cursor.isClosed() && !cursor.isAfterLast()) {
 				while (cursor.moveToNext()) {

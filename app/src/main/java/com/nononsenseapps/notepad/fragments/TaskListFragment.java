@@ -547,7 +547,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						msg = getResources().getString(R.string.deleted);
 					}
 
-					// TODO should use a Snackbar instead
+					// TODO should use a Snackbar instead of Toasts
 					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 

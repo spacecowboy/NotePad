@@ -92,6 +92,9 @@ public class SharedPreferencesHelper {
 		return Prefs(context).getString(SyncPrefs.KEY_ACCOUNT, "");
 	}
 
+	/**
+	 * @return TRUE if the password for locking notes is set, FALSE if it isn't
+	 */
 	public static boolean isPasswordSet(@NonNull Context context) {
 		return !Prefs(context).getString(PasswordPrefs.KEY_PASSWORD, "").isEmpty();
 	}

@@ -49,8 +49,8 @@ public class OrgSyncTest {
 
 	@Before
 	public void setUp() {
-		File d = getTheContext().getDir("ORGSYNCTEST", Context.MODE_PRIVATE);
-		DIR = d.getPath();
+		DIR = FileHelper.getUserSelectedOrgDir(getTheContext());
+		var d = new File(DIR);
 
 		if (!d.exists()) {
 			assertTrue(d.mkdirs());
@@ -784,8 +784,6 @@ public class OrgSyncTest {
 
 		public TestSynchronizer(Context context) {
 			super(context);
-
-			ORG_DIR = OrgSyncTest.DIR;
 		}
 
 		@Override

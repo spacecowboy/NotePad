@@ -70,8 +70,7 @@ public class AccountDialog4 extends DialogFragment implements
 		for (int i = 0; i < size; i++) {
 			names[i] = accounts[i].name;
 		}
-		// TODO
-		//  Could add a clear alternative here
+		// TODO Could add a clear alternative here
 		builder.setItems(names, (dialog, which) -> {
 			// Stuff to do when the account is selected by the user
 			accountSelected(accounts[which]);

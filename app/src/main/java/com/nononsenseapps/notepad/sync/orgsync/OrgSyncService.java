@@ -164,7 +164,7 @@ public class OrgSyncService extends Service {
 
 		Notification notif = new NotificationCompat
 				.Builder(this, NotificationHelper.CHANNEL_ID)
-				.setContentTitle("Could not access files") // TODO hardcoded
+				.setContentTitle("Could not access files")
 				.setContentText("Please change directory")
 				.setContentIntent(pi)
 				.build();

@@ -60,7 +60,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * Reads the database and the OrgFile. Returns the matching Tasks and Nodes.
 	 * <p/>
 	 * TODO
-	 * For gods' sake, test me!
+	 *  For gods' sake, test me!
 	 *
 	 * @param file The OrgFile containing all the tasks
 	 * @param list The TaskList corresponding to the OrgFile.

@@ -520,8 +520,8 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	public boolean isLocked() {
 		if (getActivity() != null) {
-			// it happened once during espresso tests
 			boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
+			NnnLogger.debug(TaskDetailFragment.class, "hasPassword = " + hasPassword);
 			// if (!hasPassword) return false; // TODO check and use these
 		}
 
@@ -605,17 +605,16 @@ public class TaskDetailFragment extends Fragment {
 				titleEnd = text.length();
 			}
 
+			// there is also ShareCompat.IntentBuilder, if you want...
+			Intent i = new Intent(Intent.ACTION_SEND)
+					.setType("text/plain")
+					.putExtra(Intent.EXTRA_TEXT, text)
+					.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
 			try {
-				// TODO try sharing a note with the email app: it should put the title
-				//  as subject, in my opinion
-				Intent i = new Intent(Intent.ACTION_SEND)
-						.setType("text/plain")
-						.putExtra(Intent.EXTRA_TEXT, text)
-						.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
 				mShareActionProvider.setShareIntent(i);
 			} catch (RuntimeException e) {
 				// Can crash when too many transactions overflow the buffer
-				Log.d("nononsensenotes", e.getLocalizedMessage());
+				NnnLogger.exception(e);
 			}
 		}
 	}
