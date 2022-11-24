@@ -23,15 +23,18 @@ import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
 
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.R;
 
 public class NotificationPrefs extends PreferenceFragmentCompat {
@@ -51,6 +54,19 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		updateRingtonePrefSummary(
 				findPreference(getString(R.string.key_pref_ringtone)),
 				this.getContext());
+
+		// the "Preferences for older Android devices" category
+		PreferenceCategory prefCat = findPreference(getString(R.string.key_pref_cat_notif_old));
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			// newer androids have a dedicated settings page for the notification channel
+			// => use that, also because the channel overwrites the individual notifications
+			prefCat.setEnabled(false);
+		} else {
+			// older androids don't have the notification channel => we keep using our
+			// notification preferences => expand their category
+			prefCat.setInitialExpandedChildrenCount(Integer.MAX_VALUE);
+		}
+
 	}
 
 	@Override
@@ -58,8 +74,8 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		final String key = preference.getKey();
 		final String ringtonePrefKey = getString(R.string.key_pref_ringtone);
 		final String allowExactRemindersKey = getString(R.string.key_pref_allow_exact_reminders);
-		final String ignoreBatteryOptimizationKey
-				= getString(R.string.key_pref_ignore_battery_optimizations);
+		final String ignoreBatteryOptimizationKey = getString(R.string.key_pref_ignore_battery_optimizations);
+		final String openNotifChannelKey = getString(R.string.key_pref_notif_channel_settings);
 
 		if (key.equals(ringtonePrefKey)) {
 			// the pseudo-ringtonePreference was clicked => open a system page to pick a ringtone
@@ -108,6 +124,9 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 
 			// the value of this preference is never used,
 			// it's just something the user can click to open a settings page
+			return false;
+		} else if (key.equals(openNotifChannelKey)) {
+			openNotificationSettings(this.getContext());
 			return false;
 		} else {
 			return super.onPreferenceTreeClick(preference);
@@ -188,6 +207,29 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 
 		findPreference(getString(R.string.key_pref_ignore_battery_optimizations))
 				.setSummary(summaryResId);
+	}
+
+	/**
+	 * opens a system settings page dedicated to notification preferences for <br/>
+	 * - our only notification channel (only devices on Oreo or newer) <br/>
+	 * - the app as a whole (only devices on API 23, 24 or 25) <br/>
+	 * In android Oreo and newer, these settings overwrite those of the old preferences,
+	 * which now are in the {@link PreferenceCategory} "key_pref_cat_notif_old"
+	 */
+	private static void openNotificationSettings(Context context) {
+		Intent intent;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
+					.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName())
+					.putExtra(Settings.EXTRA_CHANNEL_ID, NotificationHelper.CHANNEL_ID);
+		} else {
+			// it works on a tablet with API 23. But it's not as complete as the
+			// notification channel preference page on API 32 devices, for example
+			intent = new Intent("android.settings.APP_NOTIFICATION_SETTINGS")
+					.putExtra("app_package", context.getPackageName())
+					.putExtra("app_uid", context.getApplicationInfo().uid);
+		}
+		context.startActivity(intent);
 	}
 
 	// TODO test the app in doze mode: see
