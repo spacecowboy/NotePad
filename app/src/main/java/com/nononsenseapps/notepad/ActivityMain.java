@@ -781,6 +781,8 @@ public class ActivityMain extends AppCompatActivity
 	 * Load a list of lists in the left drawer
 	 */
 	protected void loadLeftDrawer() {
+		// TODO very long function. you should move everything related to drawer into static methods in ActivityHelper.java
+
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
 		if (mDrawerToggle == null) {

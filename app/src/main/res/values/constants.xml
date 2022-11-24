@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <!-- Provides constants and default values -->
-<resources>
+<resources translatable="false">
 
 	<string name="const_all_default_sorting">@string/const_alphabetic</string>
 
