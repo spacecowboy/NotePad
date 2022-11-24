@@ -72,12 +72,12 @@ public class OrgSyncService extends Service {
 	private final ArrayList<SynchronizerInterface> synchronizers;
 
 	public static void start(Context context) {
-		context.startService(new Intent(context, OrgSyncService.class)
+		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
 				.setAction(ACTION_START));
 	}
 
 	public static void pause(Context context) {
-		context.startService(new Intent(context, OrgSyncService.class)
+		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
 				.setAction(ACTION_PAUSE));
 	}
 
