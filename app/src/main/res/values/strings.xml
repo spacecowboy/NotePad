@@ -137,7 +137,7 @@
 	<string name="overwritten_in_newer_systems">These are overwritten in newer Android versions</string>
 	<string name="prefs_improved_reliability">Preferences to improve reliability</string>
 	<string name="notification_channel_settings">Notification channel settings</string>
-	<string name="open_channel_settings_description">Open a page to edit the notification settings for this app. Only applicable to devices with Android 8 Oreo or newer</string>
+	<string name="open_channel_settings_description">Open a page to edit the notification settings for this app. These override any settings chosen elsewhere</string>
 
 	<!--
 		Use few if language need it. In English is the same.
