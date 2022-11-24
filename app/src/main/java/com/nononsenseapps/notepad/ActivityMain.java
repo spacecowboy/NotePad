@@ -1209,9 +1209,7 @@ public class ActivityMain extends AppCompatActivity
 		newSwpRefLayout.setColorSchemeResources(R.color.accent);
 
 		// TODO the swipe-to-refresh layouts have been disabled because they make it impossible
-		//  to manually drag down the 1° note. When you find a solution for this, such as
-		//  selectively enabling the swipe-to-refresh layout when the gesture is in the center-left
-		//  part of the screen, delete this line
+		//  to manually drag down the 1° note. When you find a solution for this, delete this line:
 		newSwpRefLayout.setEnabled(false);
 
 		// Sets up a Listener that is invoked when the user performs a swipe-to-refresh gesture.

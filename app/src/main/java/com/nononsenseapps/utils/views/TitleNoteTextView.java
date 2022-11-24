@@ -38,6 +38,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
@@ -46,7 +48,7 @@ import com.nononsenseapps.notepad.R;
  * is not selectable. This is intended to be used in a ListView where the text
  * on items is not intended to be selectable.
  */
-public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextView {
+public class TitleNoteTextView extends AppCompatTextView {
 
 	Object titleStyleSpan;
 	Object titleSizeSpan;
@@ -64,7 +66,9 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 	private String mRest = "";
 
 	public TitleNoteTextView(Context context, AttributeSet attrs) {
-		// TODO it crashes here in the editor. check activity_task_history.xml in design mode
+		// TODO it crashes here in the editor. check activity_task_history.xml in design mode.
+		//  It may be a nullpointerexception on a method on "ColorStateList mTextColor",
+		//  so maybe you have to set that ?
 		super(context, attrs);
 
 		TypedArray attributes = context

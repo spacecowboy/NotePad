@@ -65,7 +65,7 @@ public class WeekDaysView extends LinearLayout implements
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		mInflater.inflate(R.layout.weekdays_layout, this, true);
 
-		// TODO respect locale settings regarding first day of week
+		// TO DO (useless): respect locale settings regarding first day of week
 
 		try {
 			mLocale = ActivityHelper.getUserLocale(context);

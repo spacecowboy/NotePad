@@ -59,9 +59,12 @@ public class BackupAgent extends BackupAgentHelper {
 		@Override
 		public void restoreEntity(BackupDataInputStream data) {
 			super.restoreEntity(data);
-			PreferenceManager.getDefaultSharedPreferences(mContext).edit()
+			PreferenceManager
+					.getDefaultSharedPreferences(mContext)
+					.edit()
 					.remove(GoogleTaskSync.PREFS_GTASK_LAST_SYNC_TIME)
-					.remove(SyncPrefs.KEY_LAST_SYNC).commit();
+					.remove(SyncPrefs.KEY_LAST_SYNC)
+					.commit();
 		}
 
 	}
