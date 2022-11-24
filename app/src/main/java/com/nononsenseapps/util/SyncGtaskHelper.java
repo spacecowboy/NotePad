@@ -25,10 +25,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.helpers.GTasksSyncDelay;
 import com.nononsenseapps.notepad.database.MyContentProvider;
@@ -214,7 +214,7 @@ public class SyncGtaskHelper {
 	}
 
 	private static void requestDelayedGTasksSync(final Context context) {
-		context.startService(new Intent(context, GTasksSyncDelay.class));
+		context.startService(new Intent(context, GTasksSyncDelay.class)); // TODO startservice. does this work correctly in newer android versions ?
 	}
 
 	private static boolean shouldSyncGTasksOnChange(final Context context) {

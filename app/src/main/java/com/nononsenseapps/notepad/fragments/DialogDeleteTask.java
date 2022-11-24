@@ -18,10 +18,9 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
-
-import android.widget.Toast;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;

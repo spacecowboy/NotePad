@@ -17,13 +17,6 @@
 
 package com.nononsenseapps.notepad.database;
 
-import java.security.InvalidParameterException;
-import java.util.Calendar;
-import java.util.Objects;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -34,6 +27,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.InvalidParameterException;
+import java.util.Calendar;
+import java.util.Objects;
 
 /**
  * An object that represents the task information contained in the database.
@@ -889,18 +889,17 @@ public class Task extends DAO {
 		}
 
 		final ContentValues values = new ContentValues();
-		values.put(Columns.COMPLETED, completed ? Calendar
-				.getInstance().getTimeInMillis() : null);
-		values.put(Columns.UPDATED, Calendar.getInstance()
-				.getTimeInMillis());
+		values.put(Columns.COMPLETED, completed ? Calendar.getInstance().getTimeInMillis() : null);
+		values.put(Columns.UPDATED, Calendar.getInstance().getTimeInMillis());
+
 		String idStrings = "(";
 		for (Long id : ids) {
 			idStrings += id + ",";
 		}
 		idStrings = idStrings.substring(0, idStrings.length() - 1);
 		idStrings += ")";
-		context.getContentResolver().update(URI, values,
-				Columns._ID + " IN " + idStrings, null);
+		context.getContentResolver()
+				.update(URI, values, Columns._ID + " IN " + idStrings, null);
 	}
 
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {

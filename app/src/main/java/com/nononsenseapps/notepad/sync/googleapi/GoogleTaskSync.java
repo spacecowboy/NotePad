@@ -25,8 +25,9 @@ import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.util.Pair;
+
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.NnnLogger;

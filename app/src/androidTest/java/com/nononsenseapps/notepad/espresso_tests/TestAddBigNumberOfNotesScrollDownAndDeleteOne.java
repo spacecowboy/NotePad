@@ -85,6 +85,9 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 		// check that the 1° note added was deleted
 		onView(allOf(withId(android.R.id.list), isDisplayed()))
 				.check(doesNotHaveViewWithText(noteNameList[0]));
+
+		// if the showcaseview is visible when closing the app, there will be a crash
+		EspressoHelper.hideShowCaseViewIfShown();
 	}
 
 

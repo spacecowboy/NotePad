@@ -26,11 +26,13 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
 import java.util.Locale;
@@ -40,6 +42,8 @@ import java.util.Locale;
  */
 public class PrefsActivity extends AppCompatActivity implements
 		PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+
+	private boolean isTabletInLandscape = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,25 @@ public class PrefsActivity extends AppCompatActivity implements
 		// inflates a layout with a fragmentcontainerview, which will
 		// automatically start an instance of IndexPrefs
 		setContentView(R.layout.activity_settings);
+
+		// this exists only in the tablet-landscape layout file
+		FragmentContainerView fragmentSpot2 = this.findViewById(R.id.fragmentRightForTablets);
+		isTabletInLandscape = fragmentSpot2 != null;
+
+		getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+			int numActiveFrags = getSupportFragmentManager().getBackStackEntryCount();
+			if (numActiveFrags == 1) {
+				// it's opening a settings category => there is nothing to do
+			} else if (numActiveFrags == 0) {
+				// it's going back to the "main menu" => remove the subtitle
+				if (getSupportActionBar() != null) {
+					getSupportActionBar().setSubtitle(null);
+				}
+			} else {
+				NnnLogger.warning(PrefsActivity.class,
+						"unexpected numActiveFrags = " + numActiveFrags);
+			}
+		});
 	}
 
 	/**
@@ -71,14 +94,32 @@ public class PrefsActivity extends AppCompatActivity implements
 				.instantiate(getClassLoader(), pref.getFragment());
 		fragment.setArguments(args);
 		fragment.setTargetFragment(caller, 0);
-		// Replace the existing Fragment with the new Fragment
-		getSupportFragmentManager()
-				.beginTransaction()
-				.replace(R.id.fragment, fragment)
-				.addToBackStack(null)
-				.commit();
+
+		if (isTabletInLandscape) {
+			// for tablets in landscape mode, 2 fragments are shown (=> 2 pane view):
+			// the "main menu" remains on the left, the preference page list opens on the right
+			getSupportFragmentManager()
+					.beginTransaction()
+					.replace(R.id.fragmentRightForTablets, fragment)
+					// don't call .addToBackStack(null), so the back button will immediately exit
+					.commit();
+
+		} else {
+			// for phones & tablets in portrait mode, there is only 1 fragment shown:
+			// Replace the existing "main menu" Fragment with the new "category" Fragment
+			getSupportFragmentManager()
+					.beginTransaction()
+					.replace(R.id.fragment, fragment)
+					.addToBackStack(null)
+					.commit();
+		}
+
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setSubtitle(pref.getTitle());
+		}
 		return true;
 	}
+
 
 	private void setLanguage() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -102,8 +143,7 @@ public class PrefsActivity extends AppCompatActivity implements
 
 	@Override
 	protected void onDestroy() {
-		// Request a backup in case prefs changed
-		// Safe to call multiple times
+		// Request a backup in case prefs changed. Safe to call multiple times
 		new BackupManager(this).dataChanged();
 		super.onDestroy();
 	}

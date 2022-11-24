@@ -23,8 +23,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import androidx.preference.PreferenceManager;
 import android.provider.BaseColumns;
+
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
@@ -220,7 +221,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 								.parseRFC3339Date(c.getString(3))
 								.getTime();
 					} catch (Exception e) {
-						NnnLogger.warning(DatabaseHandler.class,"date error");
+						NnnLogger.warning(DatabaseHandler.class, "date error");
 					}
 
 					// completed must be converted

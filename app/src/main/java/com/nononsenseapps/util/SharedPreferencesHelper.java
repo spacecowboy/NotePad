@@ -19,9 +19,9 @@ package com.nononsenseapps.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
@@ -92,6 +92,9 @@ public class SharedPreferencesHelper {
 		return Prefs(context).getString(SyncPrefs.KEY_ACCOUNT, "");
 	}
 
+	/**
+	 * @return TRUE if the password for locking notes is set, FALSE if it isn't
+	 */
 	public static boolean isPasswordSet(@NonNull Context context) {
 		return !Prefs(context).getString(PasswordPrefs.KEY_PASSWORD, "").isEmpty();
 	}

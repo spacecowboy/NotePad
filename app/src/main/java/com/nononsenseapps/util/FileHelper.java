@@ -6,10 +6,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
-import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
@@ -94,7 +94,7 @@ public final class FileHelper {
 		}
 	}
 
-	// TODO see https://stackoverflow.com/a/59536115/6307322
+	// TODO would thing be easier if we used MediaStore? see https://stackoverflow.com/a/59536115/6307322
 
 	/**
 	 * @return the path of the directory where ORG files are saved, or NULL if
@@ -213,15 +213,15 @@ public final class FileHelper {
 	}
 
 	/**
-	 * @return TRUE only if the given {@link File} is a folder that can be written to
+	 * Tested and works on API 32 & API 23 devices.
+	 * Returns FALSE with folders that are unreachable for us, like /data/
+	 *
+	 * @return TRUE only if the given {@link File} is a folder that CAN be written to
 	 * using the {@link File} API, but only if the user gives the
 	 * {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} permission.
-	 * @implNote returns FALSE with folders that are unreachable for us, like /data/
 	 */
 	public static boolean folderNeedsAndroidWritePermission(@NonNull File folder) {
 		if (!folder.isDirectory()) return false;
-
-		// TODO test on API 23 to see if this is OK!
 
 		String dirDownload = Environment
 				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)

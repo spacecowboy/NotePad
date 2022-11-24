@@ -25,7 +25,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,8 +40,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
 import com.nononsenseapps.notepad.R;
@@ -254,7 +255,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		super.onSaveInstanceState(outState);
 		if (mTaskListsAdapter != null && pager != null) {
 			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(pager.getCurrentItem()));
-			Log.d("nononsenseapps list", "Save state: "
+			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state: "
 					+ mTaskListsAdapter.getItemId(pager.getCurrentItem()));
 		}
 	}

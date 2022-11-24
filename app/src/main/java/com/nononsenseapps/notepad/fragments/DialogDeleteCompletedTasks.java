@@ -18,15 +18,18 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.fragment.app.FragmentManager;
-
-import android.widget.Toast;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 
+/**
+ * Popup to confirm the user's choice to delete all completed tasks
+ */
 public class DialogDeleteCompletedTasks extends DialogDeleteTask {
+
 	public static void showDialog(final FragmentManager fm, final long listId,
 								  final DialogConfirmedListener listener) {
 		DialogDeleteCompletedTasks d = new DialogDeleteCompletedTasks();
@@ -39,7 +42,7 @@ public class DialogDeleteCompletedTasks extends DialogDeleteTask {
 
 	@Override
 	public int getMessage() {
-		return R.string.delete_items_message;
+		return R.string.delete_completed_tasks_question;
 	}
 
 	@Override

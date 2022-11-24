@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -124,6 +125,7 @@ public class ListWidgetService extends RemoteViewsService {
 				// "_id" "title" "note" "completed" "due" "updated" "lft" "rgt" "dblist" "locked"
 				if (mCursor.getLong(0) < 1) {
 					// TODO this branch NEVER gets called ??
+					NnnLogger.warning(ListWidgetService.class, "The code branch was ACTUALLY called!");
 
 					// Header
 					// if (mCursor.getViewType() == HeaderCursor.headerType) {

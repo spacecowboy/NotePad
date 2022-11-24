@@ -22,9 +22,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
@@ -168,7 +169,7 @@ public class DonateMigrator extends IntentService {
 							.parseRFC3339Date(noteCursor.getString(3))
 							.getTime();
 				} catch (Exception e) {
-					NnnLogger.warning(DonateMigrator.class,"date error");
+					NnnLogger.warning(DonateMigrator.class, "date error");
 				}
 
 				// completed must be converted

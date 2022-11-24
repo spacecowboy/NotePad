@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class Notification extends DAO {
 	// These match WeekDaysView's values
@@ -182,8 +183,11 @@ public class Notification extends DAO {
 			Task.Columns.DBLIST + " = l." +
 			TaskList.Columns._ID + ";";
 
-	// milliseconds since 1970-01-01 UTC
+	/**
+	 * milliseconds since 1970-01-01 UTC
+	 */
 	public Long time = null;
+
 	public boolean permanent = false;
 
 	public Long taskID = null;
@@ -367,14 +371,8 @@ public class Notification extends DAO {
 	}
 
 	public void saveInBackground(final Context context, final boolean schedule) {
-		final AsyncTask<Void, Void, Void> task = new AsyncTask<>() {
-			@Override
-			protected Void doInBackground(Void... voids) {
-				save(context, schedule);
-				return null;
-			}
-		};
-		task.execute();
+		// TODO replace all uses of AsyncTask<> with this, which is recommended. See https://stackoverflow.com/a/64969640/6307322
+		Executors.newSingleThreadExecutor().execute(() -> save(context, schedule));
 	}
 
 	/**
@@ -426,7 +424,8 @@ public class Notification extends DAO {
 	 * Delete or reschedule a specific notification.
 	 */
 	public static void deleteOrReschedule(final Context context, final Uri uri) {
-		final Cursor c = context.getContentResolver().query(uri, Columns.FIELDS, null, null, null);
+		final Cursor c = context.getContentResolver().query(uri, Columns.FIELDS, null,
+				null, null);
 
 		while (c.moveToNext()) {
 			Notification n = new Notification(c);

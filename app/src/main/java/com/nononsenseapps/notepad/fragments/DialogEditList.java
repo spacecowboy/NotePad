@@ -19,7 +19,6 @@ package com.nononsenseapps.notepad.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -35,6 +34,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;

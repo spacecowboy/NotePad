@@ -23,11 +23,9 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.preference.PreferenceManager;
-
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -49,6 +47,7 @@ import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nononsenseapps.helpers.ActivityHelper;
@@ -87,6 +86,7 @@ import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -356,25 +356,22 @@ public class ActivityMain extends AppCompatActivity
 
 		if (syncing) {
 			// In case of connectivity problems, stop the progress bar
-			var at = new AsyncTask<Void, Void, Void>() {
-
-				@Override
-				protected Void doInBackground(Void... params) {
-					try {
-						Thread.sleep(30000);
-					} catch (InterruptedException e) {
-						NnnLogger.exception(e);
-					}
-					return null;
+			Handler handler = new Handler(Looper.getMainLooper());
+			Executors.newSingleThreadExecutor().execute(() -> {
+				// Background work here
+				try {
+					Thread.sleep(30 * 1000);
+				} catch (InterruptedException e) {
+					NnnLogger.exception(e);
 				}
 
-				@Override
-				protected void onPostExecute(Void result) {
+				handler.post(() -> {
+					// UI Thread work here
+
 					// Notify that the refresh has finished
 					setRefreshOfAllSwipeLayoutsTo(false);
-				}
-			};
-			at.execute();
+				});
+			});
 		} else {
 			// explain to the user why the swipe-refresh was canceled
 			Toast.makeText(this, R.string.no_sync_method_chosen,
@@ -509,6 +506,10 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
+	/**
+	 * Restarts the activity using the same intent that started it.
+	 * Disables animations to get a seamless restart.
+	 */
 	private void restartAndRefresh() {
 		shouldRestart = false;
 		Intent intent = getIntent();
@@ -789,11 +790,10 @@ public class ActivityMain extends AppCompatActivity
 					R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
 				/**
-				 * Called when a drawer has settled in a completely closed
-				 * state.
+				 * Called when a drawer has settled in a completely closed state.
 				 */
-				public void onDrawerClosed(View view) { // TODO needs @Override ?
-
+				@Override
+				public void onDrawerClosed(View view) {
 					getSupportActionBar().setTitle(R.string.app_name_short);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
@@ -809,7 +809,8 @@ public class ActivityMain extends AppCompatActivity
 					showcaseDrawerPress();
 				}
 
-				public void onDrawerStateChanged(int newState) { // TODO needs @Override ?
+				@Override
+				public void onDrawerStateChanged(int newState) {
 					super.onDrawerStateChanged(newState);
 
 					// If it's not idle, it isn't closed
@@ -817,8 +818,7 @@ public class ActivityMain extends AppCompatActivity
 						getSupportActionBar().setTitle(R.string.show_from_all_lists);
 						// Is in motion, hide action items
 						isDrawerClosed = false;
-						invalidateOptionsMenu(); // creates call to
-						// onPrepareOptionsMenu()
+						invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 					}
 				}
 			};
@@ -881,7 +881,7 @@ public class ActivityMain extends AppCompatActivity
 		adapter.setExtraData(extraData);
 
 		// Load count of tasks in each one
-		Log.d("nononsenseapps drawer", TaskList.CREATE_COUNT_VIEW);
+		NnnLogger.debug(ActivityMain.class, TaskList.CREATE_COUNT_VIEW);
 
 		leftDrawer.setAdapter(adapter);
 		// Set click handler
@@ -1209,9 +1209,7 @@ public class ActivityMain extends AppCompatActivity
 		newSwpRefLayout.setColorSchemeResources(R.color.accent);
 
 		// TODO the swipe-to-refresh layouts have been disabled because they make it impossible
-		//  to manually drag down the 1° note. When you find a solution for this, such as
-		//  selectively enabling the swipe-to-refresh layout when the gesture is in the center-left
-		//  part of the screen, delete this line
+		//  to manually drag down the 1° note. When you find a solution for this, delete this line:
 		newSwpRefLayout.setEnabled(false);
 
 		// Sets up a Listener that is invoked when the user performs a swipe-to-refresh gesture.

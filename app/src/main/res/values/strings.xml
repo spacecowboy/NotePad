@@ -45,6 +45,7 @@
 	<string name="delete_items_message">Are  you sure you want to delete these items?</string>
 	<string name="delete_item_message">Are  you sure you want to delete this item?</string>
 	<string name="delete_list_message">Are you sure you want to delete the list?</string>
+	<string name="delete_completed_tasks_question">Are you sure you want to delete all completed tasks?</string>
 	<string name="editor_due_date_hint">Due date</string>
 	<string name="editor_title_hint">Title</string>
 	<string name="editor_note_hint">Note</string>
@@ -132,6 +133,11 @@
 	<string name="battery_optimizations_inactive">Battery optimizations are not enabled</string>
 	<string name="allow_exact_reminders">Allow exact reminders</string>
 	<string name="allow_exact_reminders_summary">Open a page to allow this app to send reminders in a more precise and reliable way. Only needed since Android 12 "Snow Cone"</string>
+	<string name="for_older_devices">For older Android devices</string>
+	<string name="overwritten_in_newer_systems">These are overwritten by the notification channel settings, when available</string>
+	<string name="prefs_improved_reliability">Preferences to improve reliability</string>
+	<string name="notification_channel_settings">Notification channel settings</string>
+	<string name="open_channel_settings_description">Open a page to edit the notification settings for this app. These override any settings chosen elsewhere</string>
 
 	<!--
 		Use few if language need it. In English is the same.

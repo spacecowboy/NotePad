@@ -627,15 +627,9 @@ public class DBProviderMovementTest extends TestCase {
 //		deleteList(tl);
 //	}
 
-	public void testInvalidMoves() {
-		// TODO
-		// fail("TODO");
-	}
 
-	public void testMultipleDeletes() {
-		// TODO
-		// fail("TODO");
-	}
+
+
 
 	public void testTaskContent() {
 		Task t = new Task();

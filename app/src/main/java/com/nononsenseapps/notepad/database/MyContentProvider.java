@@ -87,7 +87,7 @@ public class MyContentProvider extends ContentProvider {
 			return TaskList.CONTENT_TYPE;
 		} else if (uri.toString().startsWith(LegacyDBHelper.NotePad.Notes.CONTENT_URI.toString())
 				|| uri.toString().startsWith(
-						LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI.toString())) {
+				LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI.toString())) {
 			return Task.CONTENT_TYPE;
 		}
 

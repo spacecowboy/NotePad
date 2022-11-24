@@ -17,17 +17,18 @@
 
 package com.nononsenseapps.helpers;
 
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
+
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
+
+import java.util.Locale;
 
 // TODO can be deleted, we moved it to a new activity helper (?)
 public class ActivityHelper {
@@ -37,7 +38,9 @@ public class ActivityHelper {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 
-		final String theme = prefs.getString(AppearancePrefs.KEY_THEME, activity.getString(R.string.const_theme_light_ab));
+		final String theme = prefs.getString(
+				AppearancePrefs.KEY_THEME,
+				activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
 		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {
@@ -75,9 +78,12 @@ public class ActivityHelper {
 		}
 	}
 
-	public static Locale getUserLocale(Context activity) {
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		String lang = prefs.getString(activity.getString(R.string.pref_locale), "");
+	/**
+	 * @return the users's default or selected locale
+	 */
+	public static Locale getUserLocale(Context context) {
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String lang = prefs.getString(context.getString(R.string.pref_locale), null);
 		final Locale locale;
 		if (lang == null || lang.isEmpty())
 			locale = Locale.getDefault();

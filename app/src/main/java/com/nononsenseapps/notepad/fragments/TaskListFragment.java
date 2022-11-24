@@ -28,7 +28,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -47,6 +46,7 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -547,7 +547,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						msg = getResources().getString(R.string.deleted);
 					}
 
-					// TODO should use a Snackbar instead
+					// TODO should use a Snackbar instead of Toasts
 					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
@@ -730,8 +730,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			return true;
 		} else if (itemId == R.id.menu_clearcompleted) {
 			if (mListId != -1) {
-				DialogDeleteCompletedTasks.showDialog(getFragmentManager(),
-						mListId, null);
+				DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
 			}
 			return true;
 		} else if (itemId == R.id.menu_sort_title) {

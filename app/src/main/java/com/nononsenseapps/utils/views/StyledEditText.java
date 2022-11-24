@@ -259,7 +259,7 @@ public class StyledEditText extends AppCompatEditText {
 				// Don't call the span
 			} else if (link.length != 0) {
 				if (action == MotionEvent.ACTION_UP) {
-					// TODO the same of TitleNoteTextview.java
+					// TODO the same click trick of TitleNoteTextview.java
 					link[0].onClick(this);
 				} else if (action == MotionEvent.ACTION_DOWN) {
 					Selection.setSelection(buffer,

@@ -55,7 +55,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	/**
 	 * Filesystem path of the folder where files are kept. User changeable in preferences.
 	 */
-	protected String ORG_DIR; // TODO make it final and fix tests
+	private final String ORG_DIR;
 
 	public SDSynchronizer(Context context) {
 		super(context);

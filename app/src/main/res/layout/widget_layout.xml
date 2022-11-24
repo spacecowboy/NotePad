@@ -32,9 +32,6 @@
 		android:orientation="horizontal"
 		android:padding="0dp">
 
-		<!-- TODO here the icon of a gear would be more appropriate,
-		      because it brings you to the widget's settings. Remember
-		       that it has to work on API < 26 too! -->
 		<ImageView
 			android:id="@+id/widgetConfigButton"
 			android:layout_width="48dp"
@@ -42,11 +39,8 @@
 			android:layout_gravity="center"
 			android:background="@drawable/img_default_selector_dark"
 			android:contentDescription="Configure widget"
-			android:paddingLeft="0dp"
-			android:paddingTop="8dp"
-			android:paddingRight="0dp"
-			android:paddingBottom="8dp"
-			android:src="@drawable/app_icon"/>
+			android:padding="8dp"
+			android:src="@drawable/ic_settings_24dp_white"/>
 
 		<LinearLayout
 			android:layout_width="8dp"
@@ -77,10 +71,7 @@
 			android:layout_height="match_parent"
 			android:background="@drawable/img_default_selector_dark"
 			android:contentDescription="Create new note"
-			android:paddingLeft="0dp"
-			android:paddingTop="4dp"
-			android:paddingRight="4dp"
-			android:paddingBottom="4dp"
+			android:padding="4dp"
 			android:scaleType="fitCenter"
 			android:src="@drawable/ic_add_24dp_white"/>
 	</LinearLayout>

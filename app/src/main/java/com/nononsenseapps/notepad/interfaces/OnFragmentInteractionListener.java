@@ -1,10 +1,9 @@
 package com.nononsenseapps.notepad.interfaces;
 
 import android.net.Uri;
+import android.view.View;
 
 import androidx.fragment.app.Fragment;
-
-import android.view.View;
 
 /**
  * This interface must be implemented by activities that contain

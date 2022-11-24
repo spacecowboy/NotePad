@@ -7,3 +7,5 @@
 	android:name="com.nononsenseapps.notepad.prefs.IndexPrefs"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"/>
+
+<!-- see activity_settings_dual for the tablet-landscape version -->

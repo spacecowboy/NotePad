@@ -51,6 +51,8 @@
 	<string name="const_sans">Sans</string>
 	<string name="const_serif">Serif</string>
 	<string name="const_monospace">Monospace</string>
+	<string name="key_pref_notif_channel_settings">key_pref_notif_channel_settings</string>
+	<string name="key_pref_cat_notif_old">key_pref_cat_notif_old</string>
 	<string name="key_pref_ringtone">global_ringtone</string>
 	<string name="key_pref_vibrate">global_vibrate</string>
 	<string name="key_pref_prio">global_prio</string>

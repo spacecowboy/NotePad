@@ -28,10 +28,10 @@ import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
@@ -70,8 +70,7 @@ public class AccountDialog4 extends DialogFragment implements
 		for (int i = 0; i < size; i++) {
 			names[i] = accounts[i].name;
 		}
-		// TODO
-		//  Could add a clear alternative here
+		// TODO Could add a clear alternative here
 		builder.setItems(names, (dialog, which) -> {
 			// Stuff to do when the account is selected by the user
 			accountSelected(accounts[which]);

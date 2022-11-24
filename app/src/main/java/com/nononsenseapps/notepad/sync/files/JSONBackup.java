@@ -286,13 +286,9 @@ public class JSONBackup {
 
 		// Schedule notifications
 		NotificationHelper.schedule(context);
-
-		// TODO Add geofences
 	}
 
 	private void clearDatabase() {
-		// TODO Remove geofences
-
 		context.getContentResolver().delete(RemoteTask.URI, null, null);
 		context.getContentResolver().delete(RemoteTaskList.URI, null, null);
 

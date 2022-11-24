@@ -17,15 +17,10 @@
 
 package com.nononsenseapps.notepad.dashclock;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.stream.Stream;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+
 import androidx.preference.PreferenceManager;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
@@ -33,6 +28,12 @@ import com.google.android.apps.dashclock.api.ExtensionData;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.stream.Stream;
 
 public class TasksExtension extends DashClockExtension {
 

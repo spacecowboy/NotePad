@@ -27,7 +27,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -53,6 +52,7 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
@@ -213,8 +213,8 @@ public class TaskDetailFragment extends Fragment {
 	private Task mTaskOrg;
 	// To save orgState
 	// TODO
-	// AND with task.locked. If result is true, note is locked and has not been
-	// unlocked, otherwise good to show
+	//  AND with task.locked. If result is true, note is locked and has not been
+	//  unlocked, otherwise good to show
 	private boolean mLocked = true;
 
 	private OnFragmentInteractionListener mListener;
@@ -442,21 +442,6 @@ public class TaskDetailFragment extends Fragment {
 		dpDiag.show();
 	}
 
-	/* TODO is it needed somewhere ?  check git history
-	@Override
-	 public void onDialogTimeSet(int hourOfDay, int minute) {
-	 final Calendar localTime = Calendar.getInstance();
-	 if (mTask.due != null) {
-	 localTime.setTimeInMillis(mTask.due);
-	 }
-	 localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-	 localTime.set(Calendar.MINUTE, minute);
-
-	 mTask.due = localTime.getTimeInMillis();
-	 setDueText();
-	 }
-	*/
-
 	private void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
@@ -466,8 +451,7 @@ public class TaskDetailFragment extends Fragment {
 		localTime.set(Calendar.MONTH, monthOfYear);
 		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-		// set to 23:59 to be more or less consistent with earlier date only
-		// implementation
+		// set to 23:59 to be more or less consistent with earlier date only implementation
 		localTime.set(Calendar.HOUR_OF_DAY, 23);
 		localTime.set(Calendar.MINUTE, 59);
 
@@ -536,8 +520,8 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	public boolean isLocked() {
 		if (getActivity() != null) {
-			// it happened once during espresso tests
 			boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
+			NnnLogger.debug(TaskDetailFragment.class, "hasPassword = " + hasPassword);
 			// if (!hasPassword) return false; // TODO check and use these
 		}
 
@@ -554,7 +538,7 @@ public class TaskDetailFragment extends Fragment {
 			NnnLogger.error(TaskDetailFragment.class, "taskText or taskCompleted is null");
 			return;
 		}
-		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
+		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
 		if (isLocked()) {
 			taskText.setText(mTask.title);
 			DialogPassword_ pflock = new DialogPassword_();
@@ -621,17 +605,16 @@ public class TaskDetailFragment extends Fragment {
 				titleEnd = text.length();
 			}
 
+			// there is also ShareCompat.IntentBuilder, if you want...
+			Intent i = new Intent(Intent.ACTION_SEND)
+					.setType("text/plain")
+					.putExtra(Intent.EXTRA_TEXT, text)
+					.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
 			try {
-				// TODO try sharing a note with the email app: it should put the title
-				//  as subject, in my opinion
-				Intent i = new Intent(Intent.ACTION_SEND)
-						.setType("text/plain")
-						.putExtra(Intent.EXTRA_TEXT, text)
-						.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
 				mShareActionProvider.setShareIntent(i);
 			} catch (RuntimeException e) {
 				// Can crash when too many transactions overflow the buffer
-				Log.d("nononsensenotes", e.getLocalizedMessage());
+				NnnLogger.exception(e);
 			}
 		}
 	}

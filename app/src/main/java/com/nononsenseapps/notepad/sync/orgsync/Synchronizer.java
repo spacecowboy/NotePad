@@ -112,7 +112,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 				if (list == null) {
 					// DELETE FILE DB
 					deleteRemoteFile(file);
-					deleteLocal(list, dbEntry);
+					deleteLocal(/*list=*/null, dbEntry);
 				} else {
 					if (file == null) {
 						// DELETE DB LIST
@@ -279,7 +279,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 				if (task == null) {
 					// DELETE NODE DB
 					//Log.d(TAG, "DELETE NODE DB");
-					deleteLocal(task, dbEntry);
+					deleteLocal(/*task=*/null, dbEntry);
 					if (node != null) {
 						deleteNode(node);
 						shouldUpdateFile = true;

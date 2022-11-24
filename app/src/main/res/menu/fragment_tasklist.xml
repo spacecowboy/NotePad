@@ -21,10 +21,10 @@
 
 	<group android:id="@+id/list_menu_group">
 
-		<!-- TODO add an icon for this action -->
 		<item
 			android:id="@+id/menu_clearcompleted"
 			android:orderInCategory="300"
+			android:icon="@drawable/ic_notebook_minus_24dp_white"
 			android:title="@string/menu_clearcompleted"
 			app:showAsAction="ifRoom"/>
 

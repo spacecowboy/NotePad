@@ -18,45 +18,73 @@
 
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="app_preference_screen_notifications">
 
-	<!-- RingtonePreference is not supported in androidx: we use the official hack,
+	<!-- in API >=26, open the system's notification channel pref. page, instead of using
+	 our notification preferences -->
+	<Preference
+		android:key="@string/key_pref_notif_channel_settings"
+		android:summary="@string/open_channel_settings_description"
+		android:title="@string/notification_channel_settings"/>
+
+	<!-- these 3 settings work on android API versions < API 26, which we still support.
+		 in newer androids, these values are overwritten by the notification channel settings -->
+	<PreferenceCategory
+		android:enabled="true"
+		android:key="key_pref_cat_notif_old"
+		android:persistent="false"
+		android:summary="@string/overwritten_in_newer_systems"
+		android:title="@string/for_older_devices"
+		app:initialExpandedChildrenCount="0">
+
+		<!-- RingtonePreference is not supported in androidx: we use the official hack,
 	     see NotificationPrefs.java -->
-	<Preference
-		android:key="@string/key_pref_ringtone"
-		android:summary="filled in NotificationPrefs.java"
-		android:title="@string/sound"/>
+		<Preference
+			android:key="@string/key_pref_ringtone"
+			android:summary="filled in NotificationPrefs.java"
+			android:title="@string/sound"/>
 
-	<CheckBoxPreference
-		android:defaultValue="false"
-		android:key="@string/key_pref_vibrate"
-		android:title="@string/vibrate"/>
+		<CheckBoxPreference
+			android:defaultValue="false"
+			android:key="@string/key_pref_vibrate"
+			android:title="@string/vibrate"/>
 
-	<ListPreference
-		android:defaultValue="0"
-		android:entries="@array/notification_prio_entries"
-		android:entryValues="@array/notification_prio_values"
-		android:key="@string/key_pref_prio"
-		android:title="@string/priority"/>
+		<ListPreference
+			android:defaultValue="0"
+			android:entries="@array/notification_prio_entries"
+			android:entryValues="@array/notification_prio_values"
+			android:key="@string/key_pref_prio"
+			android:title="@string/priority"/>
 
-	<SwitchPreference
-		android:defaultValue="false"
-		android:key="@string/key_pref_should_use_exact_alarms"
-		android:summary="@string/exact_alarms_summary"
-		android:title="@string/use_exact_alarms"/>
+	</PreferenceCategory>
 
-	<!-- The user clicks this to open a system page to disable battery optimizations -->
-	<Preference
-		android:dependency="@string/key_pref_should_use_exact_alarms"
-		android:key="@string/key_pref_ignore_battery_optimizations"
-		android:summary="filled in NotificationPrefs.java"
-		android:title="@string/disable_battery_optimizations"/>
+	<PreferenceCategory
+		android:enabled="true"
+		android:persistent="false"
+		android:title="@string/prefs_improved_reliability">
 
-	<!-- The user clicks this to open a system page to allow exact reminders -->
-	<Preference
-		android:dependency="@string/key_pref_should_use_exact_alarms"
-		android:key="@string/key_pref_allow_exact_reminders"
-		android:summary="@string/allow_exact_reminders_summary"
-		android:title="@string/allow_exact_reminders"/>
+		<!-- if we use .setExactAndAllowWhileIdle() to ignore doze mode and get alarms consistently -->
+		<SwitchPreference
+			android:defaultValue="false"
+			android:key="@string/key_pref_should_use_exact_alarms"
+			android:summary="@string/exact_alarms_summary"
+			android:title="@string/use_exact_alarms"/>
+
+		<!-- The user clicks this to open a system page to disable battery optimizations -->
+		<Preference
+			android:dependency="@string/key_pref_should_use_exact_alarms"
+			android:key="@string/key_pref_ignore_battery_optimizations"
+			android:summary="filled in NotificationPrefs.java"
+			android:title="@string/disable_battery_optimizations"/>
+
+		<!-- The user clicks this to open a system page to allow exact reminders -->
+		<Preference
+			android:dependency="@string/key_pref_should_use_exact_alarms"
+			android:key="@string/key_pref_allow_exact_reminders"
+			android:summary="@string/allow_exact_reminders_summary"
+			android:title="@string/allow_exact_reminders"/>
+
+	</PreferenceCategory>
 
 </PreferenceScreen>

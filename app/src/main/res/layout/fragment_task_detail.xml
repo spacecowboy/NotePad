@@ -88,8 +88,9 @@
 				<!-- TODO it had app:tint="?attr/iconTint" but that makes it white on a white
 				      backround with the classic theme. In the future, instead of using this
 				      "double icon through an attribute, for every icon" stuff, just take 1
-				      white icon and use iconTint everywhere. So one day you should delete all
-				      ic_... in attr.xml -->
+				      white icon and use iconTint everywhere. It's as easy as adding:
+				      app:drawableTint="?attr/textColorPrimary".
+				      So one day you should delete all "ic_..." tags in attr.xml -->
 				<ImageButton
 					android:id="@+id/dueCancelButton"
 					style="?android:attr/buttonBarButtonStyle"

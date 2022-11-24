@@ -18,6 +18,7 @@
 package com.nononsenseapps.helpers;
 
 import android.content.Context;
+
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;

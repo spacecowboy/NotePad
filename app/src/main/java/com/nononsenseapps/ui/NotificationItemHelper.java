@@ -20,12 +20,13 @@ package com.nononsenseapps.ui;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import androidx.preference.PreferenceManager;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
+
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;

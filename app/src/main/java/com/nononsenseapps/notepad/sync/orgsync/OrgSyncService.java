@@ -33,10 +33,10 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import androidx.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
@@ -54,8 +54,6 @@ import java.util.Calendar;
 
 public class OrgSyncService extends Service {
 
-	private static final String TAG = "OrgSyncService";
-
 	public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".sync.START";
 	public static final String ACTION_PAUSE = BuildConfig.APPLICATION_ID + ".sync.PAUSE";
 
@@ -72,12 +70,12 @@ public class OrgSyncService extends Service {
 	private final ArrayList<SynchronizerInterface> synchronizers;
 
 	public static void start(Context context) {
-		context.startService(new Intent(context, OrgSyncService.class)
+		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
 				.setAction(ACTION_START));
 	}
 
 	public static void pause(Context context) {
-		context.startService(new Intent(context, OrgSyncService.class)
+		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
 				.setAction(ACTION_PAUSE));
 	}
 
@@ -166,7 +164,7 @@ public class OrgSyncService extends Service {
 
 		Notification notif = new NotificationCompat
 				.Builder(this, NotificationHelper.CHANNEL_ID)
-				.setContentTitle("Could not access files") // TODO hardcoded
+				.setContentTitle("Could not access files")
 				.setContentText("Please change directory")
 				.setContentIntent(pi)
 				.build();
@@ -197,7 +195,7 @@ public class OrgSyncService extends Service {
 		}
 
 		public void onMonitorChange() {
-			Log.d(TAG, "OnMonitorChange");
+			NnnLogger.debug(OrgSyncService.class, "OnMonitorChange");
 			// Increment the changeId
 			changeId++;
 
@@ -242,18 +240,18 @@ public class OrgSyncService extends Service {
 				 */
 				switch (msg.arg1) {
 					case SYNC_QUEUE:
-						Log.d(TAG, "Sync-Queue: " + msg.arg2);
+						NnnLogger.debug(OrgSyncService.class, "Sync-Queue: " + msg.arg2);
 						lastChangeId = msg.arg2;
 						break;
 					case SYNC_RUN:
-						Log.d(TAG, "Sync-Run: " + msg.arg2);
+						NnnLogger.debug(OrgSyncService.class, "Sync-Run: " + msg.arg2);
 						if (msg.arg2 != lastChangeId) {
 							// Wait...
 							return;
 						}
 						// Falling through
 					case TWO_WAY_SYNC:
-						Log.d(TAG, "Sync-Two-Way: " + msg.arg2);
+						NnnLogger.debug(OrgSyncService.class, "Sync-Two-Way: " + msg.arg2);
 						// Pause monitors
 						for (final Monitor monitor : monitors) {
 							monitor.pauseMonitor();
