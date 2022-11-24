@@ -234,5 +234,6 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 
 	// TODO test the app in doze mode: see
 	//  https://developer.android.com/training/monitoring-device-state/doze-standby#testing_doze
+	//  command: $ adb shell dumpsys alarm
 
 }

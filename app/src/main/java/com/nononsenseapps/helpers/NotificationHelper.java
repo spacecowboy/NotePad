@@ -30,7 +30,6 @@ import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -66,6 +65,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static ContextObserver observer = null;
 
 	private static ContextObserver getObserver(final Context context) {
+		// TODO may be useless. delete ?
 		if (observer == null) {
 			observer = new ContextObserver(context, null);
 		}
@@ -88,6 +88,8 @@ public class NotificationHelper extends BroadcastReceiver {
 				// => can't cancel anything. Just schedule and notify at end of the function.
 				// (Intent.ACTION_BOOT_COMPLETED is for when the phone is rebooted,
 				// Intent.ACTION_RUN is for notifications scheduled through the Alarm Manager)
+
+				// TODO test boot completed with pending notifications, see if it works in API 32
 			} else {
 				// => always cancel
 				cancelNotification(context, intent.getData());
@@ -122,14 +124,14 @@ public class NotificationHelper extends BroadcastReceiver {
 				}
 			}
 		}
-		// run these in ANY case
-		notifyPast(context);
-		scheduleNext(context);
+		// run this in ANY case
+		schedule(context);
 	}
 
 	/**
 	 * creates the notification channel needed on API 26 and higher to show notifications.
-	 * This is safe to call multiple times
+	 * This is safe to call multiple times. All of its settings overwrite those of the
+	 * single notification!
 	 */
 	@TargetApi(Build.VERSION_CODES.O)
 	@RequiresApi(Build.VERSION_CODES.O)
@@ -143,29 +145,21 @@ public class NotificationHelper extends BroadcastReceiver {
 		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
 		channel.setDescription(description);
 
-		AudioAttributes audioAttrib = new AudioAttributes.Builder()
-				.setUsage(AudioAttributes.USAGE_NOTIFICATION)
-				.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-				.build();
+		// well if the users dislike this they can change it through the settings
+		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
 
-		// get user-chosen ringtone from preferences
-		String ringtone1 = PreferenceManager
-				.getDefaultSharedPreferences(context)
-				.getString(context.getString(R.string.key_pref_ringtone), null);
-		Uri ringtone2 = ringtone1 == null ? null : Uri.parse(ringtone1);
-
-		// TODO choose a value for this ? or just bring the user to the channel preference page ?
-		//  channel.setLockscreenVisibility();
-
-		// TODO we have to update the vibration and light settings HERE, or they won't work
-		//  in newer android version. read values from the preferences, copy code from this file
-		//  channel.enableVibration(true);
-
-		channel.setSound(ringtone2, audioAttrib); // TODO does it even work ?
+		// here you could also set:
+		// * the sound: channel.setSound()
+		// * the vibration: channel.enableVibration()
+		// * the light color: channel.enableLights() & channel.setLightColor()
+		// but the user can set all of these in the system's notification channel pref. page,
+		// which can be opened through our NotificationPrefs fragment. And that's
+		// better than us rewriting android code!
 		nm.createNotificationChannel(channel);
 	}
 
 	private static void monitorUri(final Context context) {
+		// TODO useless ? delete ?
 		context.getContentResolver().unregisterContentObserver(getObserver(context));
 		context.getContentResolver().registerContentObserver(
 				com.nononsenseapps.notepad.database.Notification.URI,
@@ -189,7 +183,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	/**
 	 * Displays notifications that have a time occurring in the past. If no notifications
-	 * like that exist, it will make sure to cancel any notifications showing.
+	 * like that exist, it will cancel any notifications showing.
 	 */
 	private static void notifyPast(Context context) {
 		// Get list of past notifications
@@ -210,7 +204,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 
 		NnnLogger.debug(NotificationHelper.class,
-				"Number of notifications: " + notifications.size());
+				"N° of notifications: " + notifications.size());
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {
@@ -220,7 +214,11 @@ public class NotificationHelper extends BroadcastReceiver {
 		} else {
 			// else, notify
 
-			// Fetch sound and vibrate settings
+			// Fetch sound and vibrate settings. The following settings are ARE ONLY VALID
+			// ON ANDROID API < 26, by design. Newer android versions set these things on the
+			// notification CHANNEL. For that, we just bring the user to the OS settings page,
+			// instead of creating our preferences code
+			// => the code here is only for API 23, 24 and 25 devices
 			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
 			// Always use default lights
@@ -232,8 +230,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			// Need to get a new one because the action buttons will duplicate otherwise
 			NotificationCompat.Builder builder;
 
-			// (Here there was code to group notifications together by list.
-			// I removed it because it wasn't being used.
+			// (Here there was code to group notifications together by list, but i removed it.
 			// Check git history if you're interested)
 
 			// get priority and ringtone. See NotificationPrefs.java
@@ -245,7 +242,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 			// Notify for each individually
 			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-				// notifications.length is ~3 => optimization is not needed
+				// notifications.length is ~3 => optimization is not needed in this loop
 				builder = getNotificationBuilder(context, priority, lightAndVibrate, ringtone);
 				notifyBigText(context, notificationManager, builder, note);
 			}
@@ -263,16 +260,17 @@ public class NotificationHelper extends BroadcastReceiver {
 		final Bitmap largeIcon = BitmapFactory
 				.decodeResource(context.getResources(), R.drawable.app_icon);
 
+		// note that many of these settings (ringtone, vibration, ...) are IGNORED in
+		// android API >= 26. Instead, the user should edit the notification channel
+		// preferences in the page we link to from NotificationPrefs.java
 		return new NotificationCompat
-				.Builder(context, CHANNEL_ID) // let's use only 1 channel in this app
+				.Builder(context, CHANNEL_ID) // we use only 1 channel in this app
 				.setWhen(0)
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
 				.setLargeIcon(largeIcon)
 				.setPriority(priority) // TODO always use NotificationCompat.PRIORITY_DEFAULT instead ?
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
-				// it's overwritten by the value in the notification channel,
-				// but only in newer android versions
 				.setSound(ringtone)
 				.setOnlyAlertOnce(true);
 	}
@@ -286,10 +284,9 @@ public class NotificationHelper extends BroadcastReceiver {
 			final Context context,
 			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
 		// get duplicates and iterate over them
-		for (com.nononsenseapps.notepad.database.Notification noti : getLatestOccurence(notifications)) {
+		for (var noti : getLatestOccurence(notifications)) {
 			// remove all but the first one from database, and big list
-			for (com.nononsenseapps.notepad.database.Notification dupNoti : getDuplicates(
-					noti, notifications)) {
+			for (var dupNoti : getDuplicates(noti, notifications)) {
 				notifications.remove(dupNoti);
 				cancelNotification(context, dupNoti);
 				// Cancelled called in delete
@@ -421,7 +418,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * Uses {@link AlarmManager}, which can set alarms with different priorities.
 	 * See https://developer.android.com/training/scheduling/alarms#exact
 	 * You can't expect android to be precise or reliable: reminders will appear within
-	 * a few minutes from the specified time, or may not appear at all until the app is restarted
+	 * a few minutes from the specified time, or may not appear at all until the app
+	 * is restarted. OEM and vendors make this impossibile to solve
 	 */
 	private static void scheduleNext(Context context) {
 		// Get first future notification
@@ -430,16 +428,9 @@ public class NotificationHelper extends BroadcastReceiver {
 				= com.nononsenseapps.notepad.database.Notification
 				.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
-		// TODO learn about the disasters Google made with alarms:
+		// TODO when updating to targetSDK 33 check these:
 		//  https://developer.android.com/reference/android/Manifest.permission#SCHEDULE_EXACT_ALARM
 		//  https://developer.android.com/reference/android/Manifest.permission#USE_EXACT_ALARM
-
-		// TODO if this function still does not work, try these
-		//  https://stackoverflow.com/a/60323379/6307322
-		//  https://stackoverflow.com/a/60477054/6307322
-		//  https://github.com/yuriykulikov/AlarmClock/blob/78fe0d2077260e2c68a5f0731c563bf57f8c0fa2/app/src/main/java/com/better/alarm/presenter/ScheduledReceiver.java
-		//  https://stackoverflow.com/a/71464360/6307322
-		//  which should let notifications appear even if the app is removed from the "recents" list
 
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
@@ -458,12 +449,19 @@ public class NotificationHelper extends BroadcastReceiver {
 
 			if (useExactReminders(context, aMgr)) {
 				// an "exact" alarm is more reliable, but requires user permission in API 31
-				// TODO there is also .setAlarmClock(), but it didn't work when I tried.
-				//  It's supposed to have the highest priority, so we SHOULD use it.
-				//  var aci = new AlarmManager.AlarmClockInfo(...);
-				//  am.setAlarmClock(aci,pendingIntent);
 				aMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
 						getTimeForAlarm(thingToNotify), pendingIntent);
+				/*
+				There is also .setAlarmClock(), but it didn't work when I tried.
+				It's has the highest priority, but the OS may show the reminder's trigger
+				time in the statubar on top of the screen. Therefore it overwrites any
+				alarm set by the clock app (waking up, bed time, ...). Since many
+				users (me, at least) are more interested in seeing those on the status bar,
+				(and not this app's reminders), we should avoid using setAlarmClock().
+				In any case, it would look like this:
+				aMgr.setAlarmClock(new AlarmManager.AlarmClockInfo(
+					getTimeForAlarm(thingToNotify), new PendingIntent(...)), pendingIntent);
+				*/
 			} else {
 				// these kinds of alarms don't require permission, but they are more vague
 				aMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
@@ -497,18 +495,18 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	/**
 	 * @return the time to start the alarm, of the System.currentTimeMillis() type,
-	 * so a {@link long} representing a "wall clock time" in UTC
+	 * so a {@link Long} representing a "wall clock time" in UTC
 	 */
 	private static long getTimeForAlarm(com.nononsenseapps.notepad.database.Notification input) {
 		// TODO since android takes some time to understand that it has to send the reminder,
 		//  here we could subtract 60~100 seconds so that, by the time it understands what to do,
-		//  we're not late with the reminder
+		//  we're not late with the reminder. Seems paranoic, though
 		return input.time; // - 60 * 1000
 	}
 
 	/**
-	 * Schedules coming notifications, and displays expired ones. Only
-	 * notififies once for existing notifications.
+	 * Schedules coming notifications, and displays expired ones.
+	 * Only notififies once for existing notifications.
 	 */
 	public static void schedule(final Context context) {
 		notifyPast(context);
@@ -604,6 +602,9 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	private static class ContextObserver extends ContentObserver {
+
+		// TODO can we please delete this class ?
+
 		private final Context context;
 
 		public ContextObserver(final Context context, Handler h) {
@@ -611,18 +612,6 @@ public class NotificationHelper extends BroadcastReceiver {
 			this.context = context.getApplicationContext();
 		}
 
-		// Implement the onChange(boolean) method to delegate the
-		// change notification to the onChange(boolean, Uri) method
-		// to ensure correct operation on older versions
-		// of the framework that did not have the onChange(boolean,
-		// Uri) method.
-		@Override
-		public void onChange(boolean selfChange) {
-			onChange(selfChange, null);
-		}
-
-		// Implement the onChange(boolean, Uri) method to take
-		// advantage of the new Uri argument.
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
 			// Handle change but don't spam
