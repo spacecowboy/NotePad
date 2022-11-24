@@ -18,8 +18,6 @@ import com.nononsenseapps.notepad.R;
  */
 public final class ShowcaseHelper {
 
-	// TODO is there a better place to put this file ?
-
 	/**
 	 * Create, configure and show a view to highlight a functionality, using an appropriate
 	 * library. The view is shown above the given {@link Activity} and features a title and a
@@ -95,7 +93,11 @@ public final class ShowcaseHelper {
 
 			@Override
 			public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
-				view.dismiss(false);
+				// don't .dismiss(), because that causes a NullPointerException
+				// in android.view.View.dispatchDetachedFromWindow(). See
+				// https://github.com/KeepSafe/TapTargetView/issues/395#issuecomment-987952528
+				view.setVisibility(View.GONE);
+				super.onTargetDismissed(view, userInitiated);
 			}
 		};
 
