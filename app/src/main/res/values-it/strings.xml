@@ -232,7 +232,6 @@
 	<string name="sd_card">Scheda SD</string>
 	<string name="sd_card_sync">Sincronizzazione su scheda SD</string>
 	<string name="sd_card_summary">Le note sono salvate anche sulla scheda SD. Le modifiche sono sincronizzate in entrambi i versi. Cancellare i file eliminerà anche le note nell\'app!</string>
-	<string name="sd_card_summary">L</string>
 	<string name="directory">Cartella</string>
 	<string name="directory_summary">Dove salvare i file</string>
 	<string name="cannot_write_to_directory">Impossibile scrivere sulla cartella</string>

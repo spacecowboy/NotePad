@@ -82,12 +82,27 @@ android {
         applicationId "com.nononsenseapps.notepad"
         minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
         targetSdkVersion 32
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
-        versionName getVersionName()
+
+        // Making either of these two values dynamic in the defaultConfig will
+        // require a full app build and reinstallation
+        versionCode 1
+        versionName "0.0-debug"
+
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments disableAnalytics: 'true'
+    }
+
+    // The defaultConfig values above are fixed, to optimize incremental builds. For release
+    // builds, it's OK. The following script iterates through all the known variants, finds those
+    // that are "release" build types, and changes those properties to something dynamic.
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "release") {
+            variant.mergedFlavor.versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
+            variant.mergedFlavor.versionName = getVersionName()
+        }
+        // TODO see https://developer.android.com/studio/build/optimize-your-build?utm_source=android-studio#incremental-annotation-processor-support for more
     }
 
     testOptions {
