@@ -23,6 +23,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
@@ -30,8 +31,13 @@ import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 
 import java.util.Locale;
 
-// TODO can be deleted, we moved it to a new activity helper (?)
-public class ActivityHelper {
+/**
+ * Contains helper methods for activities
+ */
+public final class ActivityHelper {
+
+	// forbid instances: it's a static class
+	private ActivityHelper() {}
 
 	public static void readAndSetSettings(Activity activity) {
 		// Read settings and set
@@ -94,5 +100,29 @@ public class ActivityHelper {
 		}
 
 		return locale;
+	}
+
+	/**
+	 * Set configured locale on current context
+	 */
+	public static void setSelectedLanguage(@NonNull Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		Configuration config = context.getResources().getConfiguration();
+
+		String lang = prefs.getString(context.getString(R.string.pref_locale), "");
+		if (!config.locale.toString().equals(lang)) {
+			Locale locale;
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			} else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+			// Locale.setDefault(locale);
+			config.locale = locale;
+			context.getResources().updateConfiguration(config,
+					context.getResources().getDisplayMetrics());
+		}
 	}
 }

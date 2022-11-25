@@ -32,6 +32,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
@@ -48,7 +49,7 @@ public class PrefsActivity extends AppCompatActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setLanguage();
+		ActivityHelper.setSelectedLanguage(this);
 
 		// Add the arrow to go back
 		if (getSupportActionBar() != null) {
@@ -118,27 +119,6 @@ public class PrefsActivity extends AppCompatActivity implements
 			getSupportActionBar().setSubtitle(pref.getTitle());
 		}
 		return true;
-	}
-
-
-	private void setLanguage() {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		Configuration config = getResources().getConfiguration();
-
-		String lang = prefs.getString(getString(R.string.pref_locale), "");
-		if (!config.locale.toString().equals(lang)) {
-			Locale locale;
-			if ("".equals(lang))
-				locale = Locale.getDefault();
-			else if (lang.length() == 5) {
-				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			} else {
-				locale = new Locale(lang.substring(0, 2));
-			}
-			// Locale.setDefault(locale);
-			config.locale = locale;
-			getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-		}
 	}
 
 	@Override
