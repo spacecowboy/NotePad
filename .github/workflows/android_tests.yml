@@ -40,7 +40,7 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-#      - name: perform HAXM installation
+#      - name: perform HAXM installation (NOT NEEDED)
 #        run: brew install --cask intel-haxm
 
       - name: perform AVD caching
@@ -53,6 +53,7 @@ jobs:
           key: avd-${{ matrix.api-level }}
 
       - name: create AVD and generate snapshot for caching
+        # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md      
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -61,8 +62,12 @@ jobs:
           arch: x86_64        # the only one available for images of all API versions
           profile: Nexus 5X
           force-avd-creation: false
+          emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: echo " - - - Generated AVD snapshot for caching - - - "
+
+      - name: Check for HAXM installation
+        run: emulator -accel-check && emulator -accel-check
 
       - name: perform the Gradle build
         run: ./gradlew build
@@ -80,7 +85,7 @@ jobs:
           profile: Nexus 5X
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: ./gradlew connectedCheck --stacktrace
 
       - name: take a screenshot at the end
@@ -99,10 +104,10 @@ jobs:
           name: screenshot2.jpg
           path: screenshot2.jpg
 
-      - name: Upload test report when tests fail
+      - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
         uses: actions/upload-artifact@v3
-        if: failure()
+        if: success() || failure()
         with:
           name: android-test-report-api${{ matrix.api-level }}
           path: app/build/reports/androidTests/connected/**
