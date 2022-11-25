@@ -68,7 +68,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
-import com.nononsenseapps.util.SharedPreferencesHelper;
+import com.nononsenseapps.util.PreferencesHelper;
 import com.nononsenseapps.utils.ShowcaseHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 
@@ -520,7 +520,7 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	public boolean isLocked() {
 		if (getActivity() != null) {
-			boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
+			boolean hasPassword = PreferencesHelper.isPasswordSet(getActivity());
 			NnnLogger.debug(TaskDetailFragment.class, "hasPassword = " + hasPassword);
 			// if (!hasPassword) return false; // TODO check and use these
 		}

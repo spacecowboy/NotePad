@@ -24,7 +24,7 @@ import android.os.FileObserver;
 
 import com.nononsenseapps.util.FileHelper;
 import com.nononsenseapps.util.PermissionsHelper;
-import com.nononsenseapps.util.SharedPreferencesHelper;
+import com.nononsenseapps.util.PreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.parser.OrgParser;
@@ -67,10 +67,10 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 				.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
 		if (permitted) {
 			// we CAN save files in the external storage
-			configured = SharedPreferencesHelper.isSdSyncEnabled(context);
+			configured = PreferencesHelper.isSdSyncEnabled(context);
 		} else {
 			configured = false;
-			SharedPreferencesHelper.disableSdCardSync(context);
+			PreferencesHelper.disableSdCardSync(context);
 		}
 	}
 
