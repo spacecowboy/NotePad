@@ -66,7 +66,7 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
-            pseudoLocalesEnabled true
+            pseudoLocalesEnabled true // TODO test https://developer.android.com/guide/topics/resources/pseudolocales
             // just to make gradle shut up about missing classes
             proguardFiles 'proguard.pro'
         }
@@ -84,7 +84,7 @@ android {
         targetSdkVersion 32
 
         // Making either of these two values dynamic in the defaultConfig will
-        // require a full app build and reinstallation
+        // require a full app build and reinstallation, even for the smallest change
         versionCode 1
         versionName "0.0-debug"
 
@@ -94,15 +94,16 @@ android {
         testInstrumentationRunnerArguments disableAnalytics: 'true'
     }
 
-    // The defaultConfig values above are fixed, to optimize incremental builds. For release
-    // builds, it's OK. The following script iterates through all the known variants, finds those
+    // The defaultConfig values above are fixed, to optimize incremental builds.
+    // The following script iterates through all the known variants, finds those
     // that are "release" build types, and changes those properties to something dynamic.
     applicationVariants.all { variant ->
         if (variant.buildType.name == "release") {
-            variant.mergedFlavor.versionCode = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
-            variant.mergedFlavor.versionName = getVersionName()
+            variant.outputs.each { output ->
+                output.versionCodeOverride = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
+                output.versionNameOverride = getVersionName()
+            }
         }
-        // TODO see https://developer.android.com/studio/build/optimize-your-build?utm_source=android-studio#incremental-annotation-processor-support for more
     }
 
     testOptions {
