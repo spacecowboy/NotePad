@@ -41,9 +41,6 @@ jobs:
 #      - name: perform HAXM installation
 #        run: brew install --cask intel-haxm
 
-#      - name: perform ffmpeg installation
-#        run: brew install ffmpeg
-
       - name: perform AVD caching
         uses: actions/cache@v3
         id: avd-cache
@@ -65,12 +62,11 @@ jobs:
           disable-animations: true
           script: echo " - - - Generated AVD snapshot for caching - - - "
 
-#      - name: record a video of the session
-#        run: |
-#          ffmpeg -f avfoundation -i 0 -t 120 video.mov &
-
       - name: perform the Gradle build
         run: ./gradlew build
+
+      - name: take a screenshot of the VM before the tests
+        run: screencapture screenshot1.jpg
 
       - name: run the tests
         # note that by now the app is already built
@@ -82,20 +78,11 @@ jobs:
           profile: Nexus 5X
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
-          script: |
-            # take a screenshot of the VM to verify that the emulator started
-            screencapture screenshot1.jpg            
-            # test
-            ./gradlew connectedCheck --stacktrace
-            # take a screenshot at the end
-            screencapture screenshot2.jpg
+          emulator-options: -no-snapshot-save -no-boot-anim -camera-back none
+          script: ./gradlew connectedCheck --stacktrace
 
-#      - name: upload the video
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: video.mov
-#          path: video.mov
+      - name: take a screenshot at the end
+        run: screencapture screenshot2.jpg
 
       - name: upload the screenshot n°1
         uses: actions/upload-artifact@v3
