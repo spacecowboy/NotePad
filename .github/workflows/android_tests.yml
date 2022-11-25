@@ -34,8 +34,8 @@ jobs:
           distribution: "temurin"
           cache: 'gradle'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
+#      - name: Setup Android SDK (useless, android-emulator-runner@v2 takes care of it)
+#        uses: android-actions/setup-android@v2
 
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
@@ -53,7 +53,7 @@ jobs:
           key: avd-${{ matrix.api-level }}
 
       - name: create AVD and generate snapshot for caching
-        # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md      
+        # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md 
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -62,9 +62,9 @@ jobs:
           arch: x86_64        # the only one available for images of all API versions
           profile: Nexus 5X
           force-avd-creation: false
-          emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-window
           disable-animations: true
-          script: echo " - - - Generated AVD snapshot for caching - - - "
+          script: echo " - - - OK - - - "
 
       - name: Check for HAXM installation
         run: emulator -accel-check && emulator -accel-check
@@ -86,23 +86,36 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-          script: ./gradlew connectedCheck --stacktrace
+          script: |          
+            # take screenshot
+            screencapture screenshot2.jpg
+            # run tests
+            ./gradlew connectedCheck # --stacktrace
 
-      - name: take a screenshot at the end
-        run: screencapture screenshot2.jpg
+      - name: take a screenshot at the end # 99% useless
+        run: screencapture screenshot3.jpg
+
+# update results
 
       - name: upload the screenshot n°1
         uses: actions/upload-artifact@v3
-        if: failure()
+        if: success() || failure()
         with:
           name: screenshot1.jpg
           path: screenshot1.jpg
 
       - name: upload the screenshot n°2
         uses: actions/upload-artifact@v3
+        if: success() || failure()
         with:
           name: screenshot2.jpg
           path: screenshot2.jpg
+
+      - name: upload the screenshot n°3
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot3.jpg
+          path: screenshot3.jpg
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
