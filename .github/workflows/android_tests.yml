@@ -37,7 +37,12 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-#      - name: perform HAXM installation (NOT NEEDED)
+      - name: Check for HAXM installation
+        # ignoring the return code: read the console log to know the result
+        run: emulator -accel-check || true
+
+# if the step above detects no HAXM, we may want to install it (?)
+#      - name: perform HAXM installation
 #        run: brew install --cask intel-haxm
 
       - name: perform AVD caching
@@ -64,10 +69,6 @@ jobs:
           disable-animations: true
           script: echo " - - - OK - - - "
 
-      - name: Check for HAXM installation
-        # ignoring the return code: read the console log to know the result
-        run: emulator -accel-check || true
-
       - name: perform the Gradle build
         run: ./gradlew build
 
@@ -84,7 +85,7 @@ jobs:
           profile: Nexus 5X
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-window
           script: |          
             # take screenshot
             screencapture screenshot2.jpg
