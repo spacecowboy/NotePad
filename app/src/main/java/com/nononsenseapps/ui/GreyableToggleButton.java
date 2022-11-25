@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.utils.views;
+package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;

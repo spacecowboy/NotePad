@@ -32,7 +32,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import com.nononsenseapps.ui.TitleNoteTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

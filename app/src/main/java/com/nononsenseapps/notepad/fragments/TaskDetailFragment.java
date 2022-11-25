@@ -70,7 +70,7 @@ import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.utils.ShowcaseHelper;
-import com.nononsenseapps.utils.views.StyledEditText;
+import com.nononsenseapps.ui.StyledEditText;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;

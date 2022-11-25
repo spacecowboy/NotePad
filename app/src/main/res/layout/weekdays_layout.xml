@@ -7,7 +7,7 @@
 	tools:ignore="HardcodedText"
 	android:orientation="horizontal">
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day1"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"
@@ -16,7 +16,7 @@
 		android:textColor="?android:attr/textColorPrimary"
 		android:textOff="WED"/>
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day2"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"
@@ -25,7 +25,7 @@
 		android:textColor="?android:attr/textColorPrimary"
 		android:textOff="WED"/>
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day3"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"
@@ -34,7 +34,7 @@
 		android:textColor="?android:attr/textColorPrimary"
 		android:textOff="WED"/>
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day4"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"
@@ -43,7 +43,7 @@
 		android:textColor="?android:attr/textColorPrimary"
 		android:textOff="WED"/>
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day5"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"
@@ -52,7 +52,7 @@
 		android:textColor="?android:attr/textColorPrimary"
 		android:textOff="WED"/>
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day6"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"
@@ -61,7 +61,7 @@
 		android:textColor="?android:attr/textColorPrimary"
 		android:textOff="WED"/>
 
-	<com.nononsenseapps.utils.views.GreyableToggleButton
+	<com.nononsenseapps.ui.GreyableToggleButton
 		android:id="@+id/day7"
 		style="@style/GreyableButtonToggle"
 		android:layout_width="0dp"

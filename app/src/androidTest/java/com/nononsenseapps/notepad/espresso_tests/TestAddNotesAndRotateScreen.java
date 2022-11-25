@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.instanceOf;
 
 import androidx.test.filters.LargeTest;
 
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import com.nononsenseapps.ui.TitleNoteTextView;
 
 import org.junit.Before;
 import org.junit.Test;

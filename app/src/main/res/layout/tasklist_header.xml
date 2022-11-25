@@ -25,7 +25,7 @@
 
 	<!-- Keeping as this class for compatibility with other layout -->
 
-	<com.nononsenseapps.utils.views.TitleNoteTextView
+	<com.nononsenseapps.ui.TitleNoteTextView
 		android:id="@android:id/text1"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

@@ -53,7 +53,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import com.nononsenseapps.ui.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;

@@ -4,20 +4,15 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.instanceOf;
 
-import androidx.test.filters.LargeTest;
-
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.junit.Before;
 import org.junit.Test;
 
 public class TestPasswords extends BaseTestClass {

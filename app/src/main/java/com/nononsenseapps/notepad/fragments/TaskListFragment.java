@@ -67,7 +67,7 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.helpers.PreferencesHelper;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import com.nononsenseapps.ui.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
