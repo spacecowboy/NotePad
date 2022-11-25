@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,7 +30,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 /**
  * Helper class to save common options to shared preferences.
  */
-public class SharedPreferencesHelper {
+public final class PreferencesHelper {
 	private static SharedPreferences Prefs(@NonNull Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}

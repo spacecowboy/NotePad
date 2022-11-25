@@ -24,7 +24,6 @@
 	<string name="done">完成</string>
 	<string name="saved">已儲存</string>
 	<string name="distance">距離</string>
-	<string name="need_location_help">長按來設定位置</string>
 	<string name="menu_save_and_add">保存並打開一個新便箋</string>
 	<string name="menu_delete">刪除</string>
 	<string name="menu_deletelist">刪除清單</string>
@@ -54,7 +53,6 @@
 	<string name="sort_list_manual">手動排序</string>
 	<string name="search_description">便箋和任務</string>
 	<string name="archive">封存</string>
-	<string name="location">位置</string>
 	<string name="restore">還原</string>
 	<string name="restore_to">還原至</string>
 	<string name="search_hint">搜尋</string>

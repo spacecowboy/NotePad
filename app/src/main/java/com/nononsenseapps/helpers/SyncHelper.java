@@ -20,12 +20,13 @@ package com.nononsenseapps.helpers;
 import android.content.Context;
 
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.util.SyncGtaskHelper;
 
 /**
  * This class handles sync logic. No other class should request a sync.
  */
 public class SyncHelper {
+
+	// TODO class may be useless. check who calls onManualSyncRequest()
 
 	public static boolean onManualSyncRequest(final Context context) {
 		boolean syncing = false;

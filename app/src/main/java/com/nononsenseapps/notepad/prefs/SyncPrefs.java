@@ -50,10 +50,10 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.util.FileHelper;
-import com.nononsenseapps.util.PermissionsHelper;
-import com.nononsenseapps.util.SharedPreferencesHelper;
-import com.nononsenseapps.util.SyncGtaskHelper;
+import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.helpers.PermissionsHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
 
 import java.io.IOException;
 
@@ -203,7 +203,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					// warn the user that the permission was denied
 					Toast.makeText(this.getContext(), R.string.permission_denied,
 							Toast.LENGTH_SHORT).show();
-					SharedPreferencesHelper.disableSdCardSync(this.getContext());
+					PreferencesHelper.disableSdCardSync(this.getContext());
 
 					// SD card synchronization was disabled, but the UI does not know: reload
 					var myPref = (SwitchPreference) findPreference(KEY_SD_ENABLE);
@@ -218,7 +218,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					// user refused: show warning and disable sync
 					Toast.makeText(this.getContext(), R.string.permission_denied,
 							Toast.LENGTH_SHORT).show();
-					SharedPreferencesHelper
+					PreferencesHelper
 							.put(getActivity(), SyncPrefs.KEY_SYNC_ENABLE, false);
 				}
 				break;

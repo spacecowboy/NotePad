@@ -23,7 +23,6 @@
 	<string name="done">完了</string>
 	<string name="saved">保存済み</string>
 	<string name="distance">半径</string>
-	<string name="need_location_help">長押ししてロケーションを設定</string>
 	<string name="near">近くに</string>
 	<string name="menu_save_and_add">デリート</string>
 	<string name="menu_delete">削除</string>
@@ -54,7 +53,6 @@
 	<string name="sort_list_manual">手動</string>
 	<string name="search_description">ノートやタスク</string>
 	<string name="archive">アーカイブ</string>
-	<string name="location">ロケーション</string>
 	<string name="restore">復元</string>
 	<string name="restore_to">&#8230;へ復元</string>
 	<string name="search_hint">検索</string>

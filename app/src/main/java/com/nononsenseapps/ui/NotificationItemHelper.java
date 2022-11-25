@@ -42,7 +42,7 @@ import java.util.GregorianCalendar;
 /**
  * Handle setting up all the listeners for a Notification list item
  */
-public class NotificationItemHelper {
+public final class NotificationItemHelper {
 
 	private static String getDateString(final Context context, final long time) {
 		return TimeFormatter.getDateFormatter(context).format(new Date(time));

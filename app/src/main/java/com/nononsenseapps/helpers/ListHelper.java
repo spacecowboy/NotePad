@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +35,8 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
  * Simple utility class to hold some general functions.
  */
 public class ListHelper {
+
+	// TODO useless ? methods are somewhere else ?
 
 	/**
 	 * If temp list is > 0, returns it if it exists. Else, checks if a default list is set

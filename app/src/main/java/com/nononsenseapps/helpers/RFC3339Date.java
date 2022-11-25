@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.utils.time;
+package com.nononsenseapps.helpers;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +25,10 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class RFC3339Date {
+public final class RFC3339Date {
+
+	// TODO see TimeFormatter & TimeHelper in this package. One of these 3 classes HAS to be redundant
+
 	public static java.util.Date parseRFC3339Date(String datestring) {
 		if (datestring == null || datestring.isEmpty()) {
 			return null;

@@ -26,7 +26,6 @@
 	<string name="done">Done</string>
 	<string name="saved">Saved</string>
 	<string name="distance">Distance</string>
-	<string name="need_location_help">Long press to set a location</string>
 	<string name="near">Near</string>
 	<string name="menu_save_and_add">Save and add note</string>
 	<string name="menu_delete">Delete</string>
@@ -34,7 +33,6 @@
 	<string name="menu_sync">Sync</string>
 	<string name="menu_share">Share</string>
 	<string name="menu_preferences">Settings</string>
-	<string name="menu_createnew">Create new</string>
 	<string name="menu_createlist">Start new list</string>
 	<string name="menu_clearcompleted">Clear completed</string>
 	<string name="menu_setdefaultlist">Set as default list</string>
@@ -60,15 +58,14 @@
 	<string name="sort_list_manual">Order manually</string>
 	<string name="search_description">Notes and tasks</string>
 	<string name="archive">Archive</string>
-	<string name="view_deletedtasks">@string/archive</string>
-	<string name="location">Location</string>
+	<string name="view_deletedtasks" translatable="false">@string/archive</string>
 	<string name="restore">Restore</string>
 	<string name="restore_to">Restore to</string>
 	<string name="search_hint">Search</string>
 	<string name="settings_theme">Current theme</string>
 	<string name="settings_theme_dialog">Use theme</string>
 	<string name="settings_lang">Language</string>
-	<string name="settings_lang_dialog">@string/settings_lang</string>
+	<string name="settings_lang_dialog" translatable="false">@string/settings_lang</string>
 	<string name="settings_summary_theme_black">Black</string>
 	<string name="settings_summary_theme_dark">Dark</string>
 	<string name="settings_summary_theme_light">Light</string>
@@ -80,7 +77,7 @@
 	<string name="settings_sync_enable_title">Google Tasks sync</string>
 	<string name="gtasks_sync_info">Not all information can be synced with Google Tasks. Only notes, due date (not time) and todo-status is synced.</string>
 	<string name="settings_cat_syncing">Synchronization</string>
-	<string name="gtasks">Google Tasks</string>
+	<string name="gtasks" translatable="false">Google Tasks</string>
 	<string name="show_from_all_lists">All lists</string>
 	<string name="lists">Lists</string>
 	<string name="deleted">Deleted</string>
@@ -88,9 +85,9 @@
 	<string name="once">Once</string>
 	<string name="always">Always</string>
 	<string name="permission_read_label">read notes and lists</string>
-	<string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
+	<string name="permission_read_desc">Allows the application to read your notes and related lists in No Nonsense Notes</string>
 	<string name="permission_write_label">modify notes and lists</string>
-	<string name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
+	<string name="permission_write_desc">Allows the application to insert, update and delete notes and lists in No Nonsense Notes</string>
 	<string name="settings_list_dialog">Select a list</string>
 	<string name="settings_list">List</string>
 	<string name="drag_to_timetravel">Drag to time travel</string>
@@ -180,7 +177,7 @@
 	<string name="unlocked">Unlocked</string>
 	<string name="password_required">Password required</string>
 	<string name="select_account">Select an account</string>
-	<string name="password">Password</string>
+	<string name="password" translatable="false">Password</string>
 	<string name="password_set">Password set</string>
 	<string name="password_cleared">Password cleared</string>
 	<string name="passwords_dont_match">Passwords do not match</string>
@@ -212,7 +209,7 @@
 	<string name="hide_checkbox_summary_on">Checkbox will be hidden</string>
 	<string name="hide_checkbox_summary_off">Checkbox will be shown</string>
 	<string name="hide_date">Hide due date</string>
-	<string name="item_max_height">Max height of notes/tasks</string>
+	<string name="item_max_height">Max height of notes/tasks, in rows</string>
 	<string name="long_date_format">Long date format</string>
 	<string name="short_date_format">Short date format</string>
 	<string name="rows">rows</string>
@@ -277,7 +274,7 @@
 	<string name="dateformat_just_date">MMMM d</string>
 	<string name="tasks">Tasks</string>
 	<string name="all_tasks">All tasks</string>
-	<string name="dashclock_tasks">@string/tasks</string>
+	<string name="dashclock_tasks" translatable="false">@string/tasks</string>
 	<string name="dashclock_restrict_to_tasks_in_a_specific_list">Restrict to tasks in</string>
 	<string name="dashclock_show_overdue_tasks">Show overdue tasks</string>
 	<string name="dashclock_overdue_tasks_show">Overdue tasks will be shown</string>
@@ -331,7 +328,7 @@
 	<string name="sd_card_touch_hint">Touch to change directory</string>
 	<string name="new_password">New password</string>
 	<string name="current_password">Current password</string>
-	<string name="const_preference_password_key">preference_password_key</string>
+	<string name="const_preference_password_key" translatable="false">preference_password_key</string>
 	<string name="legacy">Legacy</string>
 	<string name="sorting">Sorting</string>
 	<string name="undo">Undo</string>

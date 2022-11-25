@@ -24,7 +24,6 @@
 	<string name="done">Klaar</string>
 	<string name="saved">Opgeslagen</string>
 	<string name="distance">Afstand</string>
-	<string name="need_location_help">Lang indrukken om een locatie in te stellen</string>
 	<string name="near">Vlakbij</string>
 	<string name="menu_save_and_add">Opslaan en open nieuwe notitie</string>
 	<string name="menu_delete">Verwijderen</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Rangschik handmatig</string>
 	<string name="search_description">Notities en taken</string>
 	<string name="archive">Archief</string>
-	<string name="location">Plaats</string>
 	<string name="restore">Herstellen</string>
 	<string name="restore_to">Herstellen naar</string>
 	<string name="search_hint">Zoeken</string>

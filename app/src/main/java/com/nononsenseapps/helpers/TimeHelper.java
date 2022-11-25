@@ -15,11 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.text.format.Time;
-
-import com.nononsenseapps.helpers.NnnLogger;
 
 /**
  * Has a few helper functions for dealing with dates. Google Tasks API is crap
@@ -28,6 +26,8 @@ import com.nononsenseapps.helpers.NnnLogger;
  * @author Jonas
  */
 public class TimeHelper {
+
+	// TODO useless ? exists somewhere else ? See TimeFormatter and RFC3339Date
 
 	// 2012-12-31
 	public final static String dateFormat = "%Y-%m-%d";

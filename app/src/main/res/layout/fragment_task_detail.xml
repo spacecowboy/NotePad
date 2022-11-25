@@ -39,7 +39,7 @@
 			android:layout_weight="1"
 			tools:context=".TaskDetailFragment">
 
-			<com.nononsenseapps.utils.views.StyledEditText
+			<com.nononsenseapps.ui.StyledEditText
 				android:id="@+id/taskText"
 				style="@style/EditorTextStyle"
 				android:layout_width="match_parent"

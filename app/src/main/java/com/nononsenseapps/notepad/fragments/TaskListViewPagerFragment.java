@@ -50,7 +50,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.utils.ViewsHelper;
+import com.nononsenseapps.ui.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;

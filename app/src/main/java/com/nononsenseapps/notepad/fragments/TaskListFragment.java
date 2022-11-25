@@ -66,9 +66,8 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
-import com.nononsenseapps.util.AsyncTaskHelper;
-import com.nononsenseapps.util.SharedPreferencesHelper;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.ui.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -81,6 +80,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 @EFragment(resName = "fragment_task_list")
 public class TaskListFragment extends Fragment implements OnSharedPreferenceChangeListener {
@@ -489,7 +489,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				final Task[] tasks = taskMap.values().toArray(new Task[0]);
 
 				// If any are locked, ask for password first
-				final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
+				final boolean locked = PreferencesHelper.isPasswordSet(getActivity());
 
 				// Reset undo flag
 				mDeleteWasUndone = false;
@@ -502,7 +502,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						// Dismiss wil be called more than once if undo is pressed
 						if (Snackbar.Callback.DISMISS_EVENT_ACTION != event && !mDeleteWasUndone) {
 							// Delete them
-							AsyncTaskHelper.background(() -> {
+							Executors.newSingleThreadExecutor().execute(() -> {
+								// Background work here
 								for (Task t : tasks) {
 									try {
 										t.delete(getActivity());

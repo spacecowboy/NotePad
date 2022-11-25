@@ -15,12 +15,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.ui;
 
-public class ArrayHelper {
+import android.content.Context;
+import android.util.TypedValue;
 
-	@SafeVarargs
-	public static <T> T[] toArray(T... items) {
-		return items;
+public final class ViewsHelper {
+
+	/**
+	 * Convert DPs to Pixels for the current screen density
+	 */
+	public static int convertDip2Pixels(Context context, int dip) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+				dip, context.getResources().getDisplayMetrics());
 	}
 }

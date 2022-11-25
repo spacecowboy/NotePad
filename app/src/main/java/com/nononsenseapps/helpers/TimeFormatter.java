@@ -31,7 +31,7 @@ import java.util.Locale;
 /**
  * A class that helps with displaying locale and preference specific dates
  */
-public class TimeFormatter {
+public final class TimeFormatter {
 
 	public static final String WEEKDAY_SHORTEST_FORMAT = "E";
 

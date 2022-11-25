@@ -21,7 +21,6 @@
 	<string name="title_create">Nova nota</string>
 	<string name="done">Feito</string>
 	<string name="distance">Distancia</string>
-	<string name="need_location_help">Toque longo para establecer a localización</string>
 	<string name="near">Preto</string>
 	<string name="menu_save_and_add">Gardar e engadir nova nota</string>
 	<string name="menu_delete">Eliminar</string>
@@ -47,7 +46,6 @@
 	<string name="sort_list_updated">Orde pola última actualización</string>
 	<string name="sort_list_manual">Orde manual</string>
 	<string name="search_description">Notas e tarefas</string>
-	<string name="location">Localización</string>
 	<string name="restore">Restaurar</string>
 	<string name="restore_to">Restaurar a</string>
 	<string name="settings_theme">Tema actual</string>

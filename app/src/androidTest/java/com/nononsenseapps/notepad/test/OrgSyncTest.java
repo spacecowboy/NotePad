@@ -14,7 +14,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.util.FileHelper;
+import com.nononsenseapps.helpers.FileHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.junit.After;

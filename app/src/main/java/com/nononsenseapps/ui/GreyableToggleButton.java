@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.utils.views;
+package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-
+import androidx.appcompat.widget.AppCompatToggleButton;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -29,7 +29,7 @@ import com.nononsenseapps.notepad.R;
  *
  * Default secondary color is grey.
  */
-public class GreyableToggleButton extends androidx.appcompat.widget.AppCompatToggleButton {
+public class GreyableToggleButton extends AppCompatToggleButton {
 
 	private final int primaryColor;
 	private final int secondaryColor;

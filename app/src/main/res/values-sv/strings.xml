@@ -24,7 +24,6 @@
 	<string name="done">Färdig</string>
 	<string name="saved">Sparad</string>
 	<string name="distance">Avstånd</string>
-	<string name="need_location_help">Peka och håll för att välja plats</string>
 	<string name="near">Nära</string>
 	<string name="menu_save_and_add">Spara och öppna ny</string>
 	<string name="menu_delete">Ta bort</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Sortera manuellt</string>
 	<string name="search_description">Anteckningar och uppgifter</string>
 	<string name="archive">Arkiv</string>
-	<string name="location">Plats</string>
 	<string name="restore">Återställ</string>
 	<string name="restore_to">Återställ till</string>
 	<string name="search_hint">Sök</string>

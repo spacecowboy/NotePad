@@ -27,14 +27,12 @@ import android.widget.LinearLayout;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.utils.views.GreyableToggleButton;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class WeekDaysView extends LinearLayout implements
-		OnCheckedChangeListener {
+public class WeekDaysView extends LinearLayout implements OnCheckedChangeListener {
 
 	public interface onCheckedDaysChangeListener {
 		void onChange(long checkedDays);

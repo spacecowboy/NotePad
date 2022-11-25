@@ -24,7 +24,6 @@
 	<string name="done">Hotovo</string>
 	<string name="saved">Uložené</string>
 	<string name="distance">Vzdialenosť</string>
-	<string name="need_location_help">Dlhé podržanie pre nastavenie pozície</string>
 	<string name="near">Blízko</string>
 	<string name="menu_save_and_add">Uložiť a pridať</string>
 	<string name="menu_delete">Vymazať</string>
@@ -55,7 +54,6 @@
 	<string name="sort_list_manual">Zoradiť manuálne</string>
 	<string name="search_description">Poznámky a úlohy</string>
 	<string name="archive">Archív</string>
-	<string name="location">Pozícia</string>
 	<string name="restore">Vrátiť</string>
 	<string name="restore_to">Vrátiť do</string>
 	<string name="search_hint">Hľadať</string>

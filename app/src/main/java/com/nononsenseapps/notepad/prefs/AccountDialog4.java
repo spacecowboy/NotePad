@@ -37,7 +37,7 @@ import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
-import com.nononsenseapps.util.SyncGtaskHelper;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
 
 import java.io.IOException;
 

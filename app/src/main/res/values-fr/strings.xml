@@ -21,7 +21,6 @@
 	<string name="time">Heure</string>
 	<string name="done">Fait</string>
 	<string name="saved">Sauvegardé</string>
-	<string name="need_location_help">Appui long pour définir l\'emplacement</string>
 	<string name="near">Près</string>
 	<string name="menu_save_and_add">Sauvegarder et créer une nouvelle note</string>
 	<string name="menu_delete">Supprimer</string>
@@ -51,7 +50,6 @@
 	<string name="sort_list_updated">Ordonner par date de modification</string>
 	<string name="sort_list_manual">Ordonner manuellement</string>
 	<string name="search_description">Notes et tâches</string>
-	<string name="location">Emplacement</string>
 	<string name="restore">Restaurer</string>
 	<string name="restore_to">Restaurer à</string>
 	<string name="search_hint">Rechercher</string>

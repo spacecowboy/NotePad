@@ -28,14 +28,13 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.widget.WidgetPrefs;
-import com.nononsenseapps.util.SyncGtaskHelper;
 
 /**
  * The purpose here is to make it easy for other classes to notify that
  * something has changed in the database. Will also call update on the widgets
  * appropriately.
  */
-public class UpdateNotifier {
+public final class UpdateNotifier {
 
 	/**
 	 * Will update all notes and specific uri if present

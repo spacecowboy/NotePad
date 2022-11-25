@@ -24,7 +24,6 @@
 	<string name="done">Kész</string>
 	<string name="saved">Mentve</string>
 	<string name="distance">Távolság</string>
-	<string name="need_location_help">Hely megadásához nyomjon hosszan</string>
 	<string name="near">Közel</string>
 	<string name="menu_save_and_add">Mentés és új létrehozása</string>
 	<string name="menu_delete">Törlés</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Kézi rendezés</string>
 	<string name="search_description">Jegyzetek és feladatok</string>
 	<string name="archive">Archívum</string>
-	<string name="location">Hely</string>
 	<string name="restore">Visszaállítás</string>
 	<string name="restore_to">Visszaállítás helye</string>
 	<string name="search_hint">Keresés</string>

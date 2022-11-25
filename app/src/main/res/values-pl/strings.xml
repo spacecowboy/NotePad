@@ -24,7 +24,6 @@
 	<string name="done">Gotowe</string>
 	<string name="saved">Zapisane</string>
 	<string name="distance">Dystans</string>
-	<string name="need_location_help">Przytrzymaj, aby wybrać lokalizację</string>
 	<string name="near">W pobliżu</string>
 	<string name="menu_save_and_add">Nowa notatka</string>
 	<string name="menu_delete">Usuń</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Własna kolejność</string>
 	<string name="search_description">Notatki i zadania </string>
 	<string name="archive">Archiwum</string>
-	<string name="location">Lokalizacja</string>
 	<string name="restore">Przywróć</string>
 	<string name="restore_to">Przywróć do</string>
 	<string name="search_hint">Szukaj</string>

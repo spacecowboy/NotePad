@@ -2,7 +2,7 @@ package com.nononsenseapps.notepad.test;
 
 import android.util.Log;
 
-import com.nononsenseapps.utils.time.RFC3339Date;
+import com.nononsenseapps.helpers.RFC3339Date;
 
 import junit.framework.TestCase;
 

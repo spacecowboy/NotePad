@@ -19,12 +19,13 @@ package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import androidx.appcompat.widget.AppCompatCheckBox;
 
 /**
  * Convenience class to use in listviews. Bind the id to the checkbox inorder to
  * use a onCheckedChangeListener more easily.
  */
-public class NoteCheckBox extends androidx.appcompat.widget.AppCompatCheckBox {
+public class NoteCheckBox extends AppCompatCheckBox {
 	private long noteId = -1;
 
 	public NoteCheckBox(Context context) {

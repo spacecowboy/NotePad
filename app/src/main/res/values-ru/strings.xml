@@ -24,7 +24,6 @@
 	<string name="done">Готово</string>
 	<string name="saved">Сохранено</string>
 	<string name="distance">Расстояние</string>
-	<string name="need_location_help">Удерживайте, чтобы добавить расположение</string>
 	<string name="near">Около</string>
 	<string name="menu_save_and_add">Записать и открыть новую заметку</string>
 	<string name="menu_delete">Удалить</string>
@@ -57,7 +56,6 @@
 	<string name="search_description">Заметки как задачи</string>
 	<string name="archive">Архив</string>
 	<string name="view_deletedtasks">Архив</string>
-	<string name="location">Место</string>
 	<string name="restore">Восстановить</string>
 	<string name="restore_to">Восстановить в</string>
 	<string name="search_hint">Поиск</string>

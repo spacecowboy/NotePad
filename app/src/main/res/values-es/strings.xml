@@ -22,7 +22,6 @@
 	<string name="done">Hecho</string>
 	<string name="saved">Guardado</string>
 	<string name="distance">Distancia</string>
-	<string name="need_location_help">Mantener presionado para establecer la localización</string>
 	<string name="near">Cerca</string>
 	<string name="menu_save_and_add">Guardar y añadir nota</string>
 	<string name="menu_delete">Eliminar</string>
@@ -53,7 +52,6 @@
 	<string name="sort_list_manual">Ordenar manualmente</string>
 	<string name="search_description">Notas y tareas</string>
 	<string name="archive">Archivo</string>
-	<string name="location">Localización</string>
 	<string name="restore">Restaurar</string>
 	<string name="restore_to">Restaurar a</string>
 	<string name="search_hint">Búsqueda</string>

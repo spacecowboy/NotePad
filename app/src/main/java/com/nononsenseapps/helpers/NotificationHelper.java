@@ -42,7 +42,6 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -50,7 +49,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class NotificationHelper extends BroadcastReceiver {
+public final class NotificationHelper extends BroadcastReceiver {
 
 	// Intent notification argument
 	public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
@@ -478,7 +477,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	private static boolean useExactReminders(Context context, AlarmManager aMgr) {
 		// The user can (must) request the use of Exact alarms
-		boolean shouldUseExact = SharedPreferencesHelper.shouldUseExactAlarms(context);
+		boolean shouldUseExact = PreferencesHelper.shouldUseExactAlarms(context);
 		if (!shouldUseExact) return false;
 
 		// the user may revoke the permission in android 12

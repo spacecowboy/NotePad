@@ -24,7 +24,6 @@
 	<string name="done">Klaar</string>
 	<string name="saved">Gestoor</string>
 	<string name="distance">Afstand</string>
-	<string name="need_location_help">Druk lank om \'n plek te stel</string>
 	<string name="near">Naby</string>
 	<string name="menu_save_and_add">Stoor en voeg nota by</string>
 	<string name="menu_delete">Vee uit</string>
@@ -57,7 +56,6 @@
 	<string name="search_description">Notas en take</string>
 	<string name="archive">Argief</string>
 	<string name="view_deletedtasks">Bekyk gewiste take</string>
-	<string name="location">Ligging</string>
 	<string name="restore">Herstel</string>
 	<string name="restore_to">Herstel na</string>
 	<string name="search_hint">Soek</string>

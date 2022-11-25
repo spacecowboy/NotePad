@@ -33,7 +33,7 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 public class BackupAgent extends BackupAgentHelper {
 	private static final String PREFS_BACKUP_KEY = "prefs";
 
-	// TODO useless ? check
+	// TODO this should manage backups done through android. test if it works
 
 	// Allocate a helper and add it to the backup agent
 	@Override

@@ -24,7 +24,6 @@
 	<string name="done">Đã xong</string>
 	<string name="saved">Đã lưư</string>
 	<string name="distance">Khoảng cách</string>
-	<string name="need_location_help">Nhấn giữ để chọn địa điểm</string>
 	<string name="near">Gần</string>
 	<string name="menu_save_and_add">Lưu và thêm ghi chú</string>
 	<string name="menu_delete">Xoá</string>
@@ -56,7 +55,6 @@
 	<string name="sort_list_manual">Sắp xếp tự do</string>
 	<string name="search_description">Ghi chú và nhiệm vụ</string>
 	<string name="archive">Lưu trữ</string>
-	<string name="location">Địa điểm</string>
 	<string name="restore">Khôi phục</string>
 	<string name="restore_to">Khôi phục tới</string>
 	<string name="search_hint">Tìm</string>

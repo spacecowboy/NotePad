@@ -74,8 +74,8 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.util.SyncGtaskHelper;
-import com.nononsenseapps.utils.ShowcaseHelper;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
+import com.nononsenseapps.ui.ShowcaseHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -781,6 +781,8 @@ public class ActivityMain extends AppCompatActivity
 	 * Load a list of lists in the left drawer
 	 */
 	protected void loadLeftDrawer() {
+		// TODO very long function. you should move everything related to drawer into static methods in ActivityHelper.java
+
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
 		if (mDrawerToggle == null) {

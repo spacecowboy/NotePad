@@ -29,7 +29,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.utils.time.RFC3339Date;
+import com.nononsenseapps.helpers.RFC3339Date;
 
 /**
  * This class contains the code that has been called over the versions to

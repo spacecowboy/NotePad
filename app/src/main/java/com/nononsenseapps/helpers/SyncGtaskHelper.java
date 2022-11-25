@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -30,7 +30,6 @@ import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
-import com.nononsenseapps.helpers.GTasksSyncDelay;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 

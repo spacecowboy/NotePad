@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.Manifest;
 import android.content.Context;
@@ -27,7 +27,7 @@ import androidx.core.content.ContextCompat;
 /**
  * Helper class which handles runtime permissions.
  */
-public class PermissionsHelper {
+public final class PermissionsHelper {
 
 	public static final String[] PERMISSIONS_GTASKS = new String[] {
 			Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_SYNC_SETTINGS,

@@ -23,7 +23,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.util.FileHelper;
+import com.nononsenseapps.helpers.FileHelper;
 
 public class DialogRestoreBackup extends DialogConfirmBaseV11 {
 	static final String ID = "id";

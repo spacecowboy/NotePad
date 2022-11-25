@@ -24,7 +24,6 @@
 	<string name="done">Udført</string>
 	<string name="saved">Gemt</string>
 	<string name="distance">Afstand</string>
-	<string name="need_location_help">Langt tryk for at vælge en lokation</string>
 	<string name="near">Nær</string>
 	<string name="menu_save_and_add">Gem og åbn en ny note</string>
 	<string name="menu_delete">Slet</string>
@@ -55,7 +54,6 @@
 	<string name="sort_list_manual">Sorter manuelt</string>
 	<string name="search_description">Noter og opgaver</string>
 	<string name="archive">Arkiv</string>
-	<string name="location">Lokation</string>
 	<string name="restore">Gendan</string>
 	<string name="restore_to">Gendan til</string>
 	<string name="search_hint">Søg</string>
