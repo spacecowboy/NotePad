@@ -13,11 +13,11 @@ jobs:
     # there's no need to run it on forks
     if: github.repository == 'spacecowboy/NotePad'
     runs-on: macos-latest # it has hardware acceleration
-    timeout-minutes: 35
+    timeout-minutes: 30
     strategy:
       matrix:
         # test the app on emulators with these OS versions installed
-        api-level: [ 23, 32 ]
+        api-level: [ 23, 28, 32 ]
     permissions:
       contents: read
     steps:
@@ -34,10 +34,12 @@ jobs:
           distribution: "temurin"
           cache: 'gradle'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-# it shows a popup when it finishes installation: this prevents the tests from starting!
 #      - name: perform HAXM installation
 #        run: brew install --cask intel-haxm
 
