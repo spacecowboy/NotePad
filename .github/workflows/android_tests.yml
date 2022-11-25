@@ -34,9 +34,6 @@ jobs:
           distribution: "temurin"
           cache: 'gradle'
 
-#      - name: Setup Android SDK (useless, android-emulator-runner@v2 takes care of it)
-#        uses: android-actions/setup-android@v2
-
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
@@ -53,6 +50,7 @@ jobs:
           key: avd-${{ matrix.api-level }}
 
       - name: create AVD and generate snapshot for caching
+        # here it installs the needed android SDK components
         # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md 
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -67,7 +65,8 @@ jobs:
           script: echo " - - - OK - - - "
 
       - name: Check for HAXM installation
-        run: emulator -accel-check && emulator -accel-check
+        # ignoring the return code: read the console log to know the result
+        run: emulator -accel-check || true
 
       - name: perform the Gradle build
         run: ./gradlew build
@@ -95,7 +94,7 @@ jobs:
       - name: take a screenshot at the end # 99% useless
         run: screencapture screenshot3.jpg
 
-# update results
+# upload results
 
       - name: upload the screenshot n°1
         uses: actions/upload-artifact@v3
