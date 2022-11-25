@@ -36,6 +36,9 @@ import java.util.Locale;
  */
 public final class ActivityHelper {
 
+	// TODO everything in this "helpers" namespace could be moved to its own
+	//  gradle module. This would speed up builds, but maybe it's harder to manage?
+
 	// forbid instances: it's a static class
 	private ActivityHelper() {}
 

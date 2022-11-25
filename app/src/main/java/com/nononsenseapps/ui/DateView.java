@@ -38,6 +38,9 @@ import java.util.TimeZone;
  */
 public class DateView extends AppCompatTextView {
 
+	// TODO everything in this "ui" namespace could be moved to its own
+	//  gradle module. This would speed up builds, but maybe it's harder to manage?
+
 	private static final int SECONDS_PER_DAY = 3600;
 
 	SimpleDateFormat mDateFormatter;
