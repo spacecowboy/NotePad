@@ -81,4 +81,11 @@ public final class NnnLogger {
 			Log.d("NNN", message);
 		}
 	}
+
+	// TODO this file is in com.nononsenseapps.helpers => move it to its own gradle module.
+	//  Having many of these (one per namespace makes sense) will speed up parallel builds.
+	//  you can have at least 3 gradle modules: drag-sort-listview,
+	//  nononsenseapps-helpers, nononsenseapps-utils, nononsenseapps-ui
+	//  and stuff in com.nononsenseapps.notepad remains in the "app" project
+
 }
