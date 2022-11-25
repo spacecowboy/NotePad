@@ -25,7 +25,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class RFC3339Date {
+public final class RFC3339Date {
+
 	public static java.util.Date parseRFC3339Date(String datestring) {
 		if (datestring == null || datestring.isEmpty()) {
 			return null;

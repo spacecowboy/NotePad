@@ -36,6 +36,8 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
  */
 public class ListHelper {
 
+	// TODO useless ? methods are somewhere else ?
+
 	/**
 	 * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
 	 * then returns that. If none set, then returns first (alphabetical) list

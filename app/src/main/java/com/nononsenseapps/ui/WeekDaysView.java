@@ -33,8 +33,7 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class WeekDaysView extends LinearLayout implements
-		OnCheckedChangeListener {
+public class WeekDaysView extends LinearLayout implements OnCheckedChangeListener {
 
 	public interface onCheckedDaysChangeListener {
 		void onChange(long checkedDays);

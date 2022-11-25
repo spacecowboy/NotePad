@@ -29,6 +29,8 @@ import com.nononsenseapps.helpers.NnnLogger;
  */
 public class TimeHelper {
 
+	// TODO useless ? exists somewhere else ?
+
 	// 2012-12-31
 	public final static String dateFormat = "%Y-%m-%d";
 
