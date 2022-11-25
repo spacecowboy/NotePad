@@ -27,7 +27,7 @@ import android.text.format.Time;
  */
 public class TimeHelper {
 
-	// TODO useless ? exists somewhere else ?
+	// TODO useless ? exists somewhere else ? See TimeFormatter and RFC3339Date
 
 	// 2012-12-31
 	public final static String dateFormat = "%Y-%m-%d";

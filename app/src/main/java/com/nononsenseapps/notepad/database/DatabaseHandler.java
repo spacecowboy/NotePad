@@ -32,7 +32,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
-import com.nononsenseapps.utils.time.RFC3339Date;
+import com.nononsenseapps.helpers.RFC3339Date;
 
 import java.util.Calendar;
 import java.util.HashMap;

@@ -36,7 +36,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
-import com.nononsenseapps.utils.time.RFC3339Date;
+import com.nononsenseapps.helpers.RFC3339Date;
 
 import java.util.ArrayList;
 import java.util.Calendar;

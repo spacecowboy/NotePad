@@ -35,7 +35,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
-import com.nononsenseapps.utils.time.RFC3339Date;
+import com.nononsenseapps.helpers.RFC3339Date;
 
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.UiThread;
