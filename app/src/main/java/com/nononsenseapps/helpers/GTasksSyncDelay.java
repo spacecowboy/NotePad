@@ -28,7 +28,7 @@ import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.util.Calendar;
 
-public class GTasksSyncDelay extends Service {
+public final class GTasksSyncDelay extends Service {
 
 	// Delay this long before doing the sync
 	private static final int delaySecs = 60;

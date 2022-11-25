@@ -35,7 +35,7 @@ import com.nononsenseapps.util.SyncGtaskHelper;
  * something has changed in the database. Will also call update on the widgets
  * appropriately.
  */
-public class UpdateNotifier {
+public final class UpdateNotifier {
 
 	/**
 	 * Will update all notes and specific uri if present

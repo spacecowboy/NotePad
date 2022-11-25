@@ -27,6 +27,8 @@ import com.nononsenseapps.util.SyncGtaskHelper;
  */
 public class SyncHelper {
 
+	// TODO class may be useless. check who calls onManualSyncRequest()
+
 	public static boolean onManualSyncRequest(final Context context) {
 		boolean syncing = false;
 

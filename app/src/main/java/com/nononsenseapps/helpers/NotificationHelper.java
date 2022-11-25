@@ -50,7 +50,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-public class NotificationHelper extends BroadcastReceiver {
+public final class NotificationHelper extends BroadcastReceiver {
 
 	// Intent notification argument
 	public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";

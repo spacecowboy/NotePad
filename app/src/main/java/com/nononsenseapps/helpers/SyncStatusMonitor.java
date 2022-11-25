@@ -36,7 +36,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.util.SyncGtaskHelper;
 
-public class SyncStatusMonitor extends BroadcastReceiver {
+public final class SyncStatusMonitor extends BroadcastReceiver {
 	Activity activity;
 	OnSyncStartStopListener listener;
 
