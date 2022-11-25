@@ -75,7 +75,7 @@ import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
-import com.nononsenseapps.utils.ShowcaseHelper;
+import com.nononsenseapps.ui.ShowcaseHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;

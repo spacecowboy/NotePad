@@ -1,4 +1,4 @@
-package com.nononsenseapps.utils;
+package com.nononsenseapps.ui;
 
 import android.app.Activity;
 import android.view.View;

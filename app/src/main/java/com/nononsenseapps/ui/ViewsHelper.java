@@ -15,12 +15,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.utils;
+package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.util.TypedValue;
 
-public class ViewsHelper {
+public final class ViewsHelper {
 
 	/**
 	 * Convert DPs to Pixels for the current screen density
