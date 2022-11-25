@@ -1,4 +1,4 @@
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
-import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 

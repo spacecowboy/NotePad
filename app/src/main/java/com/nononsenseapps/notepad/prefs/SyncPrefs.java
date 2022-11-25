@@ -50,10 +50,10 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.util.FileHelper;
-import com.nononsenseapps.util.PermissionsHelper;
-import com.nononsenseapps.util.PreferencesHelper;
-import com.nononsenseapps.util.SyncGtaskHelper;
+import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.helpers.PermissionsHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
 
 import java.io.IOException;
 

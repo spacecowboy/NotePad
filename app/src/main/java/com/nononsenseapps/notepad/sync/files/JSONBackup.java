@@ -28,7 +28,7 @@ import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.util.FileHelper;
+import com.nononsenseapps.helpers.FileHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;

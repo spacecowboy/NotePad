@@ -68,7 +68,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
-import com.nononsenseapps.util.PreferencesHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.utils.ShowcaseHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 

@@ -22,9 +22,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.FileObserver;
 
-import com.nononsenseapps.util.FileHelper;
-import com.nononsenseapps.util.PermissionsHelper;
-import com.nononsenseapps.util.PreferencesHelper;
+import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.helpers.PermissionsHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.parser.OrgParser;

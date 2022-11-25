@@ -20,7 +20,6 @@ package com.nononsenseapps.helpers;
 import android.content.Context;
 
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.util.SyncGtaskHelper;
 
 /**
  * This class handles sync logic. No other class should request a sync.

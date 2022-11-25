@@ -33,8 +33,8 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogExportBackup;
 import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;
-import com.nononsenseapps.util.FileHelper;
-import com.nononsenseapps.util.PermissionsHelper;
+import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.helpers.PermissionsHelper;
 
 import java.io.File;
 import java.io.FileNotFoundException;

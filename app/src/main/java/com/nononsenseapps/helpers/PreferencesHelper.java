@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.util;
+package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;

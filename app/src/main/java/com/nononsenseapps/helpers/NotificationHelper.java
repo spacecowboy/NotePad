@@ -42,7 +42,6 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.PreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
