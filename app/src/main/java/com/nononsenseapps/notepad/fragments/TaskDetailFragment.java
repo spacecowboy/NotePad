@@ -49,6 +49,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -143,13 +144,13 @@ public class TaskDetailFragment extends Fragment {
 					// Load the list to see if we should hide task bits
 					Bundle args = new Bundle();
 					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
-					getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS,
-							args, this);
+					LoaderManager.getInstance(TaskDetailFragment.this)
+							.restartLoader(LOADER_EDITOR_TASKLISTS, args, this);
 
 					args.clear();
 					args.putLong(ARG_ITEM_ID,
 							getArguments().getLong(ARG_ITEM_ID, stateId));
-					getLoaderManager().restartLoader(
+					LoaderManager.getInstance(TaskDetailFragment.this).restartLoader(
 							LOADER_EDITOR_NOTIFICATIONS, args, loaderCallbacks);
 				} else {
 					// Should kill myself maybe?
@@ -160,7 +161,7 @@ public class TaskDetailFragment extends Fragment {
 				}
 				// Don't update while editing
 				// TODO this allows updating of the location name etc
-				getLoaderManager().destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
+				LoaderManager.getInstance(TaskDetailFragment.this).destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
 			} else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
 				// At current only loading a single list
 				if (c != null && c.moveToFirst()) {
@@ -307,7 +308,7 @@ public class TaskDetailFragment extends Fragment {
 			// Load data from database
 			args.putLong(ARG_ITEM_ID,
 					getArguments().getLong(ARG_ITEM_ID, stateId));
-			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
+			LoaderManager.getInstance(this).restartLoader(LOADER_EDITOR_TASK, args,
 					loaderCallbacks);
 		} else {
 			// If not valid, find a valid list
@@ -326,7 +327,7 @@ public class TaskDetailFragment extends Fragment {
 			}
 			args.putLong(ARG_ITEM_LIST_ID,
 					getArguments().getLong(ARG_ITEM_LIST_ID, stateListId));
-			getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS, args,
+			LoaderManager.getInstance(this).restartLoader(LOADER_EDITOR_TASKLISTS, args,
 					loaderCallbacks);
 
 			openKb = true;

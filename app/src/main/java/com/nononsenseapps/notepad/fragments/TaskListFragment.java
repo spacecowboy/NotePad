@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -397,7 +398,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						mSortType = list.sorting;
 						mListType = list.listtype;
 						// Reload tasks with new sorting
-						getLoaderManager().restartLoader(1, null, this);
+						LoaderManager.getInstance(TaskListFragment.this)
+								.restartLoader(1, null, this);
 					}
 				} else { // loader.getId() == LOADER_TASKS
 					mAdapter.swapCursor(c);
@@ -415,11 +417,11 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		};
 
 		if (mListId > 0) {
-			getLoaderManager().restartLoader(0, null, mCallback);
+			LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 		} else {
 			// Setting sort types for all tasks always to due date
 			mSortType = getString(R.string.const_duedate);
-			getLoaderManager().restartLoader(1, null, mCallback);
+			LoaderManager.getInstance(this).restartLoader(1, null, mCallback);
 		}
 	}
 
@@ -760,7 +762,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		getLoaderManager().destroyLoader(0);
+		LoaderManager.getInstance(this).destroyLoader(0);
 	}
 
 	@Override
@@ -911,7 +913,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			}
 
 			if (reload && mCallback != null) {
-				getLoaderManager().restartLoader(0, null, mCallback);
+				LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 			}
 		} catch (IllegalStateException ignored) {
 			// Fix crash report

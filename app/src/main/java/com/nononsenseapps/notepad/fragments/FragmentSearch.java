@@ -35,6 +35,7 @@ import androidx.annotation.NonNull;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -169,7 +170,7 @@ public class FragmentSearch extends Fragment {
 
 		// If not loaded yet, let it load
 		if (mCallback != null)
-			getLoaderManager().restartLoader(0, null, mCallback);
+			LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 	}
 
 	/**

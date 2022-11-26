@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -124,7 +125,7 @@ public class DialogEditList extends DialogFragment {
 
 		if (getArguments().getLong(LIST_ID, -1) > 0) {
 			getDialog().setTitle(R.string.menu_managelists);
-			getLoaderManager().restartLoader(0, null,
+			LoaderManager.getInstance(this).restartLoader(0, null,
 					new LoaderCallbacks<Cursor>() {
 
 						@NonNull
@@ -143,7 +144,7 @@ public class DialogEditList extends DialogFragment {
 								fillViews();
 							}
 							// Don't need it anymore
-							getLoaderManager().destroyLoader(0);
+							LoaderManager.getInstance(DialogEditList.this).destroyLoader(0);
 						}
 
 						@Override
