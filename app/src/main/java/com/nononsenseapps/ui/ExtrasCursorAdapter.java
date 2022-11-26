@@ -182,7 +182,10 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		if (position < extraIds.length) {
 			return extraIds[position];
 		} else {
-			return super.getItemId(position - extraIds.length);
+			// TODO it crashed here in the tests once (tries to open a closed cursor)
+			//  what could this function return to represent an INVALID id ?
+			long id = super.getItemId(position - extraIds.length);
+			return id;
 		}
 	}
 
