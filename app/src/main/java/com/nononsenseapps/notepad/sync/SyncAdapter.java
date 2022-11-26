@@ -70,16 +70,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public static final int LOGIN_FAIL = 1;
 	public static final int ERROR = 2;
 
-	private final Context mContext;
-
 	public SyncAdapter(Context context, boolean autoInitialize) {
 		super(context, autoInitialize);
-		mContext = context;
 	}
 
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
 							  ContentProviderClient provider, SyncResult syncResult) {
+
+		Context mContext = this.getContext();
 
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
