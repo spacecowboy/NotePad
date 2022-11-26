@@ -57,6 +57,7 @@ import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
@@ -67,7 +68,6 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
-import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -845,6 +845,13 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 		@Override
 		public int getItemViewType(int position) {
+			if (position == -1) {
+				// there was an error in drag-sort-listview: the cached view for dragging
+				// the note is too high (because the note is too long: ~90 lines).
+				// c.getLong(0) will crash anyway, because -1 is an invalid index.
+				// the fix is in SimpleFloatViewManager.onCreateFloatView()
+				NnnLogger.error(TaskListFragment.class, "Invalid index -1, now I'll crash");
+			}
 			final Cursor c = (Cursor) getItem(position);
 			// If the id is invalid, it's a header
 			if (c.getLong(0) < 1) {
