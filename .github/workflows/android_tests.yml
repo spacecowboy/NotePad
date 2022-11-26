@@ -40,8 +40,8 @@ jobs:
         run: emulator -accel-check || true
 
 # if the step above detects no HAXM, we may want to install it (?)
-#      - name: perform HAXM installation
-#        run: brew install --cask intel-haxm
+      - name: perform HAXM installation
+        run: brew install --cask intel-haxm
 
       - name: perform AVD caching
         uses: actions/cache@v3
