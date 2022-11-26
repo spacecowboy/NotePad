@@ -1,7 +1,7 @@
 name: Android tests
 
 on:
-  push:
+  push: # runs when you commit to the master branch, so also when merging pull requests
     branches: [ "master" ]
 # running on every pull request uses too much server time
 #  pull_request:
@@ -10,14 +10,12 @@ on:
 jobs:
   # this job runs all the tests
   test_on_android:
-    # there's no need to run it on forks
-    if: github.repository == 'spacecowboy/NotePad'
+    if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
     runs-on: macos-latest # it has hardware acceleration
     timeout-minutes: 30
     strategy:
       matrix:
-        # test the app on emulators with these OS versions installed
-        api-level: [ 23, 28, 32 ]
+        api-level: [ 23, 28, 32 ] # test on emulators with these OS versions
     permissions:
       contents: read
     steps:
@@ -55,17 +53,18 @@ jobs:
           key: avd-${{ matrix.api-level }}
 
       - name: create AVD and generate snapshot for caching
-        # here it installs the needed android SDK components
+        # here it automatically installs the needed android SDK components
         # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md 
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
           target: google_apis # the images for API 32 only have this target
-          arch: x86_64        # the only one available for images of all API versions
+          arch: x86_64        # the only one available for all API versions
           profile: Nexus 5X
           force-avd-creation: false
-          emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-window
+          # you need -no-window to make it work
+          emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -no-window
           disable-animations: true
           script: echo " - - - OK - - - "
 
@@ -85,9 +84,9 @@ jobs:
           profile: Nexus 5X
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-window
+          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -no-window
           script: |          
-            # take screenshot
+            # take screenshot after the emulator starts            
             screencapture screenshot2.jpg
             # run tests
             ./gradlew connectedCheck # --stacktrace
@@ -97,25 +96,15 @@ jobs:
 
 # upload results
 
-      - name: upload the screenshot n°1
+      - name: upload the screenshots
         uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
-          name: screenshot1.jpg
-          path: screenshot1.jpg
-
-      - name: upload the screenshot n°2
-        uses: actions/upload-artifact@v3
-        if: success() || failure()
-        with:
-          name: screenshot2.jpg
-          path: screenshot2.jpg
-
-      - name: upload the screenshot n°3
-        uses: actions/upload-artifact@v3
-        with:
-          name: screenshot3.jpg
-          path: screenshot3.jpg
+          name: screenshots_of_tests
+          path: |
+            screenshot1.jpg
+            screenshot2.jpg
+            screenshot3.jpg
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
