@@ -12,7 +12,7 @@ jobs:
   test_on_android:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
     runs-on: macos-latest # it has hardware acceleration
-    timeout-minutes: 30
+    timeout-minutes: 45
     strategy:
       matrix:
         api-level: [ 23, 28, 32 ] # test on emulators with these OS versions
@@ -84,7 +84,7 @@ jobs:
           profile: Nexus 5X
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -gpu swiftshader_indirect -noaudio -no-boot-anim -no-window
+          emulator-options: -no-snapshot-save -noaudio -no-boot-anim
           script: |          
             # take screenshot after the emulator starts            
             screencapture screenshot2.jpg
@@ -100,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
-          name: screenshots_of_tests
+          name: screenshots_of_tests_api${{ matrix.api-level }}
           path: |
             screenshot1.jpg
             screenshot2.jpg
