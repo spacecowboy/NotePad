@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -56,6 +57,7 @@ import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
@@ -66,7 +68,6 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
-import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -397,7 +398,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						mSortType = list.sorting;
 						mListType = list.listtype;
 						// Reload tasks with new sorting
-						getLoaderManager().restartLoader(1, null, this);
+						LoaderManager.getInstance(TaskListFragment.this)
+								.restartLoader(1, null, this);
 					}
 				} else { // loader.getId() == LOADER_TASKS
 					mAdapter.swapCursor(c);
@@ -415,11 +417,11 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		};
 
 		if (mListId > 0) {
-			getLoaderManager().restartLoader(0, null, mCallback);
+			LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 		} else {
 			// Setting sort types for all tasks always to due date
 			mSortType = getString(R.string.const_duedate);
-			getLoaderManager().restartLoader(1, null, mCallback);
+			LoaderManager.getInstance(this).restartLoader(1, null, mCallback);
 		}
 	}
 
@@ -760,7 +762,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		getLoaderManager().destroyLoader(0);
+		LoaderManager.getInstance(this).destroyLoader(0);
 	}
 
 	@Override
@@ -843,6 +845,13 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 		@Override
 		public int getItemViewType(int position) {
+			if (position == -1) {
+				// there was an error in drag-sort-listview: the cached view for dragging
+				// the note is too high (because the note is too long: ~90 lines).
+				// c.getLong(0) will crash anyway, because -1 is an invalid index.
+				// the fix is in SimpleFloatViewManager.onCreateFloatView()
+				NnnLogger.error(TaskListFragment.class, "Invalid index -1, now I'll crash");
+			}
 			final Cursor c = (Cursor) getItem(position);
 			// If the id is invalid, it's a header
 			if (c.getLong(0) < 1) {
@@ -911,7 +920,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			}
 
 			if (reload && mCallback != null) {
-				getLoaderManager().restartLoader(0, null, mCallback);
+				LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 			}
 		} catch (IllegalStateException ignored) {
 			// Fix crash report

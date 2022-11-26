@@ -17,12 +17,14 @@
 package com.nononsenseapps.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.R;
 
 /**
  * This class is designed to act as a simple version of the touch delegate. E.g.
@@ -31,7 +33,7 @@ import com.nononsenseapps.helpers.NnnLogger;
  * Define it entirely in XML as the following example demonstrates:
  *
  * <com.nononsenseapps.ui.DelegateFrame
- * xmlns:nononsenseapps="http://nononsenseapps.com"
+ * xmlns:app="http://schemas.android.com/apk/res-auto"
  * android:id="@+id/datecheckcontainer"
  * android:layout_width="wrap_content"
  * android:layout_height="fill_parent"
@@ -41,37 +43,35 @@ import com.nononsenseapps.helpers.NnnLogger;
  * android:paddingRight="4dp"
  * android:paddingTop="8dp"
  * android:clickable="true"
- * nononsenseapps:enlargedView="@+id/itemDone" >
+ * app:enlargedView="@+id/itemDone" >
  *
  * It's important to add android:clickable="true" and
- * nononsenseapps:enlargedView="@+id/YOURIDHERE"
+ * app:enlargedView="@+id/YOURIDHERE"
  */
 public class DelegateFrame extends RelativeLayout implements OnClickListener {
-	public static final String NONONSENSEAPPSNS = "http://nononsenseapps.com";
-	public static final String ATTR_ENLARGEDVIEW = "enlargedView";
 
-	private int enlargedViewId;
+	private final int enlargedViewId;
 	private View cachedView;
+	private static final int UNDEFINED = -1;
 
 	public DelegateFrame(Context context) {
-		super(context, null);
+		this(context, null);
 	}
 
 	public DelegateFrame(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		setValuesFromXML(attrs);
+		this(context, attrs, 0);
 	}
 
 	public DelegateFrame(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		setValuesFromXML(attrs);
-	}
 
-	private void setValuesFromXML(AttributeSet attrs) {
-		enlargedViewId = attrs
-				.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
+		// set values from XML
+		TypedArray a = this.getContext().obtainStyledAttributes(attrs, R.styleable.DelegateFrame);
+		enlargedViewId = a.getResourceId(R.styleable.DelegateFrame_enlargedView, UNDEFINED);
+		// enlargedViewId = attrs.getAttributeResourceValue("http://nononsenseapps.com", "enlargedView", UNDEFINED);
 		NnnLogger.debug(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
 		setOnClickListener(this);
+		a.recycle();
 	}
 
 	@Override

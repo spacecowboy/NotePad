@@ -46,7 +46,8 @@ public class EspressoHelper {
 	public static void createNoteWithName(String noteName) {
 		onView(withId(R.id.menu_add)).perform(click());
 		EspressoHelper.hideShowCaseViewIfShown();
-		onView(withId(com.nononsenseapps.notepad.R.id.taskText)).perform(typeText(noteName));
+		onView(withId(com.nononsenseapps.notepad.R.id.taskText))
+				.perform(typeText(noteName));
 	}
 
 	/**
@@ -121,9 +122,10 @@ public class EspressoHelper {
 	 * can then interact with the app.
 	 */
 	public static void hideShowCaseViewIfShown() {
+		SystemClock.sleep(800); // wait for it to show up
 		if (!EspressoHelper.isShowCaseOverlayVisible()) return;
 
-		// if it is there, it's highlighting one of the views click somewhere to dismiss it
+		// click anywhere to dismiss it
 		try {
 			onView(isRoot()).perform(click());
 		} catch (Exception ignored) {

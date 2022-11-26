@@ -448,6 +448,10 @@ public class ActivityMain extends AppCompatActivity
 
 	@Override
 	public void onDestroy() {
+		// this should avoid crashes due to its resources being called
+		// when the activity is closing (?)
+		leftDrawer.setAdapter(null);
+
 		super.onDestroy();
 		OrgSyncService.stop(this);
 	}

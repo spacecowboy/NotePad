@@ -26,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.DialogFragment;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -85,7 +86,7 @@ public class DialogRestore extends DialogFragment {
 
 		listSpinner.setAdapter(adapter);
 
-		getLoaderManager().restartLoader(0, null,
+		LoaderManager.getInstance(this).restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
 
 					@NonNull

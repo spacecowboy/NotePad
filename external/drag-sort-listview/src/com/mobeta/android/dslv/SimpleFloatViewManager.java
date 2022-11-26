@@ -1,13 +1,14 @@
 package com.mobeta.android.dslv;
 
 import android.graphics.Bitmap;
-import android.graphics.Point;
+import android.graphics.Canvas;
 import android.graphics.Color;
-import android.widget.ListView;
-import android.widget.ImageView;
+import android.graphics.Point;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.util.Log;
+import android.widget.ImageView;
+import android.widget.ListView;
 
 /**
  * Simple implementation of the FloatViewManager class. Uses list
@@ -51,7 +52,40 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
 		// recycled by the framework when the list tries to clean up memory
 		//v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 		v.setDrawingCacheEnabled(true);
-		mFloatBitmap = Bitmap.createBitmap(v.getDrawingCache());
+
+		// EDITED by CampelloManuel @ github
+		if (v.getDrawingCache() == null) {
+			// big views (for us, notes with ~90 lines) are too big to fit into the cache,
+			// so getDrawingCache() will always return null, which causes a crash.
+			// So we have to build a shorter "thumbnail" view for dragging the listitem
+
+			// TODO seems like we had to pass a custom DragSortListView.FloatViewManager
+			//  implementation. well, whatever. If you feel like wasting time, see
+			//  DragSortListView.java line ~2430 where it explains how to subclass this.
+
+			// To me this seems about as high as a note with 3 lines, which is good enough
+			int maxHeightInDp = 120;
+			// convert to pixels
+			int maxHeightEquivPixels = (int) TypedValue.applyDimension(
+					TypedValue.COMPLEX_UNIT_DIP, maxHeightInDp,
+					mListView.getContext().getResources().getDisplayMetrics());
+
+			// if needed, truncate the height to something that will make the view small
+			// enough to fit into the cache
+			int h = Math.min(v.getMeasuredHeight(), maxHeightEquivPixels);
+			int w = v.getMeasuredWidth(); // the width is always OK, it seems
+
+			Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+			Canvas bitmapHolder = new Canvas(bitmap);
+			v.layout(0, 0, v.getLayoutParams().width, v.getLayoutParams().height);
+			v.draw(bitmapHolder);
+
+			// we drew a smaller tumbnail of the view on this bitmap: set it as cache
+			mFloatBitmap = bitmap;
+		} else {
+			// normal behavior of the library
+			mFloatBitmap = Bitmap.createBitmap(v.getDrawingCache());
+		}
 		v.setDrawingCacheEnabled(false);
 
 		if (mImageView == null) {

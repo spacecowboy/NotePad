@@ -58,6 +58,7 @@
 		<attr name="secondaryColor"/>
 	</declare-styleable>
 
+	<!-- see DelegateFrame.java -->
 	<declare-styleable name="DelegateFrame">
 		<attr name="enlargedView" format="reference"/>
 	</declare-styleable>

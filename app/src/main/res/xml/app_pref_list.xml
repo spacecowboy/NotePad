@@ -28,7 +28,7 @@
 	<SeekBarPreference
 		android:defaultValue="3"
 		android:key="@string/key_pref_item_max_height"
-		android:max="50"
+		android:max="99"
 		app:min="1"
 		app:showSeekBarValue="true"
 		android:title="@string/item_max_height"/>

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -114,7 +115,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 	@Override
 	public void onStart() {
 		super.onStart();
-		getSupportLoaderManager().restartLoader(0, null,
+		LoaderManager.getInstance(this).restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
 
 					@NonNull

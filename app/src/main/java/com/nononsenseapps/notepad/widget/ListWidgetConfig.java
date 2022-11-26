@@ -43,6 +43,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -353,11 +354,11 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 		};
-		getSupportLoaderManager().restartLoader(1, null, mCallback);
+		LoaderManager.getInstance(this).restartLoader(1, null, mCallback);
 	}
 
 	void reloadTasks() {
-		getSupportLoaderManager().restartLoader(0, null, mCallback);
+		LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 	}
 
 	@AfterViews

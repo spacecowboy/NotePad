@@ -37,6 +37,7 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -160,7 +161,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		};
 
 		// Load actual data
-		getLoaderManager().restartLoader(0, null, loaderCallbacks);
+		LoaderManager.getInstance(this).restartLoader(0, null, loaderCallbacks);
 	}
 
 	@AfterViews
@@ -265,7 +266,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		if (mSectionsPagerAdapter != null) {
 			mSectionsPagerAdapter.destroy();
 		}
-		getLoaderManager().destroyLoader(0);
+		LoaderManager.getInstance(this).destroyLoader(0);
 
 		super.onDestroy();
 	}

@@ -48,6 +48,10 @@ public class DateView extends AppCompatTextView {
 	public DateView(Context context) {
 		super(context);
 
+		// TODO if you want to also show a "due time" on the note, use this instead:
+		//  mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
+		//  as of now we only show the date, which for me is good enough.
+		//  (note that this line is called many times in this file)
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 
