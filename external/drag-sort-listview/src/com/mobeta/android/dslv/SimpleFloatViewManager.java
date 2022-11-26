@@ -59,6 +59,10 @@ public class SimpleFloatViewManager implements DragSortListView.FloatViewManager
 			// so getDrawingCache() will always return null, which causes a crash.
 			// So we have to build a shorter "thumbnail" view for dragging the listitem
 
+			// TODO seems like we had to pass a custom DragSortListView.FloatViewManager
+			//  implementation. well, whatever. If you feel like wasting time, see
+			//  DragSortListView.java line ~2430 where it explains how to subclass this.
+
 			// To me this seems about as high as a note with 3 lines, which is good enough
 			int maxHeightInDp = 120;
 			// convert to pixels
