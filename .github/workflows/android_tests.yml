@@ -84,12 +84,12 @@ jobs:
           profile: Nexus 5X
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
             # take screenshot after the emulator starts            
             screencapture screenshot2.jpg
             # run tests
-            ./gradlew connectedCheck # --stacktrace
+            ./gradlew connectedCheck --stacktrace
 
       - name: take a screenshot at the end # 99% useless
         run: screencapture screenshot3.jpg
