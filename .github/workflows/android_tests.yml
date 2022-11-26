@@ -3,9 +3,7 @@ name: Android tests
 on:
   push: # runs when you commit to the master branch, so also when merging pull requests
     branches: [ "master" ]
-# running on every pull request uses too much server time
-#  pull_request:
-#    branches: [ "master" ]
+# running on every pull request uses too much server time => avoid it
 
 jobs:
   # this job runs all the tests
@@ -15,7 +13,8 @@ jobs:
     timeout-minutes: 45
     strategy:
       matrix:
-        api-level: [ 23, 28, 32 ] # test on emulators with these OS versions
+        # test on emulators with these OS versions
+        api-level: [ 23, 28, 32 ] # minSdk, average, targetSdk
     permissions:
       contents: read
     steps:
@@ -36,6 +35,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: perform HAXM installation
+        # it still does not work: check the log for the next step
         run: brew install --cask intel-haxm
 
       - name: Check for HAXM installation
@@ -60,11 +60,13 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis # the images for API 32 only have this target
           arch: x86_64        # the only one available for all API versions
-          profile: Nexus 5X
+          profile: Nexus 5X   # I test on this in my PC
+          disk-size: 1G       # for saving org and json files
           force-avd-creation: false
           # you need -no-window to make it work
           emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -no-window
           disable-animations: true
+          # start the emulator, run this script, then close the emulator
           script: echo " - - - OK - - - "
 
       - name: perform the Gradle build
@@ -81,6 +83,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: Nexus 5X
+          disk-size: 1G
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
@@ -88,7 +91,7 @@ jobs:
             # take screenshot after the emulator starts            
             screencapture screenshot2.jpg
             # run tests
-            ./gradlew connectedCheck --stacktrace
+            ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: take a screenshot at the end # 99% useless
         run: screencapture screenshot3.jpg

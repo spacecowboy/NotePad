@@ -118,8 +118,11 @@ public final class FileHelper {
 			dir = ctx.getExternalFilesDir("orgfiles");
 		}
 
+		// most likely, the shared storage is not available in this device/emulator
+		if (dir == null) return null;
+
 		// must ensure that it exists
-		if (dir != null && !dir.exists()) dir.mkdirs();
+		if (!dir.exists()) dir.mkdirs();
 
 		boolean ok = dir.exists() && dir.isDirectory() && dir.canWrite();
 		if (ok) return dir.getAbsolutePath();
