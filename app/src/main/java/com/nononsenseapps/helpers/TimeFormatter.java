@@ -189,7 +189,7 @@ public final class TimeFormatter {
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
-				withSuitableTime(
+				withSuitableTime( // <-- notice this
 						context,
 						PreferenceManager
 								.getDefaultSharedPreferences(context)
@@ -198,13 +198,12 @@ public final class TimeFormatter {
 										context.getString(R.string.dateformat_short_1))));
 	}
 
-	public static SimpleDateFormat getLocalFormatterShortDateOnly(
-			final Context context) {
+	public static SimpleDateFormat getLocalFormatterShortDateOnly(final Context context) {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
-				withSuitableDateOnly(
+				withSuitableDateOnly( // <-- notice this!
 						context,
 						PreferenceManager
 								.getDefaultSharedPreferences(context)

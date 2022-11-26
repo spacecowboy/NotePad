@@ -56,6 +56,7 @@ import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -69,7 +70,6 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
-import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 import com.nononsenseapps.ui.StyledEditText;
 
@@ -458,6 +458,17 @@ public class TaskDetailFragment extends Fragment {
 
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
+
+		/* TODO if you want the user to set a due time (we only set the due date for now)
+		    then simply uncomment this code (and code referenced in other TODOs like this)
+		// then ask for due time
+		getTimePickerDialog(localTime, (theWidget, hourOfDay, minute) -> {
+			localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			localTime.set(Calendar.MINUTE, minute);
+			mTask.due = localTime.getTimeInMillis();
+			setDueText();
+		}).show();
+		*/
 	}
 
 	/**
@@ -476,6 +487,8 @@ public class TaskDetailFragment extends Fragment {
 		} else {
 			// Due date
 			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(getActivity(), mTask.due));
+			// TODO if you want to let the user set a "due time" (as of now we have only
+			//  the due date) replace the function above with TimeFormatter.getLocalDateStringLong()
 		}
 	}
 
