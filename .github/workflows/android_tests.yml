@@ -36,9 +36,9 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-      - name: perform HAXM installation
+#      - name: perform HAXM installation
         # it still does not work: check the log for the next step
-        run: brew install intel-haxm
+#        run: brew install intel-haxm
 
       - name: Check for HAXM installation
         # ignoring the return code. Read the console log to know the result
@@ -70,14 +70,12 @@ jobs:
           disable-animations: true
           # start the emulator, run this script, then close the emulator
           script: |
+            # the emulator is still active
             screencapture screenshot1.jpg
             echo " - - - OK - - - "
 
       - name: perform the Gradle build
-        run: ./gradlew build
-
-      - name: take a screenshot of the VM before the tests
-        run: screencapture screenshot2.jpg
+        run: ./gradlew build      
 
       - name: run the tests
         # note that by now the app is already built
@@ -90,16 +88,16 @@ jobs:
           disk-size: 1G
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu swiftshader_indirect
           script: |          
             # take screenshot after the emulator starts            
             screencapture screenshot3.jpg
             # close all OS popups in the emulator
-            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS
-            # wait 30'' for emulator
-            sleep 30
+            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS            
+            # test
+            adb devices
             # run tests
-            ./gradlew connectedCheck --debug --stacktrace
+            ./gradlew connectedCheck --info --stacktrace
 
       - name: take a screenshot at the end # 99% useless
         if: success() || failure()
@@ -113,8 +111,7 @@ jobs:
         with:
           name: screenshots_of_tests_api${{ matrix.api-level }}
           path: |
-            screenshot1.jpg
-            screenshot2.jpg
+            screenshot1.jpg            
             screenshot3.jpg
             screenshot4.jpg
 
