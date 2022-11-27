@@ -90,7 +90,7 @@ jobs:
           disk-size: 1G
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu host -no-window
+          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim
           script: |          
             # take screenshot after the emulator starts            
             screencapture screenshot3.jpg
