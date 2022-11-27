@@ -71,7 +71,7 @@ jobs:
           # start the emulator, run this script, then close the emulator
           script: |
             # the emulator is still active            
-            screencapture screenshot1.jpg            
+            #screencapture screenshot1.jpg            
             adb emu screenrecord screenshot ./screenshot-emu1.png
             echo " - - - OK - - - "
 
@@ -101,14 +101,12 @@ jobs:
             # screenshot of the emulator
             adb emu screenrecord screenshot ./screenshot-emu2.png
             # record the next 50 seconds in the emulator
-            adb emu screenrecord start --time-limit 50 ./emu-video.webm
+            adb emu screenrecord start ./emu-video.webm
             # run tests
             ./gradlew connectedCheck --stacktrace
-
-      - name: take a screenshot at the end # 99% useless
-        if: success() || failure()
-        run: screencapture screenshot4.jpg
-
+            # stop recording
+            adb emu screenrecord stop
+      
 # upload results
 
       - name: upload the screenshots
@@ -118,8 +116,7 @@ jobs:
           name: screenshots_of_tests_api${{ matrix.api-level }}
           path: |
             screenshot1.jpg            
-            screenshot3.jpg
-            screenshot4.jpg
+            screenshot3.jpg            
             screenshot-emu1.png
             screenshot-emu2.png
             emu-video.webm
