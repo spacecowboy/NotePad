@@ -98,6 +98,7 @@ jobs:
             adb shell settings put secure immersive_mode_confirmations confirmed            
             # uninstall the app (it can't uninstall it by itself)
             adb uninstall com.nononsenseapps.notepad.test
+            adb uninstall com.nononsenseapps.notepad
             # screenshot of the emulator. See also
             # https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
             adb emu screenrecord screenshot ./screenshot-emu2.png
