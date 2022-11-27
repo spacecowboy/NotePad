@@ -11,7 +11,7 @@ jobs:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
     # it has hardware acceleration. Full list of installed software:
     # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-    runs-on: macos-12
+    runs-on: ubuntu-latest # macos-12    
     timeout-minutes: 45
     strategy:
       matrix:
@@ -70,8 +70,8 @@ jobs:
           disable-animations: true
           # start the emulator, run this script, then close the emulator
           script: |
-            # the emulator is still active
-            screencapture screenshot1.jpg
+            # the emulator is still active            
+            screencapture screenshot1.jpg || gnome-screenshot screenshot1.jpg || true
             echo " - - - OK - - - "
 
       - name: perform the Gradle build
@@ -91,7 +91,7 @@ jobs:
           emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
             # take screenshot after the emulator starts            
-            screencapture screenshot3.jpg
+            screencapture screenshot3.jpg || gnome-screenshot screenshot3.jpg || true
             # close all OS popups in the emulator
             adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS            
             # test
@@ -101,7 +101,7 @@ jobs:
 
       - name: take a screenshot at the end # 99% useless
         if: success() || failure()
-        run: screencapture screenshot4.jpg
+        run: screencapture screenshot4.jpg || gnome-screenshot screenshot4.jpg || true
 
 # upload results
 
