@@ -9,7 +9,9 @@ jobs:
   # this job runs all the tests
   test_on_android:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    runs-on: macos-latest # it has hardware acceleration
+    # it has hardware acceleration. Full list of installed software:
+    # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+    runs-on: macos-12
     timeout-minutes: 45
     strategy:
       matrix:
@@ -34,12 +36,12 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-      - name: perform HAXM installation
+      # - name: perform HAXM installation
         # it still does not work: check the log for the next step
-        run: brew install --cask intel-haxm
+        # run: brew install --cask intel-haxm
 
       - name: Check for HAXM installation
-        # ignoring the return code: read the console log to know the result
+        # ignoring the return code. Read the console log to know the result
         run: emulator -accel-check || true
 
       - name: perform AVD caching
@@ -67,13 +69,15 @@ jobs:
           emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -no-window
           disable-animations: true
           # start the emulator, run this script, then close the emulator
-          script: echo " - - - OK - - - "
+          script: |
+            screencapture screenshot1.jpg
+            echo " - - - OK - - - "
 
       - name: perform the Gradle build
         run: ./gradlew build
 
       - name: take a screenshot of the VM before the tests
-        run: screencapture screenshot1.jpg
+        run: screencapture screenshot2.jpg
 
       - name: run the tests
         # note that by now the app is already built
@@ -89,12 +93,14 @@ jobs:
           emulator-options: -no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
             # take screenshot after the emulator starts            
-            screencapture screenshot2.jpg
+            screencapture screenshot3.jpg
+            # close all OS popups in the emulator
+            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS
             # run tests
             ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: take a screenshot at the end # 99% useless
-        run: screencapture screenshot3.jpg
+        run: screencapture screenshot4.jpg
 
 # upload results
 
@@ -107,6 +113,7 @@ jobs:
             screenshot1.jpg
             screenshot2.jpg
             screenshot3.jpg
+            screenshot4.jpg
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short

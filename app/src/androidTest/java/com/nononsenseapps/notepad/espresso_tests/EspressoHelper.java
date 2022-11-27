@@ -122,12 +122,11 @@ public class EspressoHelper {
 	 * can then interact with the app.
 	 */
 	public static void hideShowCaseViewIfShown() {
-		SystemClock.sleep(800); // wait for it to show up
 		if (!EspressoHelper.isShowCaseOverlayVisible()) return;
 
 		// click anywhere to dismiss it
 		try {
-			onView(isRoot()).perform(click());
+			onView(instanceOf(TapTargetView.class)).perform(click());
 		} catch (Exception ignored) {
 			Assert.fail("Could not dismiss the TapTargetView");
 		}
