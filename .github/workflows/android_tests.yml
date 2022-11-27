@@ -36,13 +36,10 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-#      - name: perform HAXM installation
-        # it still does not work: check the log for the next step
-#        run: brew install intel-haxm
-
       - name: Check for HAXM installation
         # ignoring the return code. Read the console log to know the result
         run: emulator -accel-check || true
+        # it's not installed. You would install it with "brew install intel-haxm", but it doesn't work
 
       - name: perform AVD caching
         uses: actions/cache@v3
@@ -70,8 +67,7 @@ jobs:
           disable-animations: true
           # start the emulator, run this script, then close the emulator
           script: |
-            # the emulator is still active            
-            #screencapture screenshot1.jpg            
+            # the emulator is still active
             adb emu screenrecord screenshot ./screenshot-emu1.png
             echo " - - - OK - - - "
 
@@ -91,32 +87,33 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
-            # take screenshot after the emulator starts
-            # see also https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
-            screencapture screenshot3.jpg
-            # close all OS popups in the emulator
-            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS            
-            # test
+            # take screenshot after the emulator starts            
+            screencapture screenshot-desktop.jpg            
+            # output may be useful
             adb devices
-            # screenshot of the emulator
+            # close all OS popups in the emulator, like "System UI stopped working"
+            adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS   
+            # close that useless popup that tells you how to exit fullscreen mode
+            adb shell settings put secure immersive_mode_confirmations confirmed            
+            # screenshot of the emulator. See also
+            # https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
             adb emu screenrecord screenshot ./screenshot-emu2.png
-            # record the next 50 seconds in the emulator
+            # record the tests in the emulator
             adb emu screenrecord start ./emu-video.webm
             # run tests
             ./gradlew connectedCheck --stacktrace
-            # stop recording
+            # stop recording. If tests fail, it stops by itself, and the video is still good
             adb emu screenrecord stop
       
 # upload results
 
-      - name: upload the screenshots
+      - name: upload the video and screenshots
         uses: actions/upload-artifact@v3
         if: success() || failure()
         with:
           name: screenshots_of_tests_api${{ matrix.api-level }}
           path: |
-            screenshot1.jpg            
-            screenshot3.jpg            
+            screenshot-desktop.jpg                        
             screenshot-emu1.png
             screenshot-emu2.png
             emu-video.webm
