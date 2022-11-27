@@ -18,6 +18,8 @@ package com.nononsenseapps.notepad.sync.orgsync;
 
 import android.annotation.SuppressLint;
 
+import androidx.annotation.Nullable;
+
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
@@ -270,6 +272,7 @@ public class OrgConverter {
 	 * Returns the id from the meta-section, if present. Null otherwise.
 	 */
 	@SuppressLint("DefaultLocale")
+	@Nullable
 	public static String getNodeId(final OrgNode node) {
 		final Matcher m = PatternId.matcher(node.getComments());
 		if (m.find()) {

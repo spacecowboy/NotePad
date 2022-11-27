@@ -40,6 +40,10 @@ public class GoogleTask extends RemoteTask {
 	public static final String PARENT = "parent";
 	public static final String POSITION = "position";
 	public static final String HIDDEN = "hidden";
+
+	// all of these should be changed to methods like getTitle() { return this.title; }
+	// and setTitle(String new) { this.title = new; } but as of now google task is
+	// not even used by the app...
 	public String title = null;
 	public String notes = null;
 	public String status = null;
