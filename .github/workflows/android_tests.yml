@@ -88,7 +88,7 @@ jobs:
           disk-size: 1G
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu swiftshader_indirect
+          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
             # take screenshot after the emulator starts            
             screencapture screenshot3.jpg
@@ -97,7 +97,7 @@ jobs:
             # test
             adb devices
             # run tests
-            ./gradlew connectedCheck --info --stacktrace
+            ./gradlew connectedCheck --stacktrace
 
       - name: take a screenshot at the end # 99% useless
         if: success() || failure()
