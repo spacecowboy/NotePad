@@ -38,7 +38,7 @@ jobs:
 
       - name: perform HAXM installation
         # it still does not work: check the log for the next step
-        run: brew install --cask intel-haxm
+        run: brew install intel-haxm
 
       - name: Check for HAXM installation
         # ignoring the return code. Read the console log to know the result
@@ -90,14 +90,16 @@ jobs:
           disk-size: 1G
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
+          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu host -no-window
           script: |          
             # take screenshot after the emulator starts            
             screencapture screenshot3.jpg
             # close all OS popups in the emulator
             adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS
+            # wait 30'' for emulator
+            sleep 30
             # run tests
-            ./gradlew connectedDebugAndroidTest --stacktrace
+            ./gradlew connectedCheck --debug --stacktrace
 
       - name: take a screenshot at the end # 99% useless
         if: success() || failure()
