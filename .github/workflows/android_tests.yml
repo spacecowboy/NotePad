@@ -71,7 +71,8 @@ jobs:
           # start the emulator, run this script, then close the emulator
           script: |
             # the emulator is still active            
-            screencapture screenshot1.jpg
+            screencapture screenshot1.jpg            
+            adb emu screenrecord screenshot ./screenshot-emu1.png
             echo " - - - OK - - - "
 
       - name: perform the Gradle build
@@ -90,12 +91,17 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
-            # take screenshot after the emulator starts            
+            # take screenshot after the emulator starts
+            # see also https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
             screencapture screenshot3.jpg
             # close all OS popups in the emulator
             adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS            
             # test
             adb devices
+            # screenshot of the emulator
+            adb emu screenrecord screenshot ./screenshot-emu2.png
+            # record the next 50 seconds in the emulator
+            adb emu screenrecord start --time-limit 50 ./emu-video.webm
             # run tests
             ./gradlew connectedCheck --stacktrace
 
@@ -114,6 +120,9 @@ jobs:
             screenshot1.jpg            
             screenshot3.jpg
             screenshot4.jpg
+            screenshot-emu1.png
+            screenshot-emu2.png
+            emu-video.webm
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
