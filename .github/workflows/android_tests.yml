@@ -36,9 +36,9 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-      # - name: perform HAXM installation
+      - name: perform HAXM installation
         # it still does not work: check the log for the next step
-        # run: brew install --cask intel-haxm
+        run: brew install --cask intel-haxm
 
       - name: Check for HAXM installation
         # ignoring the return code. Read the console log to know the result
@@ -100,6 +100,7 @@ jobs:
             ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: take a screenshot at the end # 99% useless
+        if: success() || failure()
         run: screencapture screenshot4.jpg
 
 # upload results

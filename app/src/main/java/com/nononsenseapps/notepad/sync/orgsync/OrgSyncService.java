@@ -149,28 +149,6 @@ public class OrgSyncService extends Service {
 		}
 	}
 
-	private void notifyError() {
-		NotificationManager notificationManager = (NotificationManager)
-				getSystemService(Context.NOTIFICATION_SERVICE);
-
-		// probably this is not optimal, but this notifyError() seems useless anyway
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			NotificationHelper.createNotificationChannel(this, notificationManager);
-		}
-
-		var pi = PendingIntent.getActivity(this, 0,
-				new Intent(this, PrefsActivity.class),
-				PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-		Notification notif = new NotificationCompat
-				.Builder(this, NotificationHelper.CHANNEL_ID)
-				.setContentTitle("Could not access files")
-				.setContentText("Please change directory")
-				.setContentIntent(pi)
-				.build();
-		notificationManager.notify(237388, notif);
-	}
-
 	@Override
 	public void onDestroy() {
 		// Unregister observers
