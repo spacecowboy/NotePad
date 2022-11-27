@@ -11,12 +11,12 @@ jobs:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
     # it has hardware acceleration. Full list of installed software:
     # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-    runs-on: ubuntu-latest # macos-12    
+    runs-on: macos-12    
     timeout-minutes: 45
     strategy:
       matrix:
         # test on emulators with these OS versions
-        api-level: [ 23, 28, 32 ] # minSdk, average, targetSdk
+        api-level: [ 28, 32 ] # minSdk, average, targetSdk
     permissions:
       contents: read
     steps:
@@ -66,12 +66,12 @@ jobs:
           disk-size: 1G       # for saving org and json files
           force-avd-creation: false
           # you need -no-window to make it work
-          emulator-options: -gpu swiftshader_indirect -noaudio -no-boot-anim -no-window
+          emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window
           disable-animations: true
           # start the emulator, run this script, then close the emulator
           script: |
             # the emulator is still active            
-            screencapture screenshot1.jpg || gnome-screenshot screenshot1.jpg || true
+            screencapture screenshot1.jpg
             echo " - - - OK - - - "
 
       - name: perform the Gradle build
@@ -88,10 +88,10 @@ jobs:
           disk-size: 1G
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -verbose -noaudio -no-boot-anim -gpu swiftshader_indirect -no-window
+          emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
             # take screenshot after the emulator starts            
-            screencapture screenshot3.jpg || gnome-screenshot screenshot3.jpg || true
+            screencapture screenshot3.jpg
             # close all OS popups in the emulator
             adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS            
             # test
@@ -101,7 +101,7 @@ jobs:
 
       - name: take a screenshot at the end # 99% useless
         if: success() || failure()
-        run: screencapture screenshot4.jpg || gnome-screenshot screenshot4.jpg || true
+        run: screencapture screenshot4.jpg
 
 # upload results
 
