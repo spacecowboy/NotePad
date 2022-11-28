@@ -1,5 +1,11 @@
 #!/bin/sh
+
+# sources:  https://stackoverflow.com/a/66155744/6307322
+#           https://stackoverflow.com/a/62723329/6307322
 echo "github action script started"
+
+# exit script on the 1° error
+set -e
 
 # take screenshot of the host PC after the emulator starts
 # MacOS specific. Ignore in case of error
@@ -7,6 +13,9 @@ screencapture screenshot-desktop.jpg || true
 
 # output may be useful
 adb devices
+
+# this will fail if no single device could be selected
+adb shell uptime
 
 # close all OS popups in the emulator, like "System UI stopped working"
 adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS
@@ -41,3 +50,19 @@ record_and_move ()
 # stop recording. Useless: if the script succeeds, videos are useless.
 # If it fails, the entire script is killed
 # adb emu screenrecord stop
+
+
+# alternative:
+# funcScreenStream() {
+#  while true; do
+    # exec-out: run command on emulated android, get the output on your "host" PC
+    # bitrate & size: to get a small but still comprehensible video
+    # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm`
+    # its problem: the tool is hardcoded to die after 3 minutes. Thanks Google.
+    # - at the end: stream, don't save (?)
+#    adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 -
+#  done
+#}
+
+# save to file
+# { funcScreenStream | ffmpeg -i - -s 540x960 -framerate 24 -bufsize 16M emu-video-2.mp4 ; } &
