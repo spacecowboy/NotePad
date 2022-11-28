@@ -52,12 +52,12 @@ funcScreenStream() {
     # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm`
     # its problem: the tool is hardcoded to die after 3 minutes. Thanks Google.
     # - at the end: stream, don't save (?)
-    adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 --verbose --bugreport -
+    adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 --bugreport -
   done
 }
 
 # save to file
-{ funcScreenStream | ffmpeg -i - -s 540x960 -framerate 24 -bufsize 16M emu-video-2.mp4 ; } &
+{ funcScreenStream | ffmpeg -i - -s 540x960 -hide_banner -framerate 24 -bufsize 1M emu-video-2.mp4 ; } &
 
 # tap the screen to close a popup
 # The numbers are X and Y coordinates, in pixels, so 1080 & 1920 for the bottom right corner
