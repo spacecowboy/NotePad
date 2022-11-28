@@ -74,6 +74,9 @@ jobs:
       - name: perform the Gradle build
         run: ./gradlew build      
 
+#      - name: install ffmpeg
+#        run: brew install ffmpeg
+
       - name: run the tests
         # note that by now the app is already built
         uses: reactivecircus/android-emulator-runner@v2
@@ -102,11 +105,16 @@ jobs:
             # https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
             adb emu screenrecord screenshot ./screenshot-emu2.png
             # record the tests in the emulator (dies after 3 minutes!)
-            adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm
-            # run tests
+            # adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm
+            # make a function to record 3 minutes and save the video to the host PC
+            record_and_move() { adb shell screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 /sdcard/video$1.mp4 ; adb pull /sdcard/video$1.mp4 . ; }
+            # call the function 5 times, in series, in background
+            { record_and_move V1 ; record_and_move V2 ; record_and_move V3 ; record_and_move V4 ;  record_and_move V5 ;  } &
+            # meanwhile, run tests
             ./gradlew connectedCheck
-            # stop recording (useless)
-            adb emu screenrecord stop
+            # stop recording. Useless: if the script succeeds, videos are useless. 
+            # If it fails, the entire script is killed
+            # adb emu screenrecord stop
       
 # upload results
 
