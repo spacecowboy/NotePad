@@ -31,7 +31,7 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          # this step should not cache gradle
+          cache: gradle
 
       - name: perform Gradle setup & caching
         uses: gradle/gradle-build-action@v2        
@@ -59,8 +59,8 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis # the images for API 32 only have this target
           arch: x86_64        # the only one available for all API versions
-          profile: Nexus 5X   # I test on this in my PC
-          disk-size: 1G       # for saving org and json files
+          profile: 5.4in FWVGA #Nexus 5X   # I test on this in my PC
+          disk-size: 800M     # for saving org and json files
           force-avd-creation: false
           # you need these parameters to make it work
           emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window
@@ -87,8 +87,8 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
-          profile: Nexus 5X
-          disk-size: 1G          
+          profile: 5.4in FWVGA #Nexus 5X
+          disk-size: 800M
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
@@ -100,7 +100,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: screenshots_of_tests_api${{ matrix.api-level }}
+          name: media_api${{ matrix.api-level }}
           path: |
             screenshot-desktop.jpg                        
             screenshot-made-cache.png
@@ -114,5 +114,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: android-test-report-api${{ matrix.api-level }}
+          name: reports-api${{ matrix.api-level }}
           path: app/build/reports/androidTests/connected/**
