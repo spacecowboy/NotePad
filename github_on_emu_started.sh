@@ -56,8 +56,13 @@ funcScreenStream() {
   done
 }
 
+echo "---------- all OK as of now ----------"
+
 # save to file
-{ funcScreenStream | ffmpeg -i - -s 540x960 -hide_banner -framerate 24 -bufsize 1M emu-video-2.mp4 ; } &
+{ funcScreenStream | ffmpeg -i - -s 540x960 -loglevel error -nostats -hide_banner -framerate 24 -bufsize 1M emu-video-2.mp4 ; } &
+
+# get PID of the last line
+VIDEO_PID=$(echo $!)
 
 # tap the screen to close a popup
 # The numbers are X and Y coordinates, in pixels, so 1080 & 1920 for the bottom right corner
