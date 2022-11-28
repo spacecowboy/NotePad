@@ -59,6 +59,14 @@ funcScreenStream() {
 # save to file
 { funcScreenStream | ffmpeg -i - -s 540x960 -framerate 24 -bufsize 16M emu-video-2.mp4 ; } &
 
+# press home and back. This should close any popups left (?)
+adb shell input keyevent 3
+adb shell input keyevent 4
+# if you need to press somewhere: adb shell input tap 500 1450
+
+# check if emu-video-2.mp4 exists
+ls -lah
+
 # meanwhile, run tests
 ./gradlew connectedCheck
 
