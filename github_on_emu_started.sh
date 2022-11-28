@@ -42,7 +42,22 @@ record_and_move ()
 }
 
 # call the function 6 times, in series, in background
-{ record_and_move V1 ; record_and_move V2 ; record_and_move V3 ; record_and_move V4 ;  record_and_move V5 ; record_and_move V6 ;  } &
+# { record_and_move V1 ; record_and_move V2 ; record_and_move V3 ; record_and_move V4 ;  record_and_move V5 ; record_and_move V6 ;  } &
+
+# alternative:
+funcScreenStream() {
+  while true; do
+    # exec-out: run command on emulated android, get the output on your "host" PC
+    # bitrate & size: to get a small but still comprehensible video
+    # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm`
+    # its problem: the tool is hardcoded to die after 3 minutes. Thanks Google.
+    # - at the end: stream, don't save (?)
+    adb exec-out screenrecord --bit-rate 100000 --size 540x960 -
+  done
+}
+
+# save to file
+{ funcScreenStream | ffmpeg -i - -s 540x960 -framerate 24 -bufsize 16M emu-video-2.mp4 ; } &
 
 # meanwhile, run tests
 ./gradlew connectedCheck
@@ -50,19 +65,3 @@ record_and_move ()
 # stop recording. Useless: if the script succeeds, videos are useless.
 # If it fails, the entire script is killed
 # adb emu screenrecord stop
-
-
-# alternative:
-# funcScreenStream() {
-#  while true; do
-    # exec-out: run command on emulated android, get the output on your "host" PC
-    # bitrate & size: to get a small but still comprehensible video
-    # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm`
-    # its problem: the tool is hardcoded to die after 3 minutes. Thanks Google.
-    # - at the end: stream, don't save (?)
-#    adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 -
-#  done
-#}
-
-# save to file
-# { funcScreenStream | ffmpeg -i - -s 540x960 -framerate 24 -bufsize 16M emu-video-2.mp4 ; } &
