@@ -30,11 +30,10 @@ jobs:
         uses: actions/setup-java@v3        
         with:
           java-version: 11
-          distribution: "temurin"
-          cache: 'gradle'
-          key: java-gradle-cache-tests # ignored ?
+          distribution: temurin
+          # this step should not cache gradle
 
-      - name: perform Gradle caching
+      - name: perform Gradle setup & caching
         uses: gradle/gradle-build-action@v2        
 
       - name: Check for HAXM installation
@@ -63,7 +62,7 @@ jobs:
           profile: Nexus 5X   # I test on this in my PC
           disk-size: 1G       # for saving org and json files
           force-avd-creation: false
-          # you need -no-window to make it work
+          # you need these parameters to make it work
           emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window
           disable-animations: true
           # start the emulator, run this script, then close the emulator
@@ -88,7 +87,7 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
           script: |          
-            # take screenshot after the emulator starts            
+            # take screenshot of the host PC after the emulator starts. MacOS specific
             screencapture screenshot-desktop.jpg            
             # output may be useful
             adb devices
@@ -96,17 +95,17 @@ jobs:
             adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS   
             # close that useless popup that tells you how to exit fullscreen mode
             adb shell settings put secure immersive_mode_confirmations confirmed            
-            # uninstall the app (it can't uninstall it by itself)
+            # uninstall the app (it can't uninstall it by itself), ignore any error
             adb shell pm uninstall --user 0 com.nononsenseapps.notepad.test || true
             adb shell pm uninstall --user 0 com.nononsenseapps.notepad || true
-            # screenshot of the emulator. See also
+            # Take a screenshot of the emulator. See also
             # https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
             adb emu screenrecord screenshot ./screenshot-emu2.png
-            # record the tests in the emulator
-            adb emu screenrecord start ./emu-video.webm
+            # record the tests in the emulator (dies after 3 minutes!)
+            adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm
             # run tests
-            ./gradlew connectedCheck # --stacktrace
-            # stop recording. If tests fail, it stops by itself, and the video is still good
+            ./gradlew connectedCheck
+            # stop recording (useless)
             adb emu screenrecord stop
       
 # upload results
