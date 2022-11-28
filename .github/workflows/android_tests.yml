@@ -107,9 +107,8 @@ jobs:
             # record the tests in the emulator (dies after 3 minutes!)
             # adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm
             # make a function to record 3 minutes and save the video to the host PC
-            record_and_move() { adb shell screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 /sdcard/video$1.mp4 ; adb pull /sdcard/video$1.mp4 . ; }
-            # call the function 5 times, in series, in background
-            { record_and_move V1 ; record_and_move V2 ; record_and_move V3 ; record_and_move V4 ;  record_and_move V5 ;  } &
+            # then call the function 5 times, in series, in background
+            record_and_move () { adb shell screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 /sdcard/video$1.mp4 ; adb pull /sdcard/video$1.mp4 . ; } ; { record_and_move V1 ; record_and_move V2 ; record_and_move V3 ; record_and_move V4 ;  record_and_move V5 ;  } &
             # meanwhile, run tests
             ./gradlew connectedCheck
             # stop recording. Useless: if the script succeeds, videos are useless. 
@@ -128,6 +127,8 @@ jobs:
             screenshot-emu1.png
             screenshot-emu2.png
             emu-video.webm
+            videoV1.mp4
+            *.mp4
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
