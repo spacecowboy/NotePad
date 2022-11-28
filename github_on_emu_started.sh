@@ -52,17 +52,16 @@ funcScreenStream() {
     # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./emu-video.webm`
     # its problem: the tool is hardcoded to die after 3 minutes. Thanks Google.
     # - at the end: stream, don't save (?)
-    adb exec-out screenrecord --bit-rate 100000 --size 540x960 -
+    adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 540x960 --verbose --bugreport -
   done
 }
 
 # save to file
 { funcScreenStream | ffmpeg -i - -s 540x960 -framerate 24 -bufsize 16M emu-video-2.mp4 ; } &
 
-# press home and back. This should close any popups left (?)
-adb shell input keyevent 3
-adb shell input keyevent 4
-# if you need to press somewhere: adb shell input tap 500 1450
+# tap the screen to close a popup
+# The numbers are X and Y coordinates, in pixels, so 1080 & 1920 for the bottom right corner
+adb shell input tap 300 950 
 
 # check if emu-video-2.mp4 exists
 ls -lah
