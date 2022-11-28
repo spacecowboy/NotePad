@@ -74,8 +74,8 @@ jobs:
       - name: perform the Gradle build
         run: ./gradlew build      
 
-#      - name: install ffmpeg
-#        run: brew install ffmpeg
+      - name: install ffmpeg
+        run: brew install ffmpeg
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
@@ -106,6 +106,7 @@ jobs:
             screenshot-made-cache.png
             screenshot-emu-tests-starting.png
             emu-video.webm
+            emu-video-2.mp4
             *.mp4
 
       - name: Upload detailed test reports
