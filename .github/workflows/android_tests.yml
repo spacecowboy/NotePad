@@ -2,9 +2,10 @@ name: Android tests
 
 on:
   push:
-    branches: [ "master" ]  # runs when you commit to the master branch,
-      # so also when merging pull requests.
-    # Not on receiving pull requests: it would be a waste
+    branches: [ "master" ]
+    # runs when you commit to the master branch,
+    # so also when merging pull requests.
+    # Not on receiving pull requests: it would be a waste.
 jobs:
   # this job runs all the tests
   test_on_android:
@@ -14,19 +15,17 @@ jobs:
     strategy:
       matrix:
         # test on emulators with these Android API versions (minSdk, average, targetSdk)
-        api-level: [ 23, 28, 31, 33 ]
-        # Windows is not supported. Full list of installed software:
-        # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+        api-level: [ 23, 28, 31, 32, 33 ]        
         os: [ ubuntu-latest, macos-latest ]
         target: [ default, google_apis ] # without or with google APIs
         exclude:
-            # this emu image does not exist
+            # the image for this configuration does not exist
           - api-level: 33
             target: default            
-            # ubuntu is slow. Images with google APIs make it TOO slow
-          - os: ubuntu-latest
-            target: google_apis
-    runs-on: ${{ matrix.os }}    
+    # Windows is unsupported, Ubuntu is slow, so the emulators crash.
+    # Full list of installed software:
+    # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+    runs-on: macos-latest
     permissions:
       contents: read
     steps:
@@ -49,13 +48,12 @@ jobs:
 
       - name: Check for hardware acceleration availability
         # ignore return codes. Read the console for the result. It's either available
-        # or not. There's nothing you can do. No you can't install HAXM.
-        continue-on-error: true
+        # or not. There's nothing you can do. No you can't install HAXM.        
         run: |
           which emulator
-          emulator -accel-check
-          $ANDROID_HOME/emulator/emulator -accel-check
-          $ANDROID_HOME/tools/emulator -accel-check
+          emulator -accel-check || true
+          $ANDROID_HOME/emulator/emulator -accel-check || true
+          $ANDROID_HOME/tools/emulator -accel-check || true
           echo "done"
 
       - name: perform AVD caching
@@ -65,7 +63,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-${{ matrix.os }}-${{ matrix.target }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.target }}
 
       - name: create AVD and generate snapshot for caching
         # here it automatically installs the needed android SDK components
@@ -121,17 +119,19 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: media-${{ matrix.target }}-api${{ matrix.api-level }}-${{ matrix.os }}
+          name: media-${{ matrix.target }}-api${{ matrix.api-level }}
           path: |
             screenshot-desktop.jpg             
             screenshot-made-cache.png
             screenshot-emu-tests-starting.png            
             emu-video.mp4
+            screenshot*
+            *.mp4
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: reports-${{ matrix.target }}-api${{ matrix.api-level }}-${{ matrix.os }}
+          name: reports-${{ matrix.target }}-api${{ matrix.api-level }}
           path: app/build/reports/androidTests/connected/**
