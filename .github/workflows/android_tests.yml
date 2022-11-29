@@ -15,8 +15,7 @@ jobs:
     strategy:
       matrix:
         # test on emulators with these Android API versions (minSdk, average, targetSdk)
-        api-level: [ 23, 28, 31, 32, 33 ]        
-        os: [ ubuntu-latest, macos-latest ]
+        api-level: [ 23, 28, 31, 32, 33 ]
         target: [ default, google_apis ] # without or with google APIs
         exclude:
             # the image for this configuration does not exist
