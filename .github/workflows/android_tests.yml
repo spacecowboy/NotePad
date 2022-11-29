@@ -19,6 +19,8 @@ jobs:
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
         os: [ ubuntu-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
+    env:
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 160
     permissions:
       contents: read
     steps:
@@ -26,6 +28,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: perform the validation
+        continue-on-error: true
         uses: gradle/wrapper-validation-action@v1
 
       - name: perform the set up for the JDK
@@ -71,7 +74,7 @@ jobs:
           disk-size: 800M       # for saving org and json files
           force-avd-creation: false
           # you need these parameters to make it work
-          emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window
+          emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window          
           disable-animations: true
           # starts the emulator, runs this script, then closes the emulator
           script: |
@@ -85,10 +88,9 @@ jobs:
       - name: install ffmpeg # a command for each OS
         continue-on-error: true
         run: |
-          brew install ffmpeg
-          sudo apt install ffmpeg
-          choco install ffmpeg
-          ffmpeg --version        
+          brew install ffmpeg || true
+          sudo apt install ffmpeg  || true
+          ffmpeg --version
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
