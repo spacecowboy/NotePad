@@ -37,6 +37,8 @@ function getScreenStreamFromEmu() {
     # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./video.webm`,
     #   but the tool is hardcoded to die after 3 minutes. Thanks Google.
     adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 480x854 --bugreport -
+    # should go to STDERR, without polluting the video stream, hopefully
+    echo "restarting screenrecord from adb" >&2
   done
 }
 
@@ -45,28 +47,36 @@ function getScreenStreamFromEmu() {
 # more info in case this script crashes
 echo "---------- all OK as of now ----------"
 
-# save the video stream to a file
+# save the video stream to a file, then get this process PID
 { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
  -nostats -hide_banner -framerate 24 -bufsize 1M emu-video.mp4 ; } &
 
-# get PID of that last line
 VIDEO_PID=$!
 
 # press "HOME" to close any "system UI not responding" popups still showing
 # see https://stackoverflow.com/a/8483797/6307322
 adb shell input keyevent 3
 # The numbers are X and Y coordinates, in pixels, so 480 854 for the bottom right corner
-# adb shell input tap 130 420
+# adb shell input tap 150 440
 
 # run tests
 ./gradlew connectedCheck
 GRADLE_RETURN_CODE=$?
 
 # check if emu-video.mp4 exists
-ls -lah
+ls | grep mp4
+ls | grep png
 
 # Stop the recording
-kill -INT $VIDEO_PID
+echo "killing process id=" $VIDEO_PID
+kill -s QUIT $VIDEO_PID
+sleep 10
+sudo kill -s QUIT $VIDEO_PID
+sleep 10
+echo "try the last 2"
+killall --signal INT  ffmpeg
+sleep 10
+sudo killall ffmpeg
 
 # return with the code from gradle, so the github action can fail if the tests failed
 exit $GRADLE_RETURN_CODE
