@@ -9,7 +9,7 @@ jobs:
   # this job runs all the tests
   test_on_android:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    timeout-minutes: 45
+    timeout-minutes: 40
     continue-on-error: true # run them all even if one fails
     strategy:
       matrix:
@@ -18,9 +18,10 @@ jobs:
         # Windows is not supported. Full list of installed software:
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
         os: [ ubuntu-latest, macos-latest ]
+        target: [ default, google_apis ] # without or with google APIs
     runs-on: ${{ matrix.os }}
     env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 160
+      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 500
     permissions:
       contents: read
     steps:
@@ -59,7 +60,7 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}-${{ matrix.os }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.os }}-${{ matrix.target }}
 
       - name: create AVD and generate snapshot for caching
         # here it automatically installs the needed android SDK components
@@ -68,9 +69,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis   # the images for API 32 only have this target
-          arch: x86_64          # the only one available for all API versions
-          profile: 5.4in FWVGA  # I test on this in my PC
+          target: ${{ matrix.target }}
+          profile: 5.4in FWVGA  # low resolution => faster
+          arch: x86_64          # faster
           disk-size: 800M       # for saving org and json files
           force-avd-creation: false
           # you need these parameters to make it work
@@ -78,8 +79,8 @@ jobs:
           disable-animations: true
           # starts the emulator, runs this script, then closes the emulator
           script: |
-            # wait for it to finish loading, then take a screenshot
-            sleep 15
+            # wait for it to finish booting, then take a screenshot
+            sleep 25
             adb emu screenrecord screenshot ./screenshot-made-cache.png
 
       - name: perform the Gradle build
@@ -90,7 +91,7 @@ jobs:
         run: |
           brew install ffmpeg || true
           sudo apt install ffmpeg  || true
-          ffmpeg --version
+          ffmpeg -version
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
@@ -100,7 +101,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis # default # TODO use default instead ? available on 28 and 31
+          target: ${{ matrix.target }}
           arch: x86_64
           profile: 5.4in FWVGA
           disk-size: 800M
@@ -115,7 +116,7 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: media-api${{ matrix.api-level }}-${{ matrix.os }}
+          name: media-${{ matrix.target }}-api${{ matrix.api-level }}-${{ matrix.os }}
           path: |
             screenshot-desktop.jpg             
             screenshot-made-cache.png
@@ -127,5 +128,5 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: reports-api${{ matrix.api-level }}-${{ matrix.os }}
+          name: reports-${{ matrix.target }}-api${{ matrix.api-level }}-${{ matrix.os }}
           path: app/build/reports/androidTests/connected/**
