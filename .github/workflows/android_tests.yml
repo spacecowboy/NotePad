@@ -41,11 +41,13 @@ jobs:
       - name: Check for hardware acceleration availability
         # ignore return codes. Read the console for the result. It's either available
         # or not. There's nothing you can do. No you can't install HAXM.
+        continue-on-error: true
         run: |
           which emulator
-          emulator -accel-check || true          
-          $ANDROID_HOME/emulator/emulator -accel-check || true
-          $ANDROID_HOME/tools/emulator -accel-check || true
+          emulator -accel-check
+          $ANDROID_HOME/emulator/emulator -accel-check
+          $ANDROID_HOME/tools/emulator -accel-check
+          echo "done"
 
       - name: perform AVD caching
         uses: actions/cache@v3
@@ -80,9 +82,13 @@ jobs:
       - name: perform the Gradle build
         run: ./gradlew build
 
-      - name: install ffmpeg
-        uses: FedericoCarboni/setup-ffmpeg@v1
-        id: setup-ffmpeg
+      - name: install ffmpeg # a command for each OS
+        continue-on-error: true
+        run: |
+          brew install ffmpeg
+          sudo apt install ffmpeg
+          choco install ffmpeg
+          ffmpeg --version        
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
