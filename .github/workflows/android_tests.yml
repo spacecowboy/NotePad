@@ -14,10 +14,10 @@ jobs:
     strategy:
       matrix:
         # test on emulators with these Android API versions (minSdk, average, targetSdk)
-        api-level: [ 28, 31 ] # [ 23, 28, 33 ]
-        # Full list of installed software:
+        api-level: [ 23, 28, 31, 33 ]
+        # Windows is not supported. Full list of installed software:
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ ubuntu-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     permissions:
       contents: read
