@@ -15,6 +15,7 @@ import android.os.SystemClock;
 
 import androidx.test.espresso.AmbiguousViewMatcherException;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -38,7 +39,10 @@ public class EspressoHelper {
 	}
 
 	/**
-	 * Wait for 500ms to work around timing issues on slow emulators
+	 * Wait for 500ms to work around timing issues on slow emulators. Every time
+	 * this function is called was to solve issues with flaky tests on github runners.
+	 * Keep it: sometime tests need it, sometimes they don't, but you can't know.
+	 * Ideally, it should go after every call to {@link ViewInteraction#perform}
 	 */
 	public static void waitUi() {
 		InstrumentationRegistry.getInstrumentation().waitForIdleSync();
@@ -52,11 +56,15 @@ public class EspressoHelper {
 		onView(withId(R.id.drawerLayout)).perform(DrawerActions.open());
 	}
 
+	// many tests fail due to this function chaining note texts when called in a loop.
+	// for example, you get "prepare foodwalk dog" in a single note instead of 2
 	public static void createNoteWithName(String noteName) {
 		onView(withId(R.id.menu_add)).perform(click());
+		waitUi();
 		EspressoHelper.hideShowCaseViewIfShown();
-		EspressoHelper.waitUi();
+		waitUi(); // for the new note page to load
 		onView(withId(R.id.taskText)).perform(typeText(noteName));
+		waitUi(); // for the keyboard to finish typing
 	}
 
 	/**
@@ -75,9 +83,11 @@ public class EspressoHelper {
 	 */
 	public static void createTaskList(String taskListName) {
 		EspressoHelper.openDrawer();
+		EspressoHelper.waitUi();
 
 		// dismiss the other showcase view
 		EspressoHelper.hideShowCaseViewIfShown();
+		EspressoHelper.waitUi();
 
 		onView(withId(R.id.drawer_menu_createlist)).perform(click());
 		EspressoHelper.waitUi();
