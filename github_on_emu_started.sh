@@ -8,7 +8,7 @@ echo "github action script started"
 # wait a bit for it to finish loading
 sleep 15
 
-# take screenshot of the host PC after the emulator starts. MacOS specific
+# take screenshot of the host PC after the emulator starts
 screencapture screenshot-desktop.jpg
 
 # output may be useful
@@ -36,9 +36,15 @@ function getScreenStreamFromEmu() {
     # bugreport: helpful info when a video starts
     # alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./video.webm`,
     #   but the tool is hardcoded to die after 3 minutes. Thanks Google.
+    # returns: 0 if 3 minutes passed, a number > 0 if there was an error
     adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 480x854 --bugreport -
     # should go to STDERR, without polluting the video stream, hopefully    
     echo "restarting screenrecord from adb, PID = " $! " and " $? " is return code" >&2
+    if [ $? -eq 255 ] ; then
+	    # the emulator died: exit the loop & the function. 
+      # Hopefully this also stops ffmpeg gracefully
+	    break
+    fi
   done
 }
 
@@ -53,8 +59,10 @@ echo "---------- all OK as of now ----------"
 
 VIDEO_PID=$!
 
-# press "HOME" to close any "system UI not responding" popups still showing
-# see https://stackoverflow.com/a/8483797/6307322
+# press "HOME" to close any "system UI not responding" popups still showing.
+# For codes, see https://stackoverflow.com/a/8483797/6307322
+# Notice that these popups appear when the host PC is too slow, so the best solution
+# is to run the tests under a different host OS, device skin, API version, ...
 adb shell input keyevent 3
 # The numbers are X and Y coordinates, in pixels, so 480 854 for the bottom right corner
 # adb shell input tap 150 440
@@ -69,7 +77,7 @@ ls | grep mp4
 ls | grep png
 echo "----------"
 
-# Stop the recording
+# Stop the recording # TODO NONE OF THESE WORK!
 echo "killing process id=" $VIDEO_PID
 kill -s QUIT $VIDEO_PID
 sleep 10
