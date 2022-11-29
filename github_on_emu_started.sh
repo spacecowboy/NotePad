@@ -28,7 +28,7 @@ adb shell pm uninstall --user 0 com.nononsenseapps.notepad
 # https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
 adb emu screenrecord screenshot ./screenshot-emu-tests-starting.png
 
-getScreenStreamFromEmu() {
+function getScreenStreamFromEmu() {
   while true; do
     # exec-out: run command on emulated android, get the output on the host PC
     # bitrate & size: to get a smaller video
@@ -40,6 +40,8 @@ getScreenStreamFromEmu() {
   done
 }
 
+# TODO android API 32 images have a built-in screen record feature that can make long videos, but you have to start it from the top drawer menu. Check if API 23 has it, and try to use it with ADB. Videos go on /sdcard/movies/
+
 # more info in case this script crashes
 echo "---------- all OK as of now ----------"
 
@@ -47,7 +49,7 @@ echo "---------- all OK as of now ----------"
 { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
  -nostats -hide_banner -framerate 24 -bufsize 1M emu-video.mp4 ; } &
 
-# get PID of the last line
+# get PID of that last line
 VIDEO_PID=$!
 
 # press "HOME" to close any "system UI not responding" popups still showing
@@ -56,12 +58,15 @@ adb shell input keyevent 3
 # The numbers are X and Y coordinates, in pixels, so 480 854 for the bottom right corner
 # adb shell input tap 130 420
 
+# run tests
+./gradlew connectedCheck
+GRADLE_RETURN_CODE=$?
+
 # check if emu-video.mp4 exists
 ls -lah
 
-# meanwhile, run tests
-./gradlew connectedCheck
+# Stop the recording
+kill -INT $VIDEO_PID
 
-# Stopping the recording is useless: if the script succeeds, videos are useless.
-# If it fails, the entire script is killed
-# kill -INT $VIDEO_PID
+# return with the code from gradle, so the github action can fail if the tests failed
+exit $GRADLE_RETURN_CODE

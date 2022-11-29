@@ -53,7 +53,6 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 
 		// return to the notes list
 		Espresso.pressBack();
-		Espresso.pressBack();
 
 		// check & delete both notes
 		clickCheckBoxAt(0);
@@ -75,7 +74,6 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		onView(withId(android.R.id.button1)).perform(click());
 
 		// return to the notes list
-		Espresso.pressBack();
 		Espresso.pressBack();
 
 		// ensure both notes were restored
