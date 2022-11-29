@@ -94,12 +94,12 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis # default # TODO use default instead ? available on 28 and 31
           arch: x86_64
-          profile: 5.4in FWVGA # Nexus 5X
+          profile: 5.4in FWVGA
           disk-size: 800M
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
-          script: ./github_on_emu_started.sh # maybe add bash before for windows support ?
+          script: bash ./github_on_emu_started.sh
 
 # upload results
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # sources:  https://stackoverflow.com/a/66155744/6307322
 #           https://stackoverflow.com/a/62723329/6307322
