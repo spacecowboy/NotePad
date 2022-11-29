@@ -1,22 +1,24 @@
 name: Android tests
 
 on:
-  push: # runs when you commit to the master branch, so also when merging pull requests
-    branches: [ "master" ]
-# running on every pull request uses too much server time => avoid it
-
+  push:
+    branches: [ "master" ]  # runs when you commit to the master branch,
+      # so also when merging pull requests.
+    # Not on receiving pull requests: it would be a waste
 jobs:
   # this job runs all the tests
   test_on_android:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    # it has hardware acceleration. Full list of installed software:
-    # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-    runs-on: macos-12    
     timeout-minutes: 45
+    continue-on-error: true # run them all even if one fails
     strategy:
       matrix:
-        # test on emulators with these OS versions
-        api-level: [ 28, 32 ] # minSdk, average, targetSdk
+        # test on emulators with these Android API versions (minSdk, average, targetSdk)
+        api-level: [ 28, 31 ] # [ 23, 28, 33 ]
+        # Full list of installed software:
+        # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
     permissions:
       contents: read
     steps:
@@ -27,55 +29,60 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: perform the set up for the JDK
-        uses: actions/setup-java@v3        
+        uses: actions/setup-java@v3
         with:
           java-version: 11
           distribution: temurin
-          cache: gradle
+          # cache: gradle # this step should not cache gradle # TODO maybe it should ?
 
       - name: perform Gradle setup & caching
-        uses: gradle/gradle-build-action@v2        
+        uses: gradle/gradle-build-action@v2
 
-      - name: Check for HAXM installation
-        # ignoring the return code. Read the console log to know the result
-        run: emulator -accel-check || true
-        # it's not installed. You would install it with "brew install intel-haxm", but it doesn't work
+      - name: Check for hardware acceleration availability
+        # ignore return codes. Read the console for the result. It's either available
+        # or not. There's nothing you can do. No you can't install HAXM.
+        run: |
+          which emulator
+          emulator -accel-check || true          
+          $ANDROID_HOME/emulator/emulator -accel-check || true
+          $ANDROID_HOME/tools/emulator -accel-check || true
 
       - name: perform AVD caching
         uses: actions/cache@v3
-        id: avd-cache        
+        id: avd-cache
         with:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
+          key: avd-${{ matrix.api-level }}-${{ matrix.os }}
 
       - name: create AVD and generate snapshot for caching
         # here it automatically installs the needed android SDK components
-        # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md 
+        # see https://github.com/ReactiveCircus/android-emulator-runner/blob/main/README.md
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis # the images for API 32 only have this target
-          arch: x86_64        # the only one available for all API versions
-          profile: 5.4in FWVGA #Nexus 5X   # I test on this in my PC
-          disk-size: 800M     # for saving org and json files
+          target: google_apis   # the images for API 32 only have this target
+          arch: x86_64          # the only one available for all API versions
+          profile: 5.4in FWVGA  # I test on this in my PC
+          disk-size: 800M       # for saving org and json files
           force-avd-creation: false
           # you need these parameters to make it work
           emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window
           disable-animations: true
-          # start the emulator, run this script, then close the emulator
+          # starts the emulator, runs this script, then closes the emulator
           script: |
-            # the emulator is still active
+            # wait for it to finish loading, then take a screenshot
+            sleep 15
             adb emu screenrecord screenshot ./screenshot-made-cache.png
-            echo " - - - OK - - - "
 
       - name: perform the Gradle build
-        run: ./gradlew build      
+        run: ./gradlew build
 
       - name: install ffmpeg
-        run: brew install ffmpeg
+        uses: FedericoCarboni/setup-ffmpeg@v1
+        id: setup-ffmpeg
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
@@ -85,34 +92,32 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis
+          target: google_apis # default # TODO use default instead ? available on 28 and 31
           arch: x86_64
-          profile: 5.4in FWVGA #Nexus 5X
+          profile: 5.4in FWVGA
           disk-size: 800M
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
-          script: ./github_on_emu_started.sh
-      
+          script: bash ./github_on_emu_started.sh
+
 # upload results
 
       - name: upload the video and screenshots
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: media_api${{ matrix.api-level }}
+          name: media-api${{ matrix.api-level }}-${{ matrix.os }}
           path: |
-            screenshot-desktop.jpg                        
+            screenshot-desktop.jpg             
             screenshot-made-cache.png
-            screenshot-emu-tests-starting.png
-            emu-video.webm
-            emu-video-2.mp4
-            *.mp4
+            screenshot-emu-tests-starting.png            
+            emu-video.mp4
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: reports-api${{ matrix.api-level }}
+          name: reports-api${{ matrix.api-level }}-${{ matrix.os }}
           path: app/build/reports/androidTests/connected/**

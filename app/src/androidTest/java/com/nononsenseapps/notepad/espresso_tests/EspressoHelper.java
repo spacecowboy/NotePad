@@ -28,12 +28,21 @@ public class EspressoHelper {
 
 	// TODO useless ? the drawer is already closed when this is called
 	public static void closeDrawer() {
+		if (true) return;
 		// use the Espresso helper DrawerActions
 		try {
 			onView(withId(R.id.drawerLayout)).perform(DrawerActions.close());
 		} catch (Exception ignored) {
 			NnnLogger.error(EspressoHelper.class, "Can't close drawer");
 		}
+	}
+
+	/**
+	 * Wait for 500ms to work around timing issues on slow emulators
+	 */
+	public static void waitUi() {
+		InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+		SystemClock.sleep(500);
 	}
 
 	/**
@@ -46,8 +55,8 @@ public class EspressoHelper {
 	public static void createNoteWithName(String noteName) {
 		onView(withId(R.id.menu_add)).perform(click());
 		EspressoHelper.hideShowCaseViewIfShown();
-		onView(withId(com.nononsenseapps.notepad.R.id.taskText))
-				.perform(typeText(noteName));
+		EspressoHelper.waitUi();
+		onView(withId(R.id.taskText)).perform(typeText(noteName));
 	}
 
 	/**
@@ -65,17 +74,17 @@ public class EspressoHelper {
 	 * @param taskListName name of the task list
 	 */
 	public static void createTaskList(String taskListName) {
-
 		EspressoHelper.openDrawer();
 
 		// dismiss the other showcase view
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		onView(withId(R.id.drawer_menu_createlist)).perform(click());
+		EspressoHelper.waitUi();
 
 		// fill the popup
-		onView(withId(com.nononsenseapps.notepad.R.id.titleField)).perform(typeText(taskListName));
-		onView(withId(com.nononsenseapps.notepad.R.id.dialog_yes)).perform(click());
+		onView(withId(R.id.titleField)).perform(typeText(taskListName));
+		onView(withId(R.id.dialog_yes)).perform(click());
 	}
 
 	/**
@@ -144,8 +153,8 @@ public class EspressoHelper {
 				.getUiAutomation();
 		// rotate it
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_270);
-		// wait for the rotation to finish (.waitForIdleSync(); does not work, use this instead):
-		SystemClock.sleep(1800);
+		// wait for the rotation to finish
+		EspressoHelper.waitUi();
 
 		// rotating the screen sometimes makes the taptargetview appear in the wrong place.
 		// I have no idea why. In any case, we have to close it now, or else the next
@@ -154,11 +163,11 @@ public class EspressoHelper {
 
 		// rotate it more
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_0);
-		SystemClock.sleep(1800);
+		EspressoHelper.waitUi();
 
 		// unfreeze it and let it go back to its default state
 		uiAuto.setRotation(UiAutomation.ROTATION_UNFREEZE);
-		SystemClock.sleep(1800);
+		EspressoHelper.waitUi();
 	}
 
 }

@@ -8,6 +8,7 @@ import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.fail;
 
 import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.notepad.R;
 
@@ -32,10 +33,12 @@ public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass {
 		EspressoHelper.createNoteWithName(noteName1);
 
 		//add reminder
-		onView(withId(com.nononsenseapps.notepad.R.id.notificationAdd)).perform(click());
+		onView(withId(R.id.notificationAdd)).perform(click());
+		EspressoHelper.waitUi();
 
 		//add date
-		onView(withId(com.nononsenseapps.notepad.R.id.notificationDate)).perform(click());
+		onView(withId(R.id.notificationDate)).perform(click());
+		EspressoHelper.waitUi();
 		onView(withId(android.R.id.button1)).perform(click());
 
 		//add time
