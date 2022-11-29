@@ -19,9 +19,14 @@ jobs:
         # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
         os: [ ubuntu-latest, macos-latest ]
         target: [ default, google_apis ] # without or with google APIs
-    runs-on: ${{ matrix.os }}
-    env:
-      ANDROID_EMULATOR_WAIT_TIME_BEFORE_KILL: 500
+        exclude:
+            # this emu image does not exist
+          - api-level: 33
+            target: default            
+            # ubuntu is slow. Images with google APIs make it TOO slow
+          - os: ubuntu-latest
+            target: google_apis
+    runs-on: ${{ matrix.os }}    
     permissions:
       contents: read
     steps:
