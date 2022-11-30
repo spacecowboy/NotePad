@@ -8,21 +8,22 @@ on:
     # Not on receiving pull requests: it would be a waste.
 jobs:
   # this job runs all the tests
-  test_on_android:
+  job_tests:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    timeout-minutes: 40
+    timeout-minutes: 50
     continue-on-error: true # run them all even if one fails
     strategy:
       matrix:
         # test on emulators with these Android API versions (minSdk, average, targetSdk)
-        api-level: [ 23, 28, 31, 32, 33 ]
+        api-level: [ 23, 24, 28, 31, 32, 33 ]
         target: [ default, google_apis ] # without or with google APIs
         exclude:
-            # the image for this configuration does not exist
+          # the image for these configurations do not exist
           - api-level: 33
-            target: default            
-    # Windows is unsupported, Ubuntu is slow, so the emulators crash.
-    # Full list of installed software:
+            target: default
+          - api-level: 32
+            target: default
+    # Windows is unsupported. Ubuntu is slow so the emulators crash. List of installed software:
     # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
     runs-on: macos-latest
     permissions:
@@ -40,20 +41,15 @@ jobs:
         with:
           java-version: 11
           distribution: temurin
-          # cache: gradle # this step should not cache gradle # TODO maybe it should ?
 
       - name: perform Gradle setup & caching
         uses: gradle/gradle-build-action@v2
 
       - name: Check for hardware acceleration availability
-        # ignore return codes. Read the console for the result. It's either available
-        # or not. There's nothing you can do. No you can't install HAXM.        
-        run: |
-          which emulator
-          emulator -accel-check || true
-          $ANDROID_HOME/emulator/emulator -accel-check || true
-          $ANDROID_HOME/tools/emulator -accel-check || true
-          echo "done"
+        continue-on-error: true
+        # Read the console for the result. Acceleration is either available
+        # or not: there's nothing you can do. No you can't install HAXM.
+        run: $ANDROID_HOME/emulator/emulator -accel-check
 
       - name: perform AVD caching
         uses: actions/cache@v3
@@ -72,12 +68,12 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          profile: 5.4in FWVGA  # low resolution => faster
+          profile: 5.4in FWVGA  # low resolution => faster. It doesn't have software buttons
           arch: x86_64          # faster
           disk-size: 800M       # for saving org and json files
           force-avd-creation: false
           # you need these parameters to make it work
-          emulator-options: -gpu swiftshader_indirect -no-boot-anim -no-window          
+          emulator-options: -no-boot-anim -no-window # -gpu swiftshader_indirect
           disable-animations: true
           # starts the emulator, runs this script, then closes the emulator
           script: |
@@ -88,12 +84,11 @@ jobs:
       - name: perform the Gradle build
         run: ./gradlew build
 
-      - name: install ffmpeg # a command for each OS
-        continue-on-error: true
-        run: |
-          brew install ffmpeg || true
-          sudo apt install ffmpeg  || true
-          ffmpeg -version
+      - name: install ffmpeg
+        run: brew install ffmpeg
+
+      - name: check ffmpeg
+        run: ffmpeg -version
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
@@ -109,7 +104,7 @@ jobs:
           disk-size: 800M
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -verbose -no-boot-anim -gpu swiftshader_indirect -no-window
+          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window # -gpu swiftshader_indirect
           script: bash ./github_on_emu_started.sh
 
 # upload results
