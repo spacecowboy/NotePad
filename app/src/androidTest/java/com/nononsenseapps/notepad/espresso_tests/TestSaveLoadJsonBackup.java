@@ -50,9 +50,10 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		String EXPORT_BACKUP_TEXT = getStringResource(R.string.backup_export);
 		onView(withText(EXPORT_BACKUP_TEXT)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
+		EspressoHelper.waitUi();
 
 		// return to the notes list
-		Espresso.pressBack();
+		EspressoHelper.exitPrefsActivity();
 
 		// check & delete both notes
 		clickCheckBoxAt(0);
@@ -72,14 +73,18 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		String IMPORT_BACKUP_TEXT = getStringResource(R.string.backup_import);
 		onView(withText(IMPORT_BACKUP_TEXT)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
+		EspressoHelper.waitUi();
 
 		// return to the notes list
-		Espresso.pressBack();
+		EspressoHelper.exitPrefsActivity();
 
 		// ensure both notes were restored
 		onView(withText(noteText1)).check(matches(isDisplayed()));
 		onView(withText(noteText2)).check(matches(isDisplayed()));
 	}
+
+	// TODO explore accessibility tests. See
+	//  https://developer.android.com/training/testing/espresso/accessibility-checking
 
 	// this one expects the list to have 2 children
 	private void clickCheckBoxAt(int position) {

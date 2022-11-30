@@ -34,17 +34,11 @@ public class TestCreateTaskListAndDeleteIt extends BaseTestClass {
 
 		EspressoHelper.openDrawer();
 
-		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
-				.perform(longClick());
-
-		onView(withId(R.id.deleteButton))
-				.perform(click());
-
-		onView(withText("OK"))
-				.perform(click());
-
-		onView(withText(taskListName))
-				.check(doesNotExist());
+		onView(allOf(withText(taskListName), withId(android.R.id.text1))).perform(longClick());
+		EspressoHelper.waitUi();
+		onView(withId(R.id.deleteButton)).perform(click());
+		onView(withText("OK")).perform(click());
+		onView(withText(taskListName)).check(doesNotExist());
 	}
 
 }
