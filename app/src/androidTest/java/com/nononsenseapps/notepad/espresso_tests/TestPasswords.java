@@ -5,6 +5,7 @@ import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMe
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
@@ -46,6 +47,7 @@ public class TestPasswords extends BaseTestClass {
 
 		// then it opens the popup again, to ask the password
 		onView(withId(R.id.passwordField)).perform(typeText(password));
+		onView(withId(R.id.dialog_yes)).check(matches(isDisplayed()));
 		onView(withId(R.id.dialog_yes)).perform(click());
 
 		// the note on the (custom) edittext should appear correctly

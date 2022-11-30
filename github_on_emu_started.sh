@@ -24,9 +24,20 @@ adb shell settings put secure immersive_mode_confirmations confirmed
 adb shell pm uninstall --user 0 com.nononsenseapps.notepad.test
 adb shell pm uninstall --user 0 com.nononsenseapps.notepad
 
+# if the host PC is under heavy load, the emulator sometimes receives a "long click" instead
+# of a normal "click" signal, thus some tests will fail. The workaround is to raise the
+# treshold for a "long click" from ~400ms to 3s, so it will be harder to send long clicks
+# by mistake
+adb shell settings put secure long_press_timeout 3000
+
 # Take a screenshot of the emulator. See also
 # https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
 adb emu screenrecord screenshot ./screenshot-emu-tests-starting.png
+
+# disable animations once again, for safety
+adb shell settings put global window_animation_scale 0
+adb shell settings put global transition_animation_scale 0
+adb shell settings put global animator_duration_scale 0
 
 function getScreenStreamFromEmu() {
 	while true; do
@@ -54,7 +65,7 @@ function getScreenStreamFromEmu() {
 
 # save the video stream to a file, then get this process PID
 { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
- -nostats -hide_banner -framerate 24 -bufsize 1M emu-video.mp4 ; } &
+ -nostats -hide_banner -framerate 20 -bufsize 1M emu-video.mp4 ; } &
 
 VIDEO_PID=$!
 

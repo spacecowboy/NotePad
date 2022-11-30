@@ -388,12 +388,15 @@ public class MyContentProvider extends ContentProvider {
 				break;
 			case TaskList.VIEWCOUNTCODE:
 				// Create view if not exists
-				DatabaseHandler.getInstance(getContext()).getWritableDatabase()
+				DatabaseHandler
+						.getInstance(getContext())
+						.getWritableDatabase()
 						.execSQL(TaskList.CREATE_COUNT_VIEW);
 
 				result = DatabaseHandler
 						.getInstance(getContext())
 						.getReadableDatabase()
+						// may crash here. android.database.sqlite.SQLiteException: no such table: lists_with_count (code 1 SQLITE_ERROR): , while compiling: SELECT _id, title, count FROM lists_with_count ORDER BY title COLLATE NOCASE
 						.query(TaskList.VIEWCOUNT_NAME, projection, selection,
 								selectionArgs, null, null, sortOrder);
 				result.setNotificationUri(getContext().getContentResolver(), uri);

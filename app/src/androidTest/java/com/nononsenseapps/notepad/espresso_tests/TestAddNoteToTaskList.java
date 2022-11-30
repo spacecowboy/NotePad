@@ -33,6 +33,7 @@ public class TestAddNoteToTaskList extends BaseTestClass {
 		//make sure the correct task list is opened
 		EspressoHelper.openDrawer();
 		onView(allOf(withText(taskListName), withId(android.R.id.text1))).perform(click());
+		EspressoHelper.waitUi();
 
 		//add the note
 		EspressoHelper.createNoteWithName(noteName1);
