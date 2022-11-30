@@ -5,9 +5,11 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.instanceOf;
 
 import android.app.UiAutomation;
@@ -21,6 +23,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 
 import org.junit.Assert;
@@ -57,8 +60,13 @@ public class EspressoHelper {
 	}
 
 	// many tests fail due to this function chaining note texts when called in a loop.
-	// for example, you get "prepare foodwalk dog" in a single note instead of 2
+	// for example, you get "prepare foodwalk dog" in a single note instead of 2.
+	// Some fail because it doesn't click menu_add, it remains on the initial view
 	public static void createNoteWithName(String noteName) {
+		waitUi();
+		onView(withId(R.id.menu_add))
+				.check(matches(isDisplayed()))
+				.check(matches(isClickable()));
 		onView(withId(R.id.menu_add)).perform(click());
 		waitUi();
 		EspressoHelper.hideShowCaseViewIfShown();
@@ -94,6 +102,7 @@ public class EspressoHelper {
 
 		// fill the popup
 		onView(withId(R.id.titleField)).perform(typeText(taskListName));
+		EspressoHelper.waitUi();
 		onView(withId(R.id.dialog_yes)).perform(click());
 	}
 
@@ -116,6 +125,35 @@ public class EspressoHelper {
 			onView(withId(R.id.menu_add)).perform(click());
 		} else {
 			// we are in phone mode: close the keyboard & press the back button
+			Espresso.pressBack();
+		}
+	}
+
+	/**
+	 * Exits the "settings" activity, going back to {@link ActivityMain}
+	 */
+	public static void exitPrefsActivity() {
+
+		String label = InstrumentationRegistry
+				.getInstrumentation()
+				.getTargetContext()
+				.getString(R.string.menu_preferences);
+		try {
+			// TODO improve & return if necessary
+			onView(withText(label)).check(matches(isDisplayed()));
+		} catch (Exception e) {
+			NnnLogger.warning(EspressoHelper.class, "Can't determine if PrefsActivity is shown:");
+			NnnLogger.exception(e);
+		}
+
+		// for now, assume this function is called only when a fragment of PrefsActivity is shown
+
+		if (isInTabletMode()) {
+			// tablets show menu & category => press back only once
+			Espresso.pressBack();
+		} else {
+			// in phones, go back to the menu, then back to ActivityMain
+			Espresso.pressBack();
 			Espresso.pressBack();
 		}
 	}
@@ -163,8 +201,9 @@ public class EspressoHelper {
 				.getUiAutomation();
 		// rotate it
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_270);
-		// wait for the rotation to finish
-		EspressoHelper.waitUi();
+		// wait 1s for the rotation to finish
+		waitUi();
+		waitUi();
 
 		// rotating the screen sometimes makes the taptargetview appear in the wrong place.
 		// I have no idea why. In any case, we have to close it now, or else the next
@@ -173,11 +212,13 @@ public class EspressoHelper {
 
 		// rotate it more
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_0);
-		EspressoHelper.waitUi();
+		waitUi();
+		waitUi();
 
 		// unfreeze it and let it go back to its default state
 		uiAuto.setRotation(UiAutomation.ROTATION_UNFREEZE);
-		EspressoHelper.waitUi();
+		waitUi();
+		waitUi();
 	}
 
 }

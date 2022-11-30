@@ -37,22 +37,20 @@ function getScreenStreamFromEmu() {
 	# alternative: `adb emu screenrecord start --bit-rate 100000 --size 540x960 ./vid.webm`,
 	#   but the tool is hardcoded to die after 3 minutes. Thanks Google.
 	# returns: 0 if 3 minutes passed, a number > 0 if there was an error
-	adb exec-out screenrecord --output-format=h264 --bit-rate 100000 --size 480x854 --bugreport -
+	adb exec-out screenrecord --output-format=h264 --bit-rate 1M --size 480x854 --bugreport -
 	ADB_RET_CODE=$?
-	# should go to STDERR, without polluting the video stream, hopefully    
-	echo "restarting screenrecord, PID = " $! " and " $ADB_RET_CODE " is return code" >&2
-		if [ $ADB_RET_CODE -eq 255 ] ; then
-			# the emulator died: exit the loop & the function. 
-			# Hopefully this also stops ffmpeg gracefully
-			break
-		fi
+  if [ $ADB_RET_CODE -gt 0 ] ; then
+    # the emulator died: exit the loop & the function.
+    # Hopefully this also stops ffmpeg gracefully
+    echo "Exiting..." >&2
+    break
+  fi
+  # should go to STDERR, without polluting the video stream, hopefully
+  echo "restarting screenrecord, PID = " $! ". " $ADB_RET_CODE " was the return code" >&2
 	done
 }
 
 # TODO android API 32 images have a built-in screen record feature that can make long videos, but you have to start it from the top drawer menu. Check if API 23 has it, and try to use it with ADB. Videos go on /sdcard/movies/
-
-# more info in case this script crashes
-echo "---------- all OK as of now ----------"
 
 # save the video stream to a file, then get this process PID
 { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
@@ -71,26 +69,25 @@ GRADLE_RETURN_CODE=$?
 
 # check if emu-video.mp4 exists
 echo "----------"
-ls | grep mp4
-ls | grep png
+ls -lh -- *.mp4 *.png *.jpg
 echo "----------"
 
 # Stop the recording # TODO NONE OF THESE WORK!
-echo "killing process id=" $VIDEO_PID
-kill -s QUIT $VIDEO_PID
-sleep 10
-sudo kill -s QUIT $VIDEO_PID
-sleep 10
-kill $VIDEO_PID
-sleep 10
-sudo kill $VIDEO_PID
-sleep 10
-echo "--- try the last 2 ---"
-killall -INT  ffmpeg
-sleep 10
-sudo killall ffmpeg
-sleep 10
-sudo killall -QUIT ffmpeg
+# echo "killing process id=" $VIDEO_PID
+# kill -s QUIT $VIDEO_PID
+# sleep 10
+# sudo kill -s QUIT $VIDEO_PID
+# sleep 10
+# kill $VIDEO_PID
+# sleep 10
+# sudo kill $VIDEO_PID
+# sleep 10
+# echo "--- try the last 2 ---"
+# killall -INT  ffmpeg
+# sleep 10
+# sudo killall ffmpeg
+# sleep 10
+# sudo killall -QUIT ffmpeg
 
 # return with the code from gradle, so the github action can fail if the tests failed
 exit $GRADLE_RETURN_CODE

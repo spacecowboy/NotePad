@@ -40,7 +40,8 @@ public class TestAddNoteToTaskList extends BaseTestClass {
 
 		//make sure that the number of notes for the task list is actually 1
 		EspressoHelper.openDrawer();
-		onView(allOf(withText(taskListName), hasSibling(withText("1")))).check(matches(withText(taskListName)));
+		onView(allOf(withText(taskListName), hasSibling(withText("1"))))
+				.check(matches(withText(taskListName)));
 
 	}
 }
