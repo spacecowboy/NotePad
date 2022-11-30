@@ -80,6 +80,7 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 
 		// delete the note
 		onView(withId(R.id.menu_delete)).perform(click());
+		EspressoHelper.waitUi();
 		onView(withId(android.R.id.button1)).perform(click());
 
 		// check that the 1° note added was deleted
