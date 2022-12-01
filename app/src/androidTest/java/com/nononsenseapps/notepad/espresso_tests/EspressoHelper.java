@@ -56,6 +56,12 @@ public class EspressoHelper {
 	 * open the drawer on the left
 	 */
 	public static void openDrawer() {
+		try {
+			onView(withId(R.id.drawerLayout)).check(matches(isDisplayed()));
+		} catch (Exception e) {
+			Assert.fail("Can't find the drawerLayout, maybe a dialog is still open?");
+			return;
+		}
 		onView(withId(R.id.drawerLayout)).perform(DrawerActions.open());
 	}
 
@@ -88,11 +94,20 @@ public class EspressoHelper {
 		// dismiss the other showcase view
 		EspressoHelper.hideShowCaseViewIfShown();
 
+		onView(withId(R.id.drawer_menu_createlist)).check(matches(isDisplayed()));
 		onView(withId(R.id.drawer_menu_createlist)).perform(click());
 
 		// fill the popup
+		onView(withId(R.id.titleField)).check(matches(isDisplayed()));
 		onView(withId(R.id.titleField)).perform(typeText(taskListName));
+		onView(withId(R.id.dialog_yes)).check(matches(isDisplayed()));
 		onView(withId(R.id.dialog_yes)).perform(click());
+		try {
+			// check if the dialog is still visible (it shouldn't be)
+			onView(withId(R.id.dialog_yes)).check(matches(isDisplayed()));
+		} catch (Exception ex) {
+			NnnLogger.exception(ex);
+		}
 	}
 
 	/**
@@ -175,16 +190,18 @@ public class EspressoHelper {
 			onView(instanceOf(TapTargetView.class)).perform(click());
 		} catch (Exception ignored) {
 			Assert.fail("Could not dismiss the TapTargetView");
+			return;
 		}
+		waitUi();
 	}
 
 	/**
-	 * Rotate the screen twice, waiting ~5 seconds for the animations to finish.
+	 * Rotate the screen twice, waiting ~4 seconds for the animations to finish.
 	 * It automatically understands if the phone or tablet is "naturally" held in
 	 * landscape or portrait mode, so test should be done with the emulator's default
 	 * settings: phones in portrait mode and tablets in landscape mode
 	 */
-	public static void rotateScreen() {
+	public static void rotateScreenAndWait() {
 		var uiAuto = InstrumentationRegistry
 				.getInstrumentation()
 				.getUiAutomation();
@@ -206,6 +223,7 @@ public class EspressoHelper {
 
 		// unfreeze it and let it go back to its default state
 		uiAuto.setRotation(UiAutomation.ROTATION_UNFREEZE);
+		waitUi();
 		waitUi();
 		waitUi();
 	}

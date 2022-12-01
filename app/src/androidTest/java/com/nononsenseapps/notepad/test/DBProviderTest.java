@@ -41,7 +41,10 @@ public class DBProviderTest extends TestCase {
 		if (count != c.getCount()) {
 			// will crash. Let's get more info
 			try {
+				NnnLogger.debug(DBProviderTest.class, "cursor info:");
+				c.moveToFirst();
 				while (c.moveToNext()) {
+
 					NnnLogger.debug(DBProviderTest.class, c);
 					NnnLogger.debug(DBProviderTest.class, c.getCount());
 					NnnLogger.debug(DBProviderTest.class, c.getColumnNames());

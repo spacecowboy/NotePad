@@ -75,7 +75,7 @@ VIDEO_PID=$!
 adb shell input keyevent 3
 
 # clear logcat before tests begin
-# adb logcat -c
+adb logcat -c
 
 # run tests
 ./gradlew connectedCheck
