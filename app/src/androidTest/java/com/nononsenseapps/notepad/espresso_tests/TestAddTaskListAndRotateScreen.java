@@ -31,9 +31,10 @@ public class TestAddTaskListAndRotateScreen extends BaseTestClass {
 
 		EspressoHelper.openDrawer();
 
-		EspressoHelper.rotateScreen();
+		EspressoHelper.rotateScreenAndWait();
 
-		// make sure the task list is still visible
+		// make sure the task list is still visible.
+		// if the rotations didn't finish, it will crash here
 		RecyclerViewActions.scrollTo(hasDescendant(withText(taskListName)));
 		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
 				.check(matches(isDisplayed()));

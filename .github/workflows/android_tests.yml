@@ -10,7 +10,7 @@ jobs:
   # this job runs all the tests
   job_tests:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    timeout-minutes: 90     # emulators are very slow: they need time to finish the tests
+    timeout-minutes: 120     # emulators are very slow: they need time to finish the tests
     continue-on-error: true # run them all even if one fails
     strategy:
       matrix:
