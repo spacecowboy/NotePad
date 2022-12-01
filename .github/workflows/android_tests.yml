@@ -10,13 +10,14 @@ jobs:
   # this job runs all the tests
   job_tests:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    timeout-minutes: 120     # emulators are very slow: they need time to finish the tests
+    # emulators are very slow: one of these "test jobs" can take up to 50 minute to finish
+    timeout-minutes: 60
     continue-on-error: true # run them all even if one fails
     strategy:
       matrix:
         # test on emulators with these Android API versions. minSdk & higher
         api-level: [ 23, 24, 28, 31, 32, 33 ] # TODO 31 & 32 have NEVER completed, not even once
-        target: [ default, google_apis ] # without or with google APIs # TODO remove google_apis, these images are slower & heavier. "default" images go up to api 31
+        target: [ default, google_apis ] # without or with google APIs
         exclude:  # the images for these configurations do not exist
           - api-level: 33
             target: default
@@ -107,26 +108,15 @@ jobs:
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window
           script: bash ./github_on_emu_started.sh
 
-# upload results
-
-      - name: upload the video and screenshots
+      - name: upload the generated files
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: media-${{ matrix.target }}-api${{ matrix.api-level }}
+          name: files-api${{ matrix.api-level }}-${{ matrix.target }}
           path: |
-            screenshot-desktop.jpg             
+            screenshot-desktop.jpg
             screenshot-made-cache.png
-            screenshot-emu-tests-starting.png            
-            emu-video.mp4
-            screenshot*
-            *.mp4
+            screenshot-emu-tests-starting.png
+            emu-video.mp4                        
             logcat-dump.txt
-
-      - name: Upload detailed test reports
-        # because the printed out stacktrace (console) is too short
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: reports-${{ matrix.target }}-api${{ matrix.api-level }}
-          path: app/build/reports/androidTests/connected/**
+            app/build/reports/androidTests/**

@@ -40,8 +40,10 @@ public class TestAddNotesAndRotateScreen extends BaseTestClass {
 
 		EspressoHelper.rotateScreenAndWait();
 
+		// in case it's still there
+		EspressoHelper.hideShowCaseViewIfShown();
+
 		// check that textviews still show up.
-		// if the rotations didn't finish, it will crash here
 		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[0])))
 				.check(matches(isDisplayed()));
 		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[1])))
