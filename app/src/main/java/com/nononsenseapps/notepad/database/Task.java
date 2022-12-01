@@ -839,15 +839,17 @@ public class Task extends DAO {
 		int result = 0;
 		this.updated = updated;
 		if (_id < 1) {
-			final Uri uri = context.getContentResolver().insert(getBaseUri(),
-					getContent());
+			final Uri uri = context
+					.getContentResolver()
+					.insert(getBaseUri(), getContent());
 			if (uri != null) {
 				_id = Long.parseLong(uri.getLastPathSegment());
 				result++;
 			}
 		} else {
-			result += context.getContentResolver().update(getUri(),
-					getContent(), null, null);
+			result += context
+					.getContentResolver()
+					.update(getUri(), getContent(), null, null);
 		}
 		return result;
 	}

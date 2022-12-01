@@ -5,8 +5,10 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
@@ -20,8 +22,10 @@ import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.filters.LargeTest;
 
 import com.mobeta.android.dslv.DragSortListView;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -58,6 +62,29 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 			}
 			assertTrue(outviews.isEmpty());
 		};
+	}
+
+	/**
+	 * Many times this test fails with RootViewWithoutFocusException, i think it's
+	 * due to the emulator being slow. Let's launch the activity and wait for it to load
+	 * before starting the real test
+	 */
+	@Before
+	public void launchAndWait() {
+		try {
+			// it responds => we can return now
+			onView(isRoot()).check(matches(isDisplayed()));
+			return;
+		} catch (Exception e){
+			NnnLogger.error(this.getClass(), "Activity isn't responsive:");
+			NnnLogger.exception(e);
+		}
+
+		// maybe we just have to wait
+		EspressoHelper.waitUi();
+
+		// if it's still not enough, let's crash here
+		onView(isRoot()).check(matches(isDisplayed()));
 	}
 
 	@Test

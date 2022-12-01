@@ -59,20 +59,13 @@ public class EspressoHelper {
 		onView(withId(R.id.drawerLayout)).perform(DrawerActions.open());
 	}
 
-	// many tests fail due to this function chaining note texts when called in a loop.
-	// for example, you get "prepare foodwalk dog" in a single note instead of 2.
-	// Some fail because it doesn't click menu_add, it remains on the initial view
 	public static void createNoteWithName(String noteName) {
-		waitUi();
 		onView(withId(R.id.menu_add))
 				.check(matches(isDisplayed()))
 				.check(matches(isClickable()));
 		onView(withId(R.id.menu_add)).perform(click());
-		waitUi();
 		EspressoHelper.hideShowCaseViewIfShown();
-		waitUi(); // for the new note page to load
 		onView(withId(R.id.taskText)).perform(typeText(noteName));
-		waitUi(); // for the keyboard to finish typing
 	}
 
 	/**
@@ -91,18 +84,14 @@ public class EspressoHelper {
 	 */
 	public static void createTaskList(String taskListName) {
 		EspressoHelper.openDrawer();
-		EspressoHelper.waitUi();
 
 		// dismiss the other showcase view
 		EspressoHelper.hideShowCaseViewIfShown();
-		EspressoHelper.waitUi();
 
 		onView(withId(R.id.drawer_menu_createlist)).perform(click());
-		EspressoHelper.waitUi();
 
 		// fill the popup
 		onView(withId(R.id.titleField)).perform(typeText(taskListName));
-		EspressoHelper.waitUi();
 		onView(withId(R.id.dialog_yes)).perform(click());
 	}
 

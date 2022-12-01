@@ -50,7 +50,6 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 		onView(allOf(withText("ut "), withId(android.R.id.text1)))
 				.perform(click());
 
-
 		EspressoHelper.openDrawer();
 
 		// open the preferences page and check that it is visible

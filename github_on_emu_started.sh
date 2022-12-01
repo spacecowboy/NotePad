@@ -74,31 +74,23 @@ VIDEO_PID=$!
 # is to run the tests under a different host OS, device skin, API version, ...
 adb shell input keyevent 3
 
+# clear logcat before tests begin
+# adb logcat -c
+
 # run tests
 ./gradlew connectedCheck
 GRADLE_RETURN_CODE=$?
 
-# check if emu-video.mp4 exists
+# dump the logcat to a file. Log level: Debug
+adb logcat -d *:D > logcat-dump.txt
+
+# check if pictures, videos & logs exist
 echo "----------"
-ls -lh -- *.mp4 *.png *.jpg
+ls -lh -- *.mp4 *.png *.jpg logcat-dump.txt
 echo "----------"
 
-# Stop the recording # TODO NONE OF THESE WORK!
-# echo "killing process id=" $VIDEO_PID
-# kill -s QUIT $VIDEO_PID
-# sleep 10
-# sudo kill -s QUIT $VIDEO_PID
-# sleep 10
-# kill $VIDEO_PID
-# sleep 10
-# sudo kill $VIDEO_PID
-# sleep 10
-# echo "--- try the last 2 ---"
-# killall -INT  ffmpeg
-# sleep 10
-# sudo killall ffmpeg
-# sleep 10
-# sudo killall -QUIT ffmpeg
+# getScreenStreamFromEmu() already stops the recording, we don't have to do it manually.
+# The (clean) stop happens after the github action closes the emulator.
 
 # return with the code from gradle, so the github action can fail if the tests failed
 exit $GRADLE_RETURN_CODE

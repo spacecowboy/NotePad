@@ -38,8 +38,7 @@ public class TaskList extends DAO {
 			TABLE_NAME);
 
 	public static final String VIEWCOUNT_NAME = "lists_with_count";
-	public static final Uri URI_WITH_COUNT = Uri.withAppendedPath(URI,
-			VIEWCOUNT_NAME);
+	public static final Uri URI_WITH_COUNT = Uri.withAppendedPath(URI, VIEWCOUNT_NAME);
 
 	public static Uri getUri(final long id) {
 		return Uri.withAppendedPath(URI, Long.toString(id));
@@ -60,10 +59,8 @@ public class TaskList extends DAO {
 	 * TaskList URIs start at 101, up to 199
 	 */
 	public static void addMatcherUris(UriMatcher sURIMatcher) {
-		sURIMatcher
-				.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#",
-				BASEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#", BASEITEMCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
 				+ VIEWCOUNT_NAME, VIEWCOUNTCODE);
 
@@ -82,8 +79,7 @@ public class TaskList extends DAO {
 
 	public static class Columns implements BaseColumns {
 
-		private Columns() {
-		}
+		private Columns() {}
 
 		public static final String TITLE = "title";
 		public static final String UPDATED = "updated";
@@ -132,8 +128,7 @@ public class TaskList extends DAO {
 	public String listtype = null;
 	public String sorting = null;
 
-	public TaskList() {
-	}
+	public TaskList() {}
 
 	public TaskList(final Cursor c) {
 		this._id = c.getLong(0);
@@ -195,19 +190,24 @@ public class TaskList extends DAO {
 		return save(context, Calendar.getInstance().getTimeInMillis());
 	}
 
+	/**
+	 * Insert or update this {@link TaskList} in the database
+	 */
 	public int save(final Context context, final long updateTime) {
 		int result = 0;
 		updated = updateTime;
 		if (_id < 1) {
-			final Uri uri = context.getContentResolver().insert(getBaseUri(),
-					getContent());
+			final Uri uri = context
+					.getContentResolver()
+					.insert(getBaseUri(), getContent());
 			if (uri != null) {
 				_id = Long.parseLong(uri.getLastPathSegment());
 				result++;
 			}
 		} else {
-			result += context.getContentResolver().update(getUri(),
-					getContent(), null, null);
+			result += context
+					.getContentResolver()
+					.update(getUri(), getContent(), null, null);
 		}
 		return result;
 	}

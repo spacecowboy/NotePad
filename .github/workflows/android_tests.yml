@@ -10,15 +10,14 @@ jobs:
   # this job runs all the tests
   job_tests:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    timeout-minutes: 65
+    timeout-minutes: 90     # emulators are very slow: they need time to finish the tests
     continue-on-error: true # run them all even if one fails
     strategy:
       matrix:
-        # test on emulators with these Android API versions (minSdk, average, targetSdk)
-        api-level: [ 23, 24, 28, 31, 32, 33 ]
-        target: [ default, google_apis ] # without or with google APIs
-        exclude:
-          # the image for these configurations do not exist
+        # test on emulators with these Android API versions. minSdk & higher
+        api-level: [ 23, 24, 28, 31, 32, 33 ] # TODO 31 & 32 have NEVER completed, not even once
+        target: [ default, google_apis ] # without or with google APIs # TODO remove google_apis, these images are slower & heavier. "default" images go up to api 31
+        exclude:  # the images for these configurations do not exist
           - api-level: 33
             target: default
           - api-level: 32
@@ -47,7 +46,7 @@ jobs:
 
       - name: Check for hardware acceleration availability
         continue-on-error: true
-        # Read the console for the result. Acceleration is either available
+        # Read the console logs for the result. Acceleration is either available
         # or not: there's nothing you can do. No you can't install HAXM.
         run: $ANDROID_HOME/emulator/emulator -accel-check
 
@@ -70,10 +69,10 @@ jobs:
           target: ${{ matrix.target }}
           profile: 5.4in FWVGA  # low resolution => faster. It doesn't have software buttons
           arch: x86_64          # faster
-          disk-size: 800M       # for saving org and json files
+          disk-size: 500M       # needed for saving org and json files
           force-avd-creation: false
-          # you need these parameters to make it work
-          emulator-options: -no-boot-anim -no-window # -gpu swiftshader_indirect
+          # you need these parameters to make it work  # -gpu swiftshader_indirect
+          emulator-options: -no-boot-anim -no-window
           disable-animations: true
           # starts the emulator, runs this script, then closes the emulator
           script: |
@@ -101,10 +100,11 @@ jobs:
           target: ${{ matrix.target }}
           arch: x86_64
           profile: 5.4in FWVGA
-          disk-size: 800M
+          disk-size: 500M
           force-avd-creation: false
           disable-animations: true
-          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window # -gpu swiftshader_indirect
+          # -gpu swiftshader_indirect
+          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window
           script: bash ./github_on_emu_started.sh
 
 # upload results
@@ -121,6 +121,7 @@ jobs:
             emu-video.mp4
             screenshot*
             *.mp4
+            logcat-dump.txt
 
       - name: Upload detailed test reports
         # because the printed out stacktrace (console) is too short
