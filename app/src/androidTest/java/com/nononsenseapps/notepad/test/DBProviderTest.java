@@ -4,10 +4,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemClock;
 
 import androidx.test.filters.MediumTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
@@ -19,19 +21,14 @@ import java.util.List;
 
 public class DBProviderTest extends TestCase {
 
-	private Context context;
-	private ContentResolver resolver;
+	private Context mContext;
+	private ContentResolver mResolver;
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-		resolver = context.getContentResolver();
-	}
-
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
+		mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
+		mResolver = mContext.getContentResolver();
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields) {
@@ -40,7 +37,20 @@ public class DBProviderTest extends TestCase {
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields, final String where,
 										final String[] whereArgs, final int count) {
-		final Cursor c = resolver.query(uri, fields, where, whereArgs, null);
+		final Cursor c = mResolver.query(uri, fields, where, whereArgs, null);
+		if (count != c.getCount()) {
+			// will crash. Let's get more info
+			try {
+				while (c.moveToNext()) {
+					NnnLogger.debug(DBProviderTest.class, c);
+					NnnLogger.debug(DBProviderTest.class, c.getCount());
+					NnnLogger.debug(DBProviderTest.class, c.getColumnNames());
+					NnnLogger.debug(DBProviderTest.class, c.getLong(0));
+				}
+			} catch (Exception e) {
+				NnnLogger.exception(e);
+			}
+		}
 		final int cursorCount = c.getCount();
 		c.close();
 		if (count < 0) {
@@ -48,7 +58,7 @@ public class DBProviderTest extends TestCase {
 					cursorCount > 0);
 		} else {
 			// I don't know, sometimes it happens...
-			assertEquals("Uri did not return expected number of results",
+			assertEquals("Uri did not return expected number of results!",
 					count, cursorCount);
 		}
 	}
@@ -56,7 +66,7 @@ public class DBProviderTest extends TestCase {
 	private TaskList getNewList() {
 		TaskList result = new TaskList();
 		result.title = "111aaTestingList";
-		result.save(context);
+		result.save(mContext);
 		return result;
 	}
 
@@ -68,7 +78,7 @@ public class DBProviderTest extends TestCase {
 			t.note = "testNote" + i;
 			t.due = Calendar.getInstance().getTimeInMillis();
 			t.dblist = list._id;
-			t.save(context);
+			t.save(mContext);
 			tasks.add(t);
 		}
 		return tasks;
@@ -79,7 +89,7 @@ public class DBProviderTest extends TestCase {
 		final TaskList list = getNewList();
 		assertUriReturnsResult(TaskList.URI, TaskList.Columns.FIELDS);
 		assertUriReturnsResult(TaskList.URI_WITH_COUNT, TaskList.Columns.FIELDS);
-		list.delete(context);
+		list.delete(mContext);
 	}
 
 	@MediumTest
@@ -90,6 +100,9 @@ public class DBProviderTest extends TestCase {
 
 		assertUriReturnsResult(Task.URI, Task.Columns.FIELDS);
 
+		// maybe the next line call to assertUriReturnsResult() fails due to timing issues ?
+		SystemClock.sleep(500);
+
 		// Sectioned Date query
 		assertUriReturnsResult(Task.URI_SECTIONED_BY_DATE, Task.Columns.FIELDS,
 				Task.Columns.DBLIST + " IS ?",
@@ -99,8 +112,9 @@ public class DBProviderTest extends TestCase {
 		Task t = tasks.get(0);
 		final int histCount = 22;
 		for (int i = 0; i < 22; i++) {
+			// edit the note & save it
 			t.title += " hist" + i;
-			t.save(InstrumentationRegistry.getInstrumentation().getTargetContext());
+			t.save(mContext);
 		}
 		// Should return insert (1) + update count (histCount)
 		assertUriReturnsResult(Task.URI_TASK_HISTORY,
@@ -116,7 +130,7 @@ public class DBProviderTest extends TestCase {
 		// LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI,
 		// new String[] { LegacyDBHelper.NotePad.Notes.COLUMN_NAME_TITLE });
 
-		list.delete(context);
+		list.delete(mContext);
 
 		// Should return insert NOTHING since it should have been deleted
 		assertUriReturnsResult(Task.URI_TASK_HISTORY,

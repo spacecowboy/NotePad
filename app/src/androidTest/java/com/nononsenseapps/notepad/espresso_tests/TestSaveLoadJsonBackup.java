@@ -13,7 +13,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
-import androidx.test.espresso.Espresso;
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
@@ -49,7 +48,10 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 
 		String EXPORT_BACKUP_TEXT = getStringResource(R.string.backup_export);
 		onView(withText(EXPORT_BACKUP_TEXT)).perform(click());
-		onView(withId(android.R.id.button1)).perform(click());
+		onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
+		onView(withId(android.R.id.button1))
+				// .inRoot(isDialog())
+				.perform(click());
 		EspressoHelper.waitUi();
 
 		// return to the notes list
@@ -63,6 +65,7 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		openContextualActionModeOverflowMenu();
 		String CLEAR_COMPLETED = getStringResource(R.string.menu_clearcompleted);
 		onView(withText(CLEAR_COMPLETED)).perform(click());
+		onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
 		onView(withId(android.R.id.button1)).perform(click());
 
 		// restore the backup
