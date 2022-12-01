@@ -5,11 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 
 import androidx.test.filters.MediumTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.database.DatabaseHandler;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
@@ -29,6 +31,10 @@ public class DBProviderTest extends TestCase {
 		super.setUp();
 		mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 		mResolver = mContext.getContentResolver();
+
+		// clear app data
+		PreferenceManager.getDefaultSharedPreferences(mContext).edit().clear().commit();
+		DatabaseHandler.resetDatabase(mContext);
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields) {
