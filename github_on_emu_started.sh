@@ -1,8 +1,15 @@
 #!/bin/bash
 
+# once the android emulator starts, this script tries to:
+# * close all popups
+# * configure the emulator
+# * start recording a video
+# * run the tests
+#
 # sources:  https://stackoverflow.com/a/66155744/6307322
 #           https://stackoverflow.com/a/62723329/6307322
-# will run all commands, even if one fails, and return the result code of gradle
+# it will run all commands, even if one fails
+
 echo "github action script started"
 
 # wait a bit for the emulator to finish loading
@@ -51,23 +58,20 @@ function getScreenStreamFromEmu() {
 	adb exec-out screenrecord --output-format=h264 --bit-rate 1M --size 480x854 --bugreport -
 	ADB_RET_CODE=$?
   if [ $ADB_RET_CODE -gt 0 ] ; then
-    # the emulator died: exit the loop & the function.
-    # Hopefully this also stops ffmpeg gracefully
-    echo "Exiting..." >&2
+    # the emulator died: exit the loop & the function. The video is saved correctly
+    echo "[getScreenStreamFromEmu] Exiting..." >&2
     break
   fi
   # should go to STDERR, without polluting the video stream, hopefully
-  echo "restarting screenrecord, PID = " $! ". " $ADB_RET_CODE " was the return code" >&2
+  echo "[getScreenStreamFromEmu] restarting screenrecord, PID = " $! ". " $ADB_RET_CODE " was the return code" >&2
 	done
 }
 
-# TODO android API 32 images have a built-in screen record feature that can make long videos, but you have to start it from the top drawer menu. Check if API 23 has it, and try to use it with ADB. Videos go on /sdcard/movies/
+# TODO android API 32 images have a built-in screen record feature that can make long videos, but you have to start it from the top drawer menu. Check if API 23 has it, and try to use it with ADB. Videos are saved on /sdcard/movies/ then you have to pull them with adb
 
-# save the video stream to a file, then get this process PID
+# save the video stream to a file
 { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
- -nostats -hide_banner -framerate 20 -bufsize 1M emu-video.mp4 ; } &
-
-VIDEO_PID=$!
+ -nostats -hide_banner -framerate 15 -bufsize 1M emu-video.mp4 ; } &
 
 # press "HOME" to close any "system UI not responding" popups still showing.
 # Notice that these popups appear when the host PC is too slow, so the best solution
@@ -89,8 +93,8 @@ echo "----------"
 ls -lh -- *.mp4 *.png *.jpg logcat-dump.txt
 echo "----------"
 
-# getScreenStreamFromEmu() already stops the recording, we don't have to do it manually.
-# The (clean) stop happens after the github action closes the emulator.
-
-# return with the code from gradle, so the github action can fail if the tests failed
+# return with the code from gradle, so the github action step can fail if the tests failed
 exit $GRADLE_RETURN_CODE
+
+# then the github action will stop the emulator, and getScreenStreamFromEmu() will stop
+# the recording, we don't have to do it manually.
