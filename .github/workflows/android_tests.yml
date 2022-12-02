@@ -9,15 +9,15 @@ on:
 jobs:
   # this job runs all the tests
   job_tests:
-    if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks
-    # emulators are very slow: one of these "test jobs" can take up to 50 minute to finish
-    timeout-minutes: 60
-    continue-on-error: true # run them all even if one fails
+    if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks    
+    timeout-minutes: 60 # emulators are slow: a "test jobs" can finish in (up to) 50 minutes
+    continue-on-error: true # run all configurations even if one fails
     strategy:
       matrix:
         # test on emulators with these Android API versions. minSdk & higher
-        api-level: [ 23, 24, 28, 31, 32, 33 ] # TODO 31 & 32 have NEVER completed, not even once
-        target: [ default, google_apis ] # without or with google APIs
+        # TODO configurations that have NEVER completed a run: 32-google, 31-google, 23-default
+        api-level: [ 23, 24, 28, 31, 32, 33 ]
+        target: [ default, google_apis ] # OS images without, or with, google apps
         exclude:  # the images for these configurations do not exist
           - api-level: 33
             target: default
@@ -47,13 +47,15 @@ jobs:
 
       - name: Check for hardware acceleration availability
         continue-on-error: true
-        # Read the console logs for the result. Acceleration is either available
-        # or not: there's nothing you can do. No you can't install HAXM.
+        # Read the console logs for the result. The android emulator can't use
+        # acceleration, according to the logs. No you can't install HAXM.
         run: $ANDROID_HOME/emulator/emulator -accel-check
 
       - name: perform AVD caching
         uses: actions/cache@v3
         id: avd-cache
+        # if a configuration completed a run at least once, it has an entry in
+        # https://github.com/spacecowboy/NotePad/actions/caches?query=sort%3Asize-desc
         with:
           path: |
             ~/.android/avd/*
@@ -68,17 +70,17 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          profile: 5.4in FWVGA  # low resolution => faster. It doesn't have software buttons
+          profile: 5.4in FWVGA  # low resolution: faster. This device has no software buttons
           arch: x86_64          # faster
           disk-size: 500M       # needed for saving org and json files
           force-avd-creation: false
-          # you need these parameters to make it work  # -gpu swiftshader_indirect
-          emulator-options: -no-boot-anim -no-window
+          # it's picky on the parameters
+          emulator-options: -no-boot-anim -no-window -accel on # -gpu host
           disable-animations: true
           # starts the emulator, runs this script, then closes the emulator
           script: |
             # wait for it to finish booting, then take a screenshot
-            sleep 25
+            sleep 30
             adb emu screenrecord screenshot ./screenshot-made-cache.png
 
       - name: perform the Gradle build
