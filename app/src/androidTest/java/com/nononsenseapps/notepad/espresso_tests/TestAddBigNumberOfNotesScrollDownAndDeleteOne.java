@@ -64,29 +64,6 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 		};
 	}
 
-	/**
-	 * Many times this test fails with RootViewWithoutFocusException, i think it's
-	 * due to the emulator being slow. Let's launch the activity and wait for it to load
-	 * before starting the real test
-	 */
-	@Before
-	public void launchAndWait() {
-		try {
-			// it responds => we can return now
-			onView(isRoot()).check(matches(isDisplayed()));
-			return;
-		} catch (Exception e){
-			NnnLogger.error(this.getClass(), "Activity isn't responsive:");
-			NnnLogger.exception(e);
-		}
-
-		// maybe we just have to wait
-		EspressoHelper.waitUi();
-
-		// if it's still not enough, let's crash here
-		onView(isRoot()).check(matches(isDisplayed()));
-	}
-
 	@Test
 	public void testAddBigNumberOfNotesScrollDownAndDeleteOne() {
 		EspressoHelper.closeDrawer();

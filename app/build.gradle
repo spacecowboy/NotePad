@@ -46,7 +46,7 @@ android {
     // }
 
     lint {
-        htmlReport false
+        htmlReport false // TODO re-enable and fix all warnings reported in the html file
         textReport false
         abortOnError false
         explainIssues true
