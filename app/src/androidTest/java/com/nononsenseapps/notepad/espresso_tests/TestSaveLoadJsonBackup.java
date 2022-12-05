@@ -6,6 +6,7 @@ import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMe
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -65,8 +66,8 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		openContextualActionModeOverflowMenu();
 		String CLEAR_COMPLETED = getStringResource(R.string.menu_clearcompleted);
 		onView(withText(CLEAR_COMPLETED)).perform(click());
-		onView(withId(android.R.id.button1)).check(matches(isDisplayed()));
-		onView(withId(android.R.id.button1)).perform(click());
+		onView(withId(android.R.id.button1)).inRoot(isDialog()).check(matches(isDisplayed()));
+		onView(withId(android.R.id.button1)).inRoot(isDialog()).perform(click());
 
 		// restore the backup
 		openContextualActionModeOverflowMenu();

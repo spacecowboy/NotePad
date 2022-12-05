@@ -44,6 +44,8 @@ public class DBProviderTest extends TestCase {
 	private void assertUriReturnsResult(final Uri uri, final String[] fields, final String where,
 										final String[] whereArgs, final int count) {
 		final Cursor c = mResolver.query(uri, fields, where, whereArgs, null);
+		NnnLogger.warning(DBProviderTest.class,
+				"'parameter' count = " + count + ", cursorCount = " + c.getCount());
 		if (count != c.getCount()) {
 			// will crash. Let's get more info
 			try {
