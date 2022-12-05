@@ -47,8 +47,45 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="8dp"
-			android:text="@string/app_about"
+			android:text="@string/nononsense_notes"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="8dp"
+			android:text="@string/app_about_dev_team"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="8dp"
+			android:text="@string/app_about_git_repo"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="8dp"
+			android:text="@string/app_about_license"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<!-- TODO re-enable once we choose a translations service
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="8dp"
+			android:text="@string/app_about_translations"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/> -->
 
 		<TextView
 			android:layout_width="fill_parent"
@@ -66,15 +103,6 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
-			android:text="Androidx"
-			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:autoLink="all"
-			android:fontFamily="sans-serif-light"
-			android:paddingTop="4dp"
 			android:text="DragSortListView (&#169;) Carl Bauer"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
@@ -85,15 +113,6 @@
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
 			android:text="TapTargetView (&#169;) Keepsafe Software Inc."
-			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:autoLink="all"
-			android:fontFamily="sans-serif-light"
-			android:paddingTop="4dp"
-			android:text="TextDrawable (&#169;) Amulya Khare"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView
@@ -131,28 +150,6 @@
 			android:paddingTop="4dp"
 			android:text="joda-time (&#169;) Joda org."
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:autoLink="all"
-			android:fontFamily="sans-serif-light"
-			android:paddingTop="16dp"
-			android:text="@string/special_thanks"
-			android:textAppearance="@style/TextAppearance.AppCompat.Large"
-			android:textColor="@color/accent"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:autoLink="all"
-			android:fontFamily="sans-serif-light"
-			android:paddingTop="4dp"
-			android:text="Campello Manuel @CampelloManuel"
-			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-		<!-- contributors can add their name here by opening a pull request on github,
-		 simply copy that last textview -->
 
 	</LinearLayout>
 </ScrollView>

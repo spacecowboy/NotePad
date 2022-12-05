@@ -11,7 +11,7 @@
 
 <img src="https://img.shields.io/github/last-commit/spacecowboy/NotePad"/> <img src="https://img.shields.io/github/search/spacecowboy/NotePad/TODO"/> <img src="https://img.shields.io/librariesio/github/spacecowboy/NotePad"/>
 
-A note taking app for android with reminders, since 2012.
+A note taking app for android with reminders, since 2012. Built by @spacecowboy, maintained by @CampelloManuel.
 
 The app is currently being updated, and old versions are still available on f-droid:
 
