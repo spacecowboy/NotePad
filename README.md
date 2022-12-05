@@ -34,23 +34,11 @@ cd NotePad
 
 if it does not work, open an issue [here](https://github.com/spacecowboy/NotePad/issues)
 
-## Getting Google Tasks sync to work
+## Where did Google Tasks synchronization go ?
 
-The app was once able to synchronize with Google Tasks, then Google made some changes and
-now **that functionality is not available anymore**. Therefore, the related settings are disabled.
-Developers interested in maintaining this feature should open a new issue
-[here](https://github.com/spacecowboy/NotePad/issues) to get help on how to proceed.
-See also issue #403
+See the discussion [here](https://github.com/spacecowboy/NotePad/issues/426)
 
-Once the code is fixed,
-You need to put your API keys in a file, like the sample here:
-https://github.com/spacecowboy/NotePad/blob/master/core/assets/secretkeys.properties.sample
-
-But first you will of course need to get yourself a key.
-Follow the instructions on this page:
-https://developers.google.com/tasks/firstapp#register
-
-## Where files are saved
+## Where are the files saved ?
 
 The app can save 2 kinds of files:
 * org files, which are used for SD card synchronization. You can choose to save them in a subdirectory of your `Documents` folder, where they will be visible to many apps, including your file manager
