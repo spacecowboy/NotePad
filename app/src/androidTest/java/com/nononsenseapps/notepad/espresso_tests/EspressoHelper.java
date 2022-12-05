@@ -5,6 +5,7 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
@@ -16,6 +17,7 @@ import static org.hamcrest.Matchers.not;
 import android.app.UiAutomation;
 import android.os.SystemClock;
 
+import androidx.annotation.IdRes;
 import androidx.test.espresso.AmbiguousViewMatcherException;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewInteraction;
@@ -107,18 +109,27 @@ public class EspressoHelper {
 		}
 
 		// TODO regularly crashes here in the google_apis - API23 emulator image
-		onView(withId(R.id.titleField)).check(matches(isDisplayed()));
+		onViewWithIdInDialog(R.id.titleField).check(matches(isDisplayed()));
 
 		// fill the popup
-		onView(withId(R.id.titleField)).perform(typeText(taskListName));
-		onView(withId(R.id.dialog_yes)).check(matches(isDisplayed()));
-		onView(withId(R.id.dialog_yes)).perform(click());
+		onViewWithIdInDialog(R.id.titleField).perform(typeText(taskListName));
+		onViewWithIdInDialog(R.id.dialog_yes).check(matches(isDisplayed()));
+		onViewWithIdInDialog(R.id.dialog_yes).perform(click());
 		try {
 			// check if the dialog is still visible (it shouldn't be)
-			onView(withId(R.id.dialog_yes)).check(matches(not(isDisplayed())));
+			onViewWithIdInDialog(R.id.dialog_yes).check(matches(not(isDisplayed())));
 		} catch (Exception ex) {
 			NnnLogger.exception(ex);
 		}
+	}
+
+	/**
+	 * shorthand for onView(withId(viewId)).inRoot(isDialog())
+	 *
+	 * @param viewId it's R.id.something
+	 */
+	public static ViewInteraction onViewWithIdInDialog(@IdRes int viewId) {
+		return onView(withId(viewId)).inRoot(isDialog());
 	}
 
 	/**

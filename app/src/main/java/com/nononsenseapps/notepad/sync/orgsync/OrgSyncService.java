@@ -17,33 +17,25 @@
 
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
-import android.util.Log;
 
-import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 
@@ -70,17 +62,25 @@ public class OrgSyncService extends Service {
 	private final ArrayList<SynchronizerInterface> synchronizers;
 
 	public static void start(Context context) {
+		NnnLogger.debug(OrgSyncService.class, "got here #1");
 		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
 				.setAction(ACTION_START));
+		NnnLogger.debug(OrgSyncService.class, "got here #2");
 	}
 
+	// TODO this service crashes in API 23 - default image on github
+
 	public static void pause(Context context) {
+		NnnLogger.debug(OrgSyncService.class, "got here #3");
 		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
 				.setAction(ACTION_PAUSE));
+		NnnLogger.debug(OrgSyncService.class, "got here #4");
 	}
 
 	public static void stop(Context context) {
+		NnnLogger.debug(OrgSyncService.class, "got here #5");
 		context.stopService(new Intent(context, OrgSyncService.class));
+		NnnLogger.debug(OrgSyncService.class, "got here #6");
 	}
 
 	public static boolean areAnyEnabled(Context context) {

@@ -75,8 +75,9 @@ jobs:
           disk-size: 500M       # needed for saving org and json files
           force-avd-creation: false
           # it's picky on the parameters
-          emulator-options: -no-boot-anim -no-window -accel on # -gpu host
+          emulator-options: -no-boot-anim -no-window
           disable-animations: true
+          disable-spellchecker: true
           # starts the emulator, runs this script, then closes the emulator
           script: |
             # wait for it to finish booting, then take a screenshot
@@ -106,8 +107,9 @@ jobs:
           disk-size: 500M
           force-avd-creation: false
           disable-animations: true
-          # -gpu swiftshader_indirect
-          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window
+          disable-spellchecker: true
+          # TODO test -gpu host
+          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -accel on # -gpu host
           script: bash ./github_on_emu_started.sh
 
       - name: upload the generated files
