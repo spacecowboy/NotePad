@@ -90,15 +90,4 @@
 	<string name="dashclock_pref_next7">Next7</string>
 	<string name="dashclock_pref_none">None</string>
 
-	<!-- Strings that should not be translated -->
-	<string name="libraries_used">Libraries used</string>
-
-	<!-- TODO add a reference to our translation service -->
-	<string name="app_about">
-NoNonsense Notes\n\n
-This app is open source and available at https://github.com/spacecowboy/NotePad\n\n
-This program is licensed under the GNU General Public License version 3. See http://www.gnu.org/licenses.\n\n
-Report bugs and issues: https://github.com/spacecowboy/NotePad/issues</string>
-	<string name="license">License</string>
-
 </resources>
