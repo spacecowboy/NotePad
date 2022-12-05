@@ -92,21 +92,13 @@
 
 	<!-- Strings that should not be translated -->
 	<string name="libraries_used">Libraries used</string>
-	<!-- Timessquare, betterpickers, dragsortlistview, showcaseview -->
-	<string name="app_about">NoNonsense Notes is open source and available at https://github.com/spacecowboy/NotePad\n\nReport bugs and issues: https://github.com/spacecowboy/NotePad/issues\n\nHelp translate the app: https://crowdin.com/project/nononsensenotes\n\nKeep up with the latest progress: https://github.com/spacecowboy/NotePad</string>
+
+	<!-- TODO add a reference to our translation service -->
+	<string name="app_about">
+NoNonsense Notes\n\n
+This app is open source and available at https://github.com/spacecowboy/NotePad\n\n
+This program is licensed under the GNU General Public License version 3. See http://www.gnu.org/licenses.\n\n
+Report bugs and issues: https://github.com/spacecowboy/NotePad/issues</string>
 	<string name="license">License</string>
-	<string name="license_text">Copyright (&#169;) 2015 Jonas Kalderstam.\n\n
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.\n\n
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-General Public License for more details.\n\n
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see http://www.gnu.org/licenses.\n\n
-Report bugs and issues: https://github.com/spacecowboy/NotePad/issues.\n\n
-Help translate the app: https://crowdin.com/project/nononsensenotes.</string>
 
 </resources>
