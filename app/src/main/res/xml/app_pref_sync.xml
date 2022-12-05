@@ -21,9 +21,12 @@
 
 	<!--
 	everything google tasks was disabled. If you want to work on it:
-		* remove the   android:enabled="false"   line here below
+		* remove the   android:enabled="false" and app:isPreferenceVisible="false" from
+			the PreferenceCategory here below
 		* uncomment the lines AndroidManifest.xml related to the Gtasks permissions
 		* start testing & fixing bugs
+
+	TODO remove everything google tasks from the app if nobody comes out to work on it. See #426.
 	 -->
 
 	<PreferenceCategory
@@ -31,6 +34,7 @@
 		android:key="pref_gtask_section_key"
 		android:persistent="false"
 		app:initialExpandedChildrenCount="0"
+		app:isPreferenceVisible="false"
 		android:title="@string/gtasks_not_working">
 
 		<SwitchPreference
