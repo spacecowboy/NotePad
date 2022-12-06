@@ -16,4 +16,5 @@
  */
 
 include ':app',
+        ':contract',
         ':external:drag-sort-listview'
