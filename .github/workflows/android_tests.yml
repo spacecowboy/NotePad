@@ -108,7 +108,7 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           disable-spellchecker: true
-          # TODO test -gpu host, compare timings
+          # TODO test -gpu host & then with -gpu off, compare timings
           # tests with "-accel on": run #84
           # tests with "-gpu host":
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -gpu host

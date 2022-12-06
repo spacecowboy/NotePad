@@ -82,7 +82,7 @@ adb shell input keyevent 3
 adb logcat -c
 
 # run tests
-./gradlew connectedCheck
+./gradlew connectedCheck --info
 GRADLE_RETURN_CODE=$?
 
 # dump the logcat to a file. Log level: Debug
