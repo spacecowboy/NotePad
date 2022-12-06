@@ -16,9 +16,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!-- This is a "list item" representing a note in the drag-sort-listview -->
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:custom="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:minHeight="@dimen/list_item_min_size"
@@ -28,7 +29,6 @@
 	android:paddingBottom="4dp">
 
 	<com.nononsenseapps.ui.DelegateFrame
-		xmlns:nononsenseapps="http://nononsenseapps.com"
 		android:id="@+id/checkboxcontainer"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
 		android:clickable="true"
 		android:minHeight="40dp"
 		android:paddingRight="4dp"
-		nononsenseapps:enlargedView="@+id/itemDone">
+		app:enlargedView="@+id/itemDone">
 
 		<com.nononsenseapps.ui.NoteCheckBox
 			android:id="@+id/checkbox"
@@ -70,11 +70,11 @@
 		android:textAppearance="?android:attr/textAppearanceSmall"
 		android:textColor="?attr/textColorPrimary"
 		android:textIsSelectable="false"
-		custom:linkify="true"
-		custom:secondaryColor="@color/completedGrey"
-		custom:titleFontFamily="robotocondensed"
-		custom:titleFontStyle="bold"
-		custom:titleRelativeSize="1.2"/>
+		app:linkify="true"
+		app:secondaryColor="@color/completedGrey"
+		app:titleFontFamily="robotocondensed"
+		app:titleFontStyle="bold"
+		app:titleRelativeSize="1.2"/>
 
 	<com.nononsenseapps.ui.DateView
 		android:id="@+id/date"
