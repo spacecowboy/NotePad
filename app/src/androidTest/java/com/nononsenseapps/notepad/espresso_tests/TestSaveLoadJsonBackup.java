@@ -76,7 +76,7 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 
 		String IMPORT_BACKUP_TEXT = getStringResource(R.string.backup_import);
 		onView(withText(IMPORT_BACKUP_TEXT)).perform(click());
-		onView(withId(android.R.id.button1)).perform(click());
+		EspressoHelper.onViewWithIdInDialog(android.R.id.button1).perform(click());
 		EspressoHelper.waitUi();
 
 		// return to the notes list

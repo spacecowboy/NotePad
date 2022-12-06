@@ -31,11 +31,12 @@ public class TestAddNoteToTaskList extends BaseTestClass {
 		EspressoHelper.hideShowCaseViewIfShown();
 		EspressoHelper.createTaskList(taskListName);
 
-		// make sure the correct task list is opened
+		// make sure the correct task list is selected
 		EspressoHelper.openDrawer();
 		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
 				.check(matches(isDisplayed()));
-		onView(allOf(withText(taskListName), withId(android.R.id.text1))).perform(click());
+		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
+				.perform(click());
 		EspressoHelper.waitUi();
 
 		// add the note

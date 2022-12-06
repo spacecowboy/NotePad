@@ -100,27 +100,14 @@ public class EspressoHelper {
 		onView(withId(R.id.drawer_menu_createlist)).check(matches(isDisplayed()));
 		onView(withId(R.id.drawer_menu_createlist)).perform(click());
 		waitUi(); // the popup may need time to load
-		try {
-			// did the popup load already ?
-			onView(withId(R.id.titleField)).check(matches(isDisplayed()));
-		} catch (Exception ex) {
-			// maybe the 1° click didn't work, retry
-			onView(withId(R.id.drawer_menu_createlist)).perform(click());
-		}
 
-		// TODO regularly crashes here in the google_apis - API23 emulator image
+		// the text field in the dialog visibile must be visible
 		onViewWithIdInDialog(R.id.titleField).check(matches(isDisplayed()));
 
 		// fill the popup
 		onViewWithIdInDialog(R.id.titleField).perform(typeText(taskListName));
 		onViewWithIdInDialog(R.id.dialog_yes).check(matches(isDisplayed()));
 		onViewWithIdInDialog(R.id.dialog_yes).perform(click());
-		try {
-			// check if the dialog is still visible (it shouldn't be)
-			onViewWithIdInDialog(R.id.dialog_yes).check(matches(not(isDisplayed())));
-		} catch (Exception ex) {
-			NnnLogger.exception(ex);
-		}
 	}
 
 	/**
