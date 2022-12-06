@@ -128,6 +128,20 @@
 		<!-- <item name="colorPrimary">ivory or something, for the actionbar</item> -->
 		<!-- <item name="colorPrimaryDark">@color/primary_dark</item> -->
 		<item name="colorAccent">@color/accent</item>
+
+		<!-- TODO check and, most likely, all of the following is useless -->
+		<!-- your app's branding color (for the app bar) -->
+		<!-- <item name="android:colorPrimary">@color/primary</item> -->
+		<!--   darker variant of colorPrimary (for status bar, contextual app bars) -->
+		<!-- <item name="android:colorPrimaryDark">@color/primary_dark</item> -->
+		<!--   theme UI controls like checkboxes and text fields -->
+		<!-- <item name="android:colorAccent">@color/accent</item> -->
+		<!-- <item name="android:navigationBarColor">#AAA</item> -->
+		<!-- <item name="selectableItemBackgroundBorderless">?android:selectableItemBackgroundBorderless</item> -->
+		<!-- <item name="android:windowEnterTransition">@android:transition/no_transition</item> -->
+		<!-- <item name="android:windowExitTransition">@android:transition/no_transition</item> -->
+		<!-- <item name="android:windowAllowEnterTransitionOverlap">true</item> -->
+
 	</style>
 
 	<!-- "classic" theme: shows a more condensed note list, with smaller separators, by design!
