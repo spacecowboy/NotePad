@@ -10,12 +10,12 @@ jobs:
   # this job runs all the tests
   job_tests:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks    
-    timeout-minutes: 60 # emulators are slow: a "test jobs" can finish in (up to) 50 minutes
-    continue-on-error: true # run all configurations even if one fails
+    timeout-minutes: 70 # emulators are slow: a "test jobs" can finish in (up to) 57 minutes
+    continue-on-error: true # finish for all configurations, even if one fails
     strategy:
       matrix:
         # test on emulators with these Android API versions. minSdk & higher
-        # TODO configurations that have NEVER completed a run: 32-google, 31-google, 23-default
+        # TODO configurations that have NEVER completed a run: 31-google, 23-default
         api-level: [ 23, 24, 28, 31, 32, 33 ]
         target: [ default, google_apis ] # OS images without, or with, google apps
         exclude:  # the images for these configurations do not exist
@@ -54,7 +54,7 @@ jobs:
       - name: perform AVD caching
         uses: actions/cache@v3
         id: avd-cache
-        # if a configuration completed a run at least once, it has an entry in
+        # they appear in
         # https://github.com/spacecowboy/NotePad/actions/caches?query=sort%3Asize-desc
         with:
           path: |
@@ -108,8 +108,11 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           disable-spellchecker: true
-          # TODO test -gpu host
-          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -accel on # -gpu host
+          # TODO test -gpu host, compare timings
+          # tests with "-accel on": run #84
+          # tests with "-gpu host":
+          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -gpu host
+          # they also have powershell. maybe remake the script so it's more comprehensible ?
           script: bash ./github_on_emu_started.sh
 
       - name: upload the generated files
