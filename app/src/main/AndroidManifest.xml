@@ -357,6 +357,8 @@
 			<meta-data android:name="fabBehavior" android:value="containersAndItems" />
 		</provider>
 
+		<!-- TODO useless ? -->
+
 		<provider
 			android:name=".android.provider.DummyProvider"
 			android:label="Dummy items"
