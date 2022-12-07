@@ -37,6 +37,8 @@ import java.util.List;
  */
 public class MainListActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    // TODO it's supposed to replace com.nononsenseapps.notepad.ActivityMain
+
     private Toolbar mToolbar;
     private Fragment mFragment;
     private NavigationDrawerFragment mNavigationDrawerFragment;

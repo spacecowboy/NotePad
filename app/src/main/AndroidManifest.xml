@@ -83,6 +83,7 @@
 			</intent-filter>
 		</receiver>
 
+		<!-- Main Activity -->
 		<activity
 			android:name="com.nononsenseapps.notepad.ActivityMain_"
 			android:exported="true"
