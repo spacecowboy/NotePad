@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -13,10 +14,10 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+-->
 
 <!--
-     Declare the contents of this Android application.  The namespace
+     Declare the contents of this Android application. The namespace
      attribute brings in the Android platform namespace
 -->
 <manifest
@@ -44,6 +45,7 @@
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
 	<!-- Define my permissions for the provider -->
+	<!-- TODO useless ? -->
 	<permission
 		android:name="com.nononsenseapps.notepad.permissions.read"
 		android:description="@string/permission_read_desc"
@@ -326,6 +328,58 @@
 			android:enabled="true"
 			android:exported="false"
 			android:label="File Watcher"/>
+
+		<!-- A couple of providers -->
+
+		<provider
+			android:name=".android.provider.TextFileProvider"
+			android:label="SD-card files"
+			android:icon="@drawable/ic_sd_storage_24dp"
+			android:authorities="com.nononsenseapps.notepad.TESTPROVIDER"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="com.nononsenseapps.notepad.PROVIDER" />
+			</intent-filter>
+			<!-- Required, only one possible value atm -->
+			<meta-data android:name="protocolVersion" android:value="1" />
+			<!-- Optional, if absent assumed to be false -->
+			<meta-data android:name="requiresConfig" android:value="false" />
+			<!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
+			<!--<meta-data android:name="settingsActivity"
+				android:value=".ExampleSettingsActivity" />-->
+			<!-- Optional, specifies behavior of "+"-button in root view.
+				 Possible values: containers, items, containersAndItems, nestableItems-->
+			<!-- <meta-data android:name="fabBehaviorRoot" android:value="containersAndItems" /> -->
+			<!-- Optional, same values as root, but specifies behavior anywhere.
+				 Root-value takes precedence at root-level, otherwise this value is used. -->
+			<meta-data android:name="fabBehavior" android:value="containersAndItems" />
+		</provider>
+
+		<provider
+			android:name=".android.provider.DummyProvider"
+			android:label="Dummy items"
+			android:icon="@drawable/app_icon"
+			android:authorities="com.nononsenseapps.notepad.DUMMYPROVIDER"
+			android:enabled="true"
+			android:exported="true">
+			<intent-filter>
+				<action android:name="com.nononsenseapps.notepad.PROVIDER" />
+			</intent-filter>
+			<!-- Required, only one possible value atm -->
+			<meta-data android:name="protocolVersion" android:value="1" />
+			<!-- Optional, if absent assumed to be false -->
+			<meta-data android:name="requiresConfig" android:value="false" />
+			<!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
+			<!--<meta-data android:name="settingsActivity"
+				android:value=".ExampleSettingsActivity" />-->
+			<!-- Optional, specifies behavior of "+"-button in root view.
+				 Possible values: containers, items, containersAndItems,nestableItems-->
+			<meta-data android:name="fabBehaviorRoot" android:value="nestableItems" />
+			<!-- Optional, same values as root, but specifies behavior anywhere.
+				 Root-value takes precedence at root-level, otherwise this value is used. -->
+			<meta-data android:name="fabBehavior" android:value="nestableItems" />
+		</provider>
 
 	</application>
 </manifest>

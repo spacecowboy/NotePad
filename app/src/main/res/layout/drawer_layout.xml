@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Sequence of clickable "note list names" which makes up the entirety of the drawer menu -->
+<!-- Sequence of clickable "note list names" which makes up
+ the entirety of the drawer menu -->
+
+<!-- TODO it's kind of a hack. The recommended way is to have a
+      recyclerview with viewholders of different type, declaredù
+      in different classes, for each type of clickable item. see
+      the classes in    com.nononsenseapps.notepad.android.*
+-->
 <ListView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
