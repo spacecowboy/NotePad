@@ -90,6 +90,11 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
+    kotlinOptions {
+        // compile kotlin to java 11, for compatibility
+        jvmTarget = 11
+    }
+
     if (project.hasProperty('STORE_FILE')) {
         buildTypes {
             release {

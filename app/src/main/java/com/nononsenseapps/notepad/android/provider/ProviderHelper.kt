@@ -160,7 +160,7 @@ tailrec fun matchPath(path: String?): Int {
     } else if (path.startsWith("/")) {
         return matchPath(path.substring(1))
     } else {
-        val fp = firstPart(path).toLowerCase()
+        val fp = firstPart(path).lowercase()
         when (fp) {
             URI_LIST_PREFIX -> return URI_LIST
             URI_DETAILS_PREFIX -> {
