@@ -16,6 +16,7 @@
  */
 
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 
 // App versionName definition
 def versionMajor = 7 // Major UI overhauls
@@ -139,6 +140,8 @@ android {
 }
 
 dependencies {
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
     // AndroidX
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
@@ -162,6 +165,8 @@ dependencies {
     implementation project(':external:drag-sort-listview')
     // for highlighting functionality on 1° launch, open source & up to date
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
+    // from deleted branch 'version6'
+    implementation project(path: ':contract')
     // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
