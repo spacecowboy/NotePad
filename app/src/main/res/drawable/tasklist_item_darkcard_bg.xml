@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<item android:drawable="@drawable/list_activated_holo" android:state_activated="true"/>
-	<item android:drawable="@drawable/card_dark"/>
+	<!-- android:drawable="@color/light_selected_item_color" -->
+	<item
+		android:drawable="@drawable/list_activated_holo"
+		android:state_activated="true"/>
+	<!--
+	TODO this background for a selectable note is defined
+	 in a png file. can you make an XML drawable ? or simply
+	 use a plain color that you define in colors.xml
+	 -->
+	<item android:drawable="@drawable/card_dark"/> <!-- android:drawable="@android:color/transparent" -->
 
 </selector>

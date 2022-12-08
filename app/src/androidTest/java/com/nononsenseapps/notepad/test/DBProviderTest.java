@@ -43,20 +43,19 @@ public class DBProviderTest extends TestCase {
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields, final String where,
 										final String[] whereArgs, final int count) {
-		final Cursor c = mResolver.query(uri, fields, where, whereArgs, null);
-		NnnLogger.warning(DBProviderTest.class,
-				"'parameter' count = " + count + ", cursorCount = " + c.getCount());
-		if (count != c.getCount()) {
+		final Cursor c = mResolver
+				.query(uri, fields, where, whereArgs, null);
+		if (count == 6 && c.getCount() == 7) {
+			// TODO sometimes tests on github (not on a fast PC) crash here. Investigate why
+			NnnLogger.debug(DBProviderTest.class, "cursor info:");
 			// will crash. Let's get more info
 			try {
-				NnnLogger.debug(DBProviderTest.class, "cursor info:");
-				c.moveToFirst();
+				NnnLogger.debug(DBProviderTest.class,
+						"Columns: " + String.join(",", c.getColumnNames()));
 				while (c.moveToNext()) {
-
-					NnnLogger.debug(DBProviderTest.class, c);
-					NnnLogger.debug(DBProviderTest.class, c.getCount());
-					NnnLogger.debug(DBProviderTest.class, c.getColumnNames());
-					NnnLogger.debug(DBProviderTest.class, c.getLong(0));
+					for (int i = 0; i < c.getColumnCount(); i++) {
+						NnnLogger.debug(DBProviderTest.class, c.getString(i));
+					}
 				}
 			} catch (Exception e) {
 				NnnLogger.exception(e);

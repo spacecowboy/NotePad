@@ -1,0 +1,1 @@
+Blocul de notițe și aplicația Todo cu suport pentru sincronizare

@@ -16,25 +16,7 @@
  */
 
 apply plugin: 'com.android.application'
-
-// App versionName definition
-def versionMajor = 7 // Major UI overhauls
-def versionMinor = 0 // Some new functionality
-def versionPatch = 0 // Bug fixes
-
-// Version name from git
-def getVersionName = { ->
-    try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
-            commandLine 'git', 'describe', '--tags'
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
-    } catch (ignored) {
-        return "GITFAILEDINGRADLE"
-    }
-}
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 32
@@ -84,26 +66,16 @@ android {
         targetSdkVersion 32
 
         // Making either of these two values dynamic in the defaultConfig will
-        // require a full app build and reinstallation, even for the smallest change
-        versionCode 1
-        versionName "0.0-debug"
+        // require a full app build and reinstallation, even for the smallest change.
+        // If these values are fixed, incremental builds are optimized.
+        // Also, f-droid prefers these values to be static => update them manually, please.
+        versionCode 70000
+        versionName "7.0.0"
 
         vectorDrawables.useSupportLibrary = true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments disableAnalytics: 'true'
-    }
-
-    // The defaultConfig values above are fixed, to optimize incremental builds.
-    // The following script iterates through all the known variants, finds those
-    // that are "release" build types, and changes those properties to something dynamic.
-    applicationVariants.all { variant ->
-        if (variant.buildType.name == "release") {
-            variant.outputs.each { output ->
-                output.versionCodeOverride = versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
-                output.versionNameOverride = getVersionName()
-            }
-        }
     }
 
     testOptions {
@@ -116,6 +88,11 @@ android {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        // compile kotlin to java 11, for compatibility
+        jvmTarget = 11
     }
 
     if (project.hasProperty('STORE_FILE')) {
@@ -139,6 +116,8 @@ android {
 }
 
 dependencies {
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
     // AndroidX
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
@@ -162,6 +141,8 @@ dependencies {
     implementation project(':external:drag-sort-listview')
     // for highlighting functionality on 1° launch, open source & up to date
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
+    // from deleted branch 'version6'
+    implementation project(path: ':contract')
     // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
