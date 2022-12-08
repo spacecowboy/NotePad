@@ -1,0 +1,1 @@
+Aplicativo de bloco de notas e de tarefas com suporte a sincronização

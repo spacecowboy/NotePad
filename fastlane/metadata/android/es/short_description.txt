@@ -1,0 +1,1 @@
+App de bloc de notas y tareas pendientes con soporte a sincronización
