@@ -21,6 +21,9 @@ package com.nononsenseapps.notepad.providercontract;
 import androidx.annotation.LongDef;
 import androidx.annotation.StringDef;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * This class defines some of the contract which a provider must adhere to.
  */
@@ -91,6 +94,7 @@ public class ProviderContract {
 		return 0 < (bitmask & type);
 	}
 
+	@Retention(RetentionPolicy.SOURCE)
 	@StringDef({
 			COLUMN_PATH,
 			COLUMN_TYPEMASK,
@@ -103,6 +107,7 @@ public class ProviderContract {
 	public @interface ColumnName {
 	}
 
+	@Retention(RetentionPolicy.SOURCE)
 	@LongDef({
 			TYPE_DATA,
 			TYPE_FOLDER,
