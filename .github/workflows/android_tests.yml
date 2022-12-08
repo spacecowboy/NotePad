@@ -109,10 +109,10 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           # TODO test -gpu host & then with -gpu off, compare timings
-          # tests with "-accel on": run #84
-          # tests with "-gpu host":
-          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -gpu host
-          # they also have powershell. maybe remake the script so it's more comprehensible ?
+          # tests with "-accel on": see github run #84
+          # tests with "-gpu host": the emulators never boot!
+          emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -gpu off
+          # runners also have powershell. maybe remake the script so it's more comprehensible ?
           script: bash ./github_on_emu_started.sh
 
       - name: upload the generated files
