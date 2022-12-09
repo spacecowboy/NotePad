@@ -101,7 +101,9 @@ public class AppearancePrefs extends PreferenceFragmentCompat {
 		entries.add(context.getString(R.string.localedefault));
 		values.add("");
 
-		String[] langs = context.getResources().getStringArray(R.array.translated_langs);
+		String[] langs = context
+				.getResources()
+				.getStringArray(R.array.translated_langs);
 
 		for (String lang : langs) {
 			Locale l;

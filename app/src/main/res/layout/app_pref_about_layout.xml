@@ -77,7 +77,6 @@
 			android:text="@string/app_about_license"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
-		<!-- TODO re-enable once we choose a translations service
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
@@ -85,7 +84,7 @@
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="8dp"
 			android:text="@string/app_about_translations"
-			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/> -->
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView
 			android:layout_width="fill_parent"

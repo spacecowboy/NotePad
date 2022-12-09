@@ -16,7 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources translatable="false">
 	<string name="changelog_7_0_0">
 \nThe app has been upgraded to support android 12 restrictions
 \nFor more details, consult the app\'s page in your app store.</string>

@@ -40,14 +40,6 @@
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="Help translate the app"
-			android:textColor="@color/accent"
-			android:textStyle="bold"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
 			android:autoLink="web"
 			android:text="@string/app_about_translations"/>
 
