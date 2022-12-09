@@ -1,11 +1,10 @@
-Recentemente aggiornata per usare le più recenti tecnologie android,
-questa sublime applicazione open source vanta le seguenti funzioni:
+Recentemente aggiornata per supportare android 12,
+quest'applicazione open source vanta le seguenti funzioni:
 
 * Supporto per Dash Clock (si, funziona ancora)
 * Notifiche, anche con ripetizione settimanale
 * Selezione della lingua preferita
-* Widget ridimensionabile e configurabile
-* Sincronizzazione automatica con Google Tasks
+* Widget ridimensionabile e configurabile per la schermata home
 * Protezione delle note con password
 * Liste personalizzate tra le quali si possono spostare le note
 * Liste dove si possono riordinare a piacere le note
@@ -13,9 +12,11 @@ questa sublime applicazione open source vanta le seguenti funzioni:
 * Disponibili temi chiari e scuri
 * Importazione & esportazione su file JSON
 * Sincronizzazione con file nella memoria locale
+* Cronologia nota
+* Elenco di note eliminate
 
-Se vuoi migliorare quest'app, o condividere qualche idea, visita la pagina su github.
+Se vuoi migliorare quest'app, o condividere qualche idea, visita la nostra pagina su github.
 
 
 Una possibile alternativa è https://f-droid.org/packages/com.orgzly
-Orgzly è un'app per le note in sviluppo attivo che può importare le vecchie note di quest'app
+Orgzly è un'app per le note in sviluppo attivo che può importare le note di quest'app
