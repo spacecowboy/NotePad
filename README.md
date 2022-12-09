@@ -1,6 +1,6 @@
 # NoNonsense Notes
 
-[![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)          [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)     [![Stato traduzione](https://hosted.weblate.org/widgets/no-nonsense-notes/-/android-strings/svg-badge.svg)](https://hosted.weblate.org/engage/no-nonsense-notes/)
+[![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)          [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)     [![Translation status](https://hosted.weblate.org/widgets/no-nonsense-notes/-/android-strings/svg-badge.svg)](https://hosted.weblate.org/engage/no-nonsense-notes/)
 
 <img src="https://img.shields.io/f-droid/v/com.nononsenseapps.notepad.svg?logo=F-Droid"/> <img src="https://img.shields.io/github/release/spacecowboy/NotePad.svg?logo=github"/> <img src="https://img.shields.io/github/release-date/spacecowboy/NotePad"/> <img src="https://img.shields.io/github/downloads/spacecowboy/NotePad/latest/total"/>
 

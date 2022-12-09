@@ -15,10 +15,6 @@
 
 
 translations:
-	#sh get-diff-translations
-	python crowdin.py download
-	python deletemissingtranslations.py
-	python escapetranslations.py
 	python listlang.py
 
 #send_translations:
