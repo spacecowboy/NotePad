@@ -75,7 +75,7 @@
     <string name="once">Una sola vota</string>
     <string name="always">Sempre</string>
     <string name="permission_read_label">leggi note ed elenchi No Nonsense Notes</string>
-    <string name="permission_read_desc">Permetti all\'applicazione di leggere le tue note e i relativi elenchi di No Nonsense Notes.</string>
+    <string name="permission_read_desc">Permetti all\'applicazione di leggere le tue note e i relativi elenchi di No Nonsense Notes</string>
     <string name="permission_write_label">modifica note ed elenchi No Nonsense Notes</string>
     <string name="permission_write_desc">Permetti all\'applicazione di inserire, aggiornare ed eliminare note ed elenchi di No Nonsense Notes</string>
     <string name="settings_list_dialog">Seleziona un elenco</string>
@@ -87,7 +87,7 @@
     <string name="showcase_timemachine_title">Salva le tue note</string>
     <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
     <string name="donate_to_unlock">Dona per sbloccare</string>
-    <string name="premiums_unlocked_and_thanks">Funzioni premium sbloccate. Grazie per il tuo supporto</string>
+    <string name="premiums_unlocked_and_thanks">Funzioni premium sbloccate. Grazie per il tuo supporto!</string>
     <string name="notification_channel_name">Promemoria delle note</string>
     <string name="notification_channel_description">Mostra il contenuto della nota quando arriva il momento segnato nel promemoria</string>
     <string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>
@@ -196,7 +196,7 @@
     <string name="lists">Elenchi</string>
     <string name="drag_to_timetravel">Trascina per le versioni precedenti</string>
     <string name="import_data_question">Importare i dati?</string>
-    <string name="import_started">Ripristino. Potrebbe volerci qualche secondo</string>
+    <string name="import_started">Ripristino. Potrebbe volerci qualche secondo.</string>
     <string name="imported_result">Importate %1$d note in %2$d liste</string>
     <string name="import_error">C\'è stato un problema: %s</string>
     <string name="next_5_days">Prossimi 5 giorni</string>
@@ -233,7 +233,6 @@
     <string name="directory">Cartella</string>
     <string name="directory_summary">Dove salvare i file</string>
     <string name="cannot_write_to_directory">Impossibile scrivere sulla cartella</string>
-    <string name="dashclock_pref_tomorrow">Domani</string>
     <string name="libraries_used">Librerie usate</string>
     <string name="license">Licenza</string>
     <string name="delete_completed_tasks_question">Vuoi davvero eliminare tutte le note completate?</string>
@@ -261,4 +260,10 @@
     <string name="sorting">Ordine</string>
     <string name="undo">Annulla</string>
     <string name="changelog">Cronologia aggiornamenti</string>
+    <string name="import_data_msg">Vuoi importare le note dalla versione donazione \? Quando finisce, puoi anche disinstallarla.</string>
+    <string name="app_about_dev_team">Creata da Jonas Kalderstam e mantenuta da Campello Manuel</string>
+    <string name="app_about_license">Questo programma è fornito con la licenza GNU General Public License version 3, vedi http://www.gnu.org/licenses</string>
+    <string name="app_about_bugreports">Segnala problemi qui: https://github.com/spacecowboy/NotePad/issues</string>
+    <string name="app_about_translations">Aiutaci a tradurre l\'app: https://hosted.weblate.org/engage/no-nonsense-notes/</string>
+    <string name="app_about_git_repo">Quest\'app è open source e disponibile su https://github.com/spacecowboy/NotePad</string>
 </resources>
