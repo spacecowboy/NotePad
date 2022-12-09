@@ -142,8 +142,7 @@
 	<string name="app_about_git_repo">This app is open source and available at https://github.com/spacecowboy/NotePad</string>
 	<string name="app_about_license">This program is licensed under the GNU General Public License version 3. See http://www.gnu.org/licenses.</string>
 	<string name="app_about_bugreports">Report bugs and issues: https://github.com/spacecowboy/NotePad/issues</string>
-	<!-- TODO add a reference to our translation service -->
-	<string name="app_about_translations">Help translate the app: (TODO ADD LINK)</string>
+	<string name="app_about_translations">Help translate the app: https://hosted.weblate.org/engage/no-nonsense-notes/</string>
 
 	<!--
 		Use few if language need it. In English is the same.
