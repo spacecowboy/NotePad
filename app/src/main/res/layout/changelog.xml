@@ -40,19 +40,8 @@
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="Help translate the app"
-			android:textColor="@color/accent"
-			android:textStyle="bold"/>
-
-		<!-- TODO choose & enable a translation service, then update and show this textview -->
-		<!--
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
 			android:autoLink="web"
-			android:text="Go to https://crowdin.com/project/nononsensenotes to help translate the app to your native language."/>
-			-->
+			android:text="@string/app_about_translations"/>
 
 		<TextView
 			android:layout_width="fill_parent"
