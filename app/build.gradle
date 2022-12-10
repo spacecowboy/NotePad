@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+// apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 32
@@ -91,10 +91,10 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
+    /* kotlinOptions {
         // compile kotlin to java 11, for compatibility
         jvmTarget = 11
-    }
+    } */
 
     if (project.hasProperty('STORE_FILE')) {
         buildTypes {
@@ -117,8 +117,6 @@ android {
 }
 
 dependencies {
-    // kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
     // AndroidX
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
@@ -156,6 +154,8 @@ dependencies {
     // Desugaring library, needs android gradle plugin v7.4+ to upgrade
     //noinspection GradleDependency
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    // no kotlin
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
 }
 
 // run with: ./gradlew checkLanguages

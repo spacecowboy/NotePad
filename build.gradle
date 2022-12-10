@@ -20,7 +20,6 @@ Top-level build file where you can add configuration options
 common to all sub-projects/modules: everything in here will
 be applied to ALL gradle modules
 */
-
 buildscript {
     repositories {
         mavenCentral()
@@ -28,7 +27,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
+        // no kotlin: this is an old project, i find it easier to keep java
+        // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
     }
 }
 
