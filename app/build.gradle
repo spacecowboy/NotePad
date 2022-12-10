@@ -39,7 +39,7 @@ android {
 
     packagingOptions {
         resources {
-           // excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt']
+            // excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt']
         }
     }
 
@@ -48,7 +48,8 @@ android {
         debug {
             minifyEnabled false
             shrinkResources false
-            pseudoLocalesEnabled true // TODO test https://developer.android.com/guide/topics/resources/pseudolocales
+            pseudoLocalesEnabled true
+            // TODO test https://developer.android.com/guide/topics/resources/pseudolocales
             // just to make gradle shut up about missing classes
             proguardFiles 'proguard.pro'
         }
@@ -69,8 +70,8 @@ android {
         // require a full app build and reinstallation, even for the smallest change.
         // If these values are fixed, incremental builds are optimized.
         // Also, f-droid prefers these values to be static => update them manually, please.
-        versionCode 70000
-        versionName "7.0.0"
+        versionCode 70100
+        versionName "7.0.1"
 
         vectorDrawables.useSupportLibrary = true
 
@@ -155,4 +156,63 @@ dependencies {
     // Desugaring library, needs android gradle plugin v7.4+ to upgrade
     //noinspection GradleDependency
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+}
+
+// run with: ./gradlew checkLanguages
+task checkLanguages {
+    group 'NoNonsenseNotes custom tasks'
+    description 'Ensure all languages in res/values-*/strings.xml are selectable in the spinner'
+
+    var readFromFolders = () -> {
+        // Read res/values/ folders, add their codes to localesInFolders
+        File resDir = new File(projectDir, "src/main/res")
+        FileFilter theFilter = (file) -> file.name.toLowerCase().startsWith("values")
+        File[] dirs = resDir.listFiles(theFilter)
+
+        var localesInFolders = new ArrayList<String>()
+        for (File valueFolder : dirs) {
+            // exclude folders like 'values-600dp' which don't represent languages
+            if (valueFolder.name.contains("0dp")) continue
+            if (valueFolder.name.contains("values-land")) continue
+
+            String localeCode = valueFolder.name.replace("values-", "")
+            localesInFolders.add(localeCode)
+        }
+        return localesInFolders
+    }
+
+    var readFromXML = () -> {
+        // read the language list in arrays.xml
+        File arrFile = new File(projectDir, "src/main/res/values/arrays.xml")
+        var reader = new FileReader(arrFile.absolutePath)
+        String xmlText = reader.text
+        reader.close()
+
+        // locate where the "translated_langs" array is
+        int posBegin = xmlText.indexOf("<string-array name=\"translated_langs\" tools:ignore=\"MissingTranslation\">")
+        int posEnd = xmlText.indexOf("</string-array>", posBegin)
+        String onlyLangArray = xmlText.substring(posBegin, posEnd)
+
+        // add locale codes to localesInXML
+        var localesInXML = new ArrayList<String>()
+        for (String line : onlyLangArray.split('\n')) {
+            if (!line.contains("<item>")) continue
+
+            String localeCode = line.replace("<item>", "").replace("</item>", "")
+            localesInXML.add(localeCode)
+        }
+
+        return localesInXML
+    }
+
+    doLast {
+        // actually run the task
+        var listDir = readFromFolders()
+        var listXML = readFromXML()
+        if (listDir.size != listXML.size) {
+            String msg = "Outdated translation: XML element has " + listXML.size
+            msg += " locales, but the values-* folders are " + listDir.size
+            throw new GradleException(msg)
+        }
+    }
 }
