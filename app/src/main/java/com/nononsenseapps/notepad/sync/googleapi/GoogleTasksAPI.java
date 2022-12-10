@@ -32,6 +32,8 @@ import retrofit2.http.Query;
  */
 public interface GoogleTasksAPI {
 
+	// TODO useless, remove
+
 	@GET("/users/@me/lists")
 	ListListsResponse listLists(@Query("key") String key);
 

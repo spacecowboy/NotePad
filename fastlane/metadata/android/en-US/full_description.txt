@@ -5,7 +5,6 @@ this open source Notepad and to-do list app has these Features:
 * Notifications: set reminders at a certain time, with optional repetition at certain days of the week
 * Language selection
 * Widget, with lockscreen support, resizeable and configurable.
-* Automatic synchronization with Google Tasks
 * Ability to set passwords to protect important notes
 * Move tasks between different lists
 * Drag to reorder your tasks
