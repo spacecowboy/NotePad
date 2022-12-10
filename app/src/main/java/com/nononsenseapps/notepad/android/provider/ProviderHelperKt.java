@@ -26,9 +26,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
+import java.util.Objects;
 
 import kotlin.collections.CollectionsKt;
-import kotlin.jvm.internal.Intrinsics;
 import kotlin.text.Regex;
 import kotlin.text.StringsKt;
 
@@ -118,7 +118,6 @@ public final class ProviderHelperKt {
 	 */
 	@NotNull
 	public static final String[] split(@NotNull String fullPath) {
-		Intrinsics.checkNotNullParameter(fullPath, "fullPath");
 
 		while (true) {
 			CharSequence var2 = (CharSequence) fullPath;
@@ -157,13 +156,11 @@ public final class ProviderHelperKt {
 					Collection $this$toTypedArray$iv = (Collection) var12;
 					$i$f$toTypedArray = false;
 					Object[] var13 = $this$toTypedArray$iv.toArray(new String[0]);
-					Intrinsics.checkNotNull(var13, "null cannot be cast to non-null type kotlin.Array<T of kotlin.collections.ArraysKt__ArraysJVMKt.toTypedArray>");
 					return (String[]) var13;
 				}
 			}
 
 			String var10000 = path.substring(1);
-			Intrinsics.checkNotNullExpressionValue(var10000, "this as java.lang.String).substring(startIndex)");
 			fullPath = var10000;
 		}
 	}
@@ -225,19 +222,19 @@ public final class ProviderHelperKt {
 				String var10000;
 				if (StringsKt.startsWith(path, "/", false)) {
 					var10000 = path.substring(1);
-					Intrinsics.checkNotNullExpressionValue(var10000, "this as java.lang.String).substring(startIndex)");
+
 					path = var10000;
 					continue;
 				}
 
 				var10000 = firstPart(path).toLowerCase(Locale.ROOT);
-				Intrinsics.checkNotNullExpressionValue(var10000, "this as java.lang.String).toLowerCase(Locale.ROOT)");
+
 				String fp = var10000;
-				if (Intrinsics.areEqual(fp, "list")) {
+				if (Objects.equals(fp, "list")) {
 					return 102;
 				}
 
-				if (Intrinsics.areEqual(fp, "details")) {
+				if (Objects.equals(fp, "details")) {
 					if (((CharSequence) restPart(path)).length() == 0) {
 						return -1;
 					}

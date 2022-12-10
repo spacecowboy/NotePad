@@ -29,8 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import kotlin.jvm.internal.Intrinsics;
-
 /**
  * This class handles things related to (possibly 3rd party) providers.
  */
@@ -43,7 +41,6 @@ public final class ProviderManager {
 	private final Context applicationContext;
 
 	public ProviderManager(@NotNull Context context) {
-		Intrinsics.checkNotNullParameter(context, "context");
 		this.applicationContext = context.getApplicationContext();
 	}
 
