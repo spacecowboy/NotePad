@@ -40,6 +40,9 @@ import java.util.Calendar;
  * sync is requested/managed.
  */
 public class SyncGtaskHelper {
+
+	// TODO useless. It's scheduled for removal by ~summer 2023
+
 	// Sync types
 	public static final int MANUAL = 0;
 	private static final int BACKGROUND = 1;

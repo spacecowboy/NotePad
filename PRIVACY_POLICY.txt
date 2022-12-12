@@ -1,7 +1,8 @@
-Your privacy is your own and the maintainer(s) of this app retain(s) NO rights to do shit with any
-of your data.
+Your privacy is your own and the maintainer(s) of this app retain(s) NO rights
+to do shit with any of your data.
 
-Those bits of personal information which are requested, such as permission to list accounts,
-is used, for example, to retrieve which Google account to sync to Google Tasks with.
-Any information retained from said permissions are stored strictly locally and not uploaded anywhere
-which already doesn't have this information (e.g. Google already knows your Google account).
+The app does not request the permission to go online,
+nor to access any personal account information.
+
+There may still be old, leftover code that uses network functionality,
+but there is no conscious sharing of ANY data with ANY website.

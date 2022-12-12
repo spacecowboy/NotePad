@@ -39,6 +39,9 @@ import retrofit2.Retrofit;
  * Communication client with Google Tasks API.
  */
 public class GoogleTasksClient {
+
+	// TODO useless, remove
+
 	static final String BASE_URL = "https://www.googleapis.com/tasks/v1";
 	// https://www.googleapis.com/auth/tasks.readonly
 	private static final String OAUTH_SCOPE = "oauth2:https://www.googleapis.com/auth/tasks";

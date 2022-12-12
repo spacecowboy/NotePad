@@ -131,11 +131,12 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		// Set up a listener whenever a key changes
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
-		// this is useless, since all Google Tasks settings are disabled.
+		// TODO this is useless, since all Google Tasks settings are disabled.
 		prefAccount = findPreference(KEY_ACCOUNT);
 		setAccountTitle(sharedPrefs);
 		prefAccount.setOnPreferenceClickListener(preference -> {
 			// ask for permissions needed to use google tasks
+			// TODO useless, remove
 			boolean granted = PermissionsHelper
 					.hasPermissions(this.getContext(), PermissionsHelper.PERMISSIONS_GTASKS);
 			if (granted) {

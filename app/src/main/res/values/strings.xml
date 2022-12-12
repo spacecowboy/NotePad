@@ -74,6 +74,10 @@
 	<string name="preference_preview_text">This is how the editor text will appear</string>
 	<string name="settings_account_title">Select an account</string>
 	<string name="settings_account_summary">Touch to switch account</string>
+
+	<!-- TODO all strings related to google tasks will (should!) be deleted by summer 2023.
+	      Their translated versions will also have to be deleted -->
+
 	<string name="settings_sync_enable_title">Google Tasks sync</string>
 	<string name="gtasks_sync_info">Not all information can be synced with Google Tasks. Only notes, due date (not time) and todo-status is synced.</string>
 	<string name="settings_cat_syncing">Synchronization</string>

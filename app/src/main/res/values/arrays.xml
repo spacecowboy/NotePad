@@ -140,8 +140,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<item>-2</item>
 	</string-array>
 
-	<!-- TODO it's generated with listlang.py, but maybe you could make a static function
-	      and generate it at runtime. At least try. It's used only once, in AppearancePrefs.java  -->
+	<!-- use   ./gradlew checkLanguages   to see if it's up to date  -->
 	<string-array name="translated_langs" tools:ignore="MissingTranslation">
 		<item>af</item>
 		<item>ar</item>
@@ -157,6 +156,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<item>hu</item>
 		<item>it</item>
 		<item>ja</item>
+		<item>nb_NO</item>
 		<item>nl</item>
 		<item>pl</item>
 		<item>pt_BR</item>
