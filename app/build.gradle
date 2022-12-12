@@ -19,8 +19,8 @@ apply plugin: 'com.android.application'
 // apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.1"
     namespace "com.nononsenseapps.notepad" // for R.*
 
     // buildFeatures {
