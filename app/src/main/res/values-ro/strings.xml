@@ -55,7 +55,7 @@
     <string name="sort_list_manual">Sortare manuală</string>
     <string name="search_description">Notițe și atribuții</string>
     <string name="archive">Arhivă</string>
-    <string name="view_deletedtasks">\@șir/arhivă</string>
+
 
     <string name="restore">Restabilire</string>
     <string name="restore_to">Restabilire la</string>
@@ -63,7 +63,7 @@
     <string name="settings_theme">Tema actuală</string>
     <string name="settings_theme_dialog">Folosește tema</string>
     <string name="settings_lang">Limba</string>
-    <string name="settings_lang_dialog">\@șir/setări_lang</string>
+
     <string name="settings_summary_theme_black">Negru</string>
     <string name="settings_summary_theme_dark">Întunecat</string>
     <string name="settings_summary_theme_light">Luminat</string>
@@ -102,25 +102,7 @@
     <string name="showcase_timemachine_msg">Schimbările sunt întotdeauna salvate. Utilizează mașina timpului pentru a restabili o versiune anterioară.</string>
     <string name="donate_to_unlock">Donează pentru a debloca</string>
     <string name="premiums_unlocked_and_thanks">Caracteristicile premium au fost deblocate. Mulțumim pentru sprijinul acordat!</string>
-    <!--
-        Use few if language need it. In English is the same.
-        <item quantity="few">Copied 2 notes.</item>
-    -->
-    <plurals name="notecopied_msg">
-        <item quantity="one">\@șir/notițăcopiată_una</item>
-        <item quantity="few">\@șir/notițăcopiată_maimulte</item>
-        <item quantity="other">\@șir/notițăcopiată_maimulte</item>
-    </plurals>
-    <plurals name="notedeleted_msg">
-        <item quantity="one">\@șir/notițăștearsă_una</item>
-        <item quantity="few">\@șir/notițăștearsă_maimulte</item>
-        <item quantity="other">\@șir/notițăștearsă_maimulte</item>
-    </plurals>
-    <plurals name="mode_choose">
-        <item quantity="one">\@șir/selectată_alta</item>
-        <item quantity="few">\@șir/selectată_alta</item>
-        <item quantity="other">\@șir/selectată_alta</item>
-    </plurals>
+
     <string name="move">Mută</string>
     <string name="move_to">Mută la</string>
     <string name="moved_x_to_list">Mutat %1$d la %2$s</string>
@@ -180,22 +162,17 @@
     <string name="please_type_before_reminder">Te rugăm să introduci un text înainte de a stabili un memento</string>
     <string name="notecopied_one">Notiță %d copiată</string>
     <string name="notecopied_other">Notițe %d copiate</string>
-    <string name="notecopied_zero">\@șir/notițăcopiată_alta</string>
-    <string name="notecopied_two">\@șir/notițăcopiată_alta</string>
-    <string name="notecopied_few">\@șir/notițăcopiată_alta</string>
-    <string name="notecopied_many">\@șir/notițăcopiată_alta</string>
+
+
     <string name="notedeleted_one">Notița %d ștearsă</string>
     <string name="notedeleted_other">Notițe %d șterse</string>
     <string name="notedeleted_zero">@string/notedeleted_other</string>
     <string name="notedeleted_two">@string/notedeleted_other</string>
-    <string name="notedeleted_few">\@șir/notițăștearsă_alta</string>
-    <string name="notedeleted_many">@string/notedeleted_other</string>
+
+
     <string name="selected_one">Notiță %d selectată</string>
     <string name="selected_other">Notițe %d selectate</string>
-    <string name="selected_zero">\@șir/selectat_alta</string>
-    <string name="selected_two">\@șir/selectat_alta</string>
-    <string name="selected_few">\@șir/selectat_alta</string>
-    <string name="selected_many">\@șir/selectat_alta</string>
+
     <string name="background_sync">Fundal sincronizat</string>
     <string name="background_sync_info">Se sincronizează o dată pe oră</string>
     <string name="sync_on_change">Sincronizare modificări</string>
@@ -226,7 +203,7 @@
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Sarcini</string>
     <string name="all_tasks">Toate sarcinile</string>
-    <string name="dashclock_tasks">\@șir/sarcini</string>
+
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Limitează la sarcini în</string>
     <string name="dashclock_show_overdue_tasks">Arată sarcinile restante</string>
     <string name="dashclock_overdue_tasks_show">Sarcinile întârziate vor fi afișate</string>
@@ -239,7 +216,7 @@
     <string name="dashclock_next7">Următoarele 7 zile</string>
     <string name="dashclock_anytime">Oricând</string>
     <string name="dashclock_will_show_as_many_as_possible">O să arate cât mai mult posibile</string>
-    <string name="dashclock_will_only_show_the_task_due_first">\@șir/arată_ceas_numai_la_următoarea_sarcină</string>
+
     <string name="dashclock_show_only_the_next_task">Arată doar următoarea sarcină</string>
     <string name="dashclock_header_shown">Numele listei va fi afișat îngroșat</string>
     <string name="dashclock_first_task_shown">Numele primei sarcini din listă va fi îngroșat</string>

@@ -55,7 +55,7 @@
     <string name="sort_list_manual">Sortér manuelt</string>
     <string name="search_description">Notater og oppgaver</string>
     <string name="archive">Arkiv</string>
-    <string name="view_deletedtasks">\@tråd/arkiv</string>
+
 
     <string name="restore">Gjenopprett</string>
     <string name="restore_to">Gjenopprett til</string>
@@ -63,7 +63,7 @@
     <string name="settings_theme">Nåværende tema</string>
     <string name="settings_theme_dialog">Bruk tema</string>
     <string name="settings_lang">Språk</string>
-    <string name="settings_lang_dialog">\@tråd/innstillinger_språk</string>
+
     <string name="settings_summary_theme_black">Svart</string>
     <string name="settings_summary_theme_dark">Mørkt</string>
     <string name="settings_summary_theme_light">Lyst</string>
@@ -102,22 +102,7 @@
     <string name="showcase_timemachine_msg">Endringer lagres alltid. Bruk tidsmaskinen til å gjenopprette en tidligere versjon.</string>
     <string name="donate_to_unlock">Donér for å låse opp</string>
     <string name="premiums_unlocked_and_thanks">Premiumfunksjoner låst opp. Tusen takk for støtten!</string>
-    <!--
-        Use few if language need it. In English is the same.
-        <item quantity="few">Copied 2 notes.</item>
-    -->
-    <plurals name="notecopied_msg">
-        <item quantity="one">\@tråd/notatkopiert_en</item>
-        <item quantity="other">\@tråd/notatkopiert_andre</item>
-    </plurals>
-    <plurals name="notedeleted_msg">
-        <item quantity="one">\@tråd/notatkopiert_en</item>
-        <item quantity="other">\@tråd/notatkopiert_andre</item>
-    </plurals>
-    <plurals name="mode_choose">
-        <item quantity="one">\@tråd/valgte_en</item>
-        <item quantity="other">\@tråd/valgte_andre</item>
-    </plurals>
+
     <string name="move">Flytt</string>
     <string name="move_to">Flytt til</string>
     <string name="moved_x_to_list">Flyttet %1$d til %2$s</string>
@@ -177,22 +162,14 @@
     <string name="please_type_before_reminder">Vennligst skriv inn litt tekst før du angir en påminnelse</string>
     <string name="notecopied_one">Kopierte %d notat</string>
     <string name="notecopied_other">Kopierte %d notater</string>
-    <string name="notecopied_zero">\@tråd/notatkopiert_andre</string>
-    <string name="notecopied_two">\@tråd/notatkopiert_andre</string>
-    <string name="notecopied_few">\@tråd/notatkopiert_andre</string>
-    <string name="notecopied_many">\@tråd/notatkopiert_andre</string>
+
     <string name="notedeleted_one">Slettet %d notat</string>
     <string name="notedeleted_other">Slettet %d notater</string>
-    <string name="notedeleted_zero">\@tråd/notatkopiert_andre</string>
-    <string name="notedeleted_two">\@tråd/notatkopiert_andre</string>
-    <string name="notedeleted_few">\@tråd/notatkopiert_andre</string>
-    <string name="notedeleted_many">\@tråd/notatkopiert_andre</string>
+
+
     <string name="selected_one">Valgte %d notat</string>
     <string name="selected_other">Valgte %d notater</string>
-    <string name="selected_zero">\@tråd/valgte_andre</string>
-    <string name="selected_two">\@tråd/valgte_andre</string>
-    <string name="selected_few">\@tråd/valgte_andre</string>
-    <string name="selected_many">\@tråd/valgte_andre</string>
+
     <string name="background_sync">Bakgunnssynkronisering</string>
     <string name="background_sync_info">Synkronisér én gang i timen</string>
     <string name="sync_on_change">Synkronisér ved endringer</string>
@@ -223,7 +200,7 @@
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Oppgaver</string>
     <string name="all_tasks">Alle oppgaver</string>
-    <string name="dashclock_tasks">\@tråd/oppgaver</string>
+
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Begrens til oppgaver i</string>
     <string name="dashclock_show_overdue_tasks">Vis utløpte oppgaver</string>
     <string name="dashclock_overdue_tasks_show">Utløpte oppgaver vil vises</string>
@@ -236,7 +213,7 @@
     <string name="dashclock_next7">Neste 7 dager</string>
     <string name="dashclock_anytime">Når som helst</string>
     <string name="dashclock_will_show_as_many_as_possible">Vil vise så mange som mulig</string>
-    <string name="dashclock_will_only_show_the_task_due_first">\@tråd/dashlock_vis_kun_den_neste_oppgaven</string>
+
     <string name="dashclock_show_only_the_next_task">Vis kun den neste oppgaven</string>
     <string name="dashclock_header_shown">Listenavn vil vises i fet skrift</string>
     <string name="dashclock_first_task_shown">Tittel eller første oppgave vil vises i fet skrift</string>

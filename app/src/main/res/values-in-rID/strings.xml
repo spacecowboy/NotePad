@@ -55,7 +55,7 @@
     <string name="sort_list_manual">Pesan secara manual</string>
     <string name="search_description">Catatan dan tugas</string>
     <string name="archive">Arsip</string>
-    <string name="view_deletedtasks">\@string / arsip</string>
+
 
     <string name="restore">Kembalikan</string>
     <string name="restore_to">Kembalikan ke</string>
@@ -63,7 +63,7 @@
     <string name="settings_theme">Tema saat ini</string>
     <string name="settings_theme_dialog">Gunakan tema</string>
     <string name="settings_lang">Bahasa</string>
-    <string name="settings_lang_dialog">\@ string / settings_lang</string>
+
     <string name="settings_summary_theme_black">Hitam</string>
     <string name="settings_summary_theme_dark">Gelap</string>
     <string name="settings_summary_theme_light">Terang</string>
@@ -102,25 +102,7 @@
     <string name="showcase_timemachine_msg">Perubahan selalu disimpan. Gunakan mesin waktu untuk mengembalikan versi sebelumnya.</string>
     <string name="donate_to_unlock">Donasi untuk membuka kunci</string>
     <string name="premiums_unlocked_and_thanks">Fitur premium tidak terkunci. Terima kasih atas dukungan Anda!</string>
-    <!--
-        Use few if language need it. In English is the same.
-        <item quantity="few">Copied 2 notes.</item>
-    -->
-    <plurals name="notecopied_msg">
-        <item quantity="other">\@ string / notecopied_one
-Dari yang lain
-@ string / notecopied_other</item>
-    </plurals>
-    <plurals name="notedeleted_msg">
-        <item quantity="other">\@ string / noteseleted_one
-Untuk ibu
-@ string / noteseleted_other</item>
-    </plurals>
-    <plurals name="mode_choose">
-        <item quantity="other">\@ string / pilih satu
-Dari yang lain
-@ string / yang dipilih lainnya</item>
-    </plurals>
+
     <string name="move">Pindah</string>
     <string name="move_to">Pindah ke</string>
     <string name="moved_x_to_list">Pindah %1$d ke %2$s</string>
@@ -222,7 +204,7 @@ Dari yang lain
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Tugas</string>
     <string name="all_tasks">Semua tugas</string>
-    <string name="dashclock_tasks">\@ string / tugas</string>
+
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Batasi tugas di</string>
     <string name="dashclock_show_overdue_tasks">Tampilkan tugas yang sudah lewat</string>
     <string name="dashclock_overdue_tasks_show">Tugas yang terlambat akan ditampilkan</string>
@@ -235,7 +217,7 @@ Dari yang lain
     <string name="dashclock_next7">7 hari berikutnya</string>
     <string name="dashclock_anytime">Kapan saja</string>
     <string name="dashclock_will_show_as_many_as_possible">Akan tampil sebanyak mungkin</string>
-    <string name="dashclock_will_only_show_the_task_due_first">\@ string / dashclock_show_only_the_next_task</string>
+
     <string name="dashclock_show_only_the_next_task">Hanya tampilkan tugas selanjutnya</string>
     <string name="dashclock_header_shown">Nama daftar akan ditampilkan dengan huruf tebal</string>
     <string name="dashclock_first_task_shown">Judul tugas pertama akan ditampilkan dalam huruf tebal</string>
