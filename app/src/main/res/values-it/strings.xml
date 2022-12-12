@@ -14,7 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
---><resources>
+  -->
+<resources>
     <string name="app_name_short">Note</string>
     <string name="title_create">Nuova nota</string>
     <string name="timemachine">Cronologia Nota</string>
@@ -69,6 +70,7 @@
     <string name="settings_sync_enable_title">Sincronizza con Google Tasks</string>
     <string name="gtasks_sync_info">Con Google Tasks non è possibile sincronizzare tutte le informazioni. Verranno sincronizzate solo le note, la data di scadenza (non l\'ora) e lo stato (da fare o fatta).</string>
     <string name="settings_cat_syncing">Sincronizzazione</string>
+    <string name="gtasks">Google Task</string>
     <string name="show_from_all_lists">Tutti gli elenchi</string>
     <string name="deleted">Eliminata</string>
     <string name="repeat">Ripeti</string>
@@ -108,6 +110,7 @@
     <string name="unlocked">Sbloccata</string>
     <string name="password_required">Password richiesta</string>
     <string name="select_account">Seleziona un account</string>
+    <string name="password">Password</string>
     <string name="password_set">Password impostata</string>
     <string name="password_cleared">Password eliminata</string>
     <string name="passwords_dont_match">Le password non corrispondono</string>
@@ -138,7 +141,7 @@
     <string name="hide_date">Nascondi la data di scadenza</string>
     <string name="item_max_height">Altezza massima della nota, in righe</string>
     <string name="long_date_format">Formato data estesa</string>
-    <string name="short_date_format">Formato data corta</string>
+    <string name="short_date_format">Formato data compatta</string>
     <string name="rows">righe</string>
     <string name="select_date">Seleziona la data</string>
     <string name="localedefault">Predefinita del sistema</string>
@@ -154,7 +157,7 @@
     <string name="notecopied_one">Copiata una nota</string>
     <string name="notecopied_other">Copiate %d note</string>
     <string name="notedeleted_one">Eliminata una nota</string>
-    <string name="notedeleted_other">Eliminate %d note</string>
+    <string name="notedeleted_other">Eliminate % d note</string>
     <string name="selected_one">Selezionata una nota</string>
     <string name="selected_other">Selezionate %d note</string>
     <string name="background_sync">Sincronizza in background</string>
@@ -174,6 +177,7 @@
     <string name="priority">Priorità</string>
     <string name="notifications">Notifiche</string>
     <string name="dateformat_micro">d MMM</string>
+    <string name="dateformat_weekday">EEEE</string>
     <string name="tasks">Attività</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Limita alle attività in un elenco specifico</string>
     <string name="dashclock_show_overdue_tasks">Mostra attività scadute</string>
