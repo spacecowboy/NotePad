@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="title_create">Uus märge</string>
+    <string name="menu_delete">Kustuta</string>
+    <string name="menu_deletelist">Kustuta loend</string>
+    <string name="menu_sync">Värskenda</string>
+    <string name="menu_share">Jaga</string>
+    <string name="menu_preferences">Seadistused</string>
+    <string name="menu_createlist">Loo loend</string>
+    <string name="menu_clearcompleted">Eemalda täidetud</string>
+    <string name="menu_setdefaultlist">Märgi peamiseks loendiks</string>
+    <string name="menu_managelists">Halda loendeid</string>
+    <string name="editor_due_date_hint">Tähtaeg</string>
+    <string name="editor_title_hint">Pealkiri</string>
+    <string name="editor_note_hint">Märge</string>
+    <string name="resolve_edit">Muuda märget</string>
+    <string name="search_hint">Otsi</string>
+    <string name="settings_theme">Kasutuselolev teema</string>
+    <string name="settings_theme_dialog">Kasuta teemat</string>
+    <string name="settings_lang">Keel</string>
+    <string name="settings_summary_theme_black">Must</string>
+    <string name="settings_summary_theme_dark">Tume</string>
+    <string name="settings_summary_theme_light">Hele</string>
+    <string name="settings_cat_appearance">Väljanägemine</string>
+    <string name="settings_account_title">Vali konto</string>
+    <string name="settings_account_summary">Kliki kontode vahetamiseks</string>
+    <string name="settings_sync_enable_title">Google Tasks sünk.</string>
+    <string name="settings_cat_syncing">Sünkroniseerimine</string>
+    <string name="show_from_all_lists">Kõik loendid</string>
+    <string name="deleted">Kustutatud</string>
+    <string name="settings_list_dialog">Vali loend</string>
+    <string name="settings_list">Loend</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <string name="lock_note">Lukusta märge</string>
+    <string name="unlock_note">Lukusta märge lahti</string>
+    <string name="locked">Lukustatud</string>
+    <string name="unlocked">Lukustamata</string>
+    <string name="password_required">Nõutav on parool</string>
+    <string name="select_account">Vali konto</string>
+    <string name="password">Parool</string>
+    <string name="password_set">Parool salvestatud</string>
+    <string name="password_cleared">Parool kustutatud</string>
+    <string name="passwords_dont_match">Paroolid ei kattu</string>
+    <string name="password_incorrect">Parool ei ole õige</string>
+    <string name="enter_password">Sisesta parool</string>
+    <string name="enter_new_password">Sisesta uus parool</string>
+    <string name="confirm_new_password">Kinnita uut parooli</string>
+    <string name="apply">Rakenda</string>
+    <string name="clear_password">Kustuta parool</string>
+    <string name="sync_failed">Sünkroniseerimine ebaõnnestus</string>
+    <string name="sync_login_failed">Google Tasks\'i sisselogimine ebaõnnestus</string>
+    <string name="completed">Täidetud</string>
+    <string name="date_header_overdue">Üle aja</string>
+    <string name="date_header_today">Täna</string>
+    <string name="date_header_tomorrow">Homme</string>
+    <string name="date_header_future">Hiljem</string>
+    <string name="date_header_none">Ilma tähtajata</string>
+    <string name="date_header_completed">Täidetud</string>
+    <string name="please_select_note">Palun tee valik või loo uus märgend</string>
+    <string name="please_create_note">Palun loo uus märgend</string>
+    <string name="hide_date">Peida tähtajad</string>
+    <!-- settings string keys -->
+    <string name="notecopied_one">Märge kopeeritud</string>
+    <string name="notecopied_other">%d märget kopeeritud</string>
+    <string name="notedeleted_one">Märge kustutatud</string>
+    <string name="notedeleted_other">%d märget kustutatud</string>
+    <string name="selected_one">Märge valitud</string>
+    <string name="selected_other">%d märget valitud</string>
+    <string name="background_sync">Taustal sünkroniseerimine</string>
+    <string name="background_sync_info">Sünkroniseeri korra tunnis</string>
+    <string name="sync_on_change">Sünkroniseeri muudatuste korral</string>
+    <string name="sync_on_change_info">Määratle sünkroniseerimine vahetult peale märke muutmist </string>
+    <string name="sync_on_start">Sünkroniseeri rakenduse käivitumisel</string>
+    <string name="sync_on_start_info">Rakendub ainult esmakäivitusel</string>
+    <string name="silent">Vaikne</string>
+    <string name="sound">Heli</string>
+    <string name="vibrate">Värin</string>
+    <string name="reminders">Meeldetuletused</string>
+    <string name="standard">Standartne</string>
+    <string name="notification_prio_high">Kõrge: Tipus, tekst on laiendatud</string>
+    <string name="notification_prio_low">Madal: Peidetud, tekst on minimeeritud</string>
+    <string name="priority">Tähtsus</string>
+    <string name="notifications">Teavitused</string>
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+</resources>

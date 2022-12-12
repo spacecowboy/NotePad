@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name">یادداشت ها</string>
+    <string name="title_create">یادداشت جدید</string>
+    <string name="timemachine">ماشین زمان</string>
+    <string name="time">زمان</string>
+    <string name="done">حله</string>
+    <string name="saved">ذخیره است خیالت راحت</string>
+    <string name="distance">فاصله</string>
+    <string name="need_location_help">برای انتخاب مکان کلیک کن و نگه دار</string>
+    <string name="near">نزدیک</string>
+    <string name="menu_save_and_add">ذخیره یادداشت بعدهم اضافه یادداشت جدید</string>
+    <string name="menu_delete">پاک کن</string>
+    <string name="menu_deletelist">لیست رو پاک کن</string>
+    <string name="menu_sync">همگام سازی</string>
+    <string name="menu_share">فرستادن</string>
+    <string name="menu_preferences">تنظیمات</string>
+    <string name="menu_createlist">لیست جدید درست کن</string>
+    <string name="menu_clearcompleted">تمیز کاری تمام شد</string>
+    <string name="menu_setdefaultlist">این لیست باشه لیست پیش فرض</string>
+    <string name="menu_managelists">ویرایش لیست</string>
+    <string name="add_item">اضافه کردن مورد</string>
+    <string name="delete_question">پاک کنم؟</string>
+    <string name="delete_items_message">مطمئنی؟ این موردها رو پاک کنم؟</string>
+    <string name="delete_item_message">مطمئنی؟ این مورد رو پاک کنم؟</string>
+    <string name="delete_list_message">مطمئنی؟ این لیست رو پاک کنم؟</string>
+    <string name="editor_due_date_hint">زمان انجام دادن</string>
+    <string name="editor_title_hint">عنوان</string>
+    <string name="editor_note_hint">یادداشت</string>
+    <string name="resolve_edit">ویرایش یادداشت</string>
+    <string name="default_style">حالت پیش فرض</string>
+    <string name="show_items_as_tasks">مورد ها رو به عنوان کار نشان بده</string>
+    <string name="show_items_as_notes">مورد ها رو به عنوان یادداشت نشان بده</string>
+    <string name="sort_list_default">ترتیب پیش فرض</string>
+    <string name="sort_list_alphabetical">به ترتیب حروف الفبا</string>
+    <string name="sort_list_due">به ترتیب زمان انجام دادن</string>
+    <string name="sort_list_updated">به ترتیب آخرین تغییر</string>
+    <string name="sort_list_manual">ترتیب دستی</string>
+    <string name="search_description">یادداشت ها و کارها</string>
+    <string name="archive">آرشیو</string>
+    <string name="location">مکان</string>
+    <string name="restore">برگردان</string>
+    <string name="restore_to">برگردان به</string>
+    <string name="search_hint">جستجو</string>
+    <string name="settings_theme">تم فعلی</string>
+    <string name="settings_theme_dialog">از این تم استفاده کن</string>
+    <string name="settings_lang">زبان</string>
+    <string name="settings_summary_theme_black">سیاه</string>
+    <string name="settings_summary_theme_dark">تیره</string>
+    <string name="settings_summary_theme_light">روشن</string>
+    <string name="settings_summary_theme_classic">کلاسیک</string>
+    <string name="settings_cat_appearance">ظاهر</string>
+    <string name="preference_preview_text">متن ویرایشگر اینجوری دیده می شه</string>
+    <string name="settings_account_title">حساب کاربری رو انتخاب کن</string>
+    <string name="settings_account_summary">تغییر حساب کاربری</string>
+    <string name="settings_sync_enable_title">هماهنگ کردن با گوگل تسک</string>
+    <string name="gtasks_sync_info">نمی تونیم همه اطلاعات رو با گوگل تسک هماهنگ کنیم. فقط یادداشت ها، زمان انجام کار(وقتشون نه!) و حالات انجام کار هماهنگ می شه.</string>
+    <string name="settings_cat_syncing">هماهنگ کردن</string>
+    <string name="gtasks">گوگل تسک</string>
+    <string name="show_from_all_lists">همه لیست ها</string>
+    <string name="deleted">پاک شده ها</string>
+    <string name="repeat">تکرار کن</string>
+    <string name="once">یک بار</string>
+    <string name="always">همیشه</string>
+    <string name="permission_read_label">یادداشت ها و لیست ها را بخوان</string>
+    <string name="permission_read_desc">به برنامه اجازه می دهد تا یادداشت های شما و لیست های مربوط به آن را بخواند.</string>
+    <string name="permission_write_label">یادداشت ها و لیست ها را تغییر بده</string>
+    <string name="permission_write_desc">به برنامه اجازه می دهد تا یادداشت و لیست اضافه  کند، یا آنها را بروز کرده یا پاک کند.</string>
+    <string name="settings_list_dialog">یک لیست انتخاب کن</string>
+    <string name="settings_list">لیست</string>
+    <string name="drag_to_timetravel">برای سفر در زمان این دسته رو جابجا کن</string>
+    <string name="import_data_question">داده ها رو وارد کنم؟</string>
+    <string name="import_started">دارم داده ها رو وارد می کنم. شاید چند ثانیه ای طول بکشه.</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <!-- settings string keys -->
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+    <string name="tasks">کارها</string>
+    <string name="dashclock_pref_header_general">عمومی</string>
+    <string name="dashclock_today">امروز</string>
+    <string name="dashclock_tomorrow">فردا</string>
+    <string name="dashclock_next7">هفت روز دیگه</string>
+    <string name="dashclock_anytime">هر وقتی</string>
+    <string name="dashclock_will_show_as_many_as_possible">هر چقدر که شد نشان می ده</string>
+    <string name="dashclock_show_only_the_next_task">فقط کار بعدی رو نشان بده</string>
+    <string name="dashclock_header_shown">اسم لیست به صورت بولد نشان داده می شه</string>
+    <string name="dashclock_first_task_shown">عنوان کار اول به صورت بولد نشان داده می شه</string>
+    <string name="dashclock_display_header">اسم لیست رو نشان بده </string>
+    <string name="dropbox">دراپ باکس</string>
+</resources>

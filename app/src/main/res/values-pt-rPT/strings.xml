@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name">Notas</string>
+    <string name="title_create">Nova nota</string>
+    <string name="menu_delete">Eliminar</string>
+    <string name="menu_deletelist">Apagar lista</string>
+    <string name="menu_sync">Atualizar</string>
+    <string name="menu_share">Partilhar</string>
+    <string name="menu_preferences">Definições</string>
+    <string name="menu_createlist">Criar lista</string>
+    <string name="menu_clearcompleted">Limpar concluído</string>
+    <string name="menu_setdefaultlist">Definir como lista padrão</string>
+    <string name="menu_managelists">Gerir listas</string>
+    <string name="editor_due_date_hint">Data final</string>
+    <string name="editor_title_hint">Título</string>
+    <string name="editor_note_hint">Nota</string>
+    <string name="resolve_edit">Editar nota</string>
+    <string name="search_hint">Procurar</string>
+    <string name="settings_theme">Tema actual</string>
+    <string name="settings_theme_dialog">Usar tema</string>
+    <string name="settings_lang">Idioma </string>
+    <string name="settings_summary_theme_black">Escuro</string>
+    <string name="settings_summary_theme_dark">Escuro</string>
+    <string name="settings_summary_theme_light">Claro</string>
+    <string name="settings_cat_appearance">Aparência</string>
+    <string name="preference_preview_text">É assim que o texto irá aparecer</string>
+    <string name="settings_account_title">Selecione uma conta</string>
+    <string name="settings_account_summary">Clique para alterar a conta</string>
+    <string name="settings_sync_enable_title">Google Tarefas</string>
+    <string name="settings_cat_syncing">Sincronização</string>
+    <string name="show_from_all_lists">Todas as listas</string>
+    <string name="deleted">Apagado</string>
+    <string name="permission_read_label">ler as notas e as listas</string>
+    <string name="permission_read_desc">Permite que a aplicação leia as suas notas e listas</string>
+    <string name="permission_write_label">modificar as notas e as listas</string>
+    <string name="permission_write_desc">Permite que a aplicação insira, atualize e apague notas e listas.</string>
+    <string name="settings_list_dialog">Selecione uma lista</string>
+    <string name="settings_list">Lista</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <string name="lock_note">Bloquear nota</string>
+    <string name="unlock_note">Desbloquear nota</string>
+    <string name="locked">Bloqueada</string>
+    <string name="unlocked">Desbloqueada</string>
+    <string name="password_required">Password necessária</string>
+    <string name="select_account">Selecione uma conta</string>
+    <string name="password_set">Definir password</string>
+    <string name="password_cleared">Password apagada</string>
+    <string name="passwords_dont_match">As Passwords não combinam</string>
+    <string name="password_incorrect">Password errada</string>
+    <string name="enter_password">Digite a password</string>
+    <string name="enter_new_password">Digite a nova password</string>
+    <string name="confirm_new_password">Confirme a nova password</string>
+    <string name="apply">Aplicar</string>
+    <string name="clear_password">Apagar password</string>
+    <string name="password_info">Definir uma password vai exigir que digite a mesmapara mostrar todas as notas bloqueadas. Esta só vai proteger o campo da nota ficando aindadesprotegido o título e data. Não existe qualquer encriptação da nota para que esta possaser vista no Google Mail/Calendário. Se esquecer a password, sincronize com o Google eem seguida, reinstale a aplicação.</string>
+    <string name="about">Sobre</string>
+    <string name="changelog_title">O que há de novo? </string>
+    <string name="completed">Concluído </string>
+    <string name="date_header_today">Hoje </string>
+    <string name="date_header_tomorrow">Amanhã </string>
+    <string name="date_header_future">Mais tarde </string>
+    <string name="date_header_none">Sem data</string>
+    <!-- settings string keys -->
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+</resources>
