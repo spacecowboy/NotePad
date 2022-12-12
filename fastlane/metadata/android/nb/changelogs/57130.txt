@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Høydepunkter:
+- Fikset Google Tasks-synkronisering.
+- Fikset feil som ville slettet alle notater under Google Tasks-synkronisering.
