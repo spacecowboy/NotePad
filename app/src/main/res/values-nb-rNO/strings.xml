@@ -206,4 +206,15 @@
     <string name="battery_optimizations_active">Batterioptimalisering påskrudd</string>
     <string name="notification_channel_settings">Innstillinger for merknadskanal</string>
     <string name="battery_optimizations_inactive">Batterioptimalisering avskrudd</string>
+    <string name="background_sync">Bakgrunnssynkronisering</string>
+    <string name="background_sync_info">Synkroniserer én gang i timen</string>
+    <string name="sync_on_change">Synkroniser ved endringer</string>
+    <string name="sync_on_start">Synkroniser ved programstart</string>
+    <string name="sync_on_start_info">Synkroniserer på det meste hvert femte minutt</string>
+    <string name="sync_full_force">Påtving full synkronisering neste gang</string>
+    <string name="notification_prio_low">Lav: Skjult, minimert</string>
+    <string name="bigger_titles">Større navn</string>
+    <string name="legacy">Gammeldags</string>
+    <string name="please_type_before_reminder">Skriv litt tekst før du legger til påminnelse</string>
+    <string name="notification_prio_high">Høy: Øverst, utvidet</string>
 </resources>
