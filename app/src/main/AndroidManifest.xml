@@ -168,7 +168,7 @@
 			android:exported="true"
 			android:label="@string/menu_preferences"
 			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
-			android:theme="@style/Theme.AppCompat">
+			android:theme="@style/ThemeHolo">
 			<!-- TODO you can definitely use a day & night theme,
 			       but the icons should have ?attr/iconTint in the settings xml files -->
 			<meta-data
@@ -228,7 +228,7 @@
 			android:name="com.nononsenseapps.notepad.ShortcutConfig_"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
-			android:theme="@style/Theme.AppCompat.Dialog">
+			android:theme="@style/ThemeDayNightDialog">
 			<intent-filter>
 				<action android:name="android.intent.action.CREATE_SHORTCUT"/>
 
