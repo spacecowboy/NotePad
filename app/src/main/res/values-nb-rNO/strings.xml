@@ -217,4 +217,15 @@
     <string name="legacy">Gammeldags</string>
     <string name="please_type_before_reminder">Skriv litt tekst før du legger til påminnelse</string>
     <string name="notification_prio_high">Høy: Øverst, utvidet</string>
+    <string name="permission_read_label">lesing av notater og lister</string>
+    <string name="drag_to_timetravel">Dra for tidsreise</string>
+    <string name="premiums_unlocked_and_thanks">Premiumsfunksjoner opplåst. Takk for din støtte.</string>
+    <string name="date_header_overdue">Forfalt</string>
+    <string name="hide_checkbox">Skjul avkryssningsboks</string>
+    <string name="hide_checkbox_summary_off">Viser avkryssningsboksen</string>
+    <string name="item_max_height">Maks høyde for notater/gjøremål, i rader</string>
+    <string name="hide_header">Skjul hele miniprogramsnavnet</string>
+    <string name="hide_checkbox_summary_on">Skjuler avkryssningsboksen</string>
+    <string name="gtasks_sync_info">Ikke all info kan synkroniseres med Google Tasks; kun notater, fristdato (ikke tid) og gjøremålsstatus.</string>
+    <string name="permission_read_desc">Lar programmet lese notatene dine og relaterte lister i No Nonsense Notes</string>
 </resources>
