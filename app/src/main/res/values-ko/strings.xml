@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name_short">노트</string>
+    <string name="title_create">새 노트</string>
+    <string name="timemachine">타임머신</string>
+    <string name="time">시간</string>
+    <string name="done">완료</string>
+    <string name="saved">저장 완료</string>
+    <string name="distance">거리</string>
+
+    <string name="near">근처</string>
+    <string name="menu_save_and_add">저장하고 메모 추가</string>
+    <string name="menu_delete">지우기</string>
+    <string name="menu_deletelist">목록 지우기</string>
+    <string name="menu_sync">새로고침</string>
+    <string name="menu_share">공유</string>
+    <string name="menu_preferences">설정</string>
+    <string name="menu_createlist">목록 만들기</string>
+    <string name="menu_clearcompleted">완료된 노트 지우기</string>
+    <string name="menu_setdefaultlist">기본 목록으로 설정</string>
+    <string name="new_default_set">새로운 기본 세트</string>
+    <string name="menu_managelists">목록 관리</string>
+    <string name="add_item">항목 추가</string>
+    <string name="delete_question">삭제?</string>
+    <string name="editor_due_date_hint">목표 날짜</string>
+    <string name="editor_title_hint">제목</string>
+    <string name="editor_note_hint">노트</string>
+    <string name="resolve_edit">노트 고치기</string>
+    <string name="search_hint">찾기</string>
+    <string name="settings_theme">현재 테마</string>
+    <string name="settings_theme_dialog">테마 사용하기</string>
+    <string name="settings_lang">언어</string>
+    <string name="settings_summary_theme_black">검정</string>
+    <string name="settings_summary_theme_dark">어두움</string>
+    <string name="settings_summary_theme_light">밝음</string>
+    <string name="settings_cat_appearance">모양</string>
+    <string name="preference_preview_text">편집기 글꼴이 이렇게 보입니다</string>
+    <string name="settings_account_title">계정 선택</string>
+    <string name="settings_account_summary">계정 바꾸기</string>
+    <string name="settings_sync_enable_title">Google Task 동기화</string>
+    <string name="settings_cat_syncing">동기화</string>
+    <string name="show_from_all_lists">모든 목록</string>
+    <string name="deleted">삭제됨</string>
+    <string name="permission_read_label">노트와 목록을 읽기</string>
+    <string name="permission_read_desc">애플리케이션이 사용자의 노트와 목록을 읽게 합니다.</string>
+    <string name="permission_write_label">노트와 목록을 수정</string>
+    <string name="permission_write_desc">애플리케이션이 노트와 목록을 추가, 수정, 삭제하게 합니다.</string>
+    <string name="settings_list_dialog">목록 선택</string>
+    <string name="settings_list">목록</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <string name="lock_note">노트 잠금</string>
+    <string name="unlock_note">노트 잠금 풀기</string>
+    <string name="locked">잠김</string>
+    <string name="unlocked">잠금 풀림</string>
+    <string name="password_required">비밀번호 필요</string>
+    <string name="select_account">계정 선택</string>
+    <string name="password">비밀번호</string>
+    <string name="password_set">비밀번호 선택됨</string>
+    <string name="password_cleared">비밀번호 지워짐</string>
+    <string name="passwords_dont_match">비밀번호 같지 않음</string>
+    <string name="password_incorrect">비밀번호 틀림</string>
+    <string name="enter_password">비밀번호 입력</string>
+    <string name="enter_new_password">새 비밀번호 입력</string>
+    <string name="confirm_new_password">새 비밀번호 확인</string>
+    <string name="apply">적용</string>
+    <string name="clear_password">비밀번호 지우기</string>
+    <string name="password_info">비밀번호를 설정하면, 잠근 노트를 열기 위해 비밀번호를 입력해야 합니다. 노트를 잠그면 내용은 숨기고 제목과 목표 날짜는 비밀번호 없이 볼 수 있습니다. 내용이 암호화되지 않으므로 Gmail이나 Google Calendar에서 볼 수 있습니다. 비밀번호를 잊으면, Google과 동기화 후 애플리케이션을 다시 설치하십시오.</string>
+    <string name="about">정보</string>
+    <string name="sync_failed">동기화 실패</string>
+    <string name="sync_login_failed">로그인을 실패하여 Google Tasks에 연결할 수 없음</string>
+    <string name="changelog_full_title">애플리케이션 변경 사항</string>
+    <string name="changelog_title">새로운 기능</string>
+    <string name="completed">완료됨</string>
+    <string name="date_header_overdue">목표 날짜 지남</string>
+    <string name="date_header_today">오늘</string>
+    <string name="date_header_tomorrow">내일</string>
+    <string name="date_header_future">나중</string>
+    <string name="date_header_none">날짜 없음</string>
+    <string name="date_header_completed">완료됨</string>
+    <string name="please_select_note">노트를 만들거나 선택하세요</string>
+    <string name="please_create_note">노트를 만드세요</string>
+    <string name="hide_checkbox">체크 표시 숨기기</string>
+    <string name="hide_checkbox_summary_on">체크 표시 보이지 않음</string>
+    <string name="hide_checkbox_summary_off">체크 표시 보임</string>
+    <string name="hide_date">목표 날짜 숨기기</string>
+    <string name="localedefault">언어 설정 따르기</string>
+    <!-- settings string keys -->
+    <string name="hide_header">위젯 제목 숨기기</string>
+    <string name="shortcut_help1">체크하면, 바로가기를 누르면 선택한 리스트에 새 노트를 만들고 편집기를 엽니다. 체크하지 않으면, 선택한 리스트만 보여줍니다.</string>
+    <string name="loading_widget">위젯 읽고 있음&#8230;</string>
+    <string name="notecopied_one">노트 복사됨</string>
+    <string name="notecopied_other">노트 %d개 복사됨</string>
+    <string name="notedeleted_one">노트 지워짐</string>
+    <string name="notedeleted_other">노트 %d개 지워짐</string>
+    <string name="selected_one">노트 선택됨</string>
+    <string name="selected_other">노트 %d개 선택됨</string>
+    <string name="background_sync">백그라운드 동기화</string>
+    <string name="background_sync_info">한 시간마다 동기화</string>
+    <string name="sync_on_change">고칠 때마다 동기화</string>
+    <string name="sync_on_change_info">노트를 고치고 나면 동기화 되도록 설정</string>
+    <string name="sync_on_start">애플리케이션 시작할 때마다 동기화하기</string>
+    <string name="sync_on_start_info">애플리케이션을 \'새로\' 시작할 때에만 동기화됨</string>
+    <string name="sync_full_force">다음 번에 무조건 모두 동기화하도록 하기</string>
+    <string name="sync_full_force_info">몇몇 사항이 제대로 동기화되고 있지 않을 때에만 체크</string>
+    <string name="silent">조용히</string>
+    <string name="sound">소리</string>
+    <string name="vibrate">진동</string>
+    <string name="reminders">알림이</string>
+    <string name="standard">표준</string>
+    <string name="notification_prio_high">상위: 맨 위에서 확장</string>
+    <string name="notification_prio_low">하위: 숨김</string>
+    <string name="priority">우선순위</string>
+    <string name="notifications">알림</string>
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+</resources>

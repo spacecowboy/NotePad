@@ -14,7 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  --><resources>
+  -->
+<resources>
     <string name="app_name_short">便签</string>
     <string name="title_create">新便签</string>
     <string name="timemachine">时光机</string>
@@ -31,6 +32,7 @@
     <string name="menu_createlist">创建列表</string>
     <string name="menu_clearcompleted">清除已完成</string>
     <string name="menu_setdefaultlist">设为默认列表</string>
+    <string name="new_default_set">新的默认设置</string>
     <string name="menu_managelists">管理列表</string>
     <string name="add_item">添加条目</string>
     <string name="delete_question">删除？</string>
@@ -47,22 +49,24 @@
     <string name="sort_list_default">默认排序方式</string>
     <string name="sort_list_alphabetical">按字母顺序</string>
     <string name="sort_list_due">按过期时间顺序</string>
-    <string name="sort_list_updated">按最后更新顺序</string>
+    <string name="sort_list_updated">按最新更新排序</string>
     <string name="sort_list_manual">手动排序</string>
     <string name="search_description">便签与任务</string>
     <string name="archive">归档</string>
+    <string name="view_deletedtasks">@string/archive</string>
     <string name="restore">还原</string>
     <string name="restore_to">还原至</string>
     <string name="search_hint">搜索</string>
     <string name="settings_theme">当前主题</string>
     <string name="settings_theme_dialog">使用主题</string>
     <string name="settings_lang">语言</string>
+    <string name="settings_lang_dialog">@string/settings_lang</string>
     <string name="settings_summary_theme_black">黑色</string>
     <string name="settings_summary_theme_dark">深色</string>
     <string name="settings_summary_theme_light">浅色</string>
     <string name="settings_summary_theme_classic">经典</string>
     <string name="settings_cat_appearance">外观</string>
-    <string name="preference_preview_text">这是编辑器文本的显示方式</string>
+    <string name="preference_preview_text">我能吞下玻璃而不伤身体。</string>
     <string name="settings_account_title">选择一个账户</string>
     <string name="settings_account_summary">点击切换账户</string>
     <string name="settings_sync_enable_title">Google 工作表同步</string>
@@ -74,12 +78,14 @@
     <string name="deleted">已删除</string>
     <string name="repeat">重复</string>
     <string name="once">一次性</string>
+    <string name="always">总是</string>
     <string name="permission_read_label">读取便签和列表</string>
-    <string name="permission_read_desc">允许应用阅读你在 No Nonsense Notes 中的笔记和相关列表</string>
+    <string name="permission_read_desc">允许应用读取你的便签与相关列表。</string>
     <string name="permission_write_label">更改便签与列表</string>
-    <string name="permission_write_desc">允许应用在 No Nonsense Notes 中插入、更新及删除笔记和列表</string>
+    <string name="permission_write_desc">允许应用新增、更改和删除便签与列表。</string>
     <string name="settings_list_dialog">选择一个列表</string>
     <string name="settings_list">列表</string>
+    <string name="drag_to_timetravel">拖到时间旅行</string>
     <string name="import_data_question">导入数据？</string>
     <string name="import_started">正在导入数据。此过程可能需要几秒钟。</string>
     <string name="import_data_msg">您是否要从捐赠版本导入便签？完成后您也可以选择卸载它。</string>
@@ -93,6 +99,15 @@
     <string name="showcase_timemachine_msg">任何更改都会立即保存下来。请使用时光机功能以恢复前一个版本。</string>
     <string name="donate_to_unlock">捐赠后解锁此功能</string>
     <string name="premiums_unlocked_and_thanks">高级功能已解锁。感谢您的支持！</string>
+    <plurals name="notecopied_msg">
+        <item quantity="other">@string/notecopied_other</item>
+    </plurals>
+    <plurals name="notedeleted_msg">
+        <item quantity="other">@string/notecopied_other</item>
+    </plurals>
+    <plurals name="mode_choose">
+        <item quantity="other">@string/notecopied_other</item>
+    </plurals>
     <string name="move">移动</string>
     <string name="move_to">移动到</string>
     <string name="moved_x_to_list">移动 %1$d到%2$s</string>
@@ -126,6 +141,7 @@
     <string name="date_header_none">无日期</string>
     <string name="date_header_completed">已完成</string>
     <string name="next_5_days">未来5天</string>
+    <string name="next_n_days">下%d 天</string>
     <string name="this_week">本周</string>
     <string name="please_select_note">请选择或者创建一个便签</string>
     <string name="please_create_note">请创建一个便签</string>
@@ -145,15 +161,27 @@
     <string name="transparency">透明度</string>
     <string name="notes_shortcut">便签快捷方式</string>
     <string name="shortcut_help1">如果选中，快捷方式将会在选中的列表创建一条便签并打开编辑器。如果不选中，快捷方式只打开选中列表。</string>
-    <string name="loading_widget">正在加载小部件……</string>
+    <string name="loading_widget">正在加载小部件&#8230;&#8230;</string>
     <string name="default_list">默认列表</string>
     <string name="please_type_before_reminder">设置提醒前请先输入一些文字</string>
-    <string name="notecopied_one">已复制 %d 则笔记</string>
+    <string name="notecopied_one">已复制一条便签</string>
     <string name="notecopied_other">已复制 %d 条便签</string>
-    <string name="notedeleted_one">已删除 %d 则笔迹</string>
+    <string name="notecopied_zero">@string/notecopied_other</string>
+    <string name="notecopied_two">@string/notecopied_other</string>
+    <string name="notecopied_few">@string/notecopied_other</string>
+    <string name="notecopied_many">@string/notecopied_other</string>
+    <string name="notedeleted_one">已删除一条便签</string>
     <string name="notedeleted_other">已删除 %d 条便签</string>
-    <string name="selected_one">已选定 %d 则笔记</string>
+    <string name="notedeleted_zero">@string/notecopied_other</string>
+    <string name="notedeleted_two">@string/notecopied_other</string>
+    <string name="notedeleted_few">@string/notecopied_other</string>
+    <string name="notedeleted_many">@string/notecopied_other</string>
+    <string name="selected_one">已选定一条便签</string>
     <string name="selected_other">已选定 %d 条便签</string>
+    <string name="selected_zero">@string/selected_other</string>
+    <string name="selected_two">@string/notecopied_other</string>
+    <string name="selected_few">@string/notecopied_other</string>
+    <string name="selected_many">@string/notecopied_other</string>
     <string name="background_sync">后台同步</string>
     <string name="background_sync_info">每小时同步一次</string>
     <string name="sync_on_change">更改时同步</string>
@@ -161,7 +189,7 @@
     <string name="sync_on_start">应用启动时同步</string>
     <string name="sync_on_start_info">仅在初次启动时进行，再次打开时不再同步</string>
     <string name="sync_full_force">强制下次进行完整同步</string>
-    <string name="sync_full_force_info">仅在您认为同步漏掉了某些项目时勾选。</string>
+    <string name="sync_full_force_info">仅在您确信存在数据缺失时选择此项</string>
     <string name="snooze">打盹</string>
     <string name="silent">静音</string>
     <string name="sound">铃声</string>
@@ -172,6 +200,15 @@
     <string name="notification_prio_low">低：隐藏并最小化显示</string>
     <string name="priority">优先级</string>
     <string name="notifications">通知</string>
+    <string name="dateformat_micro">MMM d</string>
+    <string name="dateformat_weekday">EEEE</string>
+    <string name="dateformat_short_1">E 时间, d MMM</string>
+    <string name="dateformat_short_2">E, d MMM</string>
+    <string name="dateformat_short_3">MMM d</string>
+    <string name="dateformat_short_4">E, 时间</string>
+    <string name="dateformat_long_1">EEEE 时间, MMMM d</string>
+    <string name="dateformat_long_2">E 时间, MMM d</string>
+    <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">任务</string>
     <string name="all_tasks">所有任务</string>
     <string name="dashclock_tasks">任务</string>
@@ -192,4 +229,34 @@
     <string name="dashclock_header_shown">列表名称将会加粗显示。如果“所有列表”被选中，将会显示为“任务”</string>
     <string name="dashclock_first_task_shown">第一个任务的标题会加粗显示</string>
     <string name="dashclock_display_header">显示标题</string>
+    <string name="editor">编辑</string>
+    <string name="bold">加粗</string>
+    <string name="italic">斜体</string>
+    <string name="normal">正常</string>
+    <string name="title_style">标题样式</string>
+    <string name="title_font">标题字体</string>
+    <string name="body_font">正文字体</string>
+    <string name="clickable_links">可点击的链接</string>
+    <string name="small">小</string>
+    <string name="medium">中</string>
+    <string name="large">大</string>
+    <string name="text_size">字体大小</string>
+    <string name="text">文本</string>
+    <string name="add_a_reminder">添加提醒</string>
+    <string name="backup">备用</string>
+    <string name="backup_import">导入备份</string>
+    <string name="backup_export">导出备份</string>
+    <string name="backup_import_msg">是否尝试从%1$s 导入备份？这将清除当前数据库。</string>
+    <string name="backup_export_msg">是否将所有便笺导出到%1$s？</string>
+    <string name="backup_import_success">备份导入成功</string>
+    <string name="backup_file_not_found">无法找到备份文件</string>
+    <string name="backup_import_failed">无法读取备份文件</string>
+    <string name="backup_export_success">已成功导出备份</string>
+    <string name="backup_export_failed">无法写入备份文件</string>
+    <string name="sd_card">SD 卡</string>
+    <string name="sd_card_sync">SD 卡同步</string>
+    <string name="sd_card_summary">任务在SD卡上被镜像。 更改是同步的两种方式。 请注意，删除文件将删除应用程序中的任务！</string>
+    <string name="directory">目录</string>
+    <string name="directory_summary">文件应该存储在哪里</string>
+    <string name="cannot_write_to_directory">无法写入目录</string>
 </resources>

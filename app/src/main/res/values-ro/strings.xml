@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name_short">Note</string>
+    <string name="title_create">Notă nouă</string>
+    <string name="timemachine">Mașina timpului</string>
+    <string name="time">Timp</string>
+    <string name="done">Terminat</string>
+    <string name="saved">Salvat</string>
+    <string name="distance">Distanța</string>
+
+    <string name="near">Aproape</string>
+    <string name="menu_save_and_add">Salvează si adauga nota</string>
+    <string name="menu_delete">Șterge</string>
+    <string name="menu_deletelist">Șterge lista</string>
+    <string name="menu_sync">Actualizează</string>
+    <string name="menu_share">Partajează</string>
+    <string name="menu_preferences">Setări</string>
+    <string name="menu_createlist">Creează lista</string>
+    <string name="menu_clearcompleted">Șterge notele finalizate</string>
+    <string name="menu_setdefaultlist">Stabilește ca listă implicită</string>
+    <string name="new_default_set">Set implicit nou</string>
+    <string name="menu_managelists">Gestionează listele</string>
+    <string name="add_item">Adaugă element</string>
+    <string name="delete_question">Șterge?</string>
+    <string name="delete_items_message">Ești sigur că vrei să ștergi aceste elemente?</string>
+    <string name="delete_item_message">Ești sigur că vrei să ștergi acest element?</string>
+    <string name="delete_list_message">Ești sigur că vrei să ștergi lista?</string>
+    <string name="editor_due_date_hint">Termen</string>
+    <string name="editor_title_hint">Titlu</string>
+    <string name="editor_note_hint">Notă</string>
+    <string name="resolve_edit">Modifică nota</string>
+    <string name="default_style">Stilul implicit</string>
+    <string name="show_items_as_tasks">Afișază elementele ca atribuții</string>
+    <string name="show_items_as_notes">Arată elementele ca notițe</string>
+    <string name="sort_list_default">Ordine de sortare implicită</string>
+    <string name="sort_list_alphabetical">Sortare alfabetică</string>
+    <string name="sort_list_due">Sortare după dată</string>
+    <string name="sort_list_updated">Sortare după ultima actualizare</string>
+    <string name="sort_list_manual">Sortare manuală</string>
+    <string name="search_description">Notițe și atribuții</string>
+    <string name="archive">Arhivă</string>
+
+
+    <string name="restore">Restabilire</string>
+    <string name="restore_to">Restabilire la</string>
+    <string name="search_hint">Caută</string>
+    <string name="settings_theme">Tema actuală</string>
+    <string name="settings_theme_dialog">Folosește tema</string>
+    <string name="settings_lang">Limba</string>
+
+    <string name="settings_summary_theme_black">Negru</string>
+    <string name="settings_summary_theme_dark">Întunecat</string>
+    <string name="settings_summary_theme_light">Luminat</string>
+    <string name="settings_summary_theme_classic">Clasic</string>
+    <string name="settings_cat_appearance">Aspect</string>
+    <string name="preference_preview_text">Așa va fi afișat editorul</string>
+    <string name="settings_account_title">Alege un cont</string>
+    <string name="settings_account_summary">Clic pentru a schimba contul</string>
+    <string name="settings_sync_enable_title">Sincronizare Sarcini Google</string>
+    <string name="gtasks_sync_info">Nu toate informațiile poti fi sincronizate cu Google Tasks. Doar notițele, data scadenței (nu ora) și statutul-todo sunt sincronizate.</string>
+    <string name="settings_cat_syncing">Sincronizare</string>
+    <string name="gtasks">Google Tasks</string>
+    <string name="show_from_all_lists">Toate listele</string>
+    <string name="lists">Liste</string>
+    <string name="deleted">Ștearsă</string>
+    <string name="repeat">Repetă</string>
+    <string name="once">O dată</string>
+    <string name="always">Întotdeauna</string>
+    <string name="permission_read_label">citește notele și listele</string>
+    <string name="permission_read_desc">Permite aplicației să citească notele și listele aferente.</string>
+    <string name="permission_write_label">modifică notele și litele</string>
+    <string name="permission_write_desc">Permite aplicației să adauge, actualizeze și șteargă note și liste.</string>
+    <string name="settings_list_dialog">Alege o listă</string>
+    <string name="settings_list">Listă</string>
+    <string name="drag_to_timetravel">Trage pentru a călatori în timp</string>
+    <string name="import_data_question">Importă datele?</string>
+    <string name="import_started">Se importă datele. Ar putea dura câteva secunde.</string>
+    <string name="import_data_msg">Vrei să imporți notițele din versiunea de donat? Când se termină de importat, îți este dată opțiunea de dezinstalare.</string>
+    <string name="imported_result">S-a importat %1$d notițe în %2$d liste</string>
+    <string name="import_error">Ceva nu a funcționat corect: %s</string>
+    <string name="showcase_main_title">Accesează listele</string>
+    <string name="showcase_main_msg">Atinge iconița sau trage din colțul din stânga</string>
+    <string name="showcase_drawer_title">Gestionează-ți listele</string>
+    <string name="showcase_drawer_msg">Apasă lung pentru a edita sau șterge</string>
+    <string name="showcase_timemachine_title">Salvează-ți notițele</string>
+    <string name="showcase_timemachine_msg">Schimbările sunt întotdeauna salvate. Utilizează mașina timpului pentru a restabili o versiune anterioară.</string>
+    <string name="donate_to_unlock">Donează pentru a debloca</string>
+    <string name="premiums_unlocked_and_thanks">Caracteristicile premium au fost deblocate. Mulțumim pentru sprijinul acordat!</string>
+
+    <string name="move">Mută</string>
+    <string name="move_to">Mută la</string>
+    <string name="moved_x_to_list">Mutat %1$d la %2$s</string>
+    <string name="lock_note">Blochează nota</string>
+    <string name="unlock_note">Deblochează nota</string>
+    <string name="locked">Blocată</string>
+    <string name="unlocked">Deblocată</string>
+    <string name="password_required">Este necesară parola</string>
+    <string name="select_account">Alege un cont</string>
+    <string name="password">Parolă</string>
+    <string name="password_set">Parola a fost salvată</string>
+    <string name="password_cleared">Parola a fost ștearsă</string>
+    <string name="passwords_dont_match">Parolele nu se potrivesc</string>
+    <string name="password_incorrect">Parolă incorectă</string>
+    <string name="enter_password">Introdu parola</string>
+    <string name="enter_new_password">Introdu o parolă nouă</string>
+    <string name="confirm_new_password">Confirmă parola nouă</string>
+    <string name="apply">Se aplică</string>
+    <string name="clear_password">Șterge parola</string>
+    <string name="password_info">Blocarea unei notițe limitează accesul la vizualizarea și modificarea ei. Poți bloca notițe în mod individual. Notițele sunt blocate doar aici și rămân accesibile pe alte aparate.</string>
+    <string name="about">Despre</string>
+    <string name="sync_failed">Sincronizarea a eșuat</string>
+    <string name="sync_login_failed">Autentificarea a eșuat, eroare conexiune la Sarcini Google</string>
+    <string name="changelog_full_title">Modificări</string>
+    <string name="changelog_title">Ce e nou</string>
+    <string name="completed">Finalizat</string>
+    <string name="date_header_overdue">Depășit</string>
+    <string name="date_header_today">Azi</string>
+    <string name="date_header_tomorrow">Mâine</string>
+    <string name="date_header_future">Mai târziu</string>
+    <string name="date_header_none">Fără dată</string>
+    <string name="date_header_completed">Finalizare</string>
+    <string name="next_5_days">Următoarele 5 zile</string>
+    <string name="next_n_days">Următoarele %d zile</string>
+    <string name="this_week">Săptămâna aceasta</string>
+    <string name="please_select_note">Creează sau alege o notă</string>
+    <string name="please_create_note">Creează o notă</string>
+    <string name="hide_checkbox">Ascunde bifa</string>
+    <string name="hide_checkbox_summary_on">Bifa va fi ascunsă</string>
+    <string name="hide_checkbox_summary_off">Bifa va fi afișată</string>
+    <string name="hide_date">Ascunde termenul</string>
+    <string name="item_max_height">Înălțimea maximă a notițelor/sarcinilor</string>
+    <string name="long_date_format">Format extensiv</string>
+    <string name="short_date_format">Format compact</string>
+    <string name="rows">rânduri</string>
+    <string name="select_date">Selectează date</string>
+    <string name="localedefault">Implicit telefon</string>
+    <string name="donate">Donează</string>
+    <string name="donate_thanks">Mulțumim pentru sprijinul acordat!</string>
+    <!-- settings string keys -->
+    <string name="hide_header">Ascunde tot antetul</string>
+    <string name="transparency">Transparență</string>
+    <string name="notes_shortcut">Scurtăturile notițelor</string>
+    <string name="shortcut_help1">Dacă bifezi, scurtătura va crea o notă nouă în lista aleasă și va deschide editorul. Dacă nu bifezi, scurtătura va deschide lista aleasă.</string>
+    <string name="loading_widget">Se încarcă...</string>
+    <string name="default_list">Listă implicită</string>
+    <string name="please_type_before_reminder">Te rugăm să introduci un text înainte de a stabili un memento</string>
+    <string name="notecopied_one">Notiță %d copiată</string>
+    <string name="notecopied_other">Notițe %d copiate</string>
+
+
+    <string name="notedeleted_one">Notița %d ștearsă</string>
+    <string name="notedeleted_other">Notițe %d șterse</string>
+    <string name="notedeleted_zero">@string/notedeleted_other</string>
+    <string name="notedeleted_two">@string/notedeleted_other</string>
+
+
+    <string name="selected_one">Notiță %d selectată</string>
+    <string name="selected_other">Notițe %d selectate</string>
+
+    <string name="background_sync">Fundal sincronizat</string>
+    <string name="background_sync_info">Se sincronizează o dată pe oră</string>
+    <string name="sync_on_change">Sincronizare modificări</string>
+    <string name="sync_on_change_info">Programează o sincronizare la scurt timp după ce o notiță a fost schimbată</string>
+    <string name="sync_on_start">Sincronizare la pornirea aplicației</string>
+    <string name="sync_on_start_info">Se va sincroniza la fiecare 5 minute</string>
+    <string name="sync_full_force">Forțează sincronizarea completă data viitoare</string>
+    <string name="sync_full_force_info">Verifică asta doar dacă crezi că sincronizării îi lipsesc anumite elemente.</string>
+    <string name="snooze">Amână</string>
+    <string name="silent">Silențios</string>
+    <string name="sound">Sunet</string>
+    <string name="vibrate">Vibrează</string>
+    <string name="reminders">Memento-uri</string>
+    <string name="standard">Standard</string>
+    <string name="notification_prio_high">Înalt: În partea de sus, expandat</string>
+    <string name="notification_prio_low">Jos: Ascuns, minimizat</string>
+    <string name="priority">Prioritate</string>
+    <string name="notifications">Notificări</string>
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+    <string name="dateformat_micro">MMM d</string>
+    <string name="dateformat_weekday">EEEE</string>
+    <string name="dateformat_short_1">E ora locală, d MMM</string>
+    <string name="dateformat_short_2">E, d MMM</string>
+    <string name="dateformat_short_3">MMM d</string>
+    <string name="dateformat_short_4">E, ora locală</string>
+    <string name="dateformat_long_1">EEEE ora locală, MMMM d</string>
+    <string name="dateformat_long_2">E ora locală, MMMM d</string>
+    <string name="dateformat_just_date">MMMM d</string>
+    <string name="tasks">Sarcini</string>
+    <string name="all_tasks">Toate sarcinile</string>
+
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Limitează la sarcini în</string>
+    <string name="dashclock_show_overdue_tasks">Arată sarcinile restante</string>
+    <string name="dashclock_overdue_tasks_show">Sarcinile întârziate vor fi afișate</string>
+    <string name="dashclock_overdue_tasks_hide">Sarcinile întârziate vor fi ascunse</string>
+    <string name="dashclock_title_activity_tasks_settings">Setări NoNonsense Notes</string>
+    <string name="dashclock_pref_header_general">General</string>
+    <string name="dashclock_due_upper_limit_title">Limitează la sarcinile care trebuie executate mai târziu</string>
+    <string name="dashclock_today">Astăzi</string>
+    <string name="dashclock_tomorrow">Mâine</string>
+    <string name="dashclock_next7">Următoarele 7 zile</string>
+    <string name="dashclock_anytime">Oricând</string>
+    <string name="dashclock_will_show_as_many_as_possible">O să arate cât mai mult posibile</string>
+
+    <string name="dashclock_show_only_the_next_task">Arată doar următoarea sarcină</string>
+    <string name="dashclock_header_shown">Numele listei va fi afișat îngroșat</string>
+    <string name="dashclock_first_task_shown">Numele primei sarcini din listă va fi îngroșat</string>
+    <string name="dashclock_display_header">Arată numele listei</string>
+    <string name="editor">Editor</string>
+    <string name="bold">Îngroșat</string>
+    <string name="italic">Înclinat</string>
+    <string name="normal">Normal</string>
+    <string name="title_style">Stilul titlului</string>
+    <string name="title_font">Fontul titlului</string>
+    <string name="body_font">Fontul corpului textului</string>
+    <string name="clickable_links">Faceți click pe link-uri</string>
+    <string name="small">Mic</string>
+    <string name="medium">Mediu</string>
+    <string name="large">Mare</string>
+    <string name="text_size">Dimensiunea textului</string>
+    <string name="text">Text</string>
+    <string name="add_a_reminder">Adaugă un memento</string>
+    <string name="backup">Copie de rezervă</string>
+    <string name="backup_import">Importă copia de rezervă</string>
+    <string name="backup_export">Exportă copia de rezervă</string>
+    <string name="backup_import_msg">Încerci să imporți copiile de rezervă din %1$s? Aceasta va șterge baza de date curentă.</string>
+    <string name="backup_export_msg">Exportă toate notițele la %1$s?</string>
+    <string name="backup_import_success">Copiile de rezervă importate cu succes</string>
+    <string name="backup_file_not_found">Copiile de rezervă nu au fost găsite</string>
+    <string name="backup_import_failed">Nu s-a putut citi copia de rezervă</string>
+    <string name="backup_export_success">Copiile de rezervă au fost exportate cu succes</string>
+    <string name="backup_export_failed">Nu se poate scrie pe copia de rezervă</string>
+    <string name="sd_card">Card SD</string>
+    <string name="sd_card_sync">Sincronizare Card SD</string>
+    <string name="sd_card_summary">Sarcinile sunt oglindite pe cardul SD. Modificările sunt sincronizate în ambele sensuri. Rețineți că ștergerea fișierelor va șterge sarcinile din aplicație!</string>
+    <string name="directory">Director</string>
+    <string name="directory_summary">Unde vor fi stocate fișierele.</string>
+
+    <string name="cannot_write_to_directory">Nu se poate scrie în director</string>
+
+</resources>

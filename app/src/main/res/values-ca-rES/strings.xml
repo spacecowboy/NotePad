@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="title_create">Nova anotació</string>
+    <string name="menu_delete">Esborra</string>
+    <string name="menu_deletelist">Esborra la llista</string>
+    <string name="menu_sync">Refresca</string>
+    <string name="menu_share">Comparteix</string>
+    <string name="menu_preferences">Configuració</string>
+    <string name="menu_createlist">Crea una nova llista</string>
+    <string name="menu_setdefaultlist">Estableix com a llista per defecte</string>
+    <string name="menu_managelists">Gestiona les llistes</string>
+    <string name="editor_due_date_hint">Data límit</string>
+    <string name="editor_title_hint">Títol</string>
+    <string name="editor_note_hint">Nota</string>
+    <string name="resolve_edit">Editar nota</string>
+    <string name="search_hint">Cerca</string>
+    <string name="settings_theme">Tema actual</string>
+    <string name="settings_theme_dialog">Usa el tema</string>
+    <string name="settings_lang">Idioma</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <!-- settings string keys -->
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+</resources>

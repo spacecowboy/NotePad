@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name_short">Notlar</string>
+    <string name="title_create">Yeni not</string>
+    <string name="timemachine">Zaman makinesi</string>
+    <string name="time">zaman</string>
+    <string name="done">Tamam</string>
+    <string name="saved">Kaydedildi</string>
+    <string name="distance">Mesafe</string>
+
+    <string name="near">Yakın</string>
+    <string name="menu_save_and_add">not ekleyin ve Kaydedin</string>
+    <string name="menu_delete">Sil</string>
+    <string name="menu_deletelist">Listeyi sil</string>
+    <string name="menu_sync">Yenile</string>
+    <string name="menu_share">Paylaş</string>
+    <string name="menu_preferences">Ayarlar</string>
+    <string name="menu_createlist">Liste oluştur</string>
+    <string name="menu_clearcompleted">Tamamlananları temizle</string>
+    <string name="menu_setdefaultlist">Varsayılan liste olarak ayarla</string>
+    <string name="new_default_set">Yeni varsayılan ayarlar</string>
+    <string name="menu_managelists">Listeleri düzenle</string>
+    <string name="add_item">Öğe ekle</string>
+    <string name="delete_question">Sil?</string>
+    <string name="delete_items_message">Bu öğeyi silmek istediğinize emin misiniz?</string>
+    <string name="delete_item_message">Bu nesneyi silmek istediğinizden emin misiniz?</string>
+    <string name="delete_list_message">Listeyi silmek istediğinizden emin misiniz?</string>
+    <string name="editor_due_date_hint">Bitiş tarihi</string>
+    <string name="editor_title_hint">Başlık</string>
+    <string name="editor_note_hint">Not</string>
+    <string name="resolve_edit">Notu düzenle</string>
+    <string name="default_style">Varsayılan stil</string>
+    <string name="show_items_as_tasks">Nesneleri görevler olarak göster</string>
+    <string name="show_items_as_notes">Nesneleri notlar olarak göster</string>
+    <string name="sort_list_default">Varsayılan sıralama türü</string>
+    <string name="sort_list_alphabetical">Alfabetik olarak sırala</string>
+    <string name="sort_list_due">Vadeye göre sırala</string>
+    <string name="sort_list_updated">Son güncelleme tarihine göre sırala</string>
+    <string name="sort_list_manual">Manuel olarak sırala</string>
+    <string name="search_description">Notlar ve görevler</string>
+    <string name="archive">Arşiv</string>
+
+
+    <string name="restore">Eski haline çevir</string>
+    <string name="restore_to">Eski haline çevir</string>
+    <string name="search_hint">Ara</string>
+    <string name="settings_theme">Kullanılan tema</string>
+    <string name="settings_theme_dialog">Tema seçin</string>
+    <string name="settings_lang">Dil</string>
+
+    <string name="settings_summary_theme_black">Siyah</string>
+    <string name="settings_summary_theme_dark">Koyu</string>
+    <string name="settings_summary_theme_light">Açık</string>
+    <string name="settings_summary_theme_classic">Klasik</string>
+    <string name="settings_cat_appearance">Görünüş</string>
+    <string name="preference_preview_text">Düzenleyici, bu şekilde gösterilecektir.</string>
+    <string name="settings_account_title">Bir hesap seçin</string>
+    <string name="settings_account_summary">Başka bir hesaba geçmek için basın.</string>
+    <string name="settings_sync_enable_title">Google Görevler ile senk.</string>
+    <string name="gtasks_sync_info">Google görevleri ile tüm görevler senkronize edilemez. Sadece notlar, son teslim tarihi (saate göre değil) ve yapmak için durum senkronize edilir.</string>
+    <string name="settings_cat_syncing">Senkronizasyon</string>
+    <string name="gtasks">Google görevleri</string>
+    <string name="show_from_all_lists">Tüm listeler</string>
+    <string name="lists">Listeler</string>
+    <string name="deleted">Silindi: </string>
+    <string name="repeat">Tekrarla</string>
+    <string name="once">Bir defa</string>
+    <string name="always">Herzaman</string>
+    <string name="permission_read_label">Notları ve listeleri oku</string>
+    <string name="permission_read_desc">Uygulamanın notlarınıza ve onların bağlı olduğu listelere erişmesine izin verir.</string>
+    <string name="permission_write_label">Notları ve listeleri değiştir</string>
+    <string name="permission_write_desc">Uygulamanın yeni notlar ve listeler oluşturmasına, varolanları düzenlemesine veya silmesine izin verir.</string>
+    <string name="settings_list_dialog">Bir liste seçin</string>
+    <string name="settings_list">Liste</string>
+    <string name="drag_to_timetravel">Zamanda yolculuk sürükleyin</string>
+    <string name="import_data_question">Veri aktarılsın mı?</string>
+    <string name="import_started">Veriler aktarılıyor. Bu bir kaç saniye sürebilir.</string>
+    <string name="import_data_msg">Bağış sürümünden notları içe aktarmak ister misiniz?  Bittiği zaman size de kaldırma seçeneği verilir.</string>
+    <string name="imported_result">Listelerden%1$d içe aktarılan%2$dnotlar</string>
+    <string name="import_error">Bir şeyler yanlış gitti: %s</string>
+    <string name="showcase_main_title">Listelerinize erişin</string>
+    <string name="showcase_main_msg">Simgeye dokunun veya sol kenardan hızlı bir şekilde kaydırın</string>
+    <string name="showcase_drawer_title">Listelerinizi yönetin</string>
+    <string name="showcase_drawer_msg">Silmek veya düzenlemek için uzunca basılı tutun</string>
+    <string name="showcase_timemachine_title">Notlarınızı kaydetme</string>
+    <string name="showcase_timemachine_msg">Değişiklikler her zaman kaydedildi. Bir önceki sürümü geri yüklemek için zaman makinesi kullanın.</string>
+    <string name="donate_to_unlock">Kilidi açmak için bağış yapın</string>
+    <string name="premiums_unlocked_and_thanks">Premium özelliklerin kilidi kaldırıldı. Desteğiniz için teşekkürler.</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <string name="move">Taşı</string>
+    <string name="move_to">Buraya taşı</string>
+    <string name="moved_x_to_list">Buraya%1$d taşındı%2$s</string>
+    <string name="lock_note">Notu kilitle</string>
+    <string name="unlock_note">Kilidi kaldır</string>
+    <string name="locked">Kilitlendi</string>
+    <string name="unlocked">Kilit kaldırıldı</string>
+    <string name="password_required">Parola gerekli</string>
+    <string name="select_account">Bir hesap seçin</string>
+    <string name="password">Parola</string>
+    <string name="password_set">Parola belirlendi</string>
+    <string name="password_cleared">Parola temizlendi</string>
+    <string name="passwords_dont_match">Parolalar uyuşmuyor</string>
+    <string name="password_incorrect">Parola yanlış</string>
+    <string name="enter_password">Parolayı girin</string>
+    <string name="enter_new_password">Yeni parolayı girin</string>
+    <string name="confirm_new_password">Yeni parolayı doğrulayın</string>
+    <string name="apply">Uygula</string>
+    <string name="clear_password">Parolayı kaldır</string>
+    <string name="password_info">Bir parola belirlediğiniz takdirde, notlarınızı görmek için parolayıgirmeniz gerekir. Bu işlem sadece notun gövde metnini korur, yani notun başlığını ve bitiştarihini her zaman görebilirsiniz. Bu işlem ile notlarınız sadece parola ile korunur. Şifrelemeyapılmadığından dolayı Gmail ve Google Takvim gibi uygulamalarda hala görülebilir. Eğer parolayıunutursanız notlarınızı Google ile senkronize edin ve ardından uygulamayı tekrar yükleyin.</string>
+    <string name="about">Hakkında</string>
+    <string name="sync_failed">Senkronizasyon başarısız</string>
+    <string name="sync_login_failed">Giriş yapılamadı, Google Görevler\'e erişilemiyor</string>
+    <string name="changelog_full_title">Değişiklikler</string>
+    <string name="changelog_title">Yenilikler</string>
+    <string name="completed">Tamamlanmış</string>
+    <string name="date_header_overdue">Son gün</string>
+    <string name="date_header_today">Bugün</string>
+    <string name="date_header_tomorrow">Yarın</string>
+    <string name="date_header_future">İlerki zaman</string>
+    <string name="date_header_none">Tarih belirlenmemiş</string>
+    <string name="date_header_completed">Tamamlanmış</string>
+    <string name="next_5_days">Sonraki 5 gün</string>
+    <string name="next_n_days">Sonraki %d günler</string>
+    <string name="this_week">Bu hafta</string>
+    <string name="please_select_note">Lütfen bir not seçin yada oluşturun</string>
+    <string name="please_create_note">Lütfen bir not oluşturun</string>
+    <string name="hide_checkbox">İşaretleme kutusunu gizle</string>
+    <string name="hide_checkbox_summary_on">İşaretleme kutusu gizlenecektir</string>
+    <string name="hide_checkbox_summary_off">İşaretleme kutusu gösterilecektir</string>
+    <string name="hide_date">Bitiş tarihini gizle</string>
+    <string name="item_max_height">Maximum not uzunluğu/görevler</string>
+    <string name="long_date_format">Uzun tarih formatı</string>
+    <string name="short_date_format">Kısa tarih formatı</string>
+    <string name="rows">Satırlar</string>
+    <string name="select_date">Tarih seç</string>
+    <string name="localedefault">Varsayılan yerel ayar</string>
+    <string name="donate">Bağış yap</string>
+    <string name="donate_thanks">Desteğin için teşekkür ederiz!</string>
+    <!-- settings string keys -->
+    <string name="hide_header">Başlık panelini gizle</string>
+    <string name="transparency">Saydamlık</string>
+    <string name="notes_shortcut">Kısayol notları</string>
+    <string name="shortcut_help1">İşaretlendiği taktirde, kısayol seçilen listede yeni bir not yaratacak ve editörü açacaktır. İşaretlenmediği taktirde, kısayol seçilen listeyi açacaktır.</string>
+    <string name="loading_widget">Widget yükleniyor</string>
+    <string name="default_list">Varsayılan liste</string>
+    <string name="please_type_before_reminder">Lütfen bir hatırlatıcı ayarlamadan önce bir kaç metin yazın</string>
+    <string name="notecopied_one">Bir not kopyalandı</string>
+    <string name="notecopied_other">%d tane not kopyalandı</string>
+    <string name="notecopied_zero">@string/notecopied_other</string>
+    <string name="notecopied_two">@string/notecopied_other</string>
+    <string name="notecopied_few">@string/notecopied_other</string>
+    <string name="notecopied_many">@string/notecopied_other</string>
+    <string name="notedeleted_one">Bir not silindi</string>
+    <string name="notedeleted_other">%d tane not silindi</string>
+    <string name="notedeleted_zero">@string/notedeleted_other</string>
+    <string name="notedeleted_two">@string/notedeleted_other</string>
+    <string name="notedeleted_few">@string/notedeleted_other</string>
+    <string name="notedeleted_many">@string/notedeleted_other</string>
+    <string name="selected_one">Bir not seçildi</string>
+    <string name="selected_other">%d tane not seçildi</string>
+    <string name="selected_zero">@string/selected_other</string>
+    <string name="selected_two">@string/selected_other</string>
+    <string name="selected_few">@string/selected_other</string>
+    <string name="selected_many">@string/selected_other</string>
+    <string name="background_sync">Arkaplan senkronizasyonu</string>
+    <string name="background_sync_info">Saatte bir defa senkronize et</string>
+    <string name="sync_on_change">Değişiklikleri senkronize et</string>
+    <string name="sync_on_change_info">Herhangi bir not değiştikten kısa bir süre sonra bir senkronizasyonu zamanlar</string>
+    <string name="sync_on_start">Uygulamanın başlangıcında senkronize et</string>
+    <string name="sync_on_start_info">En fazla 5 dakikada bir senkronize et</string>
+    <string name="sync_full_force">Bir dahaki senkronizasyonda tamamlamayı zorla</string>
+    <string name="sync_full_force_info">Senkronizasyonun bazı nesnelerin eksik olduğunu düşünüyorsanız, bunu kontrol edin.</string>
+    <string name="snooze">Ertele</string>
+    <string name="silent">Sessize al</string>
+    <string name="sound">Sesli</string>
+    <string name="vibrate">Titreşim</string>
+    <string name="reminders">Hatırlatmalar</string>
+    <string name="standard">Standart</string>
+    <string name="notification_prio_high">Yüksek: en iyiler , genişletildi</string>
+    <string name="notification_prio_low">Düşük: Gizlendi, küçültüldü</string>
+    <string name="priority">Öncelikli</string>
+    <string name="notifications">Bildirimler</string>
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+    <string name="dateformat_micro">MMM d</string>
+    <string name="dateformat_weekday">EEEE</string>
+    <string name="dateformat_short_1">E localtime, d MMM</string>
+    <string name="dateformat_short_2">E, d MMM</string>
+    <string name="dateformat_short_3">MMM d</string>
+    <string name="dateformat_short_4">E, yerelzaman</string>
+    <string name="dateformat_long_1">EEEE yerelzaman, AAAA d</string>
+    <string name="dateformat_long_2">E yerelzaman, d MMM</string>
+    <string name="dateformat_just_date">MMMM d</string>
+    <string name="tasks">Görevler</string>
+    <string name="all_tasks">Tüm görevler</string>
+
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Görevleri sınırla</string>
+    <string name="dashclock_show_overdue_tasks">Gecikmiş görevleri göster</string>
+    <string name="dashclock_overdue_tasks_show">Gecikmiş görevler gösterilecek</string>
+    <string name="dashclock_overdue_tasks_hide">Gecikmiş görevler gizlenecek</string>
+    <string name="dashclock_title_activity_tasks_settings">NoNonsense Not Ayarları</string>
+    <string name="dashclock_pref_header_general">Genel</string>
+    <string name="dashclock_due_upper_limit_title">Görevleri en son sınırla</string>
+    <string name="dashclock_today">Bugün</string>
+    <string name="dashclock_tomorrow">Yarın</string>
+    <string name="dashclock_next7">7 gün sonra</string>
+    <string name="dashclock_anytime">Herzaman</string>
+    <string name="dashclock_will_show_as_many_as_possible">Mümkün olduğu kadar fazla gösterecek</string>
+    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+    <string name="dashclock_show_only_the_next_task">Yalnızca bir sonraki görevi göster</string>
+    <string name="dashclock_header_shown">Liste adı kalın yazıyla gösterilecek</string>
+    <string name="dashclock_first_task_shown">İlk görevin başlığı kalın gösterilecek</string>
+    <string name="dashclock_display_header">Liste adını görüntüle</string>
+    <string name="editor">Editör</string>
+    <string name="bold">Kalın</string>
+    <string name="italic">İtalik/Eğik Yazı</string>
+    <string name="normal">Normal</string>
+    <string name="title_style">Başlık stili</string>
+    <string name="title_font">Başlık yazı tipi</string>
+    <string name="body_font">Gövde yazı tipi</string>
+    <string name="clickable_links">Tıklanabilir bağlantılar</string>
+    <string name="small">Küçük</string>
+    <string name="medium">Orta</string>
+    <string name="large">Büyük</string>
+    <string name="text_size">Metin boyutu</string>
+    <string name="text">Metin</string>
+    <string name="add_a_reminder">Hatırlatma ekle</string>
+    <string name="backup">Yedekle</string>
+    <string name="backup_import">Yedeği aktar</string>
+    <string name="backup_export">Yedeği dışa aktar</string>
+    <string name="backup_import_msg">Yedeklemeyi içe aktarın %1$s Bu, mevcut veri tabanını temizleyecektir.</string>
+    <string name="backup_export_msg">Bütün notları dışa aktar%1$s?</string>
+    <string name="backup_import_success">Yedekleme başarıyla içe aktarıldı</string>
+    <string name="backup_file_not_found">Yedek dosya bulunamadı</string>
+    <string name="backup_import_failed">Yedek dosya okunamadı</string>
+    <string name="backup_export_success">Yedek başarıyla dışa aktarıldı</string>
+    <string name="backup_export_failed">Yedek dosyaya yazılamıyor</string>
+    <string name="sd_card">SD kart</string>
+    <string name="sd_card_sync">SD kart senkronizasyonu</string>
+    <string name="sd_card_summary">Görevler SD karta yansıtıldı. Değişiklikler her iki açıdan senkronize edildi. Dosyaları silmenin , uygulamadaki görevleri sileceğini unutmayın!</string>
+    <string name="directory">Rehber</string>
+    <string name="directory_summary">Dosyaların saklanacağı yer.</string>
+
+    <string name="cannot_write_to_directory">Rehbere yazılmıyor</string>
+
+</resources>

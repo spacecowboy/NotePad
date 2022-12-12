@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name_short">Σημειώσεις</string>
+    <string name="title_create">Νέα Σημείωση</string>
+    <string name="timemachine">Χρονομηχανή</string>
+    <string name="time">Ώρα</string>
+    <string name="done">Έγινε</string>
+    <string name="saved">Αποθηκεύτηκε</string>
+    <string name="distance">Απόσταση</string>
+
+    <string name="near">Κοντά </string>
+    <string name="menu_save_and_add">Αποθήκευση και άνοιγμα νέας σημείωσης</string>
+    <string name="menu_delete">Διαγραφή</string>
+    <string name="menu_deletelist">Διαγραφή λίστας</string>
+    <string name="menu_sync">Ανανέωση</string>
+    <string name="menu_share">Μοίρασμα</string>
+    <string name="menu_preferences">Ρυθμίσεις</string>
+    <string name="menu_createlist">Δημιουργίας λίστας</string>
+    <string name="menu_clearcompleted">Καθαρισμός ολοκληρώθηκε</string>
+    <string name="menu_setdefaultlist">Ορισμός ως προεπιλεγμένη λίστα</string>
+    <string name="new_default_set">Νέα προεπιλογή</string>
+    <string name="menu_managelists">Διαχείριση λιστών</string>
+    <string name="add_item">Προσθήκη αντικειμένου</string>
+    <string name="delete_question">Διαγραφή;</string>
+    <string name="delete_items_message">Είστε σίγουρος/η οτι θέλετε να διαγράψετε αυτά τα αντικείμενα;</string>
+    <string name="delete_item_message">Είστε σίγουρος/η οτι θέλετε να διαγράψετε αυτό το αντικείμενο;</string>
+    <string name="delete_list_message">Είστε σίγουρος/η οτι θέλετε να διαγράψετε τη λίστα;</string>
+    <string name="editor_due_date_hint">Ημερομηνία λήξης</string>
+    <string name="editor_title_hint">Τίτλος</string>
+    <string name="editor_note_hint">Σημείωση</string>
+    <string name="resolve_edit">Επεξεργασία Σημείωσης</string>
+    <string name="default_style">Προεπιλεγμένο στύλ</string>
+    <string name="show_items_as_tasks">Προβολή αντικειμένων ως εργασίες</string>
+    <string name="show_items_as_notes">Προβολή αντικειμένων ως σημειώσεις</string>
+    <string name="sort_list_default">Προεπιλεγμένη σειρά ταξινόμησης</string>
+    <string name="sort_list_alphabetical">Ταξινόμηση αλφαβητικά</string>
+    <string name="sort_list_due">Ταξινόμηση κατα ημερομηνία λήξης</string>
+    <string name="sort_list_updated">Ταξινόμηση κατα τελευταία ενημέρωση</string>
+    <string name="sort_list_manual">Χειροκίνητη ταξινόμηση</string>
+    <string name="search_description">Σημειώσεις και εργασίες</string>
+    <string name="archive">Αρχείο</string>
+
+
+    <string name="restore">Επαναφορά</string>
+    <string name="restore_to">Επαναφορά σε</string>
+    <string name="search_hint">Αναζήτηση</string>
+    <string name="settings_theme">Τρέχον θέμα</string>
+    <string name="settings_theme_dialog">Χρήση θέματος</string>
+    <string name="settings_lang">Γλώσσα</string>
+
+    <string name="settings_summary_theme_black">Μαύρο</string>
+    <string name="settings_summary_theme_dark">Σκοτεινό</string>
+    <string name="settings_summary_theme_light">Ανοιχτόχρωμο</string>
+    <string name="settings_summary_theme_classic">Κλασσικό</string>
+    <string name="settings_cat_appearance">Εμφάνιση</string>
+    <string name="preference_preview_text">Έτσι θα εμφανίζεται ο επεξεργαστής  κειμένου</string>
+    <string name="settings_account_title">Επιλογή λογαριασμού</string>
+    <string name="settings_account_summary">Πατήστε για εναλλαγή λογαριασμού</string>
+    <string name="settings_sync_enable_title">Συγχρονισμός με Google Tasks</string>
+    <string name="gtasks_sync_info">Δεν μπορούν να συγχρονιστούν όλες οι πληροφορίες με το Google Tasks. Μόνο οι σημειώσεις, η ημερομηνία λήξης (όχι η ώρα) και η κατάσταση todo συγχρονίζονται.</string>
+    <string name="settings_cat_syncing">Συγχρονισμός </string>
+    <string name="gtasks">Google Tasks</string>
+    <string name="show_from_all_lists">Όλες οι λίστες</string>
+    <string name="lists">Λίστες</string>
+    <string name="deleted">Διαγράφηκε</string>
+    <string name="repeat">Επανάληψη</string>
+    <string name="once">Μια φορά</string>
+    <string name="always">Πάντα</string>
+    <string name="permission_read_label">ανάγνωση σημειώσεων και λιστών</string>
+    <string name="permission_read_desc">Επιτρέπει στην εφαρμογή να διαβάζει τις σημειώσεις σας και σχετικές λίστες.</string>
+    <string name="permission_write_label">τροποποίηση σημειώσεων και λιστών</string>
+    <string name="permission_write_desc">Επιτρέπει στην εφαρμογή την εισαγωγή, ενημέρωση και διαγραφή σημειώσεων και λιστών.</string>
+    <string name="settings_list_dialog">Επιλογή λίστας</string>
+    <string name="settings_list">Λίστα</string>
+    <string name="drag_to_timetravel">Σύρετε για πλοήγηση στο χρόνο</string>
+    <string name="import_data_question">Εισαγωγή δεδομένων;</string>
+    <string name="import_started">Γίνεται εισαγωγή δεδομένων. Μπορεί να διαρκέσει μερικα δευτερόλεπτα</string>
+    <string name="import_data_msg">Θα θέλατε να εισάγετε τις σημειώσεις από την δωρεάν έκδοση; Όταν τελειώσει, σας δίνεται, επίσης, η επιλογή να το απεγκαταστήσετε.</string>
+    <string name="imported_result">Εισήχθησαν %1$d σημειώσεις σε %2$d λίστες</string>
+    <string name="import_error">Κάτι πήγε στραβά: %s</string>
+    <string name="showcase_main_title">Πρόσβαση στις λίστες σας </string>
+    <string name="showcase_main_msg">Πατήστε το εικονίδιο ή σαρώστε από την αριστερή άκρη</string>
+    <string name="showcase_drawer_title">Διαχειριστήτε τις λίστες σας </string>
+    <string name="showcase_drawer_msg">Παρατεταμένο πάτημα για επεξεργασία ή διαγραφή</string>
+    <string name="showcase_timemachine_title">Αποθηκεύστε τις σημειώσεις σας</string>
+    <string name="showcase_timemachine_msg">Οι αλλαγές αποθηκεύονται πάντα. Χρησιμοποιήστε τη χρονομηχανή για να επαναφέρετε μια προηγούμενη έκδοση.</string>
+    <string name="donate_to_unlock">Κάντε δωρεά για να ξεκλειδώσετε</string>
+    <string name="premiums_unlocked_and_thanks">Τα Premium χαρακτηριστικά ξεκλειδώθηκαν. Σας ευχαριστούμε για την υποστήριξή σας!</string>
+    <!--
+        Use few if language need it. In English is the same.
+        <item quantity="few">Copied 2 notes.</item>
+    -->
+    <plurals name="notecopied_msg">
+        <item quantity="one">@string/notecopied_one</item>
+        <item quantity="other">@string/notecopied_other</item>
+    </plurals>
+    <plurals name="notedeleted_msg">
+        <item quantity="one">@string/notedeleted_one</item>
+        <item quantity="other">@string/notedeleted_other</item>
+    </plurals>
+    <plurals name="mode_choose">
+        <item quantity="one">@string/selected_one</item>
+        <item quantity="other">@string/selected_other</item>
+    </plurals>
+    <string name="move">Μετακίνηση</string>
+    <string name="move_to">Μετακίνηση σε</string>
+    <string name="moved_x_to_list">Μετακινήθηκαν %1$d στο %2$s</string>
+    <string name="lock_note">Κλείδωμα σημείωσης</string>
+    <string name="unlock_note">Ξεκλείδωμα σημείωσης</string>
+    <string name="locked">Κλειδωμένο</string>
+    <string name="unlocked">Ξεκλείδωτο</string>
+    <string name="password_required">Απαιτείται κωδικός</string>
+    <string name="select_account">Επιλογή λογαριασμού</string>
+    <string name="password">Κωδικός</string>
+    <string name="password_set">Ορισμός κωδικού</string>
+    <string name="password_cleared">Κωδικός μηδενίστηκε</string>
+    <string name="passwords_dont_match">Κωδικοί δεν ταιριάζουν</string>
+    <string name="password_incorrect">Λάθος κωδικός</string>
+    <string name="enter_password">Εισάγετε κωδικό</string>
+    <string name="enter_new_password">Εισάγετε νέο κωδικό</string>
+    <string name="confirm_new_password">Επιβεβαίωση νέου κωδικού</string>
+    <string name="apply">Εφαρμογή</string>
+    <string name="clear_password">Μηδενισμός κωδικού</string>
+    <string name="password_info">Κλειδώνοντας μια σημείωση περιορίζεται η πρόσβαση στην ανάγνωση ή τροποποίησή της. Οι σημειώσεις προστατεύονται μόνο εδώ ενώ είναι πλήρως προσβάσιμες από άλλες συσκευές.</string>
+    <string name="about">Σχετικά με την εφαρμογή</string>
+    <string name="sync_failed">Αποτυχία συγχρονισμού</string>
+    <string name="sync_login_failed">Σύνδεση απέτυχε, δεν μπορούσε να συνδεθεί με το Google Tasks</string>
+    <string name="changelog_full_title">Λίστα αλλαγών</string>
+    <string name="changelog_title">Τί νέο υπάρχει</string>
+    <string name="completed">Ολοκληρωμένο</string>
+    <string name="date_header_overdue">Εκπρόθεσμα</string>
+    <string name="date_header_today">Σήμερα</string>
+    <string name="date_header_tomorrow">Αύριο</string>
+    <string name="date_header_future">Αργότερα</string>
+    <string name="date_header_none">Χωρίς ημερομηνία</string>
+    <string name="date_header_completed">Ολοκληρωμένο</string>
+    <string name="next_5_days">Επόμενες 5 ημέρες</string>
+    <string name="next_n_days">Επόμενες %d ημέρες</string>
+    <string name="this_week">Τρέχουσα Εβδομάδα</string>
+    <string name="please_select_note">Παρακαλώ επιλέξτε ή δημιουργήστε μια σημείωση</string>
+    <string name="please_create_note">Παρακαλώ δημιουργήστε μια σημείωση</string>
+    <string name="hide_checkbox">Απόκρυψη πλαισίου ελέγχου</string>
+    <string name="hide_checkbox_summary_on">Το πλαίσιο ελέγχου δεν θα εμφανίζεται</string>
+    <string name="hide_checkbox_summary_off">Το πλαίσιο ελέγχου θα εμφανίζεται</string>
+    <string name="hide_date">Απόκρυψη Ημ/νίας λήξης</string>
+    <string name="item_max_height">Μέγιστο ύψος των σημειώσεων/εργασιών</string>
+    <string name="long_date_format">Μορφή πλήρους ημερομηνίας</string>
+    <string name="short_date_format">Μορφή σύντομης ημερομηνίας</string>
+    <string name="rows">σειρές</string>
+    <string name="select_date">Επιλέξτε ημερομηνία</string>
+    <string name="localedefault">Προεπιλεγμένη γλώσσα</string>
+    <string name="donate">Δωρήστε</string>
+    <string name="donate_thanks">Ευχαριστούμε για την υποστήριξη!</string>
+    <!-- settings string keys -->
+    <string name="hide_header">Απόκρυψη όλης της επικεφαλίδας widget</string>
+    <string name="transparency">Διαφάνεια</string>
+    <string name="notes_shortcut">Συντόμευση σημειώσεων</string>
+    <string name="shortcut_help1">Εάν επιλεγεί, η συντόμευση θα δημιουργήσει μια νέα σημείωση στην επιλεγμένη λίστα και θα ανοίξει το πρόγραμμα επεξεργασίας. Εάν δεν είναι επιλεγμένη, η συντόμευση θα ανοίξει την επιλεγμένη λίστα.</string>
+    <string name="loading_widget">Φόρτωση Widget&#8230;</string>
+    <string name="default_list">Προεπιλεγμένη λίστα</string>
+    <string name="please_type_before_reminder">Παρακαλώ πληκτρολογήστε κάποιο κείμενο πριν να ορίσετε μια υπενθύμιση</string>
+    <string name="notecopied_one">Αντιγραφή %d σημείωσης</string>
+    <string name="notecopied_other">Αντιγραφή %d σημειώσεων</string>
+    <string name="notecopied_zero">@string/notecopied_other</string>
+    <string name="notecopied_two">@string/notecopied_other</string>
+    <string name="notecopied_few">@string/notecopied_other</string>
+    <string name="notecopied_many">@string/notecopied_other</string>
+    <string name="notedeleted_one">Διαγραφή %d σημείωσης</string>
+    <string name="notedeleted_other">Διαγράφηκαν %d σημειώσεις</string>
+    <string name="notedeleted_zero">@string/notedeleted_other</string>
+    <string name="notedeleted_two">@string/notedeleted_other</string>
+    <string name="notedeleted_few">@string/notedeleted_other</string>
+    <string name="notedeleted_many">@string/notedeleted_other</string>
+    <string name="selected_one">Επιλέχτηκε %d σημείωση</string>
+    <string name="selected_other">Επιλέχτηκαν %d σημειώσεις</string>
+    <string name="selected_zero">@string/selected_other</string>
+    <string name="selected_two">@string/selected_other</string>
+    <string name="selected_few">@string/selected_other</string>
+    <string name="selected_many">@string/selected_other</string>
+    <string name="background_sync">Συγχρονισμός στο παρασκήνιο</string>
+    <string name="background_sync_info">Συγχρονίζεται κάθε μία ώρα</string>
+    <string name="sync_on_change">Συγχρονισμός σε κάθε αλλαγή</string>
+    <string name="sync_on_change_info">Διενεργεί ένα συγχρονισμό αμέσως μετά από την τροποποίηση μιας σημείωσης</string>
+    <string name="sync_on_start">Συγχρονισμός κατά την έναρξη της εφαρμογής</string>
+    <string name="sync_on_start_info">Θα συγχρονίζεται το πολύ κάθε 5 λεπτά</string>
+    <string name="sync_full_force">Επιβολή πλήρους συγχρονισμού την επόμενη φορά</string>
+    <string name="sync_full_force_info">Επιλέγξτε αυτό μόνον εάν πιστεύετε ότι ο συγχρονισμός παρέλειψε κάποια στοιχεία.</string>
+    <string name="snooze">Αναβολή</string>
+    <string name="silent">Αθόρυβο</string>
+    <string name="sound">Ήχος</string>
+    <string name="vibrate">Δόνηση</string>
+    <string name="reminders">Υπενθυμίσεις</string>
+    <string name="standard">Τυπικό</string>
+    <string name="notification_prio_high">Υψηλή: Στην κορυφή, σε επέκταση</string>
+    <string name="notification_prio_low">Χαμηλή: Κρυφή, ελαχιστοποιημένη</string>
+    <string name="priority">Προτεραιότητα</string>
+    <string name="notifications">Ειδοποιήσεις</string>
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+    <string name="dateformat_micro">MMM d</string>
+    <string name="dateformat_weekday">EEEE</string>
+    <string name="dateformat_short_1">E localtime, d MMM</string>
+    <string name="dateformat_short_2">E, d MMM</string>
+    <string name="dateformat_short_3">MMM d</string>
+    <string name="dateformat_short_4">E, localtime</string>
+    <string name="dateformat_long_1">EEEE localtime, MMMM d</string>
+    <string name="dateformat_long_2">E localtime, MMM d</string>
+    <string name="dateformat_just_date">MMMM d</string>
+    <string name="tasks">Εργασίες</string>
+    <string name="all_tasks">Όλες οι εργασίες</string>
+    <string name="dashclock_tasks">@string/tasks</string>
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Περιορισμός σε εργασίες στο</string>
+    <string name="dashclock_show_overdue_tasks">Εμφάνιση εκπρόθεσμων εργασιών</string>
+    <string name="dashclock_overdue_tasks_show">Οι εκπρόθεσμες εργασίες θα εμφανίζονται</string>
+    <string name="dashclock_overdue_tasks_hide">Οι εκπρόθεσμες εργασίες δεν θα εμφανίζονται</string>
+    <string name="dashclock_title_activity_tasks_settings">Ρυθμίσεις NoNonsense Notes</string>
+    <string name="dashclock_pref_header_general">Γενικές</string>
+    <string name="dashclock_due_upper_limit_title">Εργασίες που λήγουν το αργότερο όριο σε</string>
+    <string name="dashclock_today">Σήμερα</string>
+    <string name="dashclock_tomorrow">Αύριο</string>
+    <string name="dashclock_next7">Επόμενες 7 ημέρες</string>
+    <string name="dashclock_anytime">Οποτεδήποτε</string>
+    <string name="dashclock_will_show_as_many_as_possible">Θα εμφανίζονται όσο το δυνατόν περισσότερα</string>
+    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+    <string name="dashclock_show_only_the_next_task">Εμφάνισε μόνο την επόμενη εργασία</string>
+    <string name="dashclock_header_shown">Το όνομα της λίστα θα εμφανίζεται με έντονη γραφή</string>
+    <string name="dashclock_first_task_shown">Ο τίτλος της πρώτης εργασίας θα εμφανίζεται με έντονους χαρακτήρες</string>
+    <string name="dashclock_display_header">Εμφανιζόμενο όνομα λίστας</string>
+    <string name="editor">Πρόγραμμα επεξεργασίας</string>
+    <string name="bold">Έντονα</string>
+    <string name="italic">Πλάγια γραφή</string>
+    <string name="normal">Κανονικά</string>
+    <string name="title_style">Στυλ τίτλου</string>
+    <string name="title_font">Γραμματοσειρά τίτλου</string>
+    <string name="body_font">Γραμματοσειρά κυρίως κειμένου</string>
+    <string name="clickable_links">Ενεργοί σύνδεσμοι</string>
+    <string name="small">Μικρά</string>
+    <string name="medium">Μεσαία</string>
+    <string name="large">Μεγάλα</string>
+    <string name="text_size">Μέγεθος κειμένου</string>
+    <string name="text">Κείμενο</string>
+    <string name="add_a_reminder">Προσθήκη υπενθύμισης</string>
+    <string name="backup">Αντίγραφα ασφαλείας</string>
+    <string name="backup_import">Εισαγωγή αντιγράφου ασφαλείας</string>
+    <string name="backup_export">Εξαγωγή αντιγράφου ασφαλείας</string>
+    <string name="backup_import_msg">Επιχειρήσατε να εισαγάγετε αντίγραφο ασφαλείας από %1$s; Αυτό θα διαγράψει την τρέχουσα βάση δεδομένων.</string>
+    <string name="backup_export_msg">Εξαγωγή όλων των σημειώσεων στο %1$s;</string>
+    <string name="backup_import_success">Η εισαγωγή αντιγράφου ασφαλείας ολοκληρώθηκε με επιτυχία</string>
+    <string name="backup_file_not_found">Δεν ήταν δυνατή η εύρεση του αρχείου αντιγράφου ασφαλείας</string>
+    <string name="backup_import_failed">Απέτυχε η ανάγνωση του αρχείου αντιγράφου ασφαλείας</string>
+    <string name="backup_export_success">Η εξαγωγή αντιγράφου ασφαλείας ολοκληρώθηκε με επιτυχία</string>
+    <string name="backup_export_failed">Δεν μπορώ να γράψω στο αρχείο αντιγράφου ασφαλείας</string>
+    <string name="sd_card">Κάρτα SD</string>
+    <string name="sd_card_sync">Συγχρονισμός κάρτας SD</string>
+    <string name="sd_card_summary">Οι εργασίες συγχρονίζονται στην κάρτα SD. Οι αλλαγές συγχρονίζονται αμφίδρομα. Σημειώστε ότι διαγράφοντας τα αρχεία θα διαγραφούν οι εργασίες στην εφαρμογή!</string>
+    <string name="directory">Κατάλογος</string>
+    <string name="directory_summary">Πού θα πρέπει να αποθηκεύονται τα αρχεία.</string>
+
+    <string name="cannot_write_to_directory">Δεν είναι δυνατή η εγγραφή στον φάκελο</string>
+
+</resources>

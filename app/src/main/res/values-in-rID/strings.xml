@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+<resources>
+    <string name="app_name_short">Catatan</string>
+    <string name="title_create">Catatan Baru</string>
+    <string name="timemachine">Mesin waktu</string>
+    <string name="time">Waktu</string>
+    <string name="done">Selesai</string>
+    <string name="saved">Disimpan</string>
+    <string name="distance">Jarak</string>
+
+    <string name="near">Dekat</string>
+    <string name="menu_save_and_add">Simpan dan tambahkan catatan</string>
+    <string name="menu_delete">Hapus</string>
+    <string name="menu_deletelist">Hapus daftar</string>
+    <string name="menu_sync">Muat Ulang</string>
+    <string name="menu_share">Bagikan</string>
+    <string name="menu_preferences">Pengaturan</string>
+    <string name="menu_createlist">Buat Daftar</string>
+    <string name="menu_clearcompleted">Hapus yang sudah selesai</string>
+    <string name="menu_setdefaultlist">Tetapkan sebagai daftar default</string>
+    <string name="new_default_set">Set standar baru</string>
+    <string name="menu_managelists">Edit daftar</string>
+    <string name="add_item">Tambah item</string>
+    <string name="delete_question">Hapus?</string>
+    <string name="delete_items_message">Apakah anda yakin ingin menghapus item ini?</string>
+    <string name="delete_item_message">Apakah Anda yakin ingin menghapus item ini?</string>
+    <string name="delete_list_message">Apakah anda yakin ingin menghapus daftarnya?</string>
+    <string name="editor_due_date_hint">Tenggat waktu</string>
+    <string name="editor_title_hint">Judul</string>
+    <string name="editor_note_hint">Catatan</string>
+    <string name="resolve_edit">Ubah Catatan</string>
+    <string name="default_style">Gaya default</string>
+    <string name="show_items_as_tasks">Tampilkan item sebagai tugas</string>
+    <string name="show_items_as_notes">Tampilkan item sebagai catatan</string>
+    <string name="sort_list_default">Urutan sortir default</string>
+    <string name="sort_list_alphabetical">Pesanan menurut abjad</string>
+    <string name="sort_list_due">Pemesanan berdasarkan tanggal jatuh tempo</string>
+    <string name="sort_list_updated">Order dengan update terbaru</string>
+    <string name="sort_list_manual">Pesan secara manual</string>
+    <string name="search_description">Catatan dan tugas</string>
+    <string name="archive">Arsip</string>
+
+
+    <string name="restore">Kembalikan</string>
+    <string name="restore_to">Kembalikan ke</string>
+    <string name="search_hint">Cari</string>
+    <string name="settings_theme">Tema saat ini</string>
+    <string name="settings_theme_dialog">Gunakan tema</string>
+    <string name="settings_lang">Bahasa</string>
+
+    <string name="settings_summary_theme_black">Hitam</string>
+    <string name="settings_summary_theme_dark">Gelap</string>
+    <string name="settings_summary_theme_light">Terang</string>
+    <string name="settings_summary_theme_classic">Klasik</string>
+    <string name="settings_cat_appearance">Tampilan</string>
+    <string name="preference_preview_text">Ini adalah bagaimana teks editor akan muncul</string>
+    <string name="settings_account_title">Pilih Akun</string>
+    <string name="settings_account_summary">Tekan untuk memilih akun</string>
+    <string name="settings_sync_enable_title">Sinkronisasi Google Tasks</string>
+    <string name="gtasks_sync_info">Tidak semua informasi dapat disinkronkan dengan Google Tasks. Hanya catatan, tanggal jatuh tempo (not time) dan todo-status yang disinkronkan.</string>
+    <string name="settings_cat_syncing">Sinkronisasi</string>
+    <string name="gtasks">Google Tasks</string>
+    <string name="show_from_all_lists">Semua daftar</string>
+    <string name="lists">Daftar</string>
+    <string name="deleted">Terhapus</string>
+    <string name="repeat">Ulangi</string>
+    <string name="once">Sekali</string>
+    <string name="always">Selalu</string>
+    <string name="permission_read_label">Baca catatan dan daftar</string>
+    <string name="permission_read_desc">Perbolehkan aplikasi untuk membaca catatan dan daftar anda.</string>
+    <string name="permission_write_label">Ubah catatan dan daftar</string>
+    <string name="permission_write_desc">Perbolehkan aplikasi untuk menambah, memperbaharui, dan menghapus catatan dan daftar.</string>
+    <string name="settings_list_dialog">Pilih Daftar</string>
+    <string name="settings_list">Daftar</string>
+    <string name="drag_to_timetravel">Seret ke waktu perjalanan</string>
+    <string name="import_data_question">Impor data?</string>
+    <string name="import_started">Mengimpor data Ini mungkin memakan waktu beberapa detik.</string>
+    <string name="import_data_msg">Apakah Anda ingin mengimpor catatan dari versi donasi? Setelah selesai, Anda diberi pilihan untuk mencopot pemasangan juga.</string>
+    <string name="imported_result">Diimpor %1$d catatan dalam %2$d daftar</string>
+    <string name="import_error">Ada sesuatu yang salah: %s</string>
+    <string name="showcase_main_title">Akses daftar Anda</string>
+    <string name="showcase_main_msg">Sentuh ikon atau gesek dari tepi kiri</string>
+    <string name="showcase_drawer_title">Kelola daftar Anda</string>
+    <string name="showcase_drawer_msg">Tekan lama untuk mengedit atau menghapus</string>
+    <string name="showcase_timemachine_title">Simpan catatan Anda</string>
+    <string name="showcase_timemachine_msg">Perubahan selalu disimpan. Gunakan mesin waktu untuk mengembalikan versi sebelumnya.</string>
+    <string name="donate_to_unlock">Donasi untuk membuka kunci</string>
+    <string name="premiums_unlocked_and_thanks">Fitur premium tidak terkunci. Terima kasih atas dukungan Anda!</string>
+
+    <string name="move">Pindah</string>
+    <string name="move_to">Pindah ke</string>
+    <string name="moved_x_to_list">Pindah %1$d ke %2$s</string>
+    <string name="lock_note">Kunci catatan</string>
+    <string name="unlock_note">Buka kunci catatan</string>
+    <string name="locked">Terkunci</string>
+    <string name="unlocked">Kunci Terbuka</string>
+    <string name="password_required">Diperlukan sandi</string>
+    <string name="select_account">Pilih akun</string>
+    <string name="password">Sandi</string>
+    <string name="password_set">Sandi terpasang</string>
+    <string name="password_cleared">Sandi terhapus</string>
+    <string name="passwords_dont_match">Sandi tidak cocok</string>
+    <string name="password_incorrect">Sandi salah</string>
+    <string name="enter_password">Masukkan sandi</string>
+    <string name="enter_new_password">Masukkan sandi baru</string>
+    <string name="confirm_new_password">Konfirmasi sandi baru</string>
+    <string name="apply">Terapkan</string>
+    <string name="clear_password">Hapus sandi</string>
+    <string name="password_info">Pengaturan password akan meminta Anda untuk memasukkan password untuk menunjukkan catatan yang terkunci. Ini hanya akan melindungi isi catatan sehingga Anda masih memiliki akses ke judul dan tanggal yang tidak terproteksi . Ini tidak mengenkripsi catatan dengan cara apapun sehingga dapat stillbe dilihat di Google mail / calendar. Jika Anda lupa password Anda, sinkron dengan Google dan kemudian menginstal ulang aplikasi.</string>
+    <string name="about">Tentang</string>
+    <string name="sync_failed">Snkronisasi gagal</string>
+    <string name="sync_login_failed">Login gagal, tidak dapat terhubung ke Google Tasks</string>
+    <string name="changelog_full_title">Ubah log</string>
+    <string name="changelog_title">Apa yang baru</string>
+    <string name="completed">Selesai</string>
+    <string name="date_header_overdue">Terlambat</string>
+    <string name="date_header_today">Hari ini</string>
+    <string name="date_header_tomorrow">Besok</string>
+    <string name="date_header_future">Nanti</string>
+    <string name="date_header_none">Tanpa tanggal</string>
+    <string name="date_header_completed">Selesai</string>
+    <string name="next_5_days">5 hari berikutnya</string>
+    <string name="next_n_days">Berikutnya %d hari</string>
+    <string name="this_week">Minggu ini</string>
+    <string name="please_select_note">Harap pilih atau buat catatan</string>
+    <string name="please_create_note">Harap membuat catatan</string>
+    <string name="hide_checkbox">Sembunyikan kotak centang</string>
+    <string name="hide_checkbox_summary_on">Kotak centang akan disembunyikan</string>
+    <string name="hide_checkbox_summary_off">Kotak centang akan ditampilkan</string>
+    <string name="hide_date">Sembunyikan tanggal jatuh tempo</string>
+    <string name="item_max_height">Tinggi maksimal catatan / tugas</string>
+    <string name="long_date_format">Format tanggal yang panjang</string>
+    <string name="short_date_format">Format tanggal pendek</string>
+    <string name="rows">baris</string>
+    <string name="select_date">Pilih tanggal</string>
+    <string name="localedefault">Lokal standar</string>
+    <string name="donate">Menyumbangkan</string>
+    <string name="donate_thanks">Terima kasih atas dukungan Anda!</string>
+    <!-- settings string keys -->
+    <string name="hide_header">Sembunyikan seluruh header pada widget</string>
+    <string name="transparency">Transparansi</string>
+    <string name="notes_shortcut">Catatan pintas</string>
+    <string name="shortcut_help1">Jika dicentang, shortcut akan membuat catatan baru di daftar yang dipilih dan buka editornya. Jika tidak dicentang, shortcut akan membuka daftar yang dipilih.</string>
+    <string name="loading_widget">Memuat widget&#8230;</string>
+    <string name="default_list">Daftar default</string>
+    <string name="please_type_before_reminder">Harap ketik beberapa teks sebelum menyetel pengingat</string>
+    <string name="notecopied_one">Disalin %d catatan</string>
+    <string name="notecopied_other">Disalin %d catatan</string>
+    <string name="notecopied_zero">@string/notecopied_other</string>
+    <string name="notecopied_two">@string/notecopied_other</string>
+    <string name="notecopied_few">@string/notecopied_other</string>
+    <string name="notecopied_many">@string/notecopied_other</string>
+    <string name="notedeleted_one">Dihapus %d catatan</string>
+    <string name="notedeleted_other">Dihapus %d catatan</string>
+    <string name="notedeleted_zero">@string/notedeleted_other</string>
+    <string name="notedeleted_two">@string/notedeleted_other</string>
+    <string name="notedeleted_few">@string/notedeleted_other</string>
+    <string name="notedeleted_many">@string/notedeleted_other</string>
+    <string name="selected_one">Dipilih %d catatan</string>
+    <string name="selected_other">Dipilih %d catatan</string>
+    <string name="background_sync">Sinkronisasi di latar belakang</string>
+    <string name="background_sync_info">Menyinkronisasi setiap jam</string>
+    <string name="sync_on_change">Menyinkronisasi pada saat berubah</string>
+    <string name="sync_on_change_info">Jadwalkan sinkronisasi sebentar setelah catatan berubah</string>
+    <string name="sync_on_start">Menyinkronisasi pada saat aplikasi mulai</string>
+    <string name="sync_on_start_info">Hanya akan memicu pada mulai pertama, tidak saat melanjutkan</string>
+    <string name="sync_full_force">Paksa untuk sinkronisasi penuh lain kali</string>
+    <string name="sync_full_force_info">Hanya memeriksa ini jika Anda percaya sinkronisasi kehilangan beberapa item.</string>
+    <string name="snooze">Tidur sebentar</string>
+    <string name="silent">Diam</string>
+    <string name="sound">Suara</string>
+    <string name="vibrate">Getar</string>
+    <string name="reminders">pengingat</string>
+    <string name="standard">Standar</string>
+    <string name="notification_prio_high">Tinggi: Di atas, diperluas</string>
+    <string name="notification_prio_low">Rendah: Tersembunyi, dipersempit</string>
+    <string name="priority">Prioritas</string>
+    <string name="notifications">notifikasi</string>
+    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+    <string name="dateformat_micro">MMM d</string>
+    <string name="dateformat_weekday">EEEE</string>
+    <string name="dateformat_short_1">E waktu setempat, d MMM</string>
+    <string name="dateformat_short_2">E, d MMM</string>
+    <string name="dateformat_short_3">MMM d</string>
+    <string name="dateformat_short_4">E, waktu setempat</string>
+    <string name="dateformat_long_1">EEEE waktu setempat, MMMM d</string>
+    <string name="dateformat_long_2">EEEE waktu setempat, MMMM d</string>
+    <string name="dateformat_just_date">MMMM d</string>
+    <string name="tasks">Tugas</string>
+    <string name="all_tasks">Semua tugas</string>
+
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Batasi tugas di</string>
+    <string name="dashclock_show_overdue_tasks">Tampilkan tugas yang sudah lewat</string>
+    <string name="dashclock_overdue_tasks_show">Tugas yang terlambat akan ditampilkan</string>
+    <string name="dashclock_overdue_tasks_hide">Tugas yang terlambat akan disembunyikan</string>
+    <string name="dashclock_title_activity_tasks_settings">Pengaturan Catatan NoNonsense</string>
+    <string name="dashclock_pref_header_general">Umum</string>
+    <string name="dashclock_due_upper_limit_title">Batasi tugas sampai selambat-lambatnya</string>
+    <string name="dashclock_today">Hari ini</string>
+    <string name="dashclock_tomorrow">Besok</string>
+    <string name="dashclock_next7">7 hari berikutnya</string>
+    <string name="dashclock_anytime">Kapan saja</string>
+    <string name="dashclock_will_show_as_many_as_possible">Akan tampil sebanyak mungkin</string>
+
+    <string name="dashclock_show_only_the_next_task">Hanya tampilkan tugas selanjutnya</string>
+    <string name="dashclock_header_shown">Nama daftar akan ditampilkan dengan huruf tebal</string>
+    <string name="dashclock_first_task_shown">Judul tugas pertama akan ditampilkan dalam huruf tebal</string>
+    <string name="dashclock_display_header">Nama daftar tampilan</string>
+    <string name="editor">Editor</string>
+    <string name="bold">Tebal</string>
+    <string name="italic">Miring</string>
+    <string name="normal">Biasa</string>
+    <string name="title_style">Gaya Judul</string>
+    <string name="title_font">Font untuk judul</string>
+    <string name="body_font">Font tubuh</string>
+    <string name="clickable_links">Tautan yang dapat diklik</string>
+    <string name="small">Kecil</string>
+    <string name="medium">Medium</string>
+    <string name="large">Besar</string>
+    <string name="text_size">Ukuran teks</string>
+    <string name="text">Teks</string>
+    <string name="add_a_reminder">Tambahkan pengingat</string>
+    <string name="backup">Cadangan</string>
+    <string name="backup_import">Impor backup</string>
+    <string name="backup_export">Ekspor cadangan</string>
+    <string name="backup_import_msg">Cobalah untuk mengimpor cadangan dari %1$s? Ini akan menghapus database saat ini.</string>
+    <string name="backup_export_msg">Ekspor semua catatan ke %1$s?</string>
+    <string name="backup_import_success">Backup berhasil diimpor</string>
+    <string name="backup_file_not_found">File cadangan tidak dapat ditemukan</string>
+    <string name="backup_import_failed">Gagal membaca file cadangan</string>
+    <string name="backup_export_success">Cadangan berhasil diekspor</string>
+    <string name="backup_export_failed">Tidak bisa menulis ke file backup</string>
+    <string name="sd_card">Kartu SD</string>
+    <string name="sd_card_sync">Sinkronkan Kartu SD</string>
+    <string name="sd_card_summary">Tugas dicerminkan pada kartu SD. Perubahan disinkronisasi dua arah. Perhatikan bahwa menghapus file akan menghapus tugas di aplikasi!</string>
+    <string name="directory">Direktori</string>
+    <string name="directory_summary">Dimana file harus disimpan.</string>
+
+    <string name="cannot_write_to_directory">Tidak bisa menulis ke direktori</string>
+
+</resources>
