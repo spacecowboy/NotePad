@@ -14,7 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+-->
 
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,9 +34,11 @@
 		android:enabled="true"
 		android:key="key_pref_cat_notif_old"
 		android:persistent="false"
-		android:summary="@string/overwritten_in_newer_systems"
 		android:title="@string/for_older_devices"
-		app:initialExpandedChildrenCount="0">
+		app:initialExpandedChildrenCount="1">
+
+		<!-- because PreferenceCategory can't wrap its summary! -->
+		<Preference android:summary="@string/overwritten_in_newer_systems"/>
 
 		<!-- RingtonePreference is not supported in androidx: we use the official hack,
 	     see NotificationPrefs.java -->

@@ -16,11 +16,13 @@
 -->
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="app_preference_backup">
 
 	<ListPreference
 		android:dialogIcon="@drawable/ic_folder_24dp_white"
 		android:key="key_backup_location"
+		app:singleLineTitle="false"
 		android:summary="added in BackupPrefs.java, it shows the chosen folder"
 		android:title="@string/choose_backup_folder"/>
 
