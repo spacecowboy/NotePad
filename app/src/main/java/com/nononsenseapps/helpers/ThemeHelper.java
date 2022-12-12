@@ -30,11 +30,12 @@ public final class ThemeHelper {
 		String theme = PreferenceManager
 				.getDefaultSharedPreferences(context)
 				.getString(AppearancePrefs.KEY_THEME, defaultTheme);
-		int themeResId = theme.contains("light")
+
+		// TODO try returning different styles & see if we should just
+		//  return the currently selected theme
+		return theme.contains("light")
 				? android.R.style.Theme_Material_Light_Dialog
 				: android.R.style.Theme_Material_Dialog;
-
-		return themeResId;
 	}
 
 }

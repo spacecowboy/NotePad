@@ -237,17 +237,14 @@ public class ListWidgetConfig extends AppCompatActivity {
 						// Complete checkbox
 						boolean visible;
 						if (view.getId() == R.id.completedCheckBoxLight) {
-							visible = THEME_LIGHT == widgetPrefs.getInt(KEY_THEME,
-									DEFAULT_THEME);
+							visible = THEME_LIGHT == widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME);
 						} else if (view.getId() == R.id.completedCheckBoxDark) {
-							visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME,
-									DEFAULT_THEME);
+							visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME);
 						} else {
 							// Spacer
 							visible = true;
 						}
-						visible &= !widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
-								false);
+						visible &= !widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false);
 						view.setVisibility(visible ? View.VISIBLE : View.GONE);
 						return true;
 					case 4:
