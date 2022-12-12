@@ -15,8 +15,5 @@ this open source Notepad and to-do list app has these Features:
 * Backup (import & export) notes to a json file
 * Sync with an ORG file on the local storage
 
-If you want to improve this app, or simply share ideas, come vist us
+If you want to improve this app, or simply share ideas, come visit us
 at https://github.com/spacecowboy/NotePad
-
-For a possible replacement, check https://f-droid.org/packages/com.orgzly
-Orgzly is an actively developed note app that can also import your old notes.
