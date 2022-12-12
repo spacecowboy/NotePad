@@ -1,0 +1,17 @@
+Fri notatblokk og gjøremålspåminner som bruker de siste Android-teknologiene.
+
+* Dash-klokke-støtte (ja, det virker enda)
+* Merknader: Sett påminnelser på gitte tidspunkt, med valgfri gjentagelse de ukedagene du vil
+* Språkvalg
+* Miniprogram med låseskjermsstøtte, der størrelse og andre ting kan endres
+* Passordbeskytting av viktige notater
+* Flytt gjøremål mellom forskjellige lister
+* Dra for å endre gjøremålsrekkefølge
+* Integrasjon med Android Agenda-miniprogram
+* Søk
+* Lys og mørk drakt
+* Sikkerhetskopier (import og eksport) notater til JSON-fil
+* Synkroniser med en ORG-fil i lokalt lager
+
+Forbedre programmet, eller del idéer.
+Besøk på https://github.com/spacecowboy/NotePad

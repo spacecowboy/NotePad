@@ -1,0 +1,13 @@
+v7.0.0: NoNonsense Notes
+
+Høydepunkter:
+- Nå kompatibelt med Android 12
+- Droppet Google Tasks-synkronisering
+- ORG og JSON-filer kan nå lagres en del steder. Du kan velge hvilke.
+
+Detaljer:
+- Mål-SDK økt til versjon 32
+- Oppgradert til AndroidX-bibliotek
+- Fikset alle tester
+- Oppgraderte avhengigheter og Gradle
+- Generell kodeopprenskning

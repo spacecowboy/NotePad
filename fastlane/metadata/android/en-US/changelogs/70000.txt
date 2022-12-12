@@ -1,13 +1,13 @@
 v7.0.0: NoNonsense Notes
 
 Highlights:
-- now compatible with android 12
+- now compatible with Android 12
 - drop Google Tasks synchronization
-- Org and Json files can now be saved in a few selected places. You can choose which
+- ORG and JSON files can now be saved in a few selected places. You can choose which.
 
 Details:
 - raised target SDK to version 32
 - upgraded to AndroidX libraries
 - fixed all tests
-- upgraded dependencies and gradle
+- upgraded dependencies and Gradle
 - general code cleanup
