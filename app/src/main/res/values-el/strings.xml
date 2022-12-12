@@ -16,14 +16,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">Σημειώσεις</string>
+    <string name="app_name_short">Σημειώσεις</string>
     <string name="title_create">Νέα Σημείωση</string>
     <string name="timemachine">Χρονομηχανή</string>
     <string name="time">Ώρα</string>
     <string name="done">Έγινε</string>
     <string name="saved">Αποθηκεύτηκε</string>
     <string name="distance">Απόσταση</string>
-    <string name="need_location_help">Πατήστε παρατεταμένα για να ορίσετε τοποθεσία</string>
+
     <string name="near">Κοντά </string>
     <string name="menu_save_and_add">Αποθήκευση και άνοιγμα νέας σημείωσης</string>
     <string name="menu_delete">Διαγραφή</string>
@@ -55,15 +55,15 @@
     <string name="sort_list_manual">Χειροκίνητη ταξινόμηση</string>
     <string name="search_description">Σημειώσεις και εργασίες</string>
     <string name="archive">Αρχείο</string>
-    <string name="view_deletedtasks">@string/αρχείο</string>
-    <string name="location">Τοποθεσία</string>
+
+
     <string name="restore">Επαναφορά</string>
     <string name="restore_to">Επαναφορά σε</string>
     <string name="search_hint">Αναζήτηση</string>
     <string name="settings_theme">Τρέχον θέμα</string>
     <string name="settings_theme_dialog">Χρήση θέματος</string>
     <string name="settings_lang">Γλώσσα</string>
-    <string name="settings_lang_dialog">@string/Ρυθμίσεις γλώσσας</string>
+
     <string name="settings_summary_theme_black">Μαύρο</string>
     <string name="settings_summary_theme_dark">Σκοτεινό</string>
     <string name="settings_summary_theme_light">Ανοιχτόχρωμο</string>
@@ -270,9 +270,7 @@
     <string name="sd_card_summary">Οι εργασίες συγχρονίζονται στην κάρτα SD. Οι αλλαγές συγχρονίζονται αμφίδρομα. Σημειώστε ότι διαγράφοντας τα αρχεία θα διαγραφούν οι εργασίες στην εφαρμογή!</string>
     <string name="directory">Κατάλογος</string>
     <string name="directory_summary">Πού θα πρέπει να αποθηκεύονται τα αρχεία.</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Συγχρονισμός Dropbox</string>
-    <string name="dropbox_sync_summary">Κρατήστε τις εργασίες και τις σημειώσεις συγχρονισμένες με αρχεία κειμένου στο Dropbox σας.</string>
+
     <string name="cannot_write_to_directory">Δεν είναι δυνατή η εγγραφή στον φάκελο</string>
-    <string name="wait_for_dropbox">Παρακαλώ περιμένετε για το Dropbox να τελειώσει την προετοιμασία.</string>
+
 </resources>

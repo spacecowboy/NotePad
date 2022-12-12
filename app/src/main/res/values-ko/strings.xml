@@ -16,14 +16,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">노트</string>
+    <string name="app_name_short">노트</string>
     <string name="title_create">새 노트</string>
     <string name="timemachine">타임머신</string>
     <string name="time">시간</string>
     <string name="done">완료</string>
     <string name="saved">저장 완료</string>
     <string name="distance">거리</string>
-    <string name="need_location_help">길게 눌러 위치설정 하기</string>
+
     <string name="near">근처</string>
     <string name="menu_save_and_add">저장하고 메모 추가</string>
     <string name="menu_delete">지우기</string>

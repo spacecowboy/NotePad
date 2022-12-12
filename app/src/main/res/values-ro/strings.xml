@@ -16,14 +16,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">Note</string>
+    <string name="app_name_short">Note</string>
     <string name="title_create">Notă nouă</string>
     <string name="timemachine">Mașina timpului</string>
     <string name="time">Timp</string>
     <string name="done">Terminat</string>
     <string name="saved">Salvat</string>
     <string name="distance">Distanța</string>
-    <string name="need_location_help">Apăsare lunga pentru a fixa locația</string>
+
     <string name="near">Aproape</string>
     <string name="menu_save_and_add">Salvează si adauga nota</string>
     <string name="menu_delete">Șterge</string>
@@ -56,7 +56,7 @@
     <string name="search_description">Notițe și atribuții</string>
     <string name="archive">Arhivă</string>
     <string name="view_deletedtasks">\@șir/arhivă</string>
-    <string name="location">Locație</string>
+
     <string name="restore">Restabilire</string>
     <string name="restore_to">Restabilire la</string>
     <string name="search_hint">Caută</string>
@@ -273,9 +273,7 @@
     <string name="sd_card_summary">Sarcinile sunt oglindite pe cardul SD. Modificările sunt sincronizate în ambele sensuri. Rețineți că ștergerea fișierelor va șterge sarcinile din aplicație!</string>
     <string name="directory">Director</string>
     <string name="directory_summary">Unde vor fi stocate fișierele.</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Sincronizare Dropbox</string>
-    <string name="dropbox_sync_summary">Păstrați sarcinile și notițele sincronizate cu fișierele text în Dropbox.</string>
+
     <string name="cannot_write_to_directory">Nu se poate scrie în director</string>
-    <string name="wait_for_dropbox">Vă rugăm să așteptați până se termină inițializarea.</string>
+
 </resources>

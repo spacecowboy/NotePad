@@ -16,14 +16,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">Notater</string>
+    <string name="app_name_short">Notater</string>
     <string name="title_create">Nytt notat</string>
     <string name="timemachine">Tidsmaskin</string>
     <string name="time">Tid</string>
     <string name="done">Ferdig</string>
     <string name="saved">Lagret</string>
     <string name="distance">Avstand</string>
-    <string name="need_location_help">Hold for å angi plass</string>
+
     <string name="near">Nær</string>
     <string name="menu_save_and_add">Lagre og legg til notat</string>
     <string name="menu_delete">Slett</string>
@@ -56,7 +56,7 @@
     <string name="search_description">Notater og oppgaver</string>
     <string name="archive">Arkiv</string>
     <string name="view_deletedtasks">\@tråd/arkiv</string>
-    <string name="location">Plass</string>
+
     <string name="restore">Gjenopprett</string>
     <string name="restore_to">Gjenopprett til</string>
     <string name="search_hint">Søk</string>
@@ -270,9 +270,6 @@
     <string name="sd_card_summary">Oppgaver speiles på SD-kortet. Endringer synkroniseres begge veier. Merk at å slette filene vil slette oppgavene i appen!</string>
     <string name="directory">Mappe</string>
     <string name="directory_summary">Hvor filer burde oppbevares.</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Dropbox-synkronisering</string>
-    <string name="dropbox_sync_summary">Synkronisér oppgavene og notatene dine med tekstfiler i Dropbox.</string>
     <string name="cannot_write_to_directory">Kunne ikke skrive til mappe</string>
-    <string name="wait_for_dropbox">Vennligst vent til Dropbox har initialisert ferdig.</string>
+
 </resources>

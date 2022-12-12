@@ -16,14 +16,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">Catatan</string>
+    <string name="app_name_short">Catatan</string>
     <string name="title_create">Catatan Baru</string>
     <string name="timemachine">Mesin waktu</string>
     <string name="time">Waktu</string>
     <string name="done">Selesai</string>
     <string name="saved">Disimpan</string>
     <string name="distance">Jarak</string>
-    <string name="need_location_help">Tekan lama untuk mengatur lokasi</string>
+
     <string name="near">Dekat</string>
     <string name="menu_save_and_add">Simpan dan tambahkan catatan</string>
     <string name="menu_delete">Hapus</string>
@@ -56,7 +56,7 @@
     <string name="search_description">Catatan dan tugas</string>
     <string name="archive">Arsip</string>
     <string name="view_deletedtasks">\@string / arsip</string>
-    <string name="location">Lokasi</string>
+
     <string name="restore">Kembalikan</string>
     <string name="restore_to">Kembalikan ke</string>
     <string name="search_hint">Cari</string>
@@ -192,18 +192,6 @@ Dari yang lain
     <string name="notedeleted_many">@string/notedeleted_other</string>
     <string name="selected_one">Dipilih %d catatan</string>
     <string name="selected_other">Dipilih %d catatan</string>
-    <string name="selected_zero">\@ string / pilih satu
-Dari yang lain
-@ string / yang dipilih lainnya</string>
-    <string name="selected_two">\@ string / pilih satu
-Dari yang lain
-@ string / yang dipilih lainnya</string>
-    <string name="selected_few">\@ string / pilih satu
-Dari yang lain
-@ string / yang dipilih lainnya</string>
-    <string name="selected_many">\@ string / pilih satu
-Dari yang lain
-@ string / yang dipilih lainnya</string>
     <string name="background_sync">Sinkronisasi di latar belakang</string>
     <string name="background_sync_info">Menyinkronisasi setiap jam</string>
     <string name="sync_on_change">Menyinkronisasi pada saat berubah</string>
@@ -281,9 +269,7 @@ Dari yang lain
     <string name="sd_card_summary">Tugas dicerminkan pada kartu SD. Perubahan disinkronisasi dua arah. Perhatikan bahwa menghapus file akan menghapus tugas di aplikasi!</string>
     <string name="directory">Direktori</string>
     <string name="directory_summary">Dimana file harus disimpan.</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Sinkronisasi Dropbox</string>
-    <string name="dropbox_sync_summary">Simpan tugas dan catatan Anda disinkronisasi dengan file teks di Dropbox Anda.</string>
+
     <string name="cannot_write_to_directory">Tidak bisa menulis ke direktori</string>
-    <string name="wait_for_dropbox">Tunggu Dropbox untuk menyelesaikan inisialisasi nya.</string>
+
 </resources>

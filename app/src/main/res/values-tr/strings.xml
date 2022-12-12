@@ -16,14 +16,14 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">Notlar</string>
+    <string name="app_name_short">Notlar</string>
     <string name="title_create">Yeni not</string>
     <string name="timemachine">Zaman makinesi</string>
     <string name="time">zaman</string>
     <string name="done">Tamam</string>
     <string name="saved">Kaydedildi</string>
     <string name="distance">Mesafe</string>
-    <string name="need_location_help">Bir konum ayarlamak için tuşuna uzun basın</string>
+
     <string name="near">Yakın</string>
     <string name="menu_save_and_add">not ekleyin ve Kaydedin</string>
     <string name="menu_delete">Sil</string>
@@ -55,15 +55,15 @@
     <string name="sort_list_manual">Manuel olarak sırala</string>
     <string name="search_description">Notlar ve görevler</string>
     <string name="archive">Arşiv</string>
-    <string name="view_deletedtasks">@dizi/arşiv</string>
-    <string name="location">Lokasyon</string>
+
+
     <string name="restore">Eski haline çevir</string>
     <string name="restore_to">Eski haline çevir</string>
     <string name="search_hint">Ara</string>
     <string name="settings_theme">Kullanılan tema</string>
     <string name="settings_theme_dialog">Tema seçin</string>
     <string name="settings_lang">Dil</string>
-    <string name="settings_lang_dialog">@dizi/ayarlar_dil</string>
+
     <string name="settings_summary_theme_black">Siyah</string>
     <string name="settings_summary_theme_dark">Koyu</string>
     <string name="settings_summary_theme_light">Açık</string>
@@ -211,7 +211,7 @@
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Görevler</string>
     <string name="all_tasks">Tüm görevler</string>
-    <string name="dashclock_tasks">@dizi/görevler</string>
+
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Görevleri sınırla</string>
     <string name="dashclock_show_overdue_tasks">Gecikmiş görevleri göster</string>
     <string name="dashclock_overdue_tasks_show">Gecikmiş görevler gösterilecek</string>
@@ -258,9 +258,7 @@
     <string name="sd_card_summary">Görevler SD karta yansıtıldı. Değişiklikler her iki açıdan senkronize edildi. Dosyaları silmenin , uygulamadaki görevleri sileceğini unutmayın!</string>
     <string name="directory">Rehber</string>
     <string name="directory_summary">Dosyaların saklanacağı yer.</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Dropbox senkronizasyonu</string>
-    <string name="dropbox_sync_summary">Görevlerinizi ve notlarınızı metin dosyalarıyla dropbox\'ta senkronize ederek tutun.</string>
+
     <string name="cannot_write_to_directory">Rehbere yazılmıyor</string>
-    <string name="wait_for_dropbox">Dropbox\'un başlatılmasını bitirmek için lütfen bekleyin.</string>
+
 </resources>
