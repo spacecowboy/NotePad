@@ -26,14 +26,12 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 
-import androidx.preference.PreferenceManager;
-
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -143,17 +141,10 @@ public final class NotificationItemHelper {
 				}
 			};
 
-			// choose a dark or white theme depending on the settings
-			final String theme = PreferenceManager
-					.getDefaultSharedPreferences(fragment.getContext())
-					.getString(AppearancePrefs.KEY_THEME, fragment.getString(R.string.const_theme_light_ab));
-			final int themeResId = theme.contains("light")
-					? android.R.style.Theme_Material_Light_Dialog
-					: android.R.style.Theme_Material_Dialog;
-
+			// configure and show a popup with a date-picker calendar view
 			final DatePickerDialog datedialog = new DatePickerDialog(
 					fragment.getContext(),
-					themeResId,
+					ThemeHelper.getPickerDialogTheme(fragment.getContext()),
 					onDateSetListnr,
 					localTime.get(Calendar.YEAR),
 					localTime.get(Calendar.MONTH),

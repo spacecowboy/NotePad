@@ -57,6 +57,7 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -424,17 +425,10 @@ public class TaskDetailFragment extends Fragment {
 		//datePicker.setListener(this);
 		//datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
 
-		// choose a dark or white theme depending on the settings
-		final String theme = PreferenceManager
-				.getDefaultSharedPreferences(this.getContext())
-				.getString(AppearancePrefs.KEY_THEME, this.getString(R.string.const_theme_light_ab));
-		final int themeResId = theme.contains("light")
-				? android.R.style.Theme_Material_Light_Dialog
-				: android.R.style.Theme_Material_Dialog;
-
+		// configure and show a popup with a date-picker calendar view
 		var dpDiag = new DatePickerDialog(
 				this.getActivity(),
-				themeResId,
+				ThemeHelper.getPickerDialogTheme(this.getContext()),
 				this::onDateSet,
 				localTime.get(Calendar.YEAR),
 				localTime.get(Calendar.MONTH),
@@ -471,15 +465,7 @@ public class TaskDetailFragment extends Fragment {
 		*/
 	}
 
-	/**
-	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a
-	 * day in a calendar view. An alternative very similar to this is
-	 * {@link com.google.android.material.datepicker.MaterialDatePicker} but it requires
-	 * a theme with parent="Theme.MaterialComponents", which does not work in our app
-	 */
-	private static DatePickerDialog getDatePickerPopup() {
-		return null;
-	}
+
 
 	private void setDueText() {
 		if (mTask.due == null) {
@@ -908,18 +894,10 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	public TimePickerDialog getTimePickerDialog(Calendar localTime,
 												TimePickerDialog.OnTimeSetListener listener) {
-		// choose a dark or white theme depending on the settings
-		final String theme = PreferenceManager
-				.getDefaultSharedPreferences(getActivity())
-				.getString(AppearancePrefs.KEY_THEME, getString(R.string.const_theme_light_ab));
-		final int themeResId = theme.contains("light")
-				? android.R.style.Theme_Material_Light_Dialog
-				: android.R.style.Theme_Material_Dialog;
-
 		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
 		return new TimePickerDialog(
 				this.getActivity(),
-				themeResId,
+				ThemeHelper.getPickerDialogTheme(this.getActivity()),
 				listener, // set the callback for when the user chooses a time
 				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
 				localTime.get(Calendar.MINUTE),

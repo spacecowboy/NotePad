@@ -44,11 +44,9 @@ public final class ActivityHelper {
 
 	public static void readAndSetSettings(Activity activity) {
 		// Read settings and set
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(activity);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-		final String theme = prefs.getString(
-				AppearancePrefs.KEY_THEME,
+		final String theme = prefs.getString(AppearancePrefs.KEY_THEME,
 				activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
@@ -56,12 +54,11 @@ public final class ActivityHelper {
 			activity.setTheme(R.style.ThemeHoloBlack);
 		} else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightClassic);
-		} else // if (theme.equals(getResources().getString(
-		// R.string.const_theme_googlenow_dark)))
+		} else // if (theme.equals(getResources().getString(R.string.const_theme_googlenow_dark)))
 		{
 			activity.setTheme(R.style.ThemeGoogleNowDark);
 		}
-
+// TODO move this to ThemeHelper
 		// Set language
 		Configuration config = activity.getResources().getConfiguration();
 
@@ -77,8 +74,8 @@ public final class ActivityHelper {
 			}
 			// Locale.setDefault(locale);
 			config.locale = locale;
-			activity.getResources().updateConfiguration(config,
-					activity.getResources().getDisplayMetrics());
+			activity.getResources()
+					.updateConfiguration(config, activity.getResources().getDisplayMetrics());
 		}
 
 		if (activity instanceof OnSharedPreferenceChangeListener) {
