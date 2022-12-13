@@ -28,10 +28,9 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.fragment.app.Fragment;
@@ -51,7 +50,9 @@ import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.ViewById;
 
 /**
- * This is used only in the "Archive" view, for deleted notes
+ * This is used only in the "Archive" view, for deleted notes.
+ * For the search widget of the "main" view, see
+ * {@link TaskListViewPagerFragment#onCreateOptionsMenu}
  */
 @EFragment(resName = "fragment_search")
 public class FragmentSearch extends Fragment {
@@ -71,8 +72,6 @@ public class FragmentSearch extends Fragment {
 	protected LoaderCallbacks<Cursor> mCallback;
 
 	protected String mQuery = "";
-
-	protected SearchView mSearchView;
 
 	public static FragmentSearch_ getInstance(final String initialQuery) {
 		FragmentSearch_ f = new FragmentSearch_();
@@ -102,20 +101,21 @@ public class FragmentSearch extends Fragment {
 		inflater.inflate(R.menu.fragment_search, menu);
 
 		// Get the SearchView and set the searchable configuration
-		mSearchView = (SearchView) menu.findItem(R.id.menu_search)
+		SearchView searchView = (SearchView) menu
+				.findItem(R.id.menu_search)
 				.getActionView();
 		// Assumes current activity is the searchable activity
-		mSearchView.setSearchableInfo(searchManager
+		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getActivity().getComponentName()));
-		mSearchView.setIconifiedByDefault(false); // Do not iconify the widget;
+		searchView.setIconifiedByDefault(false); // Do not iconify the widget;
 		// expand it by default
-		mSearchView.setQueryRefinementEnabled(true);
-		mSearchView.setSubmitButtonEnabled(false);
+		searchView.setQueryRefinementEnabled(true);
+		searchView.setSubmitButtonEnabled(false);
 
-		// Disable suggestions in search activity
-		mSearchView.setSuggestionsAdapter(null);
+		// Disable suggestions in "note archive" search activity
+		searchView.setSuggestionsAdapter(null);
 
-		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
+		searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 			@Override
 			public boolean onQueryTextSubmit(final String query) {
 				doSearch(query);
@@ -129,7 +129,7 @@ public class FragmentSearch extends Fragment {
 			}
 		});
 
-		mSearchView.setQuery(mQuery, false);
+		searchView.setQuery(mQuery, false);
 	}
 
 	@AfterViews
