@@ -24,11 +24,16 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
@@ -194,6 +199,42 @@ public class TaskListViewPagerFragment extends Fragment implements
 		searchView.setIconifiedByDefault(false);
 		searchView.setQueryRefinementEnabled(true);
 		searchView.setSubmitButtonEnabled(false);
+
+		// enlarge the suggestions box so that it occupies the whole screen
+		var autoCompTxtVi = (AutoCompleteTextView) searchView
+				.findViewById(androidx.appcompat.R.id.search_src_text);
+		autoCompTxtVi.setThreshold(1);
+		autoCompTxtVi.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+
+		var params = (LinearLayout.LayoutParams) autoCompTxtVi.getLayoutParams();
+		params.setMargins(0, 0, 0, 0);
+		autoCompTxtVi.setLayoutParams(params);
+
+		autoCompTxtVi.setPadding(0, 0, 0, 0);
+		autoCompTxtVi.setDropDownHorizontalOffset(-100);
+		autoCompTxtVi.setPadding(0, 0, 0, 0);
+		autoCompTxtVi.setLeft(0);
+
+		final View dropDownSuggestions = searchView
+				.findViewById(autoCompTxtVi.getDropDownAnchor());
+		if (dropDownSuggestions != null) {
+			dropDownSuggestions.addOnLayoutChangeListener(
+					(v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+				int[] point = new int[2];
+
+				dropDownSuggestions.getLocationOnScreen(point);
+				int dropDownPadding = point[0] + autoCompTxtVi.getDropDownHorizontalOffset();
+
+				Rect screenSize = new Rect();
+				TaskListViewPagerFragment.this
+						.getActivity()
+						.getWindowManager()
+						.getDefaultDisplay()
+						.getRectSize(screenSize);
+				int screenWidth = screenSize.width();
+				autoCompTxtVi.setDropDownWidth(screenWidth * 2);
+			});
+		}
 	}
 
 	@Override
