@@ -152,7 +152,7 @@
 		Use few if language need it. In English is the same.
 		<item quantity="few">Copied 2 notes.</item>
 	-->
-	<plurals name="notecopied_msg">
+	<plurals name="notecopied_msg" translatable="false">
 		<item quantity="one">@string/notecopied_one</item>
 		<item quantity="zero">@string/notecopied_zero</item>
 		<item quantity="two">@string/notecopied_two</item>
@@ -160,7 +160,7 @@
 		<item quantity="many">@string/notecopied_many</item>
 		<item quantity="other">@string/notecopied_other</item>
 	</plurals>
-	<plurals name="notedeleted_msg">
+	<plurals name="notedeleted_msg" translatable="false">
 		<item quantity="one">@string/notedeleted_one</item>
 		<item quantity="zero">@string/notedeleted_zero</item>
 		<item quantity="two">@string/notedeleted_two</item>
@@ -168,7 +168,7 @@
 		<item quantity="many">@string/notedeleted_many</item>
 		<item quantity="other">@string/notedeleted_other</item>
 	</plurals>
-	<plurals name="mode_choose">
+	<plurals name="mode_choose" translatable="false">
 		<item quantity="one">@string/selected_one</item>
 		<item quantity="zero">@string/selected_zero</item>
 		<item quantity="two">@string/selected_two</item>
@@ -240,22 +240,22 @@
 	<string name="please_type_before_reminder">Please type some text before setting a reminder</string>
 	<string name="notecopied_one">Copied %d note</string>
 	<string name="notecopied_other">Copied %d notes</string>
-	<string name="notecopied_zero">@string/notecopied_other</string>
-	<string name="notecopied_two">@string/notecopied_other</string>
-	<string name="notecopied_few">@string/notecopied_other</string>
-	<string name="notecopied_many">@string/notecopied_other</string>
+	<string name="notecopied_zero" translatable="false">@string/notecopied_other</string>
+	<string name="notecopied_two" translatable="false">@string/notecopied_other</string>
+	<string name="notecopied_few" translatable="false">@string/notecopied_other</string>
+	<string name="notecopied_many" translatable="false">@string/notecopied_other</string>
 	<string name="notedeleted_one">Deleted %d note</string>
 	<string name="notedeleted_other">Deleted %d notes</string>
-	<string name="notedeleted_zero">@string/notedeleted_other</string>
-	<string name="notedeleted_two">@string/notedeleted_other</string>
-	<string name="notedeleted_few">@string/notedeleted_other</string>
-	<string name="notedeleted_many">@string/notedeleted_other</string>
+	<string name="notedeleted_zero" translatable="false">@string/notedeleted_other</string>
+	<string name="notedeleted_two" translatable="false">@string/notedeleted_other</string>
+	<string name="notedeleted_few" translatable="false">@string/notedeleted_other</string>
+	<string name="notedeleted_many" translatable="false">@string/notedeleted_other</string>
 	<string name="selected_one">Selected %d note</string>
 	<string name="selected_other">Selected %d notes</string>
-	<string name="selected_zero">@string/selected_other</string>
-	<string name="selected_two">@string/selected_other</string>
-	<string name="selected_few">@string/selected_other</string>
-	<string name="selected_many">@string/selected_other</string>
+	<string name="selected_zero" translatable="false">@string/selected_other</string>
+	<string name="selected_two" translatable="false">@string/selected_other</string>
+	<string name="selected_few" translatable="false">@string/selected_other</string>
+	<string name="selected_many" translatable="false">@string/selected_other</string>
 	<string name="background_sync">Background sync</string>
 	<string name="background_sync_info">Syncs once per hour</string>
 	<string name="sync_on_change">Sync on changes</string>
@@ -299,7 +299,7 @@
 	<string name="dashclock_next7">Next 7 days</string>
 	<string name="dashclock_anytime">Anytime</string>
 	<string name="dashclock_will_show_as_many_as_possible">Will show as many as possible</string>
-	<string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+	<string name="dashclock_will_only_show_the_task_due_first" translatable="false">@string/dashclock_show_only_the_next_task</string>
 	<string name="dashclock_show_only_the_next_task">Show only the next task</string>
 	<string name="dashclock_header_shown">List name will be shown in bold</string>
 	<string name="dashclock_first_task_shown">Title of first task will be shown in bold</string>
