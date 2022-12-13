@@ -162,16 +162,10 @@
     <string name="please_type_before_reminder">Harap ketik beberapa teks sebelum menyetel pengingat</string>
     <string name="notecopied_one">Disalin %d catatan</string>
     <string name="notecopied_other">Disalin %d catatan</string>
-    <string name="notecopied_zero">@string/notecopied_other</string>
-    <string name="notecopied_two">@string/notecopied_other</string>
-    <string name="notecopied_few">@string/notecopied_other</string>
-    <string name="notecopied_many">@string/notecopied_other</string>
+    
     <string name="notedeleted_one">Dihapus %d catatan</string>
     <string name="notedeleted_other">Dihapus %d catatan</string>
-    <string name="notedeleted_zero">@string/notedeleted_other</string>
-    <string name="notedeleted_two">@string/notedeleted_other</string>
-    <string name="notedeleted_few">@string/notedeleted_other</string>
-    <string name="notedeleted_many">@string/notedeleted_other</string>
+    
     <string name="selected_one">Dipilih %d catatan</string>
     <string name="selected_other">Dipilih %d catatan</string>
     <string name="background_sync">Sinkronisasi di latar belakang</string>

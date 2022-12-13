@@ -54,14 +54,14 @@
     <string name="sort_list_manual">Sortera manuellt</string>
     <string name="search_description">Anteckningar och uppgifter</string>
     <string name="archive">Arkiv</string>
-    <string name="view_deletedtasks">@string/archive</string>
+    
     <string name="restore">Återställ</string>
     <string name="restore_to">Återställ till</string>
     <string name="search_hint">Sök</string>
     <string name="settings_theme">Nuvarande tema</string>
     <string name="settings_theme_dialog">Använd tema</string>
     <string name="settings_lang">Språk</string>
-    <string name="settings_lang_dialog">@string/settings_lang</string>
+    
     <string name="settings_summary_theme_black">Svart</string>
     <string name="settings_summary_theme_dark">Mörk</string>
     <string name="settings_summary_theme_light">Ljus</string>
@@ -162,9 +162,7 @@
     <string name="notedeleted_other">Raderade %d anteckningar</string>
     <string name="selected_one">Markerade %d anteckning</string>
     <string name="selected_other">Markerade %d anteckningar</string>
-    <string name="selected_two">@string/selected_other</string>
-    <string name="selected_few">@string/selected_other</string>
-    <string name="selected_many">@string/selected_other</string>
+    
     <string name="background_sync">Synka i bakgrunden</string>
     <string name="background_sync_info">Synka en gång per timme</string>
     <string name="sync_on_change">Synka vid ändringar</string>
@@ -188,7 +186,7 @@
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Uppgifter</string>
     <string name="all_tasks">Alla uppgifter</string>
-    <string name="dashclock_tasks">@string/tasks</string>
+    
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Endast uppgifter i</string>
     <string name="dashclock_show_overdue_tasks">Visa försenade uppgifter</string>
     <string name="dashclock_overdue_tasks_show">Försenade uppgifter visas</string>
@@ -201,7 +199,7 @@
     <string name="dashclock_next7">Kommande 7 dagarna</string>
     <string name="dashclock_anytime">När som helst</string>
     <string name="dashclock_will_show_as_many_as_possible">Visar så många som möjligt</string>
-    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+    
     <string name="dashclock_show_only_the_next_task">Visar endast nästa uppgift</string>
     <string name="dashclock_header_shown">Listans namn visas i fetstil</string>
     <string name="dashclock_first_task_shown">Den första uppgiftens titel visas i fetstil</string>
