@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">便签</string>
     <string name="title_create">新便签</string>
     <string name="timemachine">时光机</string>
@@ -66,7 +65,7 @@
     <string name="settings_summary_theme_light">浅色</string>
     <string name="settings_summary_theme_classic">经典</string>
     <string name="settings_cat_appearance">外观</string>
-    <string name="preference_preview_text">我能吞下玻璃而不伤身体。</string>
+    <string name="preference_preview_text">这是编辑器文本的显示方式</string>
     <string name="settings_account_title">选择一个账户</string>
     <string name="settings_account_summary">点击切换账户</string>
     <string name="settings_sync_enable_title">Google 工作表同步</string>
@@ -80,9 +79,9 @@
     <string name="once">一次性</string>
     <string name="always">总是</string>
     <string name="permission_read_label">读取便签和列表</string>
-    <string name="permission_read_desc">允许应用读取你的便签与相关列表。</string>
+    <string name="permission_read_desc">允许应用阅读你在 No Nonsense Notes 中的笔记和相关列表</string>
     <string name="permission_write_label">更改便签与列表</string>
-    <string name="permission_write_desc">允许应用新增、更改和删除便签与列表。</string>
+    <string name="permission_write_desc">允许应用在 No Nonsense Notes 中插入、更新及删除笔记和列表</string>
     <string name="settings_list_dialog">选择一个列表</string>
     <string name="settings_list">列表</string>
     <string name="drag_to_timetravel">拖到时间旅行</string>
@@ -161,22 +160,22 @@
     <string name="transparency">透明度</string>
     <string name="notes_shortcut">便签快捷方式</string>
     <string name="shortcut_help1">如果选中，快捷方式将会在选中的列表创建一条便签并打开编辑器。如果不选中，快捷方式只打开选中列表。</string>
-    <string name="loading_widget">正在加载小部件&#8230;&#8230;</string>
+    <string name="loading_widget">正在加载小部件……</string>
     <string name="default_list">默认列表</string>
     <string name="please_type_before_reminder">设置提醒前请先输入一些文字</string>
-    <string name="notecopied_one">已复制一条便签</string>
+    <string name="notecopied_one">已复制 %d 则笔记</string>
     <string name="notecopied_other">已复制 %d 条便签</string>
     <string name="notecopied_zero">@string/notecopied_other</string>
     <string name="notecopied_two">@string/notecopied_other</string>
     <string name="notecopied_few">@string/notecopied_other</string>
     <string name="notecopied_many">@string/notecopied_other</string>
-    <string name="notedeleted_one">已删除一条便签</string>
+    <string name="notedeleted_one">已删除 %d 则笔记</string>
     <string name="notedeleted_other">已删除 %d 条便签</string>
     <string name="notedeleted_zero">@string/notecopied_other</string>
     <string name="notedeleted_two">@string/notecopied_other</string>
     <string name="notedeleted_few">@string/notecopied_other</string>
     <string name="notedeleted_many">@string/notecopied_other</string>
-    <string name="selected_one">已选定一条便签</string>
+    <string name="selected_one">已选定 %d 则笔记</string>
     <string name="selected_other">已选定 %d 条便签</string>
     <string name="selected_zero">@string/selected_other</string>
     <string name="selected_two">@string/notecopied_other</string>
@@ -189,7 +188,7 @@
     <string name="sync_on_start">应用启动时同步</string>
     <string name="sync_on_start_info">仅在初次启动时进行，再次打开时不再同步</string>
     <string name="sync_full_force">强制下次进行完整同步</string>
-    <string name="sync_full_force_info">仅在您确信存在数据缺失时选择此项</string>
+    <string name="sync_full_force_info">仅在您认为同步漏掉了某些项目时勾选。</string>
     <string name="snooze">打盹</string>
     <string name="silent">静音</string>
     <string name="sound">铃声</string>
@@ -257,6 +256,6 @@
     <string name="sd_card_sync">SD 卡同步</string>
     <string name="sd_card_summary">任务在SD卡上被镜像。 更改是同步的两种方式。 请注意，删除文件将删除应用程序中的任务！</string>
     <string name="directory">目录</string>
-    <string name="directory_summary">文件应该存储在哪里</string>
+    <string name="directory_summary">文件应该存储在哪里。</string>
     <string name="cannot_write_to_directory">无法写入目录</string>
 </resources>
