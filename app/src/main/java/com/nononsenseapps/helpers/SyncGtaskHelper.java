@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
@@ -88,8 +89,9 @@ public class SyncGtaskHelper {
 	 * Finds and returns the account of the name given
 	 *
 	 * @param accountName email of google account
-	 * @return a Google Account
+	 * @return a Google Account. May be null. See issue #449
 	 */
+	@Nullable
 	public static Account getAccount(@NonNull AccountManager manager, @NonNull String accountName) {
 		Account[] accounts = manager.getAccountsByType("com.google");
 		for (Account account : accounts) {
@@ -197,7 +199,14 @@ public class SyncGtaskHelper {
 		// isGTasksConfigured() guarantees that this is not null
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, null);
 
+		// This "account" is null on some devices, so isSyncActive() may crash. See issue #449
 		Account account = getAccount(AccountManager.get(context), accountName);
+		if (account == null) {
+			// who cares, we are going to kill google task sync anyway...
+			NnnLogger.debug(SyncGtaskHelper.class,
+					"got null google account, quitting forceGTaskSyncNow()");
+			return;
+		}
 		// Don't start a new sync if one is already going
 		if (!ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY)) {
 			Bundle options = new Bundle();
