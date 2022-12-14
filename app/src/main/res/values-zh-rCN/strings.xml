@@ -52,14 +52,14 @@
     <string name="sort_list_manual">手动排序</string>
     <string name="search_description">便签与任务</string>
     <string name="archive">归档</string>
-    <string name="view_deletedtasks">@string/archive</string>
+    
     <string name="restore">还原</string>
     <string name="restore_to">还原至</string>
     <string name="search_hint">搜索</string>
     <string name="settings_theme">当前主题</string>
     <string name="settings_theme_dialog">使用主题</string>
     <string name="settings_lang">语言</string>
-    <string name="settings_lang_dialog">@string/settings_lang</string>
+    
     <string name="settings_summary_theme_black">黑色</string>
     <string name="settings_summary_theme_dark">深色</string>
     <string name="settings_summary_theme_light">浅色</string>
@@ -98,15 +98,7 @@
     <string name="showcase_timemachine_msg">任何更改都会立即保存下来。请使用时光机功能以恢复前一个版本。</string>
     <string name="donate_to_unlock">捐赠后解锁此功能</string>
     <string name="premiums_unlocked_and_thanks">高级功能已解锁。感谢您的支持！</string>
-    <plurals name="notecopied_msg">
-        <item quantity="other">@string/notecopied_other</item>
-    </plurals>
-    <plurals name="notedeleted_msg">
-        <item quantity="other">@string/notecopied_other</item>
-    </plurals>
-    <plurals name="mode_choose">
-        <item quantity="other">@string/notecopied_other</item>
-    </plurals>
+    
     <string name="move">移动</string>
     <string name="move_to">移动到</string>
     <string name="moved_x_to_list">移动 %1$d到%2$s</string>
@@ -165,22 +157,13 @@
     <string name="please_type_before_reminder">设置提醒前请先输入一些文字</string>
     <string name="notecopied_one">已复制 %d 则笔记</string>
     <string name="notecopied_other">已复制 %d 条便签</string>
-    <string name="notecopied_zero">@string/notecopied_other</string>
-    <string name="notecopied_two">@string/notecopied_other</string>
-    <string name="notecopied_few">@string/notecopied_other</string>
-    <string name="notecopied_many">@string/notecopied_other</string>
+    
     <string name="notedeleted_one">已删除 %d 则笔记</string>
     <string name="notedeleted_other">已删除 %d 条便签</string>
-    <string name="notedeleted_zero">@string/notecopied_other</string>
-    <string name="notedeleted_two">@string/notecopied_other</string>
-    <string name="notedeleted_few">@string/notecopied_other</string>
-    <string name="notedeleted_many">@string/notecopied_other</string>
+    
     <string name="selected_one">已选定 %d 则笔记</string>
     <string name="selected_other">已选定 %d 条便签</string>
-    <string name="selected_zero">@string/selected_other</string>
-    <string name="selected_two">@string/notecopied_other</string>
-    <string name="selected_few">@string/notecopied_other</string>
-    <string name="selected_many">@string/notecopied_other</string>
+    
     <string name="background_sync">后台同步</string>
     <string name="background_sync_info">每小时同步一次</string>
     <string name="sync_on_change">更改时同步</string>

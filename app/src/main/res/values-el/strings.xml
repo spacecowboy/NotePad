@@ -102,22 +102,7 @@
     <string name="showcase_timemachine_msg">Οι αλλαγές αποθηκεύονται πάντα. Χρησιμοποιήστε τη χρονομηχανή για να επαναφέρετε μια προηγούμενη έκδοση.</string>
     <string name="donate_to_unlock">Κάντε δωρεά για να ξεκλειδώσετε</string>
     <string name="premiums_unlocked_and_thanks">Τα Premium χαρακτηριστικά ξεκλειδώθηκαν. Σας ευχαριστούμε για την υποστήριξή σας!</string>
-    <!--
-        Use few if language need it. In English is the same.
-        <item quantity="few">Copied 2 notes.</item>
-    -->
-    <plurals name="notecopied_msg">
-        <item quantity="one">@string/notecopied_one</item>
-        <item quantity="other">@string/notecopied_other</item>
-    </plurals>
-    <plurals name="notedeleted_msg">
-        <item quantity="one">@string/notedeleted_one</item>
-        <item quantity="other">@string/notedeleted_other</item>
-    </plurals>
-    <plurals name="mode_choose">
-        <item quantity="one">@string/selected_one</item>
-        <item quantity="other">@string/selected_other</item>
-    </plurals>
+    
     <string name="move">Μετακίνηση</string>
     <string name="move_to">Μετακίνηση σε</string>
     <string name="moved_x_to_list">Μετακινήθηκαν %1$d στο %2$s</string>
@@ -177,22 +162,13 @@
     <string name="please_type_before_reminder">Παρακαλώ πληκτρολογήστε κάποιο κείμενο πριν να ορίσετε μια υπενθύμιση</string>
     <string name="notecopied_one">Αντιγραφή %d σημείωσης</string>
     <string name="notecopied_other">Αντιγραφή %d σημειώσεων</string>
-    <string name="notecopied_zero">@string/notecopied_other</string>
-    <string name="notecopied_two">@string/notecopied_other</string>
-    <string name="notecopied_few">@string/notecopied_other</string>
-    <string name="notecopied_many">@string/notecopied_other</string>
+    
     <string name="notedeleted_one">Διαγραφή %d σημείωσης</string>
     <string name="notedeleted_other">Διαγράφηκαν %d σημειώσεις</string>
-    <string name="notedeleted_zero">@string/notedeleted_other</string>
-    <string name="notedeleted_two">@string/notedeleted_other</string>
-    <string name="notedeleted_few">@string/notedeleted_other</string>
-    <string name="notedeleted_many">@string/notedeleted_other</string>
+    
     <string name="selected_one">Επιλέχτηκε %d σημείωση</string>
     <string name="selected_other">Επιλέχτηκαν %d σημειώσεις</string>
-    <string name="selected_zero">@string/selected_other</string>
-    <string name="selected_two">@string/selected_other</string>
-    <string name="selected_few">@string/selected_other</string>
-    <string name="selected_many">@string/selected_other</string>
+    
     <string name="background_sync">Συγχρονισμός στο παρασκήνιο</string>
     <string name="background_sync_info">Συγχρονίζεται κάθε μία ώρα</string>
     <string name="sync_on_change">Συγχρονισμός σε κάθε αλλαγή</string>
@@ -223,7 +199,7 @@
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Εργασίες</string>
     <string name="all_tasks">Όλες οι εργασίες</string>
-    <string name="dashclock_tasks">@string/tasks</string>
+    
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Περιορισμός σε εργασίες στο</string>
     <string name="dashclock_show_overdue_tasks">Εμφάνιση εκπρόθεσμων εργασιών</string>
     <string name="dashclock_overdue_tasks_show">Οι εκπρόθεσμες εργασίες θα εμφανίζονται</string>
@@ -236,7 +212,7 @@
     <string name="dashclock_next7">Επόμενες 7 ημέρες</string>
     <string name="dashclock_anytime">Οποτεδήποτε</string>
     <string name="dashclock_will_show_as_many_as_possible">Θα εμφανίζονται όσο το δυνατόν περισσότερα</string>
-    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+    
     <string name="dashclock_show_only_the_next_task">Εμφάνισε μόνο την επόμενη εργασία</string>
     <string name="dashclock_header_shown">Το όνομα της λίστα θα εμφανίζεται με έντονη γραφή</string>
     <string name="dashclock_first_task_shown">Ο τίτλος της πρώτης εργασίας θα εμφανίζεται με έντονους χαρακτήρες</string>

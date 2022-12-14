@@ -166,8 +166,7 @@
 
     <string name="notedeleted_one">Notița %d ștearsă</string>
     <string name="notedeleted_other">Notițe %d șterse</string>
-    <string name="notedeleted_zero">@string/notedeleted_other</string>
-    <string name="notedeleted_two">@string/notedeleted_other</string>
+    
 
 
     <string name="selected_one">Notiță %d selectată</string>

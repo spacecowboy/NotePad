@@ -59,6 +59,10 @@ public class AppearancePrefs extends PreferenceFragmentCompat {
 		setDateEntries(findPreference(getString(R.string.key_pref_dateformat_short)), R.array.dateformat_short_values);
 		setDateEntries(findPreference(getString(R.string.key_pref_dateformat_long)), R.array.dateformat_long_values);
 
+		// TODO once you set a new language force the fragment (and the activity) to reload,
+		//  because otherwise you have to go back to the main activity to use the app in the
+		//  new language selected
+
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
 		PrefsActivity

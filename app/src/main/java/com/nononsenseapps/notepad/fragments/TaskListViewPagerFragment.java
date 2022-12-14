@@ -29,9 +29,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.SearchView;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.Fragment;
@@ -45,6 +48,7 @@ import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
 import com.nononsenseapps.notepad.R;
@@ -173,6 +177,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	}
 
+	/**
+	 * Create the {@link SearchView} to find notes while browsing {@link ActivityMain}
+	 */
 	@Override
 	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
@@ -180,11 +187,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 		if (menu.findItem(R.id.menu_search) == null) {
 			return;
 		}
-
 		SearchView searchView = (SearchView) menu
 				.findItem(R.id.menu_search)
 				.getActionView();
-
 		// Assumes current activity is the searchable activity
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getActivity().getComponentName()));
@@ -192,6 +197,17 @@ public class TaskListViewPagerFragment extends Fragment implements
 		searchView.setIconifiedByDefault(false);
 		searchView.setQueryRefinementEnabled(true);
 		searchView.setSubmitButtonEnabled(false);
+
+		// enlarge the suggestions box so that it occupies the whole screen
+		var autoCompTxtVi = (AutoCompleteTextView) searchView
+				.findViewById(androidx.appcompat.R.id.search_src_text);
+		final View dropDownSugg = searchView.findViewById(autoCompTxtVi.getDropDownAnchor());
+		if (dropDownSugg == null) return;
+		dropDownSugg.addOnLayoutChangeListener(
+				(v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+					// gives more horizontal space, to show more text of a search suggestion item
+					autoCompTxtVi.setDropDownWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+				});
 	}
 
 	@Override

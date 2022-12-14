@@ -31,6 +31,7 @@
 		android:max="99"
 		app:min="1"
 		app:showSeekBarValue="true"
+		app:singleLineTitle="false"
 		android:title="@string/item_max_height"/>
 
 	<ListPreference
@@ -52,6 +53,7 @@
 	<!-- Depends on listtype in code -->
 	<CheckBoxPreference
 		android:defaultValue="false"
+		app:singleLineTitle="false"
 		android:key="@string/pref_hidecheckboxes"
 		android:summaryOff="@string/hide_checkbox_summary_off"
 		android:summaryOn="@string/hide_checkbox_summary_on"

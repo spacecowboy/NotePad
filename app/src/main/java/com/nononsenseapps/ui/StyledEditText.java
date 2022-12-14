@@ -56,22 +56,24 @@ public class StyledEditText extends AppCompatEditText {
 
 	public StyledEditText(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-				R.styleable.StyledTextView, 0, 0);
+		TypedArray a = context
+				.getTheme()
+				.obtainStyledAttributes(attrs, R.styleable.StyledTextView, 0, 0);
 
 		int mTitleFontFamily;
 		int mBodyFontFamily;
 		int mTitleFontStyle;
 		try {
-			mTitleRelativeSize = a.getFloat(
-					R.styleable.StyledTextView_titleRelativeSize, 1.0f);
-			mTitleFontFamily = a.getInteger(
-					R.styleable.StyledTextView_titleFontFamily, 0);
-			mTitleFontStyle = a.getInteger(
-					R.styleable.StyledTextView_titleFontStyle, 0);
-			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
-			mBodyFontFamily = a.getInteger(
-					R.styleable.StyledTextView_bodyFontFamily, 0);
+			mTitleRelativeSize = a
+					.getFloat(R.styleable.StyledTextView_titleRelativeSize, 1.0f);
+			mTitleFontFamily = a
+					.getInteger(R.styleable.StyledTextView_titleFontFamily, 0);
+			mTitleFontStyle = a
+					.getInteger(R.styleable.StyledTextView_titleFontStyle, 0);
+			mLinkify = a
+					.getBoolean(R.styleable.StyledTextView_linkify, false);
+			mBodyFontFamily = a
+					.getInteger(R.styleable.StyledTextView_bodyFontFamily, 0);
 		} finally {
 			a.recycle();
 		}

@@ -165,22 +165,13 @@
     <string name="please_type_before_reminder">Lütfen bir hatırlatıcı ayarlamadan önce bir kaç metin yazın</string>
     <string name="notecopied_one">Bir not kopyalandı</string>
     <string name="notecopied_other">%d tane not kopyalandı</string>
-    <string name="notecopied_zero">@string/notecopied_other</string>
-    <string name="notecopied_two">@string/notecopied_other</string>
-    <string name="notecopied_few">@string/notecopied_other</string>
-    <string name="notecopied_many">@string/notecopied_other</string>
+    
     <string name="notedeleted_one">Bir not silindi</string>
     <string name="notedeleted_other">%d tane not silindi</string>
-    <string name="notedeleted_zero">@string/notedeleted_other</string>
-    <string name="notedeleted_two">@string/notedeleted_other</string>
-    <string name="notedeleted_few">@string/notedeleted_other</string>
-    <string name="notedeleted_many">@string/notedeleted_other</string>
+    
     <string name="selected_one">Bir not seçildi</string>
     <string name="selected_other">%d tane not seçildi</string>
-    <string name="selected_zero">@string/selected_other</string>
-    <string name="selected_two">@string/selected_other</string>
-    <string name="selected_few">@string/selected_other</string>
-    <string name="selected_many">@string/selected_other</string>
+    
     <string name="background_sync">Arkaplan senkronizasyonu</string>
     <string name="background_sync_info">Saatte bir defa senkronize et</string>
     <string name="sync_on_change">Değişiklikleri senkronize et</string>
@@ -224,7 +215,7 @@
     <string name="dashclock_next7">7 gün sonra</string>
     <string name="dashclock_anytime">Herzaman</string>
     <string name="dashclock_will_show_as_many_as_possible">Mümkün olduğu kadar fazla gösterecek</string>
-    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+    
     <string name="dashclock_show_only_the_next_task">Yalnızca bir sonraki görevi göster</string>
     <string name="dashclock_header_shown">Liste adı kalın yazıyla gösterilecek</string>
     <string name="dashclock_first_task_shown">İlk görevin başlığı kalın gösterilecek</string>

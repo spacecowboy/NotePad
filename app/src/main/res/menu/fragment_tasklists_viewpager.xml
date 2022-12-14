@@ -14,12 +14,12 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+-->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- this menu is shown only in the main activity -->
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
-
-	<!-- this menu is shown only in the main activity -->
 
 	<!-- Outside group to allow for action bar placement -->
 	<item
@@ -27,7 +27,7 @@
 		android:icon="@drawable/ic_search_24dp_white"
 		android:orderInCategory="200"
 		android:title="@string/search_hint"
-		app:actionViewClass="android.widget.SearchView"
+		app:actionViewClass="androidx.appcompat.widget.SearchView"
 		app:showAsAction="ifRoom|collapseActionView"/>
 
 	<item

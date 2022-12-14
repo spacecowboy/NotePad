@@ -54,14 +54,14 @@
     <string name="sort_list_manual">Naročite ročno</string>
     <string name="search_description">Opombe in opravila</string>
     <string name="archive">Arhiv</string>
-    <string name="view_deletedtasks">@string/archive</string>
+    
     <string name="restore">Obnovitev</string>
     <string name="restore_to">Obnovi v </string>
     <string name="search_hint">Išči</string>
     <string name="settings_theme">Trenutna tema</string>
     <string name="settings_theme_dialog">Uporabi temo</string>
     <string name="settings_lang">Jezik</string>
-    <string name="settings_lang_dialog">@string/settings_lang</string>
+    
     <string name="settings_summary_theme_black">Črna</string>
     <string name="settings_summary_theme_dark">Temno</string>
     <string name="settings_summary_theme_light">Svetlobe</string>
@@ -158,22 +158,13 @@
     <string name="please_type_before_reminder">Vnesite nekaj besedila, preden nastavite opomnik</string>
     <string name="notecopied_one">Opomba prekopirane %d</string>
     <string name="notecopied_other">Kopirane %d opombe</string>
-    <string name="notecopied_zero">@string/notecopied_other</string>
-    <string name="notecopied_two">@string/notecopied_other</string>
-    <string name="notecopied_few">@string/notecopied_other</string>
-    <string name="notecopied_many">@string/notecopied_other</string>
+    
     <string name="notedeleted_one">Opomba izbrisani %d</string>
     <string name="notedeleted_other">Izbrisati %d opombe</string>
-    <string name="notedeleted_zero">@string/notedeleted_other</string>
-    <string name="notedeleted_two">@string/notedeleted_other</string>
-    <string name="notedeleted_few">@string/notedeleted_other</string>
-    <string name="notedeleted_many">@string/notedeleted_other</string>
+    
     <string name="selected_one">Opomba izbrani %d</string>
     <string name="selected_other">Izbrati %d opombe</string>
-    <string name="selected_zero">@string/selected_other</string>
-    <string name="selected_two">@string/selected_other</string>
-    <string name="selected_few">@string/selected_other</string>
-    <string name="selected_many">@string/selected_other</string>
+    
     <string name="background_sync">Ozadju sinhronizacijo</string>
     <string name="background_sync_info">Sinhronizira enkrat na uro</string>
     <string name="sync_on_change">Sinhronizacijo na spremembe</string>
@@ -203,7 +194,7 @@
     <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Naloge</string>
     <string name="all_tasks">Vsa opravila</string>
-    <string name="dashclock_tasks">@string/tasks</string>
+    
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Omejiti naloge v</string>
     <string name="dashclock_show_overdue_tasks">Pokaži zapadla opravila</string>
     <string name="dashclock_overdue_tasks_show">Bo prikazan zapadla opravila</string>
@@ -216,7 +207,7 @@
     <string name="dashclock_next7">Naslednjih 7 dni</string>
     <string name="dashclock_anytime">Kadarkoli</string>
     <string name="dashclock_will_show_as_many_as_possible">Bo pokazati čim več</string>
-    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
+    
     <string name="dashclock_show_only_the_next_task">Prikaz naslednjega opravila</string>
     <string name="dashclock_header_shown">Ime seznama, bo prikazan v krepko</string>
     <string name="dashclock_first_task_shown">Naziv prva naloga bo prikazan v krepko</string>
