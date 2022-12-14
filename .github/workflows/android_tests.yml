@@ -18,7 +18,7 @@ jobs:
         api-level: [ 23, 25, 27, 29, 31, 33 ]
         target: [ default, google_apis ] # OS images without, or with, google apps
         # TODO if you use this then disable the "avd cache" step, because you don't have space to save 20 emulator images
-        # profile: [ 5.4in FWVGA, 10.1in WXGA ] # phone or tablet
+        # profile: [ 5.1in WVGA, 10.1in WXGA ] # phone or tablet
         exclude:
             # the images for these configurations do not exist
           - api-level: 33
@@ -72,7 +72,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          profile: 5.4in FWVGA  # low resolution: faster. This has no software buttons
+          profile: 5.1in WVGA  # low resolution: faster. This has no software buttons
           arch: x86_64          # faster
           disk-size: 500M       # needed for saving org and json files
           force-avd-creation: false
