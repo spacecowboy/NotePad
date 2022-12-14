@@ -141,7 +141,6 @@
 	<string name="open_channel_settings_description">Open a page to edit the notification settings for this app. These override any settings chosen elsewhere</string>
 	<string name="libraries_used">Libraries</string>
 	<string name="license">License</string>
-
 	<string name="app_about_dev_team">Created by Jonas Kalderstam and maintained by Campello Manuel</string>
 	<string name="app_about_git_repo">This app is copylefted libre software, available at https://github.com/spacecowboy/NotePad</string>
 	<string name="app_about_license">Licensed GPLv3+, https://www.gnu.org/licenses.</string>
@@ -228,7 +227,7 @@
 	<string name="select_date">Select date</string>
 	<string name="localedefault">Device default</string>
 	<string name="donate">Donate</string>
-	<string name="donate_thanks">Thank you for your support. <3</string>
+	<string name="donate_thanks">Thank you for your support ♥</string>
 
 	<!-- settings string keys -->
 	<string name="hide_header">Hide entire widget header</string>
