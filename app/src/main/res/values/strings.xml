@@ -333,7 +333,7 @@
 	<string name="sd_card_sync">SD card sync</string>
 	<string name="sd_card_summary">Tasks are kept the same between the app and the SD card. Deleting the files thus delete the tasks in the app!</string>
 	<string name="directory">Directory</string>
-	<string name="directory_summary">Where files should be stored.</string>
+	<string name="directory_summary">Where to store files.</string>
 	<string name="cannot_write_to_directory">Cannot write to directory</string>
 	<string name="bigger_titles">Bigger titles</string>
 	<string name="bigger_titles_summary">The title is the first line</string>
