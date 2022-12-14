@@ -47,10 +47,13 @@ import java.io.IOException;
  *
  * In addition, a successful account choice will trigger an immediate sync.
  */
-public class AccountDialog4 extends DialogFragment implements
+class AccountDialog4 extends DialogFragment implements
 		AccountManagerCallback<Bundle> {
 	private Activity activity;
 	private Account account;
+
+	// TODO useless class, we have a system popup to choose accounts,
+	//  and we will delete google tasks sync anyway. delete this file.
 
 	@Override
 	public void onAttach(@NonNull Activity activity) {
@@ -83,7 +86,7 @@ public class AccountDialog4 extends DialogFragment implements
 	 */
 	public void accountSelected(final Account account) {
 		if (account != null) {
-			NnnLogger.debug(AccountDialog4.class, "step one");
+			//NnnLogger.debug(AccountDialog4.class, "step one");
 			this.account = account;
 			// Request user's permission
 			GoogleTasksClient.getAuthTokenAsync(activity, account, this);
@@ -98,7 +101,7 @@ public class AccountDialog4 extends DialogFragment implements
 	@Override
 	public void run(AccountManagerFuture<Bundle> future) {
 		try {
-			NnnLogger.debug(AccountDialog4.class, "step two");
+			//NnnLogger.debug(AccountDialog4.class, "step two");
 			// If the user has authorized
 			// your application to use the
 			// tasks API
@@ -106,10 +109,10 @@ public class AccountDialog4 extends DialogFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
-			NnnLogger.debug(AccountDialog4.class, "step two-b: " + token);
+			//NnnLogger.debug(AccountDialog4.class, "step two-b: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
-				NnnLogger.debug(AccountDialog4.class, "step three: " + account.name);
+				//NnnLogger.debug(AccountDialog4.class, "step three: " + account.name);
 				SharedPreferences customSharedPreference = PreferenceManager
 						.getDefaultSharedPreferences(activity);
 				customSharedPreference.edit()

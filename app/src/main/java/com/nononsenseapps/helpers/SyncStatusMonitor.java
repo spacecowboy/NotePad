@@ -50,19 +50,19 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
 		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
 
-		final String accountName = PreferenceManager.getDefaultSharedPreferences(activity)
+		final String accountName = PreferenceManager
+				.getDefaultSharedPreferences(activity)
 				.getString(SyncPrefs.KEY_ACCOUNT, "");
 		Account account = null;
-		if (accountName != null && !accountName.isEmpty()) {
+		if (!accountName.isEmpty()) {
 			account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
 		}
-		// Sync state might have changed, make sure we're spinning when
-		// we should
+		// Sync state might have changed, make sure we're spinning when we should
 		try {
 			listener.onSyncStartStop(account != null
 					&& ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY));
 		} catch (Exception e) {
-			NnnLogger.debug(SyncStatusMonitor.class, e.getLocalizedMessage());
+			NnnLogger.debug(SyncStatusMonitor.class, e.getMessage());
 		}
 	}
 

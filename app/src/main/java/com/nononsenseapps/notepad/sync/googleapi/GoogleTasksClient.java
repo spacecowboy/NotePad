@@ -27,6 +27,8 @@ import android.os.Bundle;
 
 import com.nononsenseapps.helpers.NnnLogger;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +57,9 @@ public class GoogleTasksClient {
 		this.accountName = accountName;
 	}
 
-	public static String getAuthToken(AccountManager accountManager, Account account, boolean notifyAuthFailure) throws AuthenticatorException, OperationCanceledException, IOException {
+	public static String getAuthToken(AccountManager accountManager, @NotNull Account account,
+									  boolean notifyAuthFailure)
+			throws AuthenticatorException, OperationCanceledException, IOException {
 		NnnLogger.debug(GoogleTasksClient.class, "getAuthToken");
 		String authToken;
 		// Might be invalid in the cache
@@ -74,7 +78,7 @@ public class GoogleTasksClient {
 	 * Get an AuthToken asynchronously. Use this in a foreground activity which will ask the user
 	 * for permission.
 	 */
-	public static void getAuthTokenAsync(Activity activity, Account account,
+	public static void getAuthTokenAsync(Activity activity, @NotNull Account account,
 										 AccountManagerCallback<Bundle> callback) {
 		NnnLogger.debug(GoogleTasksClient.class, "getAuthTokenAsync");
 
