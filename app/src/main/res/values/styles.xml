@@ -34,8 +34,13 @@
 		<item name="android:divider">?android:attr/listDivider</item>
 	</style>
 
+	<!-- TODO the only difference between these next 2 styles is the text color.
+         Use a single text color that varies and delete 1 of these styles -->
 	<style name="LeftDrawerListItemStyleDark">
+		<!-- use as many lines as the note list needs,
+		else the name is cut on devices with bigger text size
 		<item name="android:singleLine">true</item>
+		-->
 		<item name="android:gravity">center_vertical</item>
 		<item name="android:background">?android:attr/selectableItemBackground</item>
 		<item name="android:paddingLeft">16dp</item>
@@ -44,6 +49,7 @@
 		<item name="android:textColor">@android:color/primary_text_dark</item>
 	</style>
 
+	<!-- used for a list item in simple_light_list_item_2.xml -->
 	<style name="LeftDrawerListItemStyleLight" parent="@style/LeftDrawerListItemStyleDark">
 		<item name="android:textColor">@android:color/primary_text_light</item>
 	</style>

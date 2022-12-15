@@ -26,6 +26,7 @@
 	android:background="?android:attr/selectableItemBackground"
 	android:orientation="horizontal">
 
+	<!-- shows list name -->
 	<TextView
 		android:drawablePadding="8dp"
 		android:id="@android:id/text1"
@@ -34,13 +35,11 @@
 		android:layout_height="64dp"
 		android:layout_gravity="start|center_vertical"
 		android:layout_weight="1"
-		android:ellipsize="end"
 		android:fontFamily="sans-serif-light"
-		android:maxLines="1"
-		android:singleLine="true"
 		app:drawableLeftCompat="@drawable/folder_move_24dp_white"
 		app:drawableTint="?attr/textColorPrimary"/>
 
+	<!-- Shows the number of notes in this list -->
 	<TextView
 		android:id="@android:id/text2"
 		style="?LeftDrawerListItemSecondaryStyle"
