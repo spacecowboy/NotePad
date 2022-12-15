@@ -24,6 +24,9 @@
 	android:orientation="vertical"
 	android:paddingTop="16dp">
 
+	<!-- TODO minWidth is too small, so this popup may be as wide as the checkbox
+         (id: defaultListBox). Set a wider minwidth -->
+
 	<EditText
 		android:id="@+id/titleField"
 		android:layout_width="match_parent"
