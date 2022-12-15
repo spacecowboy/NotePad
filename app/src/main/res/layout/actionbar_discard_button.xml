@@ -36,5 +36,5 @@
 		android:paddingRight="20dp"
 		android:text="@android:string/cancel"
 		app:drawableTint="?attr/iconTint"
-		app:drawableLeftCompat="?attr/ic_clear_24dp_active"/>
+		app:drawableLeftCompat="@drawable/ic_clear_24dp"/>
 </FrameLayout>

@@ -45,14 +45,14 @@
 
 	<item
 		android:id="@+id/menu_lock"
-		android:icon="?attr/ic_lock_closed_24dp"
+		android:icon="@drawable/ic_lock_closed_24dp"
 		android:orderInCategory="103"
 		android:title="@string/lock_note"
 		app:showAsAction="ifRoom"/>
 
 	<item
 		android:id="@+id/menu_unlock"
-		android:icon="?attr/ic_lock_open_24dp"
+		android:icon="@drawable/ic_lock_open_24dp"
 		android:orderInCategory="104"
 		android:title="@string/unlock_note"
 		app:showAsAction="ifRoom"/>

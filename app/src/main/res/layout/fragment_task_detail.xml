@@ -100,8 +100,7 @@
 					android:layout_alignParentRight="true"
 					android:contentDescription="Remove due date"
 					android:nextFocusDown="@+id/notificationAdd"
-					android:src="?attr/ic_clear_24dp_active"
-
+					android:src="@drawable/ic_clear_24dp"
 					tools:ignore="HardcodedText"/>
 
 				<Button
@@ -135,7 +134,7 @@
 				android:background="?android:attr/selectableItemBackground"
 				android:clickable="true"
 				android:focusable="true"
-				android:drawableLeft="?attr/ic_alarm_add_24dp_active"
+				android:drawableLeft="@drawable/ic_alarm_add_24dp"
 				android:drawablePadding="8dp"
 				android:fontFamily="sans-serif-light"
 				android:gravity="center_vertical"

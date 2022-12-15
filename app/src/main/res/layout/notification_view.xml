@@ -33,7 +33,7 @@
 		android:layout_marginLeft="4dp"
 		android:contentDescription="Remove reminder"
 		android:scaleType="center"
-		android:src="?attr/ic_clear_24dp_active"
+		android:src="@drawable/ic_clear_24dp"
 		tools:ignore="HardcodedText"/>
 
 	<ImageButton
@@ -47,7 +47,7 @@
 		android:minWidth="8dp"
 		android:padding="0dp"
 		android:scaleType="center"
-		android:src="?attr/ic_alarm_24dp_active"
+		android:src="@drawable/ic_alarm_24dp"
 		tools:ignore="HardcodedText"/>
 
 	<TextView
