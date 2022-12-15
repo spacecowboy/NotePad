@@ -17,6 +17,7 @@
 
 <FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/actionbar_discard"
 	style="?android:actionButtonStyle"
 	android:layout_width="0dp"
@@ -30,10 +31,10 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:drawableLeft="?attr/ic_clear_24dp_active"
 		android:drawablePadding="8dp"
 		android:gravity="center_vertical"
 		android:paddingRight="20dp"
-		android:drawableTint="?attr/iconTint"
-		android:text="@android:string/cancel"/>
+		android:text="@android:string/cancel"
+		app:drawableTint="?attr/iconTint"
+		app:drawableLeftCompat="?attr/ic_clear_24dp_active"/>
 </FrameLayout>

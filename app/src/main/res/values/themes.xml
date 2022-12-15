@@ -93,8 +93,13 @@
 		      black icons on the actionbar when using this light theme. But we don't yet control
 		      the actionbar color, so it would be black icons on a black bar! Shall we use a
 		      light actionbar too ? -->
+		<!-- this decides the color of every xml drawable icon
+		(while this theme is active). Good values:
+		 * ?colorPrimary	Inherit from android 13 dynamic primary color
+		 * #111				black icons
+		 * @color/my_black	define a reusable color somewhere else
+		 -->
 		<item name="iconTint">@color/icon_tint_dark</item>
-		<!-- <item name="iconTint">@color/icon_tint_light</item> -->
 
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
