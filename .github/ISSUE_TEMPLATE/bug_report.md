@@ -20,7 +20,7 @@ write a clear and short description of what the bug is.
 
 ### If applicable
 
-* add screenshots
+* add the stacktrace
 * add logcat output
 
 ### Technical information
