@@ -109,5 +109,28 @@ then
   git tag -asm "$(cat "${tmpfile}")" "${NEXT_VERSION}"
 fi
 
-echo "Done. Now review the changes, and then:"
-echo "git push --tags"
+echo "Status of git files:"
+git status -s
+
+read -r -p "Push files and tags to remote? [y/N] " response
+if [[ "$response" =~ ^[yY]$ ]]
+then
+  git push
+  git push --tags
+fi
+
+# github page to create releases
+WEBPAGE=https://github.com/spacecowboy/NotePad/releases/new
+echo $WEBPAGE
+
+read -r -p "Open that github page to make a new release? [y/N] " response
+if [[ "$response" =~ ^[yY]$ ]]
+then
+  if hash start 2>/dev/null; then
+    # open URL on windows
+    start $WEBPAGE
+  else
+    # open URL on linux
+    xdg-open $WEBPAGE
+  fi
+fi
