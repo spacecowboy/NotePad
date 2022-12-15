@@ -34,7 +34,7 @@
 		android:title="@string/settings_list"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
-		android:icon="@drawable/ic_refresh_24dp_white"
+		android:icon="@drawable/ic_refresh_24dp"
 		android:summary=""
 		android:title="@string/settings_cat_syncing"/>
 	<Preference
@@ -44,7 +44,7 @@
 		android:title="@string/notifications"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
-		android:icon="@drawable/ic_lock_closed_24dp_white"
+		android:icon="@drawable/ic_lock_closed_24dp"
 		android:summary=""
 		android:title="@string/password"/>
 	<Preference
@@ -54,12 +54,12 @@
 		android:title="@string/backup"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
-		android:icon="@drawable/ic_help_24dp_white"
+		android:icon="@drawable/ic_help_24dp"
 		android:summary=""
 		android:title="@string/changelog_full_title"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
-		android:icon="@drawable/ic_info_24dp_white"
+		android:icon="@drawable/ic_info_24dp"
 		android:summary=""
 		android:title="@string/about"/>
 

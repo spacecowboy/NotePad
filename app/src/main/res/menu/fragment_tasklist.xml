@@ -24,7 +24,7 @@
 		<item
 			android:id="@+id/menu_clearcompleted"
 			android:orderInCategory="300"
-			android:icon="@drawable/ic_notebook_minus_24dp_white"
+			android:icon="@drawable/ic_notebook_minus_24dp"
 			android:title="@string/menu_clearcompleted"
 			app:showAsAction="ifRoom"/>
 

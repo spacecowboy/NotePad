@@ -24,7 +24,7 @@
 	<!-- Outside group to allow for action bar placement -->
 	<item
 		android:id="@+id/menu_search"
-		android:icon="@drawable/ic_search_24dp_white"
+		android:icon="@drawable/ic_search_24dp"
 		android:orderInCategory="200"
 		android:title="@string/search_hint"
 		app:actionViewClass="androidx.appcompat.widget.SearchView"
@@ -32,7 +32,7 @@
 
 	<item
 		android:id="@+id/menu_sync"
-		android:icon="@drawable/ic_refresh_24dp_white"
+		android:icon="@drawable/ic_refresh_24dp"
 		android:orderInCategory="201"
 		android:title="@string/menu_sync"
 		app:showAsAction="ifRoom"/>
