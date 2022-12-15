@@ -30,14 +30,14 @@
 
 	<item
 		android:id="@+id/menu_revert"
-		android:icon="@drawable/ic_undo_24dp_white"
+		android:icon="@drawable/ic_undo_24dp"
 		android:orderInCategory="101"
 		android:title="@android:string/cancel"
 		app:showAsAction="ifRoom"/>
 
 	<item
 		android:id="@+id/menu_share"
-		android:icon="@drawable/ic_share_24dp_white"
+		android:icon="@drawable/ic_share_24dp"
 		android:orderInCategory="102"
 		android:title="@string/menu_share"
 		app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"

@@ -32,7 +32,7 @@
 	<!-- android:actionProviderClass="android.widget.ShareActionProvider" -->
 	<item
 		android:id="@+id/menu_share"
-		android:icon="@drawable/ic_share_24dp_white"
+		android:icon="@drawable/ic_share_24dp"
 		app:showAsAction="ifRoom"
 		android:title="@string/menu_share"/>
 	<item

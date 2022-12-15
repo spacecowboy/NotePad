@@ -29,7 +29,7 @@
 			app:showAsAction="ifRoom"/>
 
 		<item
-			android:icon="@drawable/ic_sort_24dp_white"
+			android:icon="@drawable/ic_sort_24dp"
 			android:orderInCategory="400"
 			app:showAsAction="ifRoom"
 			android:title="@string/sorting">
