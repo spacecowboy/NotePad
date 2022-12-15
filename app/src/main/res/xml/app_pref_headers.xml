@@ -49,7 +49,7 @@
 		android:title="@string/password"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
-		android:icon="@drawable/ic_sd_storage_24dp_white"
+		android:icon="@drawable/ic_sd_storage_24dp"
 		android:summary=""
 		android:title="@string/backup"/>
 	<Preference

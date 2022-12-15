@@ -21,8 +21,8 @@
 	 	 for the widget. Things for the DARK theme can go here -->
 	<style name="ThemeHolo" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
-		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
-		<item name="ic_add_24dp">@drawable/ic_add_24dp_white</item>
+		<item name="ic_settings_24dp">@drawable/ic_settings_24dp</item>
+		<item name="ic_add_24dp">@drawable/ic_add_24dp</item>
 		<item name="ic_copy_24dp">@drawable/ic_copy_24dp</item>
 		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp</item>
 		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp</item>
@@ -38,7 +38,7 @@
 		<item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
 		<item name="list_item_card_background">@drawable/card_dark</item>
 		<item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp</item>
-		<item name="ic_clear_24dp_active">@drawable/ic_clear_24d</item>
+		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp</item>
 		<item name="ic_check_24dp">@drawable/ic_check_24dp</item>
 		<item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
 		<item name="drag_handle_color">@color/dragHandleColorDark</item>
@@ -101,13 +101,13 @@
 		 -->
 		<item name="iconTint">@color/icon_tint_dark</item>
 
-		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
-		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
+		<item name="ic_settings_24dp">@drawable/ic_settings_24dp</item>
+		<item name="ic_add_24dp">@drawable/ic_add_24dp</item>
 		<item name="ic_copy_24dp">@drawable/ic_copy_24dp</item>
 		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp</item>
 		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp</item>
 		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp</item>
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
+		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp</item>
 		<item name="ic_check_24dp">@drawable/ic_check_24dp</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="editorBackgroundColor">@drawable/card_light</item>
@@ -118,8 +118,8 @@
 		<item name="textColorPrimary">?android:attr/textColorPrimary</item>
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
-		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_black_active</item>
-		<item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_black_active</item>
+		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp</item>
+		<item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp</item>
 		<item name="list_item_card_background">@drawable/card_light</item>
 		<item name="drag_handle_color">@color/dragHandleColorLight</item>
 		<item name="TaskListItem">@style/TaskListItemLight</item>

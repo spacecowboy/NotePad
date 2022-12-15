@@ -22,7 +22,7 @@
 	<group android:id="@+id/activity_menu_group">
 		<item
 			android:id="@+id/menu_add"
-			android:icon="@drawable/ic_add_24dp_white"
+			android:icon="@drawable/ic_add_24dp"
 			android:orderInCategory="0"
 			android:title="@string/menu_save_and_add"
 			app:showAsAction="ifRoom"/>

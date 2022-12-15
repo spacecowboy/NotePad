@@ -40,7 +40,7 @@
 			android:background="@drawable/img_default_selector_dark"
 			android:contentDescription="Configure widget"
 			android:padding="8dp"
-			android:src="@drawable/ic_settings_24dp_white"/>
+			android:src="@drawable/ic_settings_24dp"/>
 
 		<LinearLayout
 			android:layout_width="8dp"
@@ -73,7 +73,7 @@
 			android:contentDescription="Create new note"
 			android:padding="4dp"
 			android:scaleType="fitCenter"
-			android:src="@drawable/ic_add_24dp_white"/>
+			android:src="@drawable/ic_add_24dp"/>
 	</LinearLayout>
 
 	<FrameLayout
