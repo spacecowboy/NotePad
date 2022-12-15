@@ -100,7 +100,7 @@
 			android:key="pref_sync_sd_dir"
 			android:summary="SyncPrefs.java sets this"
 			android:title="@string/directory"
-			android:dialogIcon="@drawable/ic_folder_24dp_white"/>
+			android:dialogIcon="@drawable/ic_folder_24dp"/>
 
 	</PreferenceCategory>
 

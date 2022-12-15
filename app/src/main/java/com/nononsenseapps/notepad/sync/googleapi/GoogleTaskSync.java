@@ -38,6 +38,8 @@ import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.RFC3339Date;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -53,8 +55,11 @@ public class GoogleTaskSync {
 	 * Returns true if sync was successful, false otherwise
 	 */
 	public static boolean fullSync(final Context context,
-								   final Account account, final Bundle extras, final String authority,
-								   final ContentProviderClient provider, final SyncResult syncResult) {
+								   @NotNull final Account account,
+								   final Bundle extras,
+								   final String authority,
+								   final ContentProviderClient provider,
+								   final SyncResult syncResult) {
 		NnnLogger.debug(GoogleTaskSync.class, "fullSync");
 		if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_GTASKS)) {
 			NnnLogger.debug(GoogleTaskSync.class, "Missing permissions, disabling sync");
@@ -70,9 +75,10 @@ public class GoogleTaskSync {
 		final AccountManager accountManager = AccountManager.get(context);
 
 		try {
-			GoogleTasksClient client = new GoogleTasksClient(GoogleTasksClient.getAuthToken
-					(accountManager, account, NOTIFY_AUTH_FAILURE), Config
-					.getGtasksApiKey(context), account.name);
+			GoogleTasksClient client = new GoogleTasksClient(
+					GoogleTasksClient.getAuthToken(accountManager, account, NOTIFY_AUTH_FAILURE),
+					Config.getGtasksApiKey(context),
+					account.name);
 
 			NnnLogger.debug(GoogleTaskSync.class, "AuthToken acquired, we are connected...");
 

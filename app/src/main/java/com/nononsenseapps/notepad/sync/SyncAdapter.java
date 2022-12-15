@@ -103,10 +103,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					null && !com.nononsenseapps.build.Config
 					.getGtasksApiKey(mContext).contains(" ")) {
 				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
-						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
-						.isEmpty()
-						&& account.name.equals(settings.getString(
-						SyncPrefs.KEY_ACCOUNT, ""))) {
+						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty()
+						&& account != null
+						&& account.name.equals(
+								settings.getString(SyncPrefs.KEY_ACCOUNT, ""))) {
 
 					NnnLogger.debug(SyncAdapter.class, "onPerformSync");
 					mContext.sendBroadcast(new Intent(SYNC_STARTED));

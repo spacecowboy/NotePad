@@ -95,9 +95,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
-		if (accountName != null && !accountName.isEmpty()) {
-			Account account = SyncGtaskHelper
-					.getAccount(AccountManager.get(activity), accountName);
+		if (!accountName.isEmpty()) {
+			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (!backgroundSync) {
 					// Disable periodic syncing
@@ -110,6 +109,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					ContentResolver.addPeriodicSync(account, MyContentProvider.AUTHORITY,
 							new Bundle(), pollFrequency);
 				}
+			} else {
+				// can't do anything: the user did not add a google account to the device
 			}
 		}
 	}
@@ -386,7 +387,9 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	 * Called when the user chooses one {@link Account} from the system popup
 	 */
 	private void userChoseAnAccountWithName(String chosenAccountName) {
-		Account[] allAccounts = AccountManager.get(this.activity).getAccountsByType("com.google");
+		Account[] allAccounts = AccountManager
+				.get(this.activity)
+				.getAccountsByType("com.google");
 
 		for (var chosenAccount : allAccounts) {
 			if (!chosenAccount.name.equalsIgnoreCase(chosenAccountName)) continue;

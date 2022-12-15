@@ -17,6 +17,7 @@
 
 <FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/actionbar_done"
 	style="?android:actionButtonStyle"
 	android:layout_width="0dp"
@@ -28,7 +29,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:drawableLeft="?attr/ic_check_24dp"
+		app:drawableLeftCompat="@drawable/ic_check_24dp"
+		app:drawableTint="?attr/iconTint"
 		android:drawablePadding="8dp"
 		android:gravity="center_vertical"
 		android:paddingRight="20dp"

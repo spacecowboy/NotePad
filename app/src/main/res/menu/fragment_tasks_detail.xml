@@ -22,7 +22,7 @@
 	<!-- Outside group to allow for action bar placement -->
 	<item
 		android:id="@+id/menu_delete"
-		android:icon="@drawable/ic_delete_24dp_white"
+		android:icon="@drawable/ic_delete_24dp"
 		android:orderInCategory="100"
 		android:title="@string/menu_delete"
 		app:showAsAction="ifRoom">
@@ -30,14 +30,14 @@
 
 	<item
 		android:id="@+id/menu_revert"
-		android:icon="@drawable/ic_undo_24dp_white"
+		android:icon="@drawable/ic_undo_24dp"
 		android:orderInCategory="101"
 		android:title="@android:string/cancel"
 		app:showAsAction="ifRoom"/>
 
 	<item
 		android:id="@+id/menu_share"
-		android:icon="@drawable/ic_share_24dp_white"
+		android:icon="@drawable/ic_share_24dp"
 		android:orderInCategory="102"
 		android:title="@string/menu_share"
 		app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
@@ -45,14 +45,14 @@
 
 	<item
 		android:id="@+id/menu_lock"
-		android:icon="?attr/ic_lock_closed_24dp"
+		android:icon="@drawable/ic_lock_closed_24dp"
 		android:orderInCategory="103"
 		android:title="@string/lock_note"
 		app:showAsAction="ifRoom"/>
 
 	<item
 		android:id="@+id/menu_unlock"
-		android:icon="?attr/ic_lock_open_24dp"
+		android:icon="@drawable/ic_lock_open_24dp"
 		android:orderInCategory="104"
 		android:title="@string/unlock_note"
 		app:showAsAction="ifRoom"/>

@@ -17,17 +17,18 @@
   -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<!-- TODO add a Material You theme.
+         Names of colors you can use (for example <item>?colorPrimary</item>):
+         colorPrimary colorOnPrimary colorPrimaryContainer colorOnPrimaryContainer
+         colorError colorOnError colorErrorContainer colorOnErrorContainer
+         colorOnBackground colorSurface colorOnSurface
+	 -->
+
 	<!-- a base theme used by ThemeGoogleNowDark for the app & ThemeWidgetConfig
 	 	 for the widget. Things for the DARK theme can go here -->
-	<style name="ThemeHolo" parent="Theme.AppCompat">
+	<style name="ThemeBaseDark" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
-		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
-		<item name="ic_add_24dp">@drawable/ic_add_24dp_white</item>
-		<item name="ic_copy_24dp">@drawable/ic_copy_24dp_white</item>
-		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
-		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp_white</item>
-		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp_white</item>
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
+
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_dark</item>
@@ -37,9 +38,7 @@
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
 		<item name="list_item_card_background">@drawable/card_dark</item>
-		<item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_white</item>
-		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_white</item>
-		<item name="ic_check_24dp">@drawable/ic_check_24dp_white</item>
+
 		<item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
 		<item name="drag_handle_color">@color/dragHandleColorDark</item>
 		<item name="TaskListItem">@style/TaskListItemDark</item>
@@ -48,7 +47,7 @@
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark</item>
-		<!-- decides the color of xml vector drawable icons -->
+		<!-- white icons for dark themes -->
 		<item name="iconTint">@color/icon_tint_dark</item>
 		<!-- <item name="colorPrimary">@color/primary</item> -->
 		<!-- darker variant of colorPrimary (for status bar, contextual app bars) -->
@@ -58,7 +57,7 @@
 	</style>
 
 	<!-- The full black theme -->
-	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
+	<style name="ThemeNnnPitchBlack" parent="@style/ThemeNnnDark">
 		<item name="android:windowBackground">@android:color/black</item>
 		<item name="android:colorBackgroundCacheHint">@android:color/black</item>
 		<item name="editorBackgroundColor">@android:color/black</item>
@@ -74,7 +73,7 @@
 	</style>
 
 	<!-- The dark theme -->
-	<style name="ThemeGoogleNowDark" parent="@style/ThemeHolo">
+	<style name="ThemeNnnDark" parent="@style/ThemeBaseDark">
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_darkergrey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
@@ -84,26 +83,16 @@
 	</style>
 
 	<!-- The light (white, day) theme -->
-	<style name="ThemeHoloLightDarkActonBar" parent="Theme.AppCompat.Light.DarkActionBar">
+	<style name="ThemeNnnLight" parent="Theme.AppCompat.Light">
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_grey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
 
-		<!-- TODO setting this to icon_tint_light (see commented line below) would allow to have
-		      black icons on the actionbar when using this light theme. But we don't yet control
-		      the actionbar color, so it would be black icons on a black bar! Shall we use a
-		      light actionbar too ? -->
-		<item name="iconTint">@color/icon_tint_dark</item>
-		<!-- <item name="iconTint">@color/icon_tint_light</item> -->
+		<!-- this decides the color of every xml drawable icon (while this "light" theme
+		 is active). Use	?colorPrimary	 to inherit from android 13's
+		 user set dynamic primary color -->
+		<item name="iconTint">@color/icon_tint_light</item>
 
-		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
-		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
-		<item name="ic_copy_24dp">@drawable/ic_copy_24dp_white</item>
-		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
-		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp_white</item>
-		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp_white</item>
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
-		<item name="ic_check_24dp">@drawable/ic_check_24dp_white</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="editorBackgroundColor">@drawable/card_light</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
@@ -113,8 +102,7 @@
 		<item name="textColorPrimary">?android:attr/textColorPrimary</item>
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
-		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_black_active</item>
-		<item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_black_active</item>
+
 		<item name="list_item_card_background">@drawable/card_light</item>
 		<item name="drag_handle_color">@color/dragHandleColorLight</item>
 		<item name="TaskListItem">@style/TaskListItemLight</item>
@@ -144,7 +132,7 @@
 
 	<!-- "classic" theme: shows a more condensed note list, with smaller separators, by design!
 	 	That aside, it's 99% similar to the light theme -->
-	<style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
+	<style name="ThemeNnnClassicLight" parent="@style/ThemeNnnLight">
 		<item name="TaskListItem">@style/TaskListItemLightClassic</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
 		<item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
@@ -152,7 +140,7 @@
 
 	<!-- For the activity where you configure the big widget. It has no theme background,
 	 	to let user's wallpaper shine through -->
-	<style name="ThemeWidgetConfig" parent="@style/ThemeHolo">
+	<style name="ThemeWidgetConfig" parent="@style/ThemeBaseDark">
 		<item name="android:background">@null</item>
 		<item name="android:colorBackgroundCacheHint">@null</item>
 		<item name="android:windowContentOverlay">@null</item>

@@ -24,42 +24,42 @@
 
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AppearancePrefs"
-		android:icon="@drawable/ic_brightness_6_24dp_white"
+		android:icon="@drawable/ic_brightness_6_24dp"
 		android:summary=""
 		android:title="@string/settings_cat_appearance"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
-		android:icon="@drawable/ic_folder_24dp_white"
+		android:icon="@drawable/ic_folder_24dp"
 		android:summary=""
 		android:title="@string/settings_list"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
-		android:icon="@drawable/ic_refresh_24dp_white"
+		android:icon="@drawable/ic_refresh_24dp"
 		android:summary=""
 		android:title="@string/settings_cat_syncing"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
-		android:icon="@drawable/ic_alarm_24dp_white"
+		android:icon="@drawable/ic_alarm_24dp"
 		android:summary=""
 		android:title="@string/notifications"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
-		android:icon="@drawable/ic_lock_closed_24dp_white"
+		android:icon="@drawable/ic_lock_closed_24dp"
 		android:summary=""
 		android:title="@string/password"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
-		android:icon="@drawable/ic_sd_storage_24dp_white"
+		android:icon="@drawable/ic_sd_storage_24dp"
 		android:summary=""
 		android:title="@string/backup"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
-		android:icon="@drawable/ic_help_24dp_white"
+		android:icon="@drawable/ic_help_24dp"
 		android:summary=""
 		android:title="@string/changelog_full_title"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
-		android:icon="@drawable/ic_info_24dp_white"
+		android:icon="@drawable/ic_info_24dp"
 		android:summary=""
 		android:title="@string/about"/>
 

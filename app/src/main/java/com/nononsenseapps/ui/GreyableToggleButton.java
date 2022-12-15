@@ -31,6 +31,7 @@ import com.nononsenseapps.notepad.R;
  */
 public class GreyableToggleButton extends AppCompatToggleButton {
 
+	// text colors for checked & unchecked status
 	private final int primaryColor;
 	private final int secondaryColor;
 

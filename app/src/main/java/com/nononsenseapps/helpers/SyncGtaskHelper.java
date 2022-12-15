@@ -27,6 +27,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
@@ -88,8 +89,10 @@ public class SyncGtaskHelper {
 	 * Finds and returns the account of the name given
 	 *
 	 * @param accountName email of google account
-	 * @return a Google Account
+	 * @return a Google Account. May be null, for example if there are
+	 * no google accounts on the device. See issue #449
 	 */
+	@Nullable
 	public static Account getAccount(@NonNull AccountManager manager, @NonNull String accountName) {
 		Account[] accounts = manager.getAccountsByType("com.google");
 		for (Account account : accounts) {
@@ -97,6 +100,7 @@ public class SyncGtaskHelper {
 				return account;
 			}
 		}
+		// simply, the user didn't add a google account to the phone!
 		return null;
 	}
 
@@ -141,6 +145,9 @@ public class SyncGtaskHelper {
 					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, false);
 					ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 0);
 				}
+			} else {
+				// account == null, because the user did not add
+				// a google account to the device
 			}
 		}
 		if (!currentlyEnabled) {
@@ -197,7 +204,12 @@ public class SyncGtaskHelper {
 		// isGTasksConfigured() guarantees that this is not null
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, null);
 
+		// This "account" is null on devices where users don't add a google account.
+		// Let's quit to avoid a crash like the one in issue #449
 		Account account = getAccount(AccountManager.get(context), accountName);
+		if (account == null) {
+			return;
+		}
 		// Don't start a new sync if one is already going
 		if (!ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY)) {
 			Bundle options = new Bundle();

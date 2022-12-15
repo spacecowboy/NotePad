@@ -48,7 +48,7 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 
-@EFragment(resName = "fragment_dialog_editlist")
+@EFragment(R.layout.fragment_dialog_editlist)
 public class DialogEditList extends DialogFragment {
 
 	public interface EditListDialogListener {

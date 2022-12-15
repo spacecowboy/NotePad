@@ -21,8 +21,12 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:orientation="vertical"
 	android:paddingTop="16dp">
+
+	<!-- TODO minWidth is too small, so this popup may be as wide as the checkbox
+         (id: defaultListBox). Set a wider minwidth -->
 
 	<EditText
 		android:id="@+id/titleField"
@@ -71,7 +75,6 @@
 		android:layout_marginBottom="4dp"
 		android:clickable="true"
 		android:focusable="true"
-		android:drawableLeft="@drawable/ic_delete_24dp_red"
 		android:drawablePadding="8dp"
 		android:fontFamily="sans-serif"
 		android:gravity="center_vertical"
@@ -81,7 +84,9 @@
 		android:textAllCaps="true"
 		android:textAppearance="@android:style/TextAppearance.Medium"
 		android:textColor="?attr/textColorSecondary"
-		android:textStyle="bold"/>
+		android:textStyle="bold"
+		android:drawableLeft="@drawable/ic_delete_24dp"
+		android:drawableTint="@color/material_red"/>
 
 	<include
 		android:id="@+id/buttons"

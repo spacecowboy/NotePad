@@ -174,7 +174,7 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		lPref.setEntryValues(choices);
 		lPref.setEntries(choices);
 		lPref.setDefaultValue(choices[0]); // useless
-		lPref.setIcon(R.drawable.ic_folder_24dp_white);
+		lPref.setIcon(R.drawable.ic_folder_24dp);
 
 		lPref.setOnPreferenceChangeListener((preference, stringNewPath) -> {
 			// save and show the new value

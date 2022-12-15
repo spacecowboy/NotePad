@@ -22,7 +22,7 @@
 	<group android:id="@+id/activity_menu_group">
 		<item
 			android:id="@+id/menu_add"
-			android:icon="@drawable/ic_add_24dp_white"
+			android:icon="@drawable/ic_add_24dp"
 			android:orderInCategory="0"
 			android:title="@string/menu_save_and_add"
 			app:showAsAction="ifRoom"/>
@@ -32,7 +32,7 @@
 		android:visible="false">
 		<item
 			android:id="@+id/drawer_menu_createlist"
-			android:icon="?attr/ic_folder_plus_24dp"
+			android:icon="@drawable/folder_plus_24dp"
 			android:orderInCategory="997"
 			app:showAsAction="ifRoom"
 			android:title="@string/menu_createlist"/>
@@ -40,7 +40,7 @@
 
 	<item
 		android:id="@+id/menu_preferences"
-		android:icon="?attr/ic_settings_24dp"
+		android:icon="@drawable/ic_settings_24dp"
 		android:orderInCategory="999"
 		app:showAsAction="never"
 		android:title="@string/menu_preferences"/>

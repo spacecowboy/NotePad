@@ -53,6 +53,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
@@ -74,7 +75,6 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 
 import org.androidannotations.annotations.AfterViews;
@@ -90,8 +90,9 @@ import java.util.concurrent.Executors;
 
 
 /**
- * This is extended by {@link ActivityMain_}. It was renamed to ActivityList in release 6.0.0 beta,
- * it has to do with getting rid of the annotations library that generates {@link ActivityMain_}
+ * This is extended by {@link ActivityMain_}. It was renamed to ActivityList
+ * in release 6.0.0 beta, it has to do with getting rid of the annotations
+ * library that generates {@link ActivityMain_}
  */
 @EActivity(resName = "activity_main")
 public class ActivityMain extends AppCompatActivity
@@ -132,7 +133,10 @@ public class ActivityMain extends AppCompatActivity
 
 	boolean mAnimateExit = false;
 
-	// Changes depending on what we're showing since the started activity can receive new intents
+	/**
+	 * Changes depending on what we're showing since
+	 * the started activity can receive new intents
+	 */
 	@InstanceState
 	boolean showingEditor = false;
 
@@ -412,8 +416,7 @@ public class ActivityMain extends AppCompatActivity
 		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
 
 		// To listen on fragment changes
-		getSupportFragmentManager().addOnBackStackChangedListener(
-				() -> {
+		getSupportFragmentManager().addOnBackStackChangedListener(() -> {
 					if (showingEditor && !isNoteIntent(getIntent())) {
 						setHomeAsDrawer(true);
 					}
@@ -423,7 +426,7 @@ public class ActivityMain extends AppCompatActivity
 		);
 
 		if (b != null) {
-			Log.d("nononsenseapps list", "Activity Saved not null: " + b);
+			NnnLogger.debug(ActivityMain.class,"Activity Saved not null: " + b);
 			this.state = b;
 		}
 
@@ -432,7 +435,6 @@ public class ActivityMain extends AppCompatActivity
 //		 mFab.setOnClickListener(view -> {
 //			 //addTaskInList("", ListHelper.getARealList(this, id_of_the_list));
 //		 });
-
 
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
@@ -785,7 +787,8 @@ public class ActivityMain extends AppCompatActivity
 	 * Load a list of lists in the left drawer
 	 */
 	protected void loadLeftDrawer() {
-		// TODO very long function. you should move everything related to drawer into static methods in ActivityHelper.java
+		// TODO very long function. you should move everything related to drawer
+		//  into static methods in ActivityHelper.java
 
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
@@ -800,10 +803,10 @@ public class ActivityMain extends AppCompatActivity
 				 */
 				@Override
 				public void onDrawerClosed(View view) {
-					getSupportActionBar().setTitle(R.string.app_name_short);
+					// hide 'Notes' (R.string.app_name_short) from the toolbar
+					getSupportActionBar().setTitle(null);
 					isDrawerClosed = true;
-					invalidateOptionsMenu(); // creates call to
-					// onPrepareOptionsMenu()
+					invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 				}
 
 				/**
@@ -839,6 +842,8 @@ public class ActivityMain extends AppCompatActivity
 		} else {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			getSupportActionBar().setHomeButtonEnabled(true);
+			// hide 'Notes' (R.string.app_name_short) from the toolbar
+			getSupportActionBar().setTitle(null);
 		}
 
 		// Use extra items. From top to bottom, they are "TASKS", "Overdue", "Today",
