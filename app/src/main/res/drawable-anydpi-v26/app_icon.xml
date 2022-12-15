@@ -4,4 +4,5 @@
 	 foreground is a symbol (a vector drawable). See their xml files to edit them separately -->
 	<background android:drawable="@drawable/icon_gradient"/>
 	<foreground android:drawable="@drawable/icon_foreground_symbol"/>
+	<monochrome android:drawable="@drawable/icon_monochrome"/>
 </adaptive-icon>
