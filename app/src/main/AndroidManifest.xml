@@ -59,6 +59,7 @@
 	<uses-permission android:name="com.nononsenseapps.notepad.permissions.write"/>
 
 	<application
+		android:name="com.nononsenseapps.notepad.NnnApp"
 		android:allowBackup="true"
 		android:backupAgent="com.nononsenseapps.notepad.BackupAgent"
 		android:hardwareAccelerated="true"
