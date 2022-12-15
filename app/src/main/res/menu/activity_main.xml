@@ -32,7 +32,7 @@
 		android:visible="false">
 		<item
 			android:id="@+id/drawer_menu_createlist"
-			android:icon="@drawable/folder_plus_24dp_white"
+			android:icon="@drawable/folder_plus_24dp"
 			android:orderInCategory="997"
 			app:showAsAction="ifRoom"
 			android:title="@string/menu_createlist"/>

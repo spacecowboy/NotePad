@@ -24,7 +24,7 @@
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_white</item>
 		<item name="ic_copy_24dp">@drawable/ic_copy_24dp</item>
-		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
+		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp</item>
 		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp</item>
 		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp</item>
 		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp</item>
@@ -104,7 +104,7 @@
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
 		<item name="ic_copy_24dp">@drawable/ic_copy_24dp</item>
-		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
+		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp</item>
 		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp</item>
 		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp</item>
 		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
