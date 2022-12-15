@@ -48,7 +48,7 @@
 		<item
 			android:id="@+id/menu_deletedtasks"
 			android:orderInCategory="203"
-			android:icon="@drawable/ic_archive_24dp_white"
+			android:icon="@drawable/ic_archive_24dp"
 			android:title="@string/view_deletedtasks"
 			app:showAsAction="ifRoom"/>
 	</group>

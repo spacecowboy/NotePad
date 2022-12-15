@@ -24,7 +24,7 @@
 
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AppearancePrefs"
-		android:icon="@drawable/ic_brightness_6_24dp_white"
+		android:icon="@drawable/ic_brightness_6_24dp"
 		android:summary=""
 		android:title="@string/settings_cat_appearance"/>
 	<Preference
@@ -39,7 +39,7 @@
 		android:title="@string/settings_cat_syncing"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
-		android:icon="@drawable/ic_alarm_24dp_white"
+		android:icon="@drawable/ic_alarm_24dp"
 		android:summary=""
 		android:title="@string/notifications"/>
 	<Preference

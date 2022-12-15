@@ -392,7 +392,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 
 		// Snooze button only on time non-repeating
 		if (note.time != null && note.repeats == 0) {
-			builder.addAction(R.drawable.ic_alarm_24dp_white, context.getText(R.string.snooze), piSnooze);
+			builder.addAction(R.drawable.ic_alarm_24dp, context.getText(R.string.snooze), piSnooze);
 		}
 		// Complete button only on non-repeating, both time and location
 		if (note.repeats == 0) {
