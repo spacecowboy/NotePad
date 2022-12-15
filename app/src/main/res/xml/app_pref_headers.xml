@@ -29,7 +29,7 @@
 		android:title="@string/settings_cat_appearance"/>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
-		android:icon="@drawable/ic_folder_24dp_white"
+		android:icon="@drawable/ic_folder_24dp"
 		android:summary=""
 		android:title="@string/settings_list"/>
 	<Preference
