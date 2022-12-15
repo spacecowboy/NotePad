@@ -17,6 +17,13 @@
   -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<!-- TODO add a Material You theme.
+         Names of colors you can use (for example <item>?colorPrimary</item>):
+         colorPrimary colorOnPrimary colorPrimaryContainer colorOnPrimaryContainer
+         colorError colorOnError colorErrorContainer colorOnErrorContainer
+         colorOnBackground colorSurface colorOnSurface
+	 -->
+
 	<!-- a base theme used by ThemeGoogleNowDark for the app & ThemeWidgetConfig
 	 	 for the widget. Things for the DARK theme can go here -->
 	<style name="ThemeBaseDark" parent="Theme.AppCompat">

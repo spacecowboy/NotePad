@@ -27,7 +27,7 @@
 	<color name="icon_tint_light">#8a000000</color>
 
 	<!-- Make icons white for dark themes -->
-	<color name="icon_tint_dark">#8affffff</color>
+	<color name="icon_tint_dark">#D9FFFFFF</color>
 
 
 	<!-- Unchecked. some of these should be deleted -->
