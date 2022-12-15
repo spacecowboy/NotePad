@@ -49,16 +49,17 @@ public final class ActivityHelper {
 		final String theme = prefs.getString(AppearancePrefs.KEY_THEME,
 				activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
-			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
+			activity.setTheme(R.style.ThemeNnnLight);
 		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {
-			activity.setTheme(R.style.ThemeHoloBlack);
+			activity.setTheme(R.style.ThemeNnnPitchBlack);
 		} else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
-			activity.setTheme(R.style.ThemeHoloLightClassic);
+			activity.setTheme(R.style.ThemeNnnClassicLight);
 		} else // if (theme.equals(getResources().getString(R.string.const_theme_googlenow_dark)))
 		{
-			activity.setTheme(R.style.ThemeGoogleNowDark);
+			activity.setTheme(R.style.ThemeNnnDark);
 		}
-// TODO move this to ThemeHelper
+// TODO move the part above to a ThemeHelper function
+
 		// Set language
 		Configuration config = activity.getResources().getConfiguration();
 

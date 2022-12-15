@@ -31,6 +31,7 @@
 	<string name="complete_note_broadcast_intent">com.nononsenseapps.completenote</string>
 	<!-- For when they HAVE been completed, for AndroidAgendaWidget primarily -->
 	<string name="note_completed_broadcast_intent">com.nononsenseapps.notecompleted</string>
+
 	<!-- Theme constants should contain "light" if a light timepicker is appropriate -->
 	<string name="const_theme_dark">dark</string>
 	<string name="const_theme_black">black</string>
@@ -38,6 +39,7 @@
 	<string name="const_theme_classic">light_classic</string>
 	<string name="const_theme_light_ab">light_ab</string>
 	<string name="const_theme_googlenow_dark">googlenow_dark</string>
+
 	<string name="const_alphabetic">title COLLATE NOCASE</string>
 	<string name="const_as_alphabetic">%s COLLATE NOCASE</string>
 	<string name="const_duedate">duedate</string>

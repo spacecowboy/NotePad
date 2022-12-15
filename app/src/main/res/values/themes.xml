@@ -19,7 +19,7 @@
 
 	<!-- a base theme used by ThemeGoogleNowDark for the app & ThemeWidgetConfig
 	 	 for the widget. Things for the DARK theme can go here -->
-	<style name="ThemeHolo" parent="Theme.AppCompat">
+	<style name="ThemeBaseDark" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
 
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -50,7 +50,7 @@
 	</style>
 
 	<!-- The full black theme -->
-	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
+	<style name="ThemeNnnPitchBlack" parent="@style/ThemeNnnDark">
 		<item name="android:windowBackground">@android:color/black</item>
 		<item name="android:colorBackgroundCacheHint">@android:color/black</item>
 		<item name="editorBackgroundColor">@android:color/black</item>
@@ -66,7 +66,7 @@
 	</style>
 
 	<!-- The dark theme -->
-	<style name="ThemeGoogleNowDark" parent="@style/ThemeHolo">
+	<style name="ThemeNnnDark" parent="@style/ThemeBaseDark">
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_darkergrey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
@@ -76,7 +76,7 @@
 	</style>
 
 	<!-- The light (white, day) theme -->
-	<style name="ThemeHoloLightDarkActonBar" parent="Theme.AppCompat.Light.DarkActionBar">
+	<style name="ThemeNnnLight" parent="Theme.AppCompat.Light">
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_grey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
@@ -133,7 +133,7 @@
 
 	<!-- "classic" theme: shows a more condensed note list, with smaller separators, by design!
 	 	That aside, it's 99% similar to the light theme -->
-	<style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
+	<style name="ThemeNnnClassicLight" parent="@style/ThemeNnnLight">
 		<item name="TaskListItem">@style/TaskListItemLightClassic</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
 		<item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
@@ -141,7 +141,7 @@
 
 	<!-- For the activity where you configure the big widget. It has no theme background,
 	 	to let user's wallpaper shine through -->
-	<style name="ThemeWidgetConfig" parent="@style/ThemeHolo">
+	<style name="ThemeWidgetConfig" parent="@style/ThemeBaseDark">
 		<item name="android:background">@null</item>
 		<item name="android:colorBackgroundCacheHint">@null</item>
 		<item name="android:windowContentOverlay">@null</item>

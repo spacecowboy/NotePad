@@ -89,7 +89,7 @@
 			android:name="com.nononsenseapps.notepad.ActivityMain_"
 			android:exported="true"
 			android:label="@string/app_name_short"
-			android:theme="@style/ThemeHoloLightDarkActonBar"
+			android:theme="@style/ThemeNnnLight"
 			android:windowSoftInputMode="adjustResize">
 			<meta-data
 				android:name="android.app.default_searchable"
@@ -138,7 +138,7 @@
 			android:exported="true"
 			android:label="@string/search_hint"
 			android:launchMode="singleTop"
-			android:theme="@style/ThemeHoloLightDarkActonBar">
+			android:theme="@style/ThemeNnnLight">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH"/>
 			</intent-filter>
@@ -154,7 +154,7 @@
 			android:exported="true"
 			android:label="@string/archive"
 			android:launchMode="singleTop"
-			android:theme="@style/ThemeHoloLightDarkActonBar">
+			android:theme="@style/ThemeNnnLight">
 			<intent-filter>
 				<action android:name="android.intent.action.SEARCH"/>
 			</intent-filter>
@@ -169,7 +169,7 @@
 			android:exported="true"
 			android:label="@string/menu_preferences"
 			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
-			android:theme="@style/ThemeHolo">
+			android:theme="@style/ThemeBaseDark">
 			<!-- TODO you can definitely use a day & night theme,
 			       but the icons should have ?attr/iconTint in the settings xml files -->
 			<meta-data
