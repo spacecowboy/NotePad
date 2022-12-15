@@ -37,7 +37,7 @@
 		android:layout_weight="1"
 		android:fontFamily="sans-serif-light"
 		app:drawableLeftCompat="@drawable/folder_move_24dp"
-		app:drawableTint="?attr/textColorPrimary"/>
+		app:drawableTint="?attr/iconTint"/>
 
 	<!-- Shows the number of notes in this list -->
 	<TextView

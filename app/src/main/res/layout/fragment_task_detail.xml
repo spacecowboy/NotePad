@@ -85,12 +85,6 @@
 						android:nextFocusDown="@+id/notificationAdd"/>
 				</com.nononsenseapps.ui.DelegateFrame>
 
-				<!-- TODO it had app:tint="?attr/iconTint" but that makes it white on a white
-				      backround with the classic theme. In the future, instead of using this
-				      "double icon through an attribute, for every icon" stuff, just take 1
-				      white icon and use iconTint everywhere. It's as easy as adding:
-				      app:drawableTint="?attr/textColorPrimary".
-				      So one day you should delete all "ic_..." tags in attr.xml -->
 				<ImageButton
 					android:id="@+id/dueCancelButton"
 					style="?android:attr/buttonBarButtonStyle"
@@ -101,6 +95,7 @@
 					android:contentDescription="Remove due date"
 					android:nextFocusDown="@+id/notificationAdd"
 					android:src="@drawable/ic_clear_24dp"
+					app:tint="?attr/iconTint"
 					tools:ignore="HardcodedText"/>
 
 				<Button
@@ -134,7 +129,6 @@
 				android:background="?android:attr/selectableItemBackground"
 				android:clickable="true"
 				android:focusable="true"
-				android:drawableLeft="@drawable/ic_alarm_add_24dp"
 				android:drawablePadding="8dp"
 				android:fontFamily="sans-serif-light"
 				android:gravity="center_vertical"
@@ -143,7 +137,9 @@
 				android:text="@string/add_a_reminder"
 				android:textAllCaps="false"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textColor="?attr/textColorSecondary"/>
+				android:textColor="?attr/textColorSecondary"
+				app:drawableLeftCompat="@drawable/ic_alarm_add_24dp"
+				app:drawableTint="?attr/iconTint"/>
 
 			<LinearLayout
 				android:id="@+id/notificationList"
