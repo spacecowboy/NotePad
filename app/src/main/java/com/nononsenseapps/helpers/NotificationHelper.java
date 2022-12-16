@@ -34,6 +34,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -210,42 +211,51 @@ public final class NotificationHelper extends BroadcastReceiver {
 			// cancelAll permanent notifications here if/when that is implemented.
 			// Don't touch others. Dont do this, it clears location
 			// notificationManager.cancelAll();
-		} else {
-			// else, notify
-
-			// Fetch sound and vibrate settings. The following settings are ARE ONLY VALID
-			// ON ANDROID API < 26, by design. Newer android versions set these things on the
-			// notification CHANNEL. For that, we just bring the user to the OS settings page,
-			// instead of creating our preferences code
-			// => the code here is only for API 23, 24 and 25 devices
-			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-			// Always use default lights
-			int lightAndVibrate = Notification.DEFAULT_LIGHTS;
-			// If vibrate on, use default vibration pattern also
-			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate), false))
-				lightAndVibrate |= Notification.DEFAULT_VIBRATE;
-
-			// Need to get a new one because the action buttons will duplicate otherwise
-			NotificationCompat.Builder builder;
-
-			// (Here there was code to group notifications together by list, but i removed it.
-			// Check git history if you're interested)
-
-			// get priority and ringtone. See NotificationPrefs.java
-			final int priority = Integer.parseInt(
-					prefs.getString(context.getString(R.string.key_pref_prio), "0"));
-			final Uri ringtone = Uri.parse(prefs.getString(
-					context.getString(R.string.key_pref_ringtone),
-					"DEFAULT_NOTIFICATION_URI"));
-
-			// Notify for each individually
-			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-				// notifications.length is ~3 => optimization is not needed in this loop
-				builder = getNotificationBuilder(context, priority, lightAndVibrate, ringtone);
-				notifyBigText(context, notificationManager, builder, note);
-			}
+			return;
 		}
+
+		// else, notify
+		if (!areNotificationsVisible(notificationManager)) {
+			// android API >= 33 lets users disable notifications.
+			// The user turned OFF notifications for this app => send a warning
+			NnnLogger.warning(NotificationHelper.class,
+					"areNotificationsVisible() claims the user denied notifications");
+			Toast.makeText(context, R.string.msg_enable_notifications,Toast.LENGTH_SHORT).show();
+		}
+
+		// Fetch sound and vibrate settings. The following settings are ARE ONLY VALID
+		// ON ANDROID API < 26, by design. Newer android versions set these things on the
+		// notification CHANNEL. For that, we just bring the user to the OS settings page,
+		// instead of creating our preferences code
+		// => the code here is only for API 23, 24 and 25 devices
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+		// Always use default lights
+		int lightAndVibrate = Notification.DEFAULT_LIGHTS;
+		// If vibrate on, use default vibration pattern also
+		if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate), false))
+			lightAndVibrate |= Notification.DEFAULT_VIBRATE;
+
+		// Need to get a new one because the action buttons will duplicate otherwise
+		NotificationCompat.Builder builder;
+
+		// (Here there was code to group notifications together by list, but i removed it.
+		// Check git history if you're interested)
+
+		// get priority and ringtone. See NotificationPrefs.java
+		final int priority = Integer.parseInt(
+				prefs.getString(context.getString(R.string.key_pref_prio), "0"));
+		final Uri ringtone = Uri.parse(prefs.getString(
+				context.getString(R.string.key_pref_ringtone),
+				"DEFAULT_NOTIFICATION_URI"));
+
+		// Notify for each individually
+		for (com.nononsenseapps.notepad.database.Notification note : notifications) {
+			// notifications.length is ~3 => optimization is not needed in this loop
+			builder = getNotificationBuilder(context, priority, lightAndVibrate, ringtone);
+			notifyBigText(context, notificationManager, builder, note);
+		}
+
 	}
 
 	/**
@@ -401,6 +411,21 @@ public final class NotificationHelper extends BroadcastReceiver {
 
 		final Notification noti = builder.build();
 		notificationManager.notify((int) note._id, noti);
+	}
+
+	/**
+	 * @return TRUE if notifications from this app will be visible to the user
+	 */
+	public static boolean areNotificationsVisible(@NonNull NotificationManager manager) {
+		boolean canShowNotif;
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+			canShowNotif = manager.areNotificationsEnabled() && !manager.areNotificationsPaused();
+		} else if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+			canShowNotif = manager.areNotificationsEnabled();
+		} else {
+			canShowNotif = true;
+		}
+		return canShowNotif;
 	}
 
 	private static long getLatestTime(
