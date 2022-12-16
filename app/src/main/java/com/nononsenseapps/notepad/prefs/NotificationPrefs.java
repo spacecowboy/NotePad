@@ -18,6 +18,7 @@
 package com.nononsenseapps.notepad.prefs;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
@@ -43,6 +44,7 @@ import androidx.preference.PreferenceManager;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 
 public class NotificationPrefs extends PreferenceFragmentCompat {
@@ -85,6 +87,7 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		final String ignoreBatteryOptimizationKey = getString(R.string.key_pref_ignore_battery_optimizations);
 		final String openNotifChannelKey = getString(R.string.key_pref_notif_channel_settings);
 		final String disableHibernation = getString(R.string.key_pref_disable_hibernation);
+		final String notificVisibility = getString(R.string.key_pref_notif_visibility);
 
 		if (key.equals(ringtonePrefKey)) {
 			// the pseudo-ringtonePreference was clicked => open a system page to pick a ringtone
@@ -137,12 +140,20 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		} else if (key.equals(openNotifChannelKey)) {
 			openNotificationSettings(this.getContext());
 			return false;
+		} else if (key.equals(notificVisibility)) {
+			// open the app settings to let the user change app permissions
+			Intent i = new Intent(
+					android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+					Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+			startActivity(i);
+			return false;
 		} else if (key.equals(disableHibernation)) {
 			showHibernationPageIfNeeded(this);
 			return false;
 		} else {
 			return super.onPreferenceTreeClick(preference);
 		}
+
 	}
 
 	@Override
@@ -212,13 +223,19 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		super.onResume();
 
 		// check if battery optimizations are enabled and show it in the summary
-		PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
-		int summaryResId = pm.isIgnoringBatteryOptimizations(getContext().getPackageName())
+		var pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+		int summaryResId1 = pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)
 				? R.string.battery_optimizations_inactive
 				: R.string.battery_optimizations_active;
-
 		findPreference(getString(R.string.key_pref_ignore_battery_optimizations))
-				.setSummary(summaryResId);
+				.setSummary(summaryResId1);
+
+		var nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		int summaryResId2 = NotificationHelper.areNotificationsVisible(nm)
+				? R.string.notifications_enabled
+				: R.string.notifications_blocked;
+		findPreference(getString(R.string.key_pref_notif_visibility))
+				.setSummary(summaryResId2);
 	}
 
 	/**

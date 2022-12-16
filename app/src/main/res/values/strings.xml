@@ -128,7 +128,7 @@
 	<string name="choose_backup_folder">Choose a backup folder</string>
 	<string name="default_location">Default location</string>
 	<string name="use_exact_alarms">Use exact alarms</string>
-	<string name="exact_alarms_summary">Uses more battery to  show notification reminders in a more reliable way</string>
+	<string name="exact_alarms_summary">Uses more battery to show notification reminders in a more reliable way</string>
 	<string name="disable_battery_optimizations">Turn off battery optimizations</string>
 	<string name="battery_optimizations_active">Battery optimizations on</string>
 	<string name="battery_optimizations_inactive">Battery optimizations off</string>
@@ -150,6 +150,9 @@
 	<string name="disable_android_hibernation_desc">It is a feature that makes the app less reliable. It may block your reminders. Open this, look for something like \"suspend app activity if unused\" and turn it off</string>
 	<string name="msg_hibernation_already_off">Android hibernation is already OFF, you do not need this</string>
 	<string name="msg_enable_notifications">Go to settings -> notifications to enable notifications</string>
+	<string name="notifications_visibility">Notifications visibility</string>
+	<string name="notifications_enabled">Notifications are visible</string>
+	<string name="notifications_blocked">Notifications are not visible, so you will not see the reminders. Touch here, find the permissions category, and enable notifications for this app</string>
 
 	<!--
 		Use few if language need it. In English is the same.

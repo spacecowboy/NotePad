@@ -26,7 +26,15 @@
 	<Preference
 		android:key="@string/key_pref_notif_channel_settings"
 		android:summary="@string/open_channel_settings_description"
+		android:persistent="false"
 		android:title="@string/notification_channel_settings"/>
+
+	<!-- shows if notifications permissions are granted -->
+	<Preference
+		android:key="@string/key_pref_notif_visibility"
+		android:title="@string/notifications_visibility"
+		android:summary="fill it in NotificationPrefs.java"
+		android:persistent="false"/>
 
 	<!-- these 3 settings work on android API versions < API 26, which we still support.
 		 in newer androids, these values are overwritten by the notification channel settings -->
