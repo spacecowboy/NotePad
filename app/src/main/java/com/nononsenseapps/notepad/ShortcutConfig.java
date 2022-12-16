@@ -36,14 +36,6 @@ public class ShortcutConfig extends AppCompatActivity {
 	@ViewById(resName = "listSpinner")
 	Spinner listSpinner;
 
-	@Override
-	protected void onCreate(@Nullable Bundle savInstState) {
-		// this configuration activity is shown as a popup,
-		// with the same style of datepickers and timepickers
-		this.setTheme(ThemeHelper.getPickerDialogTheme(this));
-		super.onCreate(savInstState);
-	}
-
 	@AfterViews
 	protected void setup() {
 		// Default result is fail

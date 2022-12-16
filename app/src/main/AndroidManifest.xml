@@ -229,7 +229,7 @@
 			android:name="com.nononsenseapps.notepad.ShortcutConfig_"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
-			android:theme="@style/ThemeNnnDialogLight">
+			android:theme="@style/ThemeNnnDayNightDialog">
 			<!-- An appropriate theme is set in ShortcutConfig.java -->
 			<intent-filter>
 				<action android:name="android.intent.action.CREATE_SHORTCUT"/>

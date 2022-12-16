@@ -32,11 +32,12 @@ public final class ThemeHelper {
 				.getDefaultSharedPreferences(context)
 				.getString(AppearancePrefs.KEY_THEME, defaultTheme);
 
-		// we use only 2 themes for dialogs: one light, one dark.
-		// return one that matches the app's selected theme
+		// The "DeviceDefault" theme adapts to the device's general appearance: on Android 13,
+		// it uses the user-picked accent color. We use only 2 themes for dialogs: one light,
+		// one dark. There's no need to customize it, let's keep it default-looking
 		return theme.contains("light")
-				? R.style.ThemeNnnDialogLight
-				: R.style.ThemeNnnDialogDark;
+				? android.R.style.Theme_DeviceDefault_Light_Dialog
+				: android.R.style.Theme_DeviceDefault_Dialog;
 	}
 
 	/**
