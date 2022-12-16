@@ -149,6 +149,7 @@
 	<string name="disable_android_hibernation">Disable Android hibernation</string>
 	<string name="disable_android_hibernation_desc">It is a feature that makes the app less reliable. It may block your reminders. Open this, look for something like \"suspend app activity if unused\" and turn it off</string>
 	<string name="msg_hibernation_already_off">Android hibernation is already OFF, you do not need this</string>
+	<string name="msg_enable_notifications">Go to settings -> notifications to enable notifications</string>
 
 	<!--
 		Use few if language need it. In English is the same.

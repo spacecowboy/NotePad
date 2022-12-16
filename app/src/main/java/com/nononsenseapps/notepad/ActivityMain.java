@@ -53,6 +53,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
@@ -426,7 +427,7 @@ public class ActivityMain extends AppCompatActivity
 		);
 
 		if (b != null) {
-			NnnLogger.debug(ActivityMain.class,"Activity Saved not null: " + b);
+			NnnLogger.debug(ActivityMain.class, "Activity Saved not null: " + b);
 			this.state = b;
 		}
 
@@ -446,6 +447,13 @@ public class ActivityMain extends AppCompatActivity
 		BackgroundSyncScheduler.scheduleSync(this);
 		// Sync if appropriate
 		OrgSyncService.start(this);
+
+		// keep showing the popup to ask for notification permissions on startup.
+		// The callback function doesn't matter. Android will stop showing it if
+		// the user denies the permission twice.
+		if (!PermissionsHelper.hasPermissions(this, PermissionsHelper.FOR_NOTIFICATIONS))
+			this.requestPermissions(PermissionsHelper.FOR_NOTIFICATIONS,
+					PermissionsHelper.REQCODE_NOTIFICATIONS);
 	}
 
 	@Override
