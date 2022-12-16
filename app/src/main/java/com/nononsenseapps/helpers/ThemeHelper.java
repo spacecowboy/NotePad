@@ -32,11 +32,11 @@ public final class ThemeHelper {
 				.getDefaultSharedPreferences(context)
 				.getString(AppearancePrefs.KEY_THEME, defaultTheme);
 
-		// TODO try returning different styles & see if we should just
-		//  return the currently selected theme
+		// we use only 2 themes for dialogs: one light, one dark.
+		// return one that matches the app's selected theme
 		return theme.contains("light")
-				? android.R.style.Theme_Material_Light_Dialog
-				: android.R.style.Theme_Material_Dialog;
+				? R.style.ThemeNnnDialogLight
+				: R.style.ThemeNnnDialogDark;
 	}
 
 	/**

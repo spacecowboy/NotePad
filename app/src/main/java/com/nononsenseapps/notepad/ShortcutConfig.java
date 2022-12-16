@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
@@ -22,16 +24,25 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
 /**
- * Shows a window to configure the app's smaller widget, letting the user choose which note list
- * will be opened
+ * Shows a window to configure the app's smaller widget,
+ * letting the user choose which note list will be opened
  */
 @EActivity(resName = "activity_shortcut_config")
 public class ShortcutConfig extends AppCompatActivity {
 
 	@ViewById(resName = "createNoteSwitch")
 	SwitchCompat noteSwitch;
+
 	@ViewById(resName = "listSpinner")
 	Spinner listSpinner;
+
+	@Override
+	protected void onCreate(@Nullable Bundle savInstState) {
+		// this configuration activity is shown as a popup,
+		// with the same style of datepickers and timepickers
+		this.setTheme(ThemeHelper.getPickerDialogTheme(this));
+		super.onCreate(savInstState);
+	}
 
 	@AfterViews
 	protected void setup() {

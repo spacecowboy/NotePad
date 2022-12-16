@@ -65,6 +65,7 @@ public final class ShowcaseHelper {
 				.drawShadow(true)
 				.cancelable(true) // tap outside the circle to dismiss the showcaseView
 				.tintTarget(false)
+				// TODO not good for Material YOU themes. shows green text on a green circle, for example
 				.textColorInt(ThemeHelper.getThemeAccentColor(activity));
 
 		// this listener will always dismiss the taptargetview, regardless of where you click.
