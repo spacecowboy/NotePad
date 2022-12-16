@@ -2,12 +2,12 @@ apply plugin: 'com.android.library'
 
 android {
     namespace "com.nononsenseapps.notepad.providercontract" // for R.*
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.1"
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0.0"
     }

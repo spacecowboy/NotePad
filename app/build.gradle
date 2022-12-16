@@ -64,7 +64,7 @@ android {
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
-        targetSdkVersion 32
+        targetSdkVersion 33
 
         // Making either of these two values dynamic in the defaultConfig will
         // require a full app build and reinstallation, even for the smallest change.
