@@ -35,8 +35,9 @@
 	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 	-->
 
-	<!-- Writing sync files to SD card -->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<!-- Writing sync files to SD card. Works only in API 29 and lower -->
+	<!-- TODO can we remove this if we use only mediastore ? -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
 
 	<!-- For notifications -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
