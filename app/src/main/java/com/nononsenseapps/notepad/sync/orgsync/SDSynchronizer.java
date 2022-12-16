@@ -64,7 +64,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		ORG_DIR = FileHelper.getUserSelectedOrgDir(context);
 
 		boolean permitted = PermissionsHelper
-				.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
+				.hasPermissions(context, PermissionsHelper.FOR_SDCARD);
 		if (permitted) {
 			// we CAN save files in the external storage
 			configured = PreferencesHelper.isSdSyncEnabled(context);

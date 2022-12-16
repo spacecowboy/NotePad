@@ -183,10 +183,10 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 
 			if (FileHelper.folderNeedsAndroidWritePermission(theDir)) {
 				boolean granted = PermissionsHelper.hasPermissions(prefPage.getContext(),
-						PermissionsHelper.PERMISSIONS_SD);
+						PermissionsHelper.FOR_SDCARD);
 				if (!granted)
-					prefPage.requestPermissions(PermissionsHelper.PERMISSIONS_SD,
-							PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS);
+					prefPage.requestPermissions(PermissionsHelper.FOR_SDCARD,
+							PermissionsHelper.REQCODE_WRITE_SD);
 				// then, if you want, you can implement the callback in the PreferenceFragment
 			}
 			return true;
