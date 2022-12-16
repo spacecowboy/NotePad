@@ -3,6 +3,7 @@ package com.nononsenseapps.helpers;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
@@ -38,4 +39,16 @@ public final class ThemeHelper {
 				: android.R.style.Theme_Material_Dialog;
 	}
 
+	/**
+	 * It is different from {@link R.color#accent} if the user sets a custom Material3
+	 * theme in android 13 or greater
+	 *
+	 * @return This theme's accent color, in the form 0xAARRGGBB
+	 */
+	public static int getThemeAccentColor(@NonNull Context context) {
+		var outValue = new TypedValue();
+		context.getTheme()
+				.resolveAttribute(android.R.attr.colorAccent, outValue, true);
+		return outValue.data;
+	}
 }
