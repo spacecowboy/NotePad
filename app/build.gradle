@@ -142,6 +142,8 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
     // from deleted branch 'version6'
     implementation project(path: ':contract')
+    // for ListenableFuture<>
+    implementation 'com.google.guava:guava:31.1-android'
     // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"

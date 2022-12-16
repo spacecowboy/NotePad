@@ -61,6 +61,7 @@
 	<string name="key_pref_should_use_exact_alarms">key_pref_should_use_exact_alarms</string>
 	<string name="key_pref_ignore_battery_optimizations">ignoreBatteryOptimizationPref</string>
 	<string name="key_pref_allow_exact_reminders">key_pref_allow_exact_reminders</string>
+	<string name="key_pref_disable_hibernation">key_pref_disable_hibernation</string>
 	<string name="pref_locale">pref_key_locale</string>
 	<string name="key_pref_item_max_height">item_max_height</string>
 	<string name="key_pref_dateformat_long">dateformat_long</string>

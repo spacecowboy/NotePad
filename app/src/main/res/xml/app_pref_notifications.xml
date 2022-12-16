@@ -87,6 +87,14 @@
 			android:summary="@string/allow_exact_reminders_summary"
 			android:title="@string/allow_exact_reminders"/>
 
+		<!-- The user clicks this to open a system page to disable app hibernation -->
+		<Preference
+			android:persistent="false"
+			android:dependency="@string/key_pref_should_use_exact_alarms"
+			android:key="@string/key_pref_disable_hibernation"
+			android:summary="@string/disable_android_hibernation_desc"
+			android:title="@string/disable_android_hibernation"/>
+
 	</PreferenceCategory>
 
 </PreferenceScreen>

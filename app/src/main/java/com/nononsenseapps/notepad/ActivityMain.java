@@ -504,7 +504,6 @@ public class ActivityMain extends AppCompatActivity
 		if (syncStatusReceiver != null) {
 			syncStatusReceiver.startMonitoring(this, this);
 		}
-
 		// Sync if appropriate
 		if (SyncGtaskHelper.enoughTimeSinceLastSync(this)) {
 			SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.ONAPPSTART);
