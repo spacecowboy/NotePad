@@ -128,8 +128,8 @@
 
 	<!-- For DashClock Settings -->
 	<style name="DashClockSettings.Theme" parent="Theme.AppCompat.Light">
-		<!-- It is used in the manifest. Note that it MUST inherit from a .Light theme, because
-			 dashclock forces a white background, so the text must be black -->
+		<!-- It is used in the manifest. Note that it MUST inherit from a .Light theme,
+		 because dashclock forces a white background, so the text must be black -->
 		<!-- There's no need to customize anything, the defaults are good enough -->
 	</style>
 
