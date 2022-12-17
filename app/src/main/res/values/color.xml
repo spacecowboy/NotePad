@@ -23,10 +23,10 @@
 	<color name="accent">@android:color/holo_blue_dark</color>
 
 	<!-- Make icons black for light themes (85% transparency) -->
-	<color name="icon_tint_light">#D9000000</color>
+	<color name="black_alpha85">#D9000000</color>
 
 	<!-- Make icons white for dark themes (85% transparency) -->
-	<color name="icon_tint_dark">#D9FFFFFF</color>
+	<color name="white_alpha85">#D9FFFFFF</color>
 
 
 	<!-- Unchecked. some of these should be deleted -->
