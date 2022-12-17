@@ -95,7 +95,6 @@
 					android:contentDescription="Remove due date"
 					android:nextFocusDown="@+id/notificationAdd"
 					android:src="@drawable/ic_clear_24dp"
-					app:tint="?attr/iconTint"
 					tools:ignore="HardcodedText"/>
 
 				<!-- This shows the due date. Clicking it opens a datepicker.
@@ -141,8 +140,7 @@
 				android:textAllCaps="false"
 				android:textAppearance="?android:attr/textAppearanceMedium"
 				android:textColor="?attr/textColorSecondary"
-				app:drawableLeftCompat="@drawable/ic_alarm_add_24dp"
-				app:drawableTint="?attr/iconTint"/>
+				app:drawableLeftCompat="@drawable/ic_alarm_add_24dp"/>
 
 			<LinearLayout
 				android:id="@+id/notificationList"

@@ -57,7 +57,7 @@
 			android:paddingBottom="4dp"
 			android:singleLine="false"
 			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textColor="?textColorPrimary"
+			android:textColor="?android:attr/textColorPrimary"
 			android:textIsSelectable="true"
 			custom:linkify="true"
 			custom:titleFontFamily="robotocondensed"

@@ -30,7 +30,6 @@
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
 		app:drawableLeftCompat="@drawable/ic_check_24dp"
-		app:drawableTint="?attr/iconTint"
 		android:drawablePadding="8dp"
 		android:gravity="center_vertical"
 		android:paddingRight="20dp"

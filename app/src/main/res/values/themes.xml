@@ -44,9 +44,10 @@
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark
 		</item>
-		<!-- white icons for dark themes. Both are needed -->
+		<!-- white icons for dark themes. All 3 are needed -->
 		<item name="iconTint">@color/white_alpha85</item>
 		<item name="android:drawableTint">@color/white_alpha85</item>
+		<item name="android:tint">@color/white_alpha85</item>
 		<!-- theme UI controls like checkboxes and text fields  -->
 		<item name="colorAccent">@color/accent</item>
 		<!-- Not setting colorPrimary & colorPrimaryDark because I don't need them -->
@@ -101,11 +102,12 @@
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight
 		</item>
 		<item name="colorAccent">@color/accent</item>
-		<!-- these 2 decide the color of every xml drawable icon (while this "light" theme
+		<!-- these 3 decide the color of every xml drawable icon (while this "light" theme
 		 is active). Use	?colorPrimary	 to inherit from android 13's
 		 user set dynamic primary color -->
 		<item name="iconTint">@color/black_alpha85</item>
 		<item name="android:drawableTint">@color/black_alpha85</item>
+		<item name="android:tint">@color/black_alpha85</item>
 	</style>
 
 	<!-- "classic" theme: shows a more condensed note list, with smaller separators, by design!
