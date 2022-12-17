@@ -29,7 +29,7 @@
 			android:paddingTop="4dip"
 			android:text="@string/please_create_note"
 			android:textAppearance="?android:attr/textAppearanceLarge"
-			android:textColor="?android:attr/textColorSecondary"/>
+			android:textColor="?attr/textColorSecondary"/>
 	</LinearLayout>
 
 	<FrameLayout

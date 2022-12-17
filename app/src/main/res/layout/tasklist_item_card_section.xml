@@ -68,7 +68,7 @@
 		android:paddingBottom="4dp"
 		android:singleLine="false"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:textColor="?attr/textColorPrimary"
+		android:textColor="?android:attr/textColorPrimary"
 		android:textIsSelectable="false"
 		app:linkify="true"
 		app:secondaryColor="@color/completedGrey"
