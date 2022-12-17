@@ -1,5 +1,6 @@
 package com.nononsenseapps.helpers;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -21,8 +22,10 @@ public final class ThemeHelper {
 	private ThemeHelper() {}
 
 	/**
-	 * @return the Id of the style (theme) to use in a {@link DatePickerDialog}
-	 * or {@link TimePickerDialog}
+	 * A theme for dialogs, Light or dark, according to the user-chosen theme.
+	 * Use it in a {@link DatePickerDialog}, {@link TimePickerDialog} and {@link AlertDialog}.
+	 *
+	 * @return the Id of the style (theme)
 	 */
 	@StyleRes
 	public static int getPickerDialogTheme(@NonNull Context context) {

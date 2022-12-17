@@ -24,6 +24,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
+import com.nononsenseapps.helpers.ThemeHelper;
+
 /**
  * Simple confirm dialog fragment, extending from V11 fragment
  */
@@ -42,7 +44,8 @@ public abstract class DialogConfirmBaseV11 extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		return new AlertDialog.Builder(getActivity())
+		int style = ThemeHelper.getPickerDialogTheme(getActivity());
+		return new AlertDialog.Builder(getActivity(), style)
 				.setTitle(getTitle())
 				.setMessage(getMessage())
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> onOKClick())
