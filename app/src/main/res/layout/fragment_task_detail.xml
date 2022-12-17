@@ -98,6 +98,9 @@
 					app:tint="?attr/iconTint"
 					tools:ignore="HardcodedText"/>
 
+				<!-- This shows the due date. Clicking it opens a datepicker.
+				 The spinner style here looks better than the default button style,
+				 but you may want to choose something else. Just try -->
 				<Button
 					android:id="@+id/dueDateBox"
 					style="?android:attr/spinnerStyle"

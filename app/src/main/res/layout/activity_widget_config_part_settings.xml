@@ -23,7 +23,6 @@
 
 		<Spinner
 			android:id="@+id/listSpinner"
-			style="?android:attr/spinnerStyle"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/list_item_min_size"
 			android:layout_marginTop="4dp"
@@ -34,7 +33,6 @@
 
 		<Spinner
 			android:id="@+id/sortingSpinner"
-			style="?android:attr/spinnerStyle"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/list_item_min_size"
 			android:layout_marginTop="4dp"
@@ -45,7 +43,6 @@
 
 		<Spinner
 			android:id="@+id/themeSpinner"
-			style="?android:attr/spinnerStyle"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/list_item_min_size"
 			android:layout_marginTop="4dp"

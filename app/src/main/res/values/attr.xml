@@ -60,7 +60,7 @@
 	<attr name="editorBackgroundColor" format="reference"/>
 	<attr name="btn_default_selector" format="reference"/>
 	<attr name="img_default_selector" format="reference"/>
-	<attr name="SpinnerStyle" format="reference"/>
+
 	<attr name="viewpager_bg" format="reference"/>
 	<attr name="textColorPrimary" format="reference|color"/>
 	<attr name="textColorSecondary" format="reference|color"/>
