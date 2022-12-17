@@ -156,10 +156,8 @@ public class TaskDetailFragment extends Fragment {
 				}
 			} else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c != null && c.moveToNext()) {
-					// TODO when you share a note or click a link & go back to this
-					//  note-detail-page, this function is called too many times, and we get
-					//  one more - USELESS - reminder. See issue #412
-					//  SOLUTION: remove views in onPause or onStop and they will be re-added here
+					// TODO this causes the "ghost reminder widgets" bug. See issue #412
+					//  a shitty fix is provided in onPause()
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
@@ -190,8 +188,8 @@ public class TaskDetailFragment extends Fragment {
 	Button dueDateBox;
 
 	/**
-	 * holds a list of widgets, one for each reminder the user sets
-	 * (below the due date row)
+	 * holds a list of widgets, one for each reminder the user sets.
+	 * It is below the "due date" row
 	 */
 	@ViewById(resName = "notificationList")
 	LinearLayout notificationList;
@@ -215,12 +213,16 @@ public class TaskDetailFragment extends Fragment {
 	// To override intent values with
 	@InstanceState
 	long stateId = -1;
+
 	@InstanceState
 	long stateListId = -1;
+
 	// Dao version of the object this fragment represents
 	private Task mTask;
+
 	// Version when task was opened
 	private Task mTaskOrg;
+
 	// To save orgState
 	// TODO
 	//  AND with task.locked. If result is true, note is locked and has not been
@@ -230,7 +232,7 @@ public class TaskDetailFragment extends Fragment {
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
 
-	/*
+	/**
 	 * If in tablet and added, rotating to portrait actually recreats the
 	 * fragment even though it isn't visible. So if this is true, don't load
 	 * anything.
@@ -754,23 +756,28 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * Save mTask to database
+	 */
 	private void saveTask() {
 		// if mTask is null, the task has been deleted or cancelled
-		// If the task is not unlocked, editing is disabled
-		if (mTask != null && !isLocked()) {
-			// Needed for comparison
-			mTask.setText(taskText.getText().toString());
-			// if new item, only save if something has been entered
-			if ((mTask._id > 0 && !mTask.equals(mTaskOrg))
-					|| (mTask._id == -1 && isThereContent())) {
-				// mTask.setText(taskText.getText().toString());
-				mTask.save(getActivity());
-				// Set the intent to open the task.
-				// So we dont create a new one on rotation for example
-				fixIntent();
+		// If the task is locked, editing is disabled
+		if (mTask == null || isLocked()) {
+			return;
+		}
 
-				// TODO, should restart notification loader for new tasks
-			}
+		// Needed for comparison
+		mTask.setText(taskText.getText().toString());
+
+		// if new item, only save if something has been entered
+		if ((mTask._id > 0 && !mTask.equals(mTaskOrg)) || (mTask._id == -1 && isThereContent())) {
+			// mTask.setText(taskText.getText().toString());
+			mTask.save(getActivity());
+			// Set the intent to open the task.
+			// So we dont create a new one on rotation for example
+			fixIntent();
+
+			// TODO, should restart notification loader for new tasks
 		}
 	}
 
@@ -789,7 +796,8 @@ public class TaskDetailFragment extends Fragment {
 		if (mTask == null || mTask._id < 1)
 			return;
 
-		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
+		final Intent intent = new Intent()
+				.setAction(Intent.ACTION_EDIT)
 				.setClass(getActivity(), ActivityMain_.class)
 				.setData(mTask.getUri())
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, mTask.dblist);
@@ -820,6 +828,12 @@ public class TaskDetailFragment extends Fragment {
 		if (isLocked() && mTask != null && taskText != null) {
 			taskText.setText(mTask.title);
 		}
+
+		// TODO lazy fix for #412 --> instead you should stop onLoadFinished() when it
+		//  tries to load reminders that are already there
+		// remove all reminders from the list. Next time this Fragment is loaded,
+		// onLoadFinished() will add them back
+		notificationList.removeAllViews();
 	}
 
 	@Override
