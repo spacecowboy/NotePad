@@ -18,16 +18,15 @@
 package com.nononsenseapps.ui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
+
 import androidx.appcompat.widget.AppCompatToggleButton;
+
 import com.nononsenseapps.notepad.R;
 
 /**
- * A Checkbox like textview. It displays it's two states by toggling between two
- * textcolors.
- *
- * Default secondary color is grey.
+ * A Checkbox like textview. It displays its 2 states by toggling between two
+ * textcolors. Secondary color is grey. Used in {@link WeekDaysView}
  */
 public class GreyableToggleButton extends AppCompatToggleButton {
 
@@ -37,34 +36,20 @@ public class GreyableToggleButton extends AppCompatToggleButton {
 
 	public GreyableToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-
-		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-				R.styleable.GreyableToggleButton, 0, 0);
-
-		try {
-			primaryColor = super.getCurrentTextColor();
-			// defTextSize = super.getTextSize();
-
-			secondaryColor = a.getColor(
-					R.styleable.GreyableToggleButton_secondaryColor,
-					getResources().getColor(R.color.uncheckedGrey));
-		} finally {
-			a.recycle();
-		}
+		primaryColor = super.getCurrentTextColor();
+		// defTextSize = super.getTextSize();
+		secondaryColor = getResources().getColor(R.color.uncheckedGrey);
 		// max size defaults to the initially specified text size unless it is too small
 	}
 
 	@Override
 	public void setChecked(boolean checked) {
 		super.setChecked(checked);
-
-		// Set correct color
-		if (secondaryColor != primaryColor) {
-			if (checked) {
-				super.setTextColor(primaryColor);
-			} else {
-				super.setTextColor(secondaryColor);
-			}
+		// Set correct text color
+		if (checked) {
+			super.setTextColor(primaryColor);
+		} else {
+			super.setTextColor(secondaryColor);
 		}
 	}
 
