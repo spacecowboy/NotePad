@@ -171,8 +171,7 @@
 			android:label="@string/menu_preferences"
 			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
 			android:theme="@style/ThemeBaseDark">
-			<!-- TODO you can definitely use a day & night theme,
-			       but the icons should have ?attr/iconTint in the settings xml files -->
+			<!-- TODO use the same theme of ActivityMain, verify that the icons change color accordingly -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.nononsenseapps.notepad.ActivityMain_"/>
