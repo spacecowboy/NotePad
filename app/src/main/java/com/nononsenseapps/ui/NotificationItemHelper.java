@@ -77,6 +77,13 @@ public final class NotificationItemHelper {
 		not.time = cal.getTimeInMillis();
 	}
 
+	/**
+	 * add a new reminder and show it in the note detail page
+	 *
+	 * @param fragment         the {@link TaskDetailFragment} that will host this reminder widget
+	 * @param notificationList the list in {@link TaskDetailFragment} that contains this reminder
+	 *                         widget
+	 */
 	public static void setup(final TaskDetailFragment fragment,
 							 final LinearLayout notificationList, final View nv,
 							 final Notification not, final Task mTask) {

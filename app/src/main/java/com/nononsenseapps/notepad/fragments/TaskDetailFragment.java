@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -69,7 +68,6 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 import com.nononsenseapps.ui.StyledEditText;
@@ -145,24 +143,30 @@ public class TaskDetailFragment extends Fragment {
 					// Load the list to see if we should hide task bits
 					Bundle args = new Bundle();
 					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
-					LoaderManager.getInstance(TaskDetailFragment.this)
+					LoaderManager
+							.getInstance(TaskDetailFragment.this)
 							.restartLoader(LOADER_EDITOR_TASKLISTS, args, this);
-
 					args.clear();
-					args.putLong(ARG_ITEM_ID,
-							getArguments().getLong(ARG_ITEM_ID, stateId));
-					LoaderManager.getInstance(TaskDetailFragment.this).restartLoader(
-							LOADER_EDITOR_NOTIFICATIONS, args, loaderCallbacks);
+					args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, stateId));
+					LoaderManager
+							.getInstance(TaskDetailFragment.this)
+							.restartLoader(LOADER_EDITOR_NOTIFICATIONS, args, loaderCallbacks);
 				} else {
 					// Should kill myself maybe?
 				}
 			} else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c != null && c.moveToNext()) {
+					// TODO when you share a note or click a link & go back to this
+					//  note-detail-page, this function is called too many times, and we get
+					//  one more - USELESS - reminder. See issue #412
+					//  SOLUTION: remove views in onPause or onStop and they will be re-added here
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
 				// TODO this allows updating of the location name etc
-				LoaderManager.getInstance(TaskDetailFragment.this).destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
+				LoaderManager
+						.getInstance(TaskDetailFragment.this)
+						.destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
 			} else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
 				// At current only loading a single list
 				if (c != null && c.moveToFirst()) {
@@ -185,6 +189,10 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById(resName = "dueDateBox")
 	Button dueDateBox;
 
+	/**
+	 * holds a list of widgets, one for each reminder the user sets
+	 * (below the due date row)
+	 */
 	@ViewById(resName = "notificationList")
 	LinearLayout notificationList;
 
@@ -464,7 +472,6 @@ public class TaskDetailFragment extends Fragment {
 		}).show();
 		*/
 	}
-
 
 
 	private void setDueText() {
@@ -844,19 +851,19 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
-		if (getActivity() != null) {
-			@SuppressLint("InflateParams") View nv = LayoutInflater
-					.from(getActivity())
-					.inflate(R.layout.notification_view, null);
+		if (getActivity() == null) return;
 
-			// So we can update the view later
-			not.view = nv;
+		View nv = LayoutInflater
+				.from(getActivity())
+				.inflate(R.layout.notification_view, null);
 
-			// Setup all the listeners etc
-			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
+		// So we can update the view later
+		not.view = nv;
 
-			notificationList.addView(nv);
-		}
+		// Setup all the listeners, etc...
+		NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
+
+		notificationList.addView(nv);
 	}
 
 	@Override
