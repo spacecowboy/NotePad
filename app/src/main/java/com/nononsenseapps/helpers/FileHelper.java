@@ -1,6 +1,5 @@
 package com.nononsenseapps.helpers;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
@@ -9,27 +8,27 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.function.Function;
 
 /**
- * Methods to help navigate through Google's mess regarding file access in android 10
- * and higher.
+ * Methods to help navigate through Google's mess regarding file access in
+ * Android 10 and higher.
  *
  * Functions that start with "document" are related to {@link DocumentFile}
  * objects, which Google recommends, but which we can still avoid, for now.
@@ -74,31 +73,90 @@ public final class FileHelper {
 	}
 
 	/**
-	 * Writes the given {@link String} to the given {@link File}
+	 * Writes the given {@link String} to the given {@link File}, using a method appropriate
+	 * for every android API version
 	 *
 	 * @return TRUE if it worked, FALSE otherwise
 	 */
-	public static boolean writeStringToFile(String content, File target) {
-		if (content == null || target == null || target.isDirectory()) return false;
-		target.getParentFile().mkdirs();
+	public static boolean writeStringToFile(String content, File target, Context context) {
+		if (content == null || target == null) return false;
+		if (target.isDirectory() || target.getParentFile() == null) return false;
 
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+			// bothersome requirements. Thanks Google
+			String relPath = getRelativePathOrNull(target);
+			if (relPath == null)
+				return FileHelper.writeStringToFileSimple(content, target);
+			else
+				// will create & overwrite the file as needed
+				return MediaStoreHelper.saveTextToFile(context, content, target, relPath);
+		} else {
+			return FileHelper.writeStringToFileSimple(content, target);
+		}
+	}
+
+	/**
+	 * @return the relative path to use with {@link MediaStore} in {@link MediaStoreHelper},
+	 * or null if the simple {@link File} API should be used instead
+	 */
+	@Nullable
+	private static String getRelativePathOrNull(File target) {
+		// these directories require the write permission
+		String dirDownload = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+				.getAbsolutePath();
+		boolean isInDownloadDir = target.getAbsolutePath().contains(dirDownload);
+
+		String dirDocs = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+				.getAbsolutePath();
+		boolean isInDocsDir = target.getAbsolutePath().contains(dirDocs);
+
+		if (isInDownloadDir) {
+			return Environment.DIRECTORY_DOWNLOADS;
+		} else if (isInDocsDir) {
+			return Environment.DIRECTORY_DOCUMENTS;
+		} else {
+			// file is in /Android/data/ so we can still use the simple function
+			return null;
+		}
+	}
+
+	/**
+	 * Easy, but doesn't work in android API 29 and newer
+	 *
+	 * @return TRUE if it managed to write "content" to file "target"
+	 */
+	private static boolean writeStringToFileSimple(@NotNull String content, @NotNull File target) {
+		if (target.isDirectory() || target.getParentFile() == null) return false;
+		NnnLogger.debug(FileHelper.class,
+				"Writing, with PrintStream, to file " + target.getAbsolutePath());
 		try {
-			target.createNewFile();
-		} catch (IOException e) {
-			// you just can't write to that folder
+			target.getParentFile().mkdirs();
+		} catch (SecurityException se) {
+			NnnLogger.error(FileHelper.class, "Can't create: " + target.getParentFile());
+			NnnLogger.exception(se);
 			return false;
 		}
+		// TODO useless & does not work
+		// .
+		//		if (!tryDeleteFile(target, context)) return false;
+		//		try {
+		//			if (!target.createNewFile()) return false;
+		//		} catch (IOException e) {
+		//			// you just can't write to that folder
+		//			return false;
+		//		}
 
-		try (PrintStream out = new PrintStream(new FileOutputStream(target.getAbsolutePath()))) {
+		try (PrintStream out = new PrintStream(new FileOutputStream(target))) {
 			out.print(content);
+			out.close();
 			return true;
 		} catch (Exception e) {
 			NnnLogger.exception(e);
 			return false;
 		}
 	}
-
-	// TODO would thing be easier if we used MediaStore? see https://stackoverflow.com/a/59536115/6307322
 
 	/**
 	 * @return the path of the directory where ORG files are saved, or NULL if
@@ -199,6 +257,7 @@ public final class FileHelper {
 	 * This function takes care of that
 	 */
 	public static boolean tryDeleteFile(@NonNull File toDelete, @NonNull Context context) {
+		// TODO test on API 30+ I think this should be replaced by MediaStore
 		if (toDelete.exists()) {
 			try {
 				if (!toDelete.delete()) return false;
@@ -243,41 +302,6 @@ public final class FileHelper {
 
 		// anything else: it's either writable without permissions, or unreachable at all
 		return false;
-	}
-
-	/**
-	 * Saves "text" in "fileName.json" located in the downloads folder
-	 * example:
-	 * FileHelper.saveFile(this, "NoNonsenseNotes_Backup", "testo", "aaa");
-	 */
-	private static void saveFile_TESTING(Context context, String fileName, String text, String extension)
-			throws IOException {
-		// TODO test and use this to save files. note that it can't overwrite files,
-		//  so the restore functionality should have a file picker to chose which json to use
-		//  see https://stackoverflow.com/a/62879112/6307322
-		OutputStream outputStream;
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			// use mediastore to bypass filesystem writing permissions
-			ContentValues values = new ContentValues();
-			values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
-			values.put(MediaStore.MediaColumns.MIME_TYPE, "application/json");
-			values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
-			// you can replace "download" with documents
-			Uri fileUri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-			outputStream = context.getContentResolver().openOutputStream(fileUri);
-		} else {
-			// fallback to method for old android versions
-			String path = Environment
-					.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-					.toString() + "/sub/dir";
-			File file = new File(path, fileName + extension);
-			Log.d("TAG", "saveFile: file path - " + file.getAbsolutePath());
-			outputStream = new FileOutputStream(file);
-		}
-
-		byte[] bytes = text.getBytes();
-		outputStream.write(bytes);
-		outputStream.close();
 	}
 
 }
