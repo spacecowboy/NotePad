@@ -33,6 +33,7 @@ import androidx.preference.PreferenceManager;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -46,6 +47,7 @@ public class PrefsActivity extends AppCompatActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
 
 		// Add the arrow to go back

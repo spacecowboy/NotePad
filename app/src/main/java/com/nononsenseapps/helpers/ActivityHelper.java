@@ -24,6 +24,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
@@ -42,25 +43,10 @@ public final class ActivityHelper {
 	// forbid instances: it's a static class
 	private ActivityHelper() {}
 
-	public static void readAndSetSettings(Activity activity) {
-		// Read settings and set
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-		final String theme = prefs.getString(AppearancePrefs.KEY_THEME,
-				activity.getString(R.string.const_theme_light_ab));
-		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
-			activity.setTheme(R.style.ThemeNnnLight);
-		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {
-			activity.setTheme(R.style.ThemeNnnPitchBlack);
-		} else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
-			activity.setTheme(R.style.ThemeNnnClassicLight);
-		} else // if (theme.equals(getResources().getString(R.string.const_theme_googlenow_dark)))
-		{
-			activity.setTheme(R.style.ThemeNnnDark);
-		}
-// TODO move the part above to a ThemeHelper function
-
+	public static void readAndSetSettings(AppCompatActivity activity) {
+		ThemeHelper.setTheme(activity);
 		// Set language
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
 		Configuration config = activity.getResources().getConfiguration();
 
 		String lang = prefs.getString(activity.getString(R.string.pref_locale), "");
