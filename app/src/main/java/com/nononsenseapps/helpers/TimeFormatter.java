@@ -91,10 +91,11 @@ public final class TimeFormatter {
 			// 12:59 am
 			format = "h:mm a";
 		}
-		return new SimpleDateFormat(format, getLocale(PreferenceManager
-				.getDefaultSharedPreferences(context).getString(
-						context.getString(R.string.pref_locale), "")))
-				.format(new Date(time));
+		// like "it_IT"
+		String localePrefVal = PreferenceManager
+				.getDefaultSharedPreferences(context)
+				.getString(context.getString(R.string.pref_locale), "");
+		return new SimpleDateFormat(format, getLocale(localePrefVal)).format(new Date(time));
 	}
 
 	/**
@@ -128,10 +129,25 @@ public final class TimeFormatter {
 		return formatString.replaceAll("\\s*localtime\\s*", " ");
 	}
 
+	/**
+	 * @param lang if app is in japanese, it's "ja" and uses values-ja/strings.xml
+	 */
 	private static SimpleDateFormat getLocalFormatter(final Context context,
 													  final String lang, final String format) {
 		final Locale locale = getLocale(lang);
-		return new SimpleDateFormat(withSuitableTime(context, format), locale);
+		SimpleDateFormat sdf;
+		try {
+			sdf = new SimpleDateFormat(withSuitableTime(context, format), locale);
+		} catch (IllegalArgumentException iae) {
+			NnnLogger.error(TimeFormatter.class,
+					"Error in translated date format strings. In: values-" + lang
+							+ ", value: " + format);
+			NnnLogger.exception(iae);
+		} finally {
+			// just log the error, but crash anyway
+			sdf = new SimpleDateFormat(withSuitableTime(context, format), locale);
+		}
+		return sdf;
 	}
 
 	public static GregorianCalendar getLocalCalendar(final Context context) {
