@@ -30,7 +30,7 @@
 	<TextView
 		android:drawablePadding="8dp"
 		android:id="@android:id/text1"
-		style="?LeftDrawerListItemStyle"
+		style="?attr/LeftDrawerListItemStyle"
 		android:layout_width="0dp"
 		android:layout_height="64dp"
 		android:layout_gravity="start|center_vertical"
@@ -41,7 +41,7 @@
 	<!-- Shows the number of notes in this list -->
 	<TextView
 		android:id="@android:id/text2"
-		style="?LeftDrawerListItemSecondaryStyle"
+		style="?attr/LeftDrawerListItemSecondaryStyle"
 		android:layout_width="wrap_content"
 		android:layout_height="64dp"
 		android:layout_gravity="end|center_vertical"

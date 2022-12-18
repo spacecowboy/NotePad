@@ -17,8 +17,6 @@
   -->
 <resources>
 
-	
-
 	<declare-styleable name="StyledTextView">
 		<attr name="linkify" format="boolean"/>
 		<attr name="styledText" format="string"/>
@@ -49,9 +47,6 @@
 	</declare-styleable>
 
 	<!-- Vetted -->
-	<attr name="NavDrawerStyle" format="reference"/>
-	<attr name="separatorColor" format="color"/>
-	<attr name="selectable_item_background" format="reference"/>
 	<attr name="my_list_selector" format="reference"/>
 	<attr name="editorBackgroundColor" format="reference"/>
 	<attr name="btn_default_selector" format="reference"/>
@@ -69,5 +64,4 @@
 	<attr name="LeftDrawerStyle" format="reference"/>
 	<attr name="LeftDrawerListItemStyle" format="reference"/>
 	<attr name="LeftDrawerListItemSecondaryStyle" format="reference"/>
-	<attr name="ListHeaderSize" format="reference"/>
 </resources>
