@@ -102,14 +102,24 @@
 	<string name="dateformat_micro">MMM d</string>
 	<string name="dateformat_weekday">EEEE</string>
 	<string name="dateformat_short_1">E localtime, d MMM</string>
-	<string name="dateformat_short_2" translatable="false">E, d MMM</string>
+	<string name="dateformat_short_2">E, d MMM</string>
 	<string name="dateformat_short_3">MMM d</string>
 	<string name="dateformat_short_4">E, localtime</string>
-	<!-- TODO instead of translations, add dateformat_short_9 and more,
-	      so that users from other countries have more choice,
-	      without having to translate these strings -->
 	<string name="dateformat_long_1">EEEE localtime, MMMM d</string>
 	<string name="dateformat_long_2">E localtime, MMM d</string>
 	<string name="dateformat_just_date">MMMM d</string>
+
+	<!-- potential alternatives -->
+	<!-- TODO instead of translations, add these dateformat_* and more,
+	      so that users from other countries have more choice,
+	      without having to translate these strings. See arrays.xml & java code -->
+	<string name="dateformat_just_date_2">d MMMM</string>
+	<string name="dateformat_long_3">EEEE d MMMM, localtime</string>
+	<string name="dateformat_long_4">E d MMM, localtime</string>
+	<string name="dateformat_micro_2">d MMM</string>
+	<string name="dateformat_micro_3">MM/dd</string>
+	<string name="dateformat_short_5">d MMM</string>
+	<string name="dateformat_short_6">MM/dd(E)</string>
+	<string name="dateformat_short_7">MM/dd</string>
 
 </resources>
