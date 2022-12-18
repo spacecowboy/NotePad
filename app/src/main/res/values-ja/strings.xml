@@ -171,13 +171,7 @@
     <string name="notification_prio_low">低：隠す、縮小</string>
     <string name="priority">優先度</string>
     <string name="notifications">通知</string>
-    <string name="dateformat_micro">MM/dd</string>
-    <string name="dateformat_short_1">kk:mm MM/dd(E)</string>
-    <string name="dateformat_short_2">h:mm MM/dd(E)</string>
-    <string name="dateformat_short_3">MM/dd(E)</string>
-    <string name="dateformat_short_4">MM/dd</string>
-    <string name="dateformat_long_1">MM月dd日 (EEEE) kk:mm</string>
-    <string name="dateformat_long_2">MM月dd日 (EEEE) h:mm </string>
+
     <string name="tasks">タスク</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">表示するタスクを限定</string>
     <string name="dashclock_show_overdue_tasks">期限切れタスクを表示</string>

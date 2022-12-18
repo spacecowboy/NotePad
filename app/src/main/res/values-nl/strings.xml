@@ -178,13 +178,7 @@
     <string name="notification_prio_low">Laag: Verborgen, geminimaliseerd</string>
     <string name="priority">Prioriteit</string>
     <string name="notifications">Meldingen</string>
-    <string name="dateformat_micro">d MMM</string>
-    <string name="dateformat_short_1">E d MMM, localtime</string>
-    <string name="dateformat_short_2">E d MMM</string>
-    <string name="dateformat_short_3">d MMM</string>
-    <string name="dateformat_long_1">EEEE d MMMM, localtime</string>
-    <string name="dateformat_long_2">E d MMMM, localtime</string>
-    <string name="dateformat_just_date">d MMMM</string>
+
     <string name="tasks">Taken</string>
     <string name="all_tasks">Alle taken</string>
     <string name="dashclock_tasks">Taken</string>

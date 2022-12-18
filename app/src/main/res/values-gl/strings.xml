@@ -184,16 +184,7 @@
     <string name="notification_prio_low">Baixa: oculta, minimizada</string>
     <string name="priority">Prioridade</string>
     <string name="notifications">Notificacións</string>
-    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
-    <string name="dateformat_micro">d MMM</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_1">E localtime, d MMM</string>
-    <string name="dateformat_short_2">E, d MMM</string>
-    <string name="dateformat_short_3">d MMM</string>
-    <string name="dateformat_short_4">E, localtime</string>
-    <string name="dateformat_long_1">EEEE localtime, d MMMM</string>
-    <string name="dateformat_long_2">E localtime, d MMM</string>
-    <string name="dateformat_just_date">d MMMM</string>
+
     <string name="tasks">Tarefas</string>
     <string name="all_tasks">Todas as tarefas</string>
     

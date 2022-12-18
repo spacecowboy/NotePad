@@ -186,16 +186,7 @@
     <string name="notification_prio_low">Rendah: Tersembunyi, dipersempit</string>
     <string name="priority">Prioritas</string>
     <string name="notifications">notifikasi</string>
-    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
-    <string name="dateformat_micro">MMM d</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_1">E waktu setempat, d MMM</string>
-    <string name="dateformat_short_2">E, d MMM</string>
-    <string name="dateformat_short_3">MMM d</string>
-    <string name="dateformat_short_4">E, waktu setempat</string>
-    <string name="dateformat_long_1">EEEE waktu setempat, MMMM d</string>
-    <string name="dateformat_long_2">EEEE waktu setempat, MMMM d</string>
-    <string name="dateformat_just_date">MMMM d</string>
+
     <string name="tasks">Tugas</string>
     <string name="all_tasks">Semua tugas</string>
 

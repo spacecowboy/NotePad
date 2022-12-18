@@ -181,9 +181,7 @@
     <string name="notification_prio_low">Låg: Gömd, minimerad</string>
     <string name="priority">Prioritet</string>
     <string name="notifications">Påminnelser</string>
-    <string name="dateformat_micro">MMM d</string>
-    <string name="dateformat_short_3">MMM d</string>
-    <string name="dateformat_just_date">MMMM d</string>
+
     <string name="tasks">Uppgifter</string>
     <string name="all_tasks">Alla uppgifter</string>
     

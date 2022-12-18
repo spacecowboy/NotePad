@@ -86,7 +86,7 @@
     <string name="notedeleted_other">Slettet %d notater</string>
     <string name="notedeleted_one">Slettet %d notat</string>
     <string name="priority">Prioritet</string>
-    <string name="dateformat_micro">d. MMM</string>
+
     <string name="all_tasks">Alle gjøremål</string>
     <string name="dashclock_anytime">Når som helst</string>
     <string name="clickable_links">Klikkbare lenker</string>
@@ -236,13 +236,7 @@
     <string name="shortcut_help1">Får snarveien til å åpne nytt notat i valgt liste med åpen tekstredigerer.</string>
     <string name="sync_on_change_info">Planlegger synkronisering rett etter endring av notat</string>
     <string name="standard">Standard</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_1">E, d. MMM, localtime</string>
-    <string name="dateformat_short_2">E, d. MMM</string>
-    <string name="dateformat_short_3">d. MMM</string>
-    <string name="dateformat_long_1">EEEE, D. MMMM, localtime</string>
-    <string name="dateformat_long_2">E, D. MMM, localtime</string>
-    <string name="dateformat_just_date">d. MMMM</string>
+
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Begrens til gjøremål i</string>
     <string name="dashclock_title_activity_tasks_settings">Innstillinger</string>
     <string name="dashclock_due_upper_limit_title">Begrens til gjøremål med frist senest</string>
@@ -256,7 +250,7 @@
     <string name="prefs_improved_reliability">Innstillinger for økt pålitelighet</string>
     <string name="exact_alarms_summary">Bruker mer batteri for å vise merknader for påminnelser mer pålitelig</string>
     <string name="allow_exact_reminders_summary">Åpne en side for å tillate dette programmet å sende påminnelser mer pålitelig. Trengs kun siden Android 12 Snow Cone.</string>
-    <string name="dateformat_short_4">E, localtime</string>
+
     <string name="sync_full_force_info">Velg dette hvis du tror noen elementer mangler.</string>
     <string name="bold">Fet</string>
     <string name="app_about_license">Lisensiert GPLv3+, tilgjengelig på https://www.gnu.org/licenses.</string>

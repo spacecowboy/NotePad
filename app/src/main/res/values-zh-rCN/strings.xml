@@ -176,15 +176,7 @@
     <string name="notification_prio_low">低：隐藏并最小化显示</string>
     <string name="priority">优先级</string>
     <string name="notifications">通知</string>
-    <string name="dateformat_micro">MMM d</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_1">E 时间, d MMM</string>
-    <string name="dateformat_short_2">E, d MMM</string>
-    <string name="dateformat_short_3">MMM d</string>
-    <string name="dateformat_short_4">E, 时间</string>
-    <string name="dateformat_long_1">EEEE 时间, MMMM d</string>
-    <string name="dateformat_long_2">E 时间, MMM d</string>
-    <string name="dateformat_just_date">MMMM d</string>
+
     <string name="tasks">任务</string>
     <string name="all_tasks">所有任务</string>
     <string name="dashclock_tasks">任务</string>

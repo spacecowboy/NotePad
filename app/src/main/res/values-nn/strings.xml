@@ -162,15 +162,7 @@
 	<string name="notification_prio_low">Lav: gjemt, minimert</string>
 	<string name="priority">Prioritet</string>
 	<string name="notifications">Varslinger</string>
-	<string name="dateformat_micro">MMM d</string>
-	<string name="dateformat_weekday">EEEE</string>
-	<string name="dateformat_short_1">E lokaltid, d MMM</string>
-	<string name="dateformat_short_2">E, d MMM</string>
-	<string name="dateformat_short_3">MMM d</string>
-	<string name="dateformat_short_4">E, lokaltid</string>
-	<string name="dateformat_long_1">EEEE lokaltid, MMMM d</string>
-	<string name="dateformat_long_2">E lokaltid, MMM d</string>
-	<string name="dateformat_just_date">MMMM d</string>
+
 	<string name="tasks">Oppgaver</string>
 	<string name="all_tasks">Alle oppgaver</string>
 	<string name="dashclock_restrict_to_tasks_in_a_specific_list">Begrens til oppgaver i</string>

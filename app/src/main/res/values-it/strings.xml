@@ -176,8 +176,7 @@
     <string name="notification_prio_low">Bassa: nascosta, minimizzata</string>
     <string name="priority">Priorità</string>
     <string name="notifications">Notifiche</string>
-    <string name="dateformat_micro">d MMM</string>
-    <string name="dateformat_weekday">EEEE</string>
+
     <string name="tasks">Attività</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Limita alle attività in un elenco specifico</string>
     <string name="dashclock_show_overdue_tasks">Mostra attività scadute</string>

@@ -178,11 +178,7 @@
     <string name="notification_prio_low">Nízká: Skryté, minimalizovat</string>
     <string name="priority">Priorita</string>
     <string name="notifications">Upozornění</string>
-    <string name="dateformat_micro">MMM d</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_2">E, d MMM</string>
-    <string name="dateformat_short_3">MMM d</string>
-    <string name="dateformat_just_date">MMMM d</string>
+
     <string name="tasks">Úkoly</string>
     <string name="all_tasks">Všechny úkoly</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Omezit na úkoly v</string>
