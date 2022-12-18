@@ -57,7 +57,7 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_notifications);
 
-		PrefsActivity.bindPreferenceSummaryToValue(
+		PrefsActivity.bindSummaryToValue(
 				findPreference(getString(R.string.key_pref_prio)));
 
 		// show the initial value of the selected ringtone

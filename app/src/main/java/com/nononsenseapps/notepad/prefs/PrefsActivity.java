@@ -167,15 +167,14 @@ public class PrefsActivity extends AppCompatActivity implements
 	};
 
 	/**
-	 * Binds a preference's summary to its value. More specifically, when the
-	 * preference's value is changed, its summary (line of text below the
-	 * preference title) is updated to reflect the value. The summary is also
-	 * immediately updated upon calling this method. The exact display format is
+	 * Binds a preference's summary to its value. When the preference's value is changed,
+	 * its summary (text below the preference title) is updated to reflect the value.
+	 * The summary is also updated upon calling this method. The exact display format is
 	 * dependent on the type of preference.
 	 *
 	 * @see #sBindPreferenceSummaryToValueListener
 	 */
-	public static void bindPreferenceSummaryToValue(Preference preference) {
+	public static void bindSummaryToValue(Preference preference) {
 		// Set the listener to watch for value changes.
 		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 

@@ -32,7 +32,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
- * Settings about how notes will look like
+ * Settings about how notes will look like: Theme, language, text size, ...
  */
 public class AppearancePrefs extends PreferenceFragmentCompat {
 
@@ -64,21 +64,21 @@ public class AppearancePrefs extends PreferenceFragmentCompat {
 		//  new language selected
 
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
+				.bindSummaryToValue(findPreference(getString(R.string.pref_locale)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
+				.bindSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
+				.bindSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
+				.bindSummaryToValue(findPreference(KEY_THEME));
 	}
 
 	private void setDateEntries(ListPreference prefDate, int array) {
