@@ -46,9 +46,9 @@ public class PrefsActivity extends AppCompatActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
+		super.onCreate(savedInstanceState);
 
 		// Add the arrow to go back
 		if (getSupportActionBar() != null) {

@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.helpers;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -28,7 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 
 import java.util.Locale;
 
@@ -43,33 +41,6 @@ public final class ActivityHelper {
 	// forbid instances: it's a static class
 	private ActivityHelper() {}
 
-	public static void readAndSetSettings(AppCompatActivity activity) {
-		ThemeHelper.setTheme(activity);
-		// Set language
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-		Configuration config = activity.getResources().getConfiguration();
-
-		String lang = prefs.getString(activity.getString(R.string.pref_locale), "");
-		if (!config.locale.toString().equals(lang)) {
-			Locale locale;
-			if (lang == null || lang.isEmpty())
-				locale = Locale.getDefault();
-			else if (lang.length() == 5) {
-				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			} else {
-				locale = new Locale(lang.substring(0, 2));
-			}
-			// Locale.setDefault(locale);
-			config.locale = locale;
-			activity.getResources()
-					.updateConfiguration(config, activity.getResources().getDisplayMetrics());
-		}
-
-		if (activity instanceof OnSharedPreferenceChangeListener) {
-			prefs.registerOnSharedPreferenceChangeListener(
-					(OnSharedPreferenceChangeListener) activity);
-		}
-	}
 
 	/**
 	 * @return the users's default or selected locale
@@ -90,16 +61,16 @@ public final class ActivityHelper {
 	}
 
 	/**
-	 * Set configured locale on current context
+	 * Set configured locale on the given activity. Call it before Activity.onCreate()
 	 */
-	public static void setSelectedLanguage(@NonNull Context context) {
+	public static void setSelectedLanguage(@NonNull AppCompatActivity context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Configuration config = context.getResources().getConfiguration();
 
 		String lang = prefs.getString(context.getString(R.string.pref_locale), "");
 		if (!config.locale.toString().equals(lang)) {
 			Locale locale;
-			if ("".equals(lang))
+			if (lang == null || lang.isEmpty())
 				locale = Locale.getDefault();
 			else if (lang.length() == 5) {
 				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
@@ -110,6 +81,10 @@ public final class ActivityHelper {
 			config.locale = locale;
 			context.getResources().updateConfiguration(config,
 					context.getResources().getDisplayMetrics());
+		}
+		if (context instanceof OnSharedPreferenceChangeListener) {
+			prefs.registerOnSharedPreferenceChangeListener(
+					(OnSharedPreferenceChangeListener) context);
 		}
 	}
 }
