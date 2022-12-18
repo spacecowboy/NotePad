@@ -18,6 +18,8 @@
 package com.nononsenseapps.ui;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatToggleButton;
@@ -25,21 +27,33 @@ import androidx.appcompat.widget.AppCompatToggleButton;
 import com.nononsenseapps.notepad.R;
 
 /**
- * A Checkbox like textview. It displays its 2 states by toggling between two
- * textcolors. Secondary color is grey. Used in {@link WeekDaysView}
+ * A Checkbox like textview. It displays its 2 states by toggling between 2 text
+ * colors: the primary text color and grey. Used in {@link WeekDaysView}
  */
 public class GreyableToggleButton extends AppCompatToggleButton {
 
 	// text colors for checked & unchecked status
-	private final int primaryColor;
+	private final ColorStateList primaryColor;
 	private final int secondaryColor;
 
+	/**
+	 * See also "GreyableButtonToggle" in styles.xml
+	 */
 	public GreyableToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		primaryColor = super.getCurrentTextColor();
-		// defTextSize = super.getTextSize();
+		primaryColor = getTextColorPrimary(context);
 		secondaryColor = getResources().getColor(R.color.uncheckedGrey);
-		// max size defaults to the initially specified text size unless it is too small
+	}
+
+	/**
+	 * Correct and mandatory way to get the text color for the "selected" state
+	 */
+	private static ColorStateList getTextColorPrimary(Context context) {
+		TypedArray a = context
+				.obtainStyledAttributes(new int[] { android.R.attr.textColorPrimary });
+		ColorStateList color = a.getColorStateList(a.getIndex(0));
+		a.recycle();
+		return color;
 	}
 
 	@Override
