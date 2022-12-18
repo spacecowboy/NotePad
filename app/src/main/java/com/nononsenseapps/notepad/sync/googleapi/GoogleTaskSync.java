@@ -61,7 +61,7 @@ public class GoogleTaskSync {
 								   final ContentProviderClient provider,
 								   final SyncResult syncResult) {
 		NnnLogger.debug(GoogleTaskSync.class, "fullSync");
-		if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_GTASKS)) {
+		if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.FOR_GOOGLETASKS)) {
 			NnnLogger.debug(GoogleTaskSync.class, "Missing permissions, disabling sync");
 			SyncGtaskHelper.disableSync(context);
 			return false;

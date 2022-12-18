@@ -17,8 +17,6 @@
   -->
 <resources>
 
-	<attr name="iconTint" format="color"/>
-
 	<declare-styleable name="StyledTextView">
 		<attr name="linkify" format="boolean"/>
 		<attr name="styledText" format="string"/>
@@ -43,40 +41,22 @@
 		<attr name="secondaryColor" format="color"/>
 	</declare-styleable>
 
-	<declare-styleable name="GreyableToggleButton">
-		<attr name="secondaryColor"/>
-	</declare-styleable>
-
 	<!-- see DelegateFrame.java -->
 	<declare-styleable name="DelegateFrame">
 		<attr name="enlargedView" format="reference"/>
 	</declare-styleable>
 
 	<!-- Vetted -->
-	<attr name="NavDrawerStyle" format="reference"/>
-	<attr name="separatorColor" format="color"/>
-	<attr name="selectable_item_background" format="reference"/>
 	<attr name="my_list_selector" format="reference"/>
 	<attr name="editorBackgroundColor" format="reference"/>
 	<attr name="btn_default_selector" format="reference"/>
 	<attr name="img_default_selector" format="reference"/>
-	<attr name="SpinnerStyle" format="reference"/>
+
 	<attr name="viewpager_bg" format="reference"/>
-	<attr name="textColorPrimary" format="reference|color"/>
 	<attr name="textColorSecondary" format="reference|color"/>
 	<attr name="list_item_card_background" format="reference"/>
 	<attr name="labelAddItemTextColor" format="reference|color"/>
 	<attr name="drag_handle_color" format="reference|color"/>
-
-	<declare-styleable name="SeekBarPreference">
-		<attr name="max" format="integer"/>
-		<attr name="min" format="integer"/>
-		<attr name="unitsLeft" format="string"/>
-		<attr name="unitsRight" format="string"/>
-		<attr name="units" format="string"/>
-		<attr name="summary" format="string"/>
-		<attr name="interval" format="integer"/>
-	</declare-styleable>
 
 	<attr name="TaskListItem" format="reference"/>
 	<attr name="ListDividerStyle" format="reference"/>
@@ -84,5 +64,4 @@
 	<attr name="LeftDrawerStyle" format="reference"/>
 	<attr name="LeftDrawerListItemStyle" format="reference"/>
 	<attr name="LeftDrawerListItemSecondaryStyle" format="reference"/>
-	<attr name="ListHeaderSize" format="reference"/>
 </resources>

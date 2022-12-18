@@ -9,8 +9,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
 
 /**
  * Holds all code related to the showcase view, which for now is provided
@@ -64,7 +64,9 @@ public final class ShowcaseHelper {
 		target.outerCircleAlpha(0.9f)
 				.drawShadow(true)
 				.cancelable(true) // tap outside the circle to dismiss the showcaseView
-				.textColor(R.color.accent);
+				.tintTarget(false)
+				// TODO not good for Material YOU themes. shows green text on a green circle, for example
+				.textColorInt(ThemeHelper.getThemeAccentColor(activity));
 
 		// this listener will always dismiss the taptargetview, regardless of where you click.
 		// It's less frustrating to use, and above all it makes the espresso tests work.

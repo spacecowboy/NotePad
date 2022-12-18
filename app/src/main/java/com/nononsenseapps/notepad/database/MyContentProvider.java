@@ -360,8 +360,8 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public Cursor query(Uri uri, String[] projection,
-									 String selection, String[] selectionArgs, String sortOrder) {
+	synchronized public Cursor query(Uri uri, String[] projection, String selection,
+									 String[] selectionArgs, String sortOrder) {
 		Cursor result;
 		final long id;
 		switch (sURIMatcher.match(uri)) {
@@ -382,8 +382,8 @@ public class MyContentProvider extends ContentProvider {
 								projection,
 								TaskList.whereIdIs(selection),
 								TaskList.joinArrays(selectionArgs,
-										new String[] { String.valueOf(id) }), null,
-								null, sortOrder);
+										new String[] { String.valueOf(id) }),
+								null, null, sortOrder);
 				result.setNotificationUri(getContext().getContentResolver(), uri);
 				break;
 			case TaskList.VIEWCOUNTCODE:

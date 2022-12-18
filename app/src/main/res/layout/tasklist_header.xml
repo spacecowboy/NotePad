@@ -34,7 +34,7 @@
 		android:paddingLeft="16dp"
 		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:textColor="?attr/textColorPrimary"
+		android:textColor="?android:attr/textColorPrimary"
 		android:textIsSelectable="false"
 		custom:titleFontFamily="robotolight"/>
 

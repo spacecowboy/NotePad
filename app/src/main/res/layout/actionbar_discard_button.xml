@@ -15,6 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!-- used in the time machine (note history) activity -->
 <FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,8 +25,6 @@
 	android:layout_height="match_parent"
 	android:layout_weight="1">
 
-
-	<!-- TODO not really sure about this, but it works... -->
 	<TextView
 		style="?android:actionBarTabTextStyle"
 		android:layout_width="wrap_content"
@@ -35,6 +34,5 @@
 		android:gravity="center_vertical"
 		android:paddingRight="20dp"
 		android:text="@android:string/cancel"
-		app:drawableTint="?attr/iconTint"
 		app:drawableLeftCompat="@drawable/ic_clear_24dp"/>
 </FrameLayout>

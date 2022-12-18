@@ -178,15 +178,7 @@
     <string name="notification_prio_low">Niedrig: versteckt, minimiert</string>
     <string name="priority">Priorität</string>
     <string name="notifications">Benachrichtigungen</string>
-    <string name="dateformat_micro">d. MMM</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_1">E, d. MMM, localtime</string>
-    <string name="dateformat_short_2">E,  d. MMM </string>
-    <string name="dateformat_short_3">d. MMM </string>
-    <string name="dateformat_short_4">E, localtime</string>
-    <string name="dateformat_long_1">EEEE, d. MMMM, localtime</string>
-    <string name="dateformat_long_2">E, d. MMM, localtime</string>
-    <string name="dateformat_just_date">d. MMMM </string>
+
     <string name="tasks">Aufgaben</string>
     <string name="all_tasks">Alle Aufgaben</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Auf Aufgaben in bestimmter Liste beschränken</string>

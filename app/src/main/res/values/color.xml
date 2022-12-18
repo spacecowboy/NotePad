@@ -22,12 +22,11 @@
 	      Or make a new theme that doesn't define this. whatever is better -->
 	<color name="accent">@android:color/holo_blue_dark</color>
 
-	<!-- Make icons black for light themes -->
-	<!-- TODO it's semi transparent, so it looks grey-ish. use #000 instead ? not that i care -->
-	<color name="icon_tint_light">#8a000000</color>
+	<!-- Make icons black for light themes (85% transparency) -->
+	<color name="black_alpha85">#D9000000</color>
 
-	<!-- Make icons white for dark themes -->
-	<color name="icon_tint_dark">#D9FFFFFF</color>
+	<!-- Make icons white for dark themes (85% transparency) -->
+	<color name="white_alpha85">#D9FFFFFF</color>
 
 
 	<!-- Unchecked. some of these should be deleted -->

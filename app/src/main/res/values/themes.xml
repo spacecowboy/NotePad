@@ -28,17 +28,13 @@
 	 	 for the widget. Things for the DARK theme can go here -->
 	<style name="ThemeBaseDark" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
-
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_dark</item>
-		<item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
 		<item name="viewpager_bg">@android:drawable/dark_header</item>
-		<item name="textColorPrimary">?android:attr/textColorPrimary</item>
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
 		<item name="list_item_card_background">@drawable/card_dark</item>
-
 		<item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
 		<item name="drag_handle_color">@color/dragHandleColorDark</item>
 		<item name="TaskListItem">@style/TaskListItemDark</item>
@@ -46,14 +42,15 @@
 		<item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
-		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark</item>
-		<!-- white icons for dark themes -->
-		<item name="iconTint">@color/icon_tint_dark</item>
-		<!-- <item name="colorPrimary">@color/primary</item> -->
-		<!-- darker variant of colorPrimary (for status bar, contextual app bars) -->
-		<!-- <item name="colorPrimaryDark">@color/primary_dark</item> -->
+		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark
+		</item>
+		<!-- white icons for dark themes. All 3 are needed -->
+		<item name="iconTint">@color/white_alpha85</item>
+		<item name="android:drawableTint">@color/white_alpha85</item>
+		<item name="android:tint">@color/white_alpha85</item>
 		<!-- theme UI controls like checkboxes and text fields  -->
 		<item name="colorAccent">@color/accent</item>
+		<!-- Not setting colorPrimary & colorPrimaryDark because I don't need them -->
 	</style>
 
 	<!-- The full black theme -->
@@ -87,22 +84,14 @@
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_grey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
-
-		<!-- this decides the color of every xml drawable icon (while this "light" theme
-		 is active). Use	?colorPrimary	 to inherit from android 13's
-		 user set dynamic primary color -->
-		<item name="iconTint">@color/icon_tint_light</item>
-
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="editorBackgroundColor">@drawable/card_light</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_light</item>
-		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
+
 		<item name="viewpager_bg">@color/googlenow_grey_trans</item>
-		<item name="textColorPrimary">?android:attr/textColorPrimary</item>
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
-
 		<item name="list_item_card_background">@drawable/card_light</item>
 		<item name="drag_handle_color">@color/dragHandleColorLight</item>
 		<item name="TaskListItem">@style/TaskListItemLight</item>
@@ -110,24 +99,15 @@
 		<item name="ListMarginStyle">@style/ListMarginStyleCard</item>
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
-		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight</item>
-
-		<!-- <item name="colorPrimary">ivory or something, for the actionbar</item> -->
-		<!-- <item name="colorPrimaryDark">@color/primary_dark</item> -->
+		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight
+		</item>
 		<item name="colorAccent">@color/accent</item>
-
-		<!-- TODO check and, most likely, all of the following is useless -->
-		<!-- your app's branding color (for the app bar) -->
-		<!-- <item name="android:colorPrimary">@color/primary</item> -->
-		<!--   darker variant of colorPrimary (for status bar, contextual app bars) -->
-		<!-- <item name="android:colorPrimaryDark">@color/primary_dark</item> -->
-		<!--   theme UI controls like checkboxes and text fields -->
-		<!-- <item name="android:colorAccent">@color/accent</item> -->
-		<!-- <item name="android:navigationBarColor">#AAA</item> -->
-		<!-- <item name="selectableItemBackgroundBorderless">?android:selectableItemBackgroundBorderless</item> -->
-		<!-- <item name="android:windowEnterTransition">@android:transition/no_transition</item> -->
-		<!-- <item name="android:windowExitTransition">@android:transition/no_transition</item> -->
-		<!-- <item name="android:windowAllowEnterTransitionOverlap">true</item> -->
+		<!-- these 3 decide the color of every xml drawable icon (while this "light" theme
+		 is active). Use	?colorPrimary	 to inherit from android 13's
+		 user set dynamic primary color -->
+		<item name="iconTint">@color/black_alpha85</item>
+		<item name="android:drawableTint">@color/black_alpha85</item>
+		<item name="android:tint">@color/black_alpha85</item>
 	</style>
 
 	<!-- "classic" theme: shows a more condensed note list, with smaller separators, by design!
@@ -148,9 +128,9 @@
 		<item name="android:windowBackground">@android:color/transparent</item>
 	</style>
 
-	<!-- our theme for popups that respect the day/night system setting -->
-	<style name="ThemeDayNightDialog" parent="@style/Theme.AppCompat.DayNight.Dialog">
-		<!-- theme UI controls like checkboxes and text fields  -->
+	<!-- Respects the user's day/night system setting and shows the activity as a dialog.
+	 For the shortcut widget configuration activity -->
+	<style name="ThemeNnnDayNightDialog" parent="@style/Theme.AppCompat.DayNight.Dialog">
 		<item name="colorAccent">@color/accent</item>
 	</style>
 

@@ -42,15 +42,15 @@ public class ListPrefs extends PreferenceFragmentCompat {
 		setEntries((ListPreference) findPreference(getString(R.string.pref_defaultlist)));
 
 		// Bind summaries
-		PrefsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorttype)));
-		PrefsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_defaultlist)));
-		PrefsActivity.bindPreferenceSummaryToValue(
+		PrefsActivity.bindSummaryToValue(findPreference(getString(R.string.pref_sorttype)));
+		PrefsActivity.bindSummaryToValue(findPreference(getString(R.string.pref_defaultlist)));
+		PrefsActivity.bindSummaryToValue(
 				findPreference(getString(R.string.pref_list_title_fontfamily)));
-		PrefsActivity.bindPreferenceSummaryToValue(
+		PrefsActivity.bindSummaryToValue(
 				findPreference(getString(R.string.pref_list_title_fontstyle)));
-		PrefsActivity.bindPreferenceSummaryToValue(
+		PrefsActivity.bindSummaryToValue(
 				findPreference(getString(R.string.pref_list_body_fontfamily)));
-		PrefsActivity.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
+		PrefsActivity.bindSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
 
 		//PrefsActivity
 		//		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_listtype)));

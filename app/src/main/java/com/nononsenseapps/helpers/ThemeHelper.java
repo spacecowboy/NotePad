@@ -1,11 +1,15 @@
 package com.nononsenseapps.helpers;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StyleRes;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
@@ -20,8 +24,10 @@ public final class ThemeHelper {
 	private ThemeHelper() {}
 
 	/**
-	 * @return the Id of the style (theme) to use in a {@link DatePickerDialog}
-	 * or {@link TimePickerDialog}
+	 * A theme for dialogs, Light or dark, according to the user-chosen theme.
+	 * Use it in a {@link DatePickerDialog}, {@link TimePickerDialog} and {@link AlertDialog}.
+	 *
+	 * @return the Id of the style (theme)
 	 */
 	@StyleRes
 	public static int getPickerDialogTheme(@NonNull Context context) {
@@ -31,11 +37,44 @@ public final class ThemeHelper {
 				.getDefaultSharedPreferences(context)
 				.getString(AppearancePrefs.KEY_THEME, defaultTheme);
 
-		// TODO try returning different styles & see if we should just
-		//  return the currently selected theme
+		// The "DeviceDefault" theme adapts to the device's general appearance: on Android 13,
+		// it uses the user-picked accent color. We use only 2 themes for dialogs: one light,
+		// one dark. There's no need to customize it, let's keep it default-looking
 		return theme.contains("light")
-				? android.R.style.Theme_Material_Light_Dialog
-				: android.R.style.Theme_Material_Dialog;
+				? android.R.style.Theme_DeviceDefault_Light_Dialog
+				: android.R.style.Theme_DeviceDefault_Dialog;
 	}
 
+	/**
+	 * It is different from {@link R.color#accent} if the user sets a custom Material3
+	 * theme in android 13 or greater
+	 *
+	 * @return This theme's accent color, in the form 0xAARRGGBB
+	 */
+	public static int getThemeAccentColor(@NonNull Context context) {
+		var outValue = new TypedValue();
+		context.getTheme()
+				.resolveAttribute(android.R.attr.colorAccent, outValue, true);
+		return outValue.data;
+	}
+
+	/**
+	 * Set the theme chosen by the user in {@link AppearancePrefs} for this activity
+	 */
+	public static void setTheme(@NonNull AppCompatActivity activity) {
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		final String theme = prefs.getString(AppearancePrefs.KEY_THEME,
+				activity.getString(R.string.const_theme_light_ab));
+		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
+			activity.setTheme(R.style.ThemeNnnLight);
+		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {
+			activity.setTheme(R.style.ThemeNnnPitchBlack);
+		} else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
+			activity.setTheme(R.style.ThemeNnnClassicLight);
+		} else if (theme.equals(activity.getResources().getString(R.string.const_theme_googlenow_dark))) {
+			activity.setTheme(R.style.ThemeNnnDark);
+		} else {
+			// any theme you want to add should go in a new if block ~here
+		}
+	}
 }

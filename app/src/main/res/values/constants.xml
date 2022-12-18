@@ -15,6 +15,7 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
+
 <!-- Provides constants and default values -->
 <resources translatable="false">
 
@@ -61,6 +62,8 @@
 	<string name="key_pref_should_use_exact_alarms">key_pref_should_use_exact_alarms</string>
 	<string name="key_pref_ignore_battery_optimizations">ignoreBatteryOptimizationPref</string>
 	<string name="key_pref_allow_exact_reminders">key_pref_allow_exact_reminders</string>
+	<string name="key_pref_disable_hibernation">key_pref_disable_hibernation</string>
+	<string name="key_pref_notif_visibility">key_pref_notif_visibility</string>
 	<string name="pref_locale">pref_key_locale</string>
 	<string name="key_pref_item_max_height">item_max_height</string>
 	<string name="key_pref_dateformat_long">dateformat_long</string>
@@ -91,5 +94,32 @@
 	<string name="dashclock_pref_tomorrow">Tomorrow</string>
 	<string name="dashclock_pref_next7">Next7</string>
 	<string name="dashclock_pref_none">None</string>
+
+	<!-- Date formats. "localtime" is replaced at runtime with 12/24 hour clock.
+	 Translators COULD change date formats according to their culture, but
+	 if they make mistakes the app will crash at runtime, and I won't check
+	 those strings on every pull request. -->
+	<string name="dateformat_micro">MMM d</string>
+	<string name="dateformat_weekday">EEEE</string>
+	<string name="dateformat_short_1">E localtime, d MMM</string>
+	<string name="dateformat_short_2">E, d MMM</string>
+	<string name="dateformat_short_3">MMM d</string>
+	<string name="dateformat_short_4">E, localtime</string>
+	<string name="dateformat_long_1">EEEE localtime, MMMM d</string>
+	<string name="dateformat_long_2">E localtime, MMM d</string>
+	<string name="dateformat_just_date">MMMM d</string>
+
+	<!-- potential alternatives -->
+	<!-- TODO instead of translations, add these dateformat_* and more,
+	      so that users from other countries have more choice,
+	      without having to translate these strings. See arrays.xml & java code -->
+	<string name="dateformat_just_date_2">d MMMM</string>
+	<string name="dateformat_long_3">EEEE d MMMM, localtime</string>
+	<string name="dateformat_long_4">E d MMM, localtime</string>
+	<string name="dateformat_micro_2">d MMM</string>
+	<string name="dateformat_micro_3">MM/dd</string>
+	<string name="dateformat_short_5">d MMM</string>
+	<string name="dateformat_short_6">MM/dd(E)</string>
+	<string name="dateformat_short_7">MM/dd</string>
 
 </resources>

@@ -163,8 +163,8 @@ public class DialogEditList extends DialogFragment {
 		selectListTypeKey();
 
 		// Check if this is the default list
-		final long defList = Long.parseLong(
-				PreferenceManager.getDefaultSharedPreferences(getActivity())
+		final long defList = Long.parseLong(PreferenceManager
+						.getDefaultSharedPreferences(getActivity())
 						.getString(getString(R.string.pref_defaultlist), "-1"));
 		if (mTaskList._id > 0 && defList == mTaskList._id) {
 			defaultListBox.setChecked(true);

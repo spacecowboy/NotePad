@@ -18,8 +18,6 @@
 package com.nononsenseapps.notepad.prefs;
 
 import android.app.backup.BackupManager;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -34,9 +32,9 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.R;
-
-import java.util.Locale;
 
 /**
  * The preferences page, holds a list of all preference categories
@@ -49,6 +47,7 @@ public class PrefsActivity extends AppCompatActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
 
 		// Add the arrow to go back
@@ -125,6 +124,9 @@ public class PrefsActivity extends AppCompatActivity implements
 	protected void onDestroy() {
 		// Request a backup in case prefs changed. Safe to call multiple times
 		new BackupManager(this).dataChanged();
+		// show reminders notifications. Useful when the user re-enables notifications
+		// permissions: in this case, any overdue notification should be shown immediately
+		NotificationHelper.schedule(this);
 		super.onDestroy();
 	}
 
@@ -167,15 +169,14 @@ public class PrefsActivity extends AppCompatActivity implements
 	};
 
 	/**
-	 * Binds a preference's summary to its value. More specifically, when the
-	 * preference's value is changed, its summary (line of text below the
-	 * preference title) is updated to reflect the value. The summary is also
-	 * immediately updated upon calling this method. The exact display format is
+	 * Binds a preference's summary to its value. When the preference's value is changed,
+	 * its summary (text below the preference title) is updated to reflect the value.
+	 * The summary is also updated upon calling this method. The exact display format is
 	 * dependent on the type of preference.
 	 *
 	 * @see #sBindPreferenceSummaryToValueListener
 	 */
-	public static void bindPreferenceSummaryToValue(Preference preference) {
+	public static void bindSummaryToValue(Preference preference) {
 		// Set the listener to watch for value changes.
 		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 

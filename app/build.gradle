@@ -64,7 +64,7 @@ android {
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
-        targetSdkVersion 32
+        targetSdkVersion 33
 
         // Making either of these two values dynamic in the defaultConfig will
         // require a full app build and reinstallation, even for the smallest change.
@@ -142,6 +142,8 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
     // from deleted branch 'version6'
     implementation project(path: ':contract')
+    // for ListenableFuture<>
+    implementation 'com.google.guava:guava:31.1-android'
     // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"

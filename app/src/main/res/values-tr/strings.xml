@@ -190,16 +190,7 @@
     <string name="notification_prio_low">Düşük: Gizlendi, küçültüldü</string>
     <string name="priority">Öncelikli</string>
     <string name="notifications">Bildirimler</string>
-    <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
-    <string name="dateformat_micro">MMM d</string>
-    <string name="dateformat_weekday">EEEE</string>
-    <string name="dateformat_short_1">E localtime, d MMM</string>
-    <string name="dateformat_short_2">E, d MMM</string>
-    <string name="dateformat_short_3">MMM d</string>
-    <string name="dateformat_short_4">E, yerelzaman</string>
-    <string name="dateformat_long_1">EEEE yerelzaman, AAAA d</string>
-    <string name="dateformat_long_2">E yerelzaman, d MMM</string>
-    <string name="dateformat_just_date">MMMM d</string>
+
     <string name="tasks">Görevler</string>
     <string name="all_tasks">Tüm görevler</string>
 

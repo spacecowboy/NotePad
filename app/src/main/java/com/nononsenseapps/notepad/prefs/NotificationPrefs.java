@@ -18,6 +18,7 @@
 package com.nononsenseapps.notepad.prefs;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Ringtone;
@@ -27,14 +28,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.IntentCompat;
+import androidx.core.content.PackageManagerCompat;
+import androidx.core.content.UnusedAppRestrictionsConstants;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.google.common.util.concurrent.ListenableFuture;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 
 public class NotificationPrefs extends PreferenceFragmentCompat {
@@ -47,7 +57,7 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_notifications);
 
-		PrefsActivity.bindPreferenceSummaryToValue(
+		PrefsActivity.bindSummaryToValue(
 				findPreference(getString(R.string.key_pref_prio)));
 
 		// show the initial value of the selected ringtone
@@ -76,6 +86,8 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		final String allowExactRemindersKey = getString(R.string.key_pref_allow_exact_reminders);
 		final String ignoreBatteryOptimizationKey = getString(R.string.key_pref_ignore_battery_optimizations);
 		final String openNotifChannelKey = getString(R.string.key_pref_notif_channel_settings);
+		final String disableHibernation = getString(R.string.key_pref_disable_hibernation);
+		final String notificVisibility = getString(R.string.key_pref_notif_visibility);
 
 		if (key.equals(ringtonePrefKey)) {
 			// the pseudo-ringtonePreference was clicked => open a system page to pick a ringtone
@@ -128,9 +140,20 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		} else if (key.equals(openNotifChannelKey)) {
 			openNotificationSettings(this.getContext());
 			return false;
+		} else if (key.equals(notificVisibility)) {
+			// open the app settings to let the user change app permissions
+			Intent i = new Intent(
+					android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+					Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+			startActivity(i);
+			return false;
+		} else if (key.equals(disableHibernation)) {
+			showHibernationPageIfNeeded(this);
+			return false;
 		} else {
 			return super.onPreferenceTreeClick(preference);
 		}
+
 	}
 
 	@Override
@@ -200,13 +223,19 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 		super.onResume();
 
 		// check if battery optimizations are enabled and show it in the summary
-		PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
-		int summaryResId = pm.isIgnoringBatteryOptimizations(getContext().getPackageName())
+		var pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+		int summaryResId1 = pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)
 				? R.string.battery_optimizations_inactive
 				: R.string.battery_optimizations_active;
-
 		findPreference(getString(R.string.key_pref_ignore_battery_optimizations))
-				.setSummary(summaryResId);
+				.setSummary(summaryResId1);
+
+		var nm = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+		int summaryResId2 = NotificationHelper.areNotificationsVisible(nm)
+				? R.string.notifications_enabled
+				: R.string.notifications_blocked;
+		findPreference(getString(R.string.key_pref_notif_visibility))
+				.setSummary(summaryResId2);
 	}
 
 	/**
@@ -236,5 +265,56 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 	//  https://developer.android.com/training/monitoring-device-state/doze-standby#testing_doze
 	//  command: $ adb shell dumpsys alarm
 	//  in particular, ensure that the notification arrive at a reasonable time
+
+
+	/**
+	 * If the user doesn't start the app for a few months, the system will
+	 * place restrictions on it. See the {@link UnusedAppRestrictionsConstants} for details.
+	 * This function shows the settings page where the user can disable this behavior
+	 */
+	static void showHibernationPageIfNeeded(@NonNull PreferenceFragmentCompat owner) {
+		var context = owner.getContext();
+		ListenableFuture<Integer> lfi = PackageManagerCompat
+				.getUnusedAppRestrictionsStatus(context);
+		lfi.addListener(() -> {
+			// if we're going to show the settings page to disable hibernation
+			boolean showPage;
+			try {
+				int appRestrictionsStatus = lfi.get();
+				switch (appRestrictionsStatus) {
+					case UnusedAppRestrictionsConstants.API_30_BACKPORT:
+					case UnusedAppRestrictionsConstants.API_30:
+					case UnusedAppRestrictionsConstants.API_31:
+						// restriction enabled => show settings page to let users disable it
+						showPage = true;
+						break;
+					case UnusedAppRestrictionsConstants.ERROR:
+					case UnusedAppRestrictionsConstants.FEATURE_NOT_AVAILABLE:
+					case UnusedAppRestrictionsConstants.DISABLED:
+					default:
+						// restriction not enabled => don't show settings page
+						showPage = false;
+						break;
+				}
+			} catch (Exception ex) {
+				NnnLogger.exception(ex);
+				return;
+			}
+			if (showPage) {
+				// ask the user to disable these restrictions: redirect the user to
+				// the page in system settings to disable the feature.
+				String pkgName = context.getPackageName();
+				Intent i = IntentCompat.createManageUnusedAppRestrictionsIntent(context, pkgName);
+
+				// You must use startActivityForResult(), not startActivity(), even if
+				// you don't use the result code returned in onActivityResult().
+				owner.startActivityForResult(i, 12345);
+			} else {
+				// tell the user that hibernation is already OFF
+				Toast.makeText(context, R.string.msg_hibernation_already_off, Toast.LENGTH_SHORT)
+						.show();
+			}
+		}, ContextCompat.getMainExecutor(context));
+	}
 
 }

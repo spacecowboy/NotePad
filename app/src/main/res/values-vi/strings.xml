@@ -177,13 +177,7 @@
     <string name="notification_prio_low">Thấp: Ẩn hộp thoại</string>
     <string name="priority">Ưu tiên</string>
     <string name="notifications">Thông báo</string>
-    <string name="dateformat_micro">d MMM</string>
-    <string name="dateformat_short_1">localtime E, d MMM</string>
-    <string name="dateformat_short_3">d MMM</string>
-    <string name="dateformat_short_4">E localtime</string>
-    <string name="dateformat_long_1">localtime EEEE, d MMMM</string>
-    <string name="dateformat_long_2">localtime EEEE, d MMM</string>
-    <string name="dateformat_just_date">d MMMM</string>
+
     <string name="tasks">Nhiệm vụ</string>
     <string name="all_tasks">Tất cả nhiệm vụ</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Áp dụng cho các nhiệm vụ trong danh sách</string>

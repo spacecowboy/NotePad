@@ -23,7 +23,6 @@
 
 	<Spinner
 		android:id="@+id/listSpinner"
-		style="?android:attr/spinnerStyle"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/list_item_min_size"
 		android:layout_below="@id/textView1"

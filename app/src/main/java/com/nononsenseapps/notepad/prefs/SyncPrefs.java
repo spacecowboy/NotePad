@@ -139,14 +139,14 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			// ask for permissions needed to use google tasks
 			// TODO useless, remove
 			boolean granted = PermissionsHelper
-					.hasPermissions(this.getContext(), PermissionsHelper.PERMISSIONS_GTASKS);
+					.hasPermissions(this.getContext(), PermissionsHelper.FOR_GOOGLETASKS);
 			if (granted) {
 				// Show dialog
 				showAccountDialog();
 			} else {
 				this.requestPermissions(
-						PermissionsHelper.PERMISSIONS_GTASKS,
-						PermissionsHelper.REQUEST_CODE_GTASKS_PERMISSIONS);
+						PermissionsHelper.FOR_GOOGLETASKS,
+						PermissionsHelper.REQCODE_GOOGLETASKS);
 			}
 			return true;
 		});
@@ -158,10 +158,10 @@ public class SyncPrefs extends PreferenceFragmentCompat
 
 		findPreference(KEY_SD_ENABLE).setOnPreferenceClickListener(p -> {
 			boolean ok = PermissionsHelper.hasPermissions(
-					this.getContext(), PermissionsHelper.PERMISSIONS_SD);
+					this.getContext(), PermissionsHelper.FOR_SDCARD);
 			if (!ok) {
-				this.requestPermissions(PermissionsHelper.PERMISSIONS_SD,
-						PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS);
+				this.requestPermissions(PermissionsHelper.FOR_SDCARD,
+						PermissionsHelper.REQCODE_WRITE_SD);
 				// continues in onRequestPermissionsResult()
 			}
 			return true;
@@ -175,14 +175,14 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		// when the user clicks on the settings entry to choose the directory, do this
 		prefSdDirURI.setOnPreferenceClickListener(preference -> {
 			boolean ok = PermissionsHelper.hasPermissions(
-					this.getContext(), PermissionsHelper.PERMISSIONS_SD);
+					this.getContext(), PermissionsHelper.FOR_SDCARD);
 			if (ok) {
 				// we CAN read the filesystem => show the filepicker
 				showFolderPickerActivity();
 			} else {
 				this.requestPermissions(
-						PermissionsHelper.PERMISSIONS_SD,
-						PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS);
+						PermissionsHelper.FOR_SDCARD,
+						PermissionsHelper.REQCODE_WRITE_SD);
 				// continues in onRequestPermissionsResult()
 			}
 			// tell android to update the preference value
@@ -200,7 +200,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
 
 		switch (reqCode) {
-			case PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS:
+			case PermissionsHelper.REQCODE_WRITE_SD:
 				if (!granted) {
 					// warn the user that the permission was denied
 					Toast.makeText(this.getContext(), R.string.permission_denied,
@@ -212,7 +212,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					if (myPref.isChecked()) myPref.setChecked(false);
 				}
 				break;
-			case PermissionsHelper.REQUEST_CODE_GTASKS_PERMISSIONS:
+			case PermissionsHelper.REQCODE_GOOGLETASKS:
 				if (granted) {
 					// Success => open the dialog
 					showAccountDialog();

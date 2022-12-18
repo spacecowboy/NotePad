@@ -35,8 +35,9 @@
 	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 	-->
 
-	<!-- Writing sync files to SD card -->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<!-- Writing sync files to SD card. Works only in API 29 and lower -->
+	<!-- TODO can we remove this if we use only mediastore ? -->
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29"/>
 
 	<!-- For notifications -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
@@ -170,8 +171,7 @@
 			android:label="@string/menu_preferences"
 			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
 			android:theme="@style/ThemeBaseDark">
-			<!-- TODO you can definitely use a day & night theme,
-			       but the icons should have ?attr/iconTint in the settings xml files -->
+			<!-- TODO use the same theme of ActivityMain, verify that the icons change color accordingly -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
 				android:value="com.nononsenseapps.notepad.ActivityMain_"/>
@@ -229,7 +229,8 @@
 			android:name="com.nononsenseapps.notepad.ShortcutConfig_"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
-			android:theme="@style/ThemeDayNightDialog">
+			android:theme="@style/ThemeNnnDayNightDialog">
+			<!-- An appropriate theme is set in ShortcutConfig.java -->
 			<intent-filter>
 				<action android:name="android.intent.action.CREATE_SHORTCUT"/>
 

@@ -481,11 +481,11 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		});
 
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
 			final HashMap<Long, Task> tasks = new HashMap<>();
 
 			/**
 			 * Delete tasks and display a snackbar with an undo action
-			 *
 			 */
 			private void deleteTasks(final Map<Long, Task> taskMap) {
 				final Task[] tasks = taskMap.values().toArray(new Task[0]);
@@ -576,8 +576,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			@Override
 			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 				// Must setup the contextual action menu
-				final MenuInflater inflater = getActivity().getMenuInflater();
-				inflater.inflate(R.menu.fragment_tasklist_context, menu);
+				getActivity().getMenuInflater().inflate(R.menu.fragment_tasklist_context, menu);
 
 				// Must clear for reuse
 				tasks.clear();

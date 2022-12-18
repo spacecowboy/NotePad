@@ -1,11 +1,15 @@
 package com.nononsenseapps.helpers;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
+import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
@@ -18,6 +22,7 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -238,6 +243,41 @@ public final class FileHelper {
 
 		// anything else: it's either writable without permissions, or unreachable at all
 		return false;
+	}
+
+	/**
+	 * Saves "text" in "fileName.json" located in the downloads folder
+	 * example:
+	 * FileHelper.saveFile(this, "NoNonsenseNotes_Backup", "testo", "aaa");
+	 */
+	private static void saveFile_TESTING(Context context, String fileName, String text, String extension)
+			throws IOException {
+		// TODO test and use this to save files. note that it can't overwrite files,
+		//  so the restore functionality should have a file picker to chose which json to use
+		//  see https://stackoverflow.com/a/62879112/6307322
+		OutputStream outputStream;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+			// use mediastore to bypass filesystem writing permissions
+			ContentValues values = new ContentValues();
+			values.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
+			values.put(MediaStore.MediaColumns.MIME_TYPE, "application/json");
+			values.put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS);
+			// you can replace "download" with documents
+			Uri fileUri = context.getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+			outputStream = context.getContentResolver().openOutputStream(fileUri);
+		} else {
+			// fallback to method for old android versions
+			String path = Environment
+					.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+					.toString() + "/sub/dir";
+			File file = new File(path, fileName + extension);
+			Log.d("TAG", "saveFile: file path - " + file.getAbsolutePath());
+			outputStream = new FileOutputStream(file);
+		}
+
+		byte[] bytes = text.getBytes();
+		outputStream.write(bytes);
+		outputStream.close();
 	}
 
 }

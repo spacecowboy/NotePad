@@ -74,7 +74,7 @@
 
 	<style name="EditorLayoutStyle">
 		<item name="android:layout_marginTop">@dimen/editor_vertical_margin</item>
-		<item name="android:background">?editorBackgroundColor</item>
+		<item name="android:background">?attr/editorBackgroundColor</item>
 		<item name="android:paddingBottom">@dimen/editor_vertical_margin_bottom</item>
 		<item name="android:paddingLeft">8dp</item>
 		<item name="android:paddingRight">8dp</item>
@@ -128,8 +128,8 @@
 
 	<!-- For DashClock Settings -->
 	<style name="DashClockSettings.Theme" parent="Theme.AppCompat.Light">
-		<!-- It is used in the manifest. Note that it MUST inherit from a .Light theme, because
-			 dashclock forces a white background, so the text must be black -->
+		<!-- It is used in the manifest. Note that it MUST inherit from a .Light theme,
+		 because dashclock forces a white background, so the text must be black -->
 		<!-- There's no need to customize anything, the defaults are good enough -->
 	</style>
 

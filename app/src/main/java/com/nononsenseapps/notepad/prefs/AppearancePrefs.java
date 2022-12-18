@@ -23,6 +23,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -32,7 +33,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
- * Settings about how notes will look like
+ * Settings about how notes will look like: Theme, language, text size, ...
  */
 public class AppearancePrefs extends PreferenceFragmentCompat {
 
@@ -59,26 +60,45 @@ public class AppearancePrefs extends PreferenceFragmentCompat {
 		setDateEntries(findPreference(getString(R.string.key_pref_dateformat_short)), R.array.dateformat_short_values);
 		setDateEntries(findPreference(getString(R.string.key_pref_dateformat_long)), R.array.dateformat_long_values);
 
-		// TODO once you set a new language force the fragment (and the activity) to reload,
-		//  because otherwise you have to go back to the main activity to use the app in the
-		//  new language selected
+		PrefsActivity
+				.bindSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
+		PrefsActivity
+				.bindSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
+		PrefsActivity
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
+		PrefsActivity
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
+		PrefsActivity
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
+		PrefsActivity
+				.bindSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
 
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
+		// when theme or language changes, restart the PrefsActivity
+		initializeRestartingPrefWithKey(KEY_THEME);
+		initializeRestartingPrefWithKey(getString(R.string.pref_locale));
+	}
+
+	/**
+	 * Initialize a preference with the given key so that we restart the
+	 * {@link PrefsActivity} when it changes, to see immediately the change.
+	 * Warning: only keys of {@link ListPreference} instances!
+	 */
+	private void initializeRestartingPrefWithKey(String prefKey) {
+		ListPreference listPref = findPreference(prefKey);
+		// like "light_ab" or "it_IT"
+		String prefVal = PreferenceManager
+				.getDefaultSharedPreferences(listPref.getContext())
+				.getString(listPref.getKey(), null);
+		int index = listPref.findIndexOfValue(prefVal);
+		// like "Light" or "italiano"
+		CharSequence valueToSet = index >= 0 ? listPref.getEntries()[index] : null;
+		listPref.setSummary(valueToSet);
+
+		listPref.setOnPreferenceChangeListener((samePref, val) -> {
+			// TODO the theme reloads correctly, the locale doesn't. Please test
+			this.getActivity().recreate();
+			return true;
+		});
 	}
 
 	private void setDateEntries(ListPreference prefDate, int array) {

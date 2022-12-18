@@ -29,16 +29,26 @@ import androidx.core.content.ContextCompat;
  */
 public final class PermissionsHelper {
 
-	public static final String[] PERMISSIONS_GTASKS = new String[] {
+	public static final String[] FOR_GOOGLETASKS = new String[] {
 			Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_SYNC_SETTINGS,
 			Manifest.permission.READ_SYNC_SETTINGS, Manifest.permission.READ_SYNC_STATS,
 			Manifest.permission.INTERNET };
 
-	public static final String[] PERMISSIONS_SD =
+	/**
+	 * Permissions to write to the internal storage
+	 */
+	public static final String[] FOR_SDCARD =
 			new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
-	public static final int REQUEST_CODE_SD_PERMISSIONS = 1;
-	public static final int REQUEST_CODE_GTASKS_PERMISSIONS = 2;
+	/**
+	 * Permissions to show notifications
+	 */
+	public static final String[] FOR_NOTIFICATIONS =
+			new String[] { "android.permission.POST_NOTIFICATIONS" };
+
+	public static final int REQCODE_WRITE_SD = 1;
+	public static final int REQCODE_GOOGLETASKS = 2;
+	public static final int REQCODE_NOTIFICATIONS = 3;
 
 	/**
 	 * @return TRUE if all the specified permissions are granted, FALSE otherwise
@@ -59,7 +69,8 @@ public final class PermissionsHelper {
 	 * @param grantResults of the request
 	 * @return true if all results were granted, false otherwise
 	 */
-	public static boolean permissionsGranted(@NonNull String[] permissions, @NonNull int[] grantResults) {
+	public static boolean permissionsGranted(@NonNull String[] permissions,
+											 @NonNull int[] grantResults) {
 		return permissions.length > 0 && allGranted(grantResults);
 	}
 

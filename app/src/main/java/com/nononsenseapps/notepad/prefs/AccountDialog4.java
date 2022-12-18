@@ -33,11 +33,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
-import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
-import com.nononsenseapps.helpers.SyncGtaskHelper;
 
 import java.io.IOException;
 
@@ -64,9 +64,11 @@ class AccountDialog4 extends DialogFragment implements
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle args) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setTitle(R.string.select_account);
-		final Account[] accounts = AccountManager.get(activity)
+		int style = ThemeHelper.getPickerDialogTheme(activity);
+		var builder = new AlertDialog.Builder(activity, style)
+				.setTitle(R.string.select_account);
+		final Account[] accounts = AccountManager
+				.get(activity)
 				.getAccountsByType("com.google");
 		final int size = accounts.length;
 		String[] names = new String[size];

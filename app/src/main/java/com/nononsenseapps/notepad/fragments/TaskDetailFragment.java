@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -69,7 +68,6 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 import com.nononsenseapps.ui.StyledEditText;
@@ -145,24 +143,28 @@ public class TaskDetailFragment extends Fragment {
 					// Load the list to see if we should hide task bits
 					Bundle args = new Bundle();
 					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
-					LoaderManager.getInstance(TaskDetailFragment.this)
+					LoaderManager
+							.getInstance(TaskDetailFragment.this)
 							.restartLoader(LOADER_EDITOR_TASKLISTS, args, this);
-
 					args.clear();
-					args.putLong(ARG_ITEM_ID,
-							getArguments().getLong(ARG_ITEM_ID, stateId));
-					LoaderManager.getInstance(TaskDetailFragment.this).restartLoader(
-							LOADER_EDITOR_NOTIFICATIONS, args, loaderCallbacks);
+					args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, stateId));
+					LoaderManager
+							.getInstance(TaskDetailFragment.this)
+							.restartLoader(LOADER_EDITOR_NOTIFICATIONS, args, loaderCallbacks);
 				} else {
 					// Should kill myself maybe?
 				}
 			} else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c != null && c.moveToNext()) {
+					// TODO this causes the "ghost reminder widgets" bug. See issue #412
+					//  a shitty fix is provided in onPause()
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
 				// TODO this allows updating of the location name etc
-				LoaderManager.getInstance(TaskDetailFragment.this).destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
+				LoaderManager
+						.getInstance(TaskDetailFragment.this)
+						.destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
 			} else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
 				// At current only loading a single list
 				if (c != null && c.moveToFirst()) {
@@ -185,6 +187,10 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById(resName = "dueDateBox")
 	Button dueDateBox;
 
+	/**
+	 * holds a list of widgets, one for each reminder the user sets.
+	 * It is below the "due date" row
+	 */
 	@ViewById(resName = "notificationList")
 	LinearLayout notificationList;
 
@@ -207,12 +213,16 @@ public class TaskDetailFragment extends Fragment {
 	// To override intent values with
 	@InstanceState
 	long stateId = -1;
+
 	@InstanceState
 	long stateListId = -1;
+
 	// Dao version of the object this fragment represents
 	private Task mTask;
+
 	// Version when task was opened
 	private Task mTaskOrg;
+
 	// To save orgState
 	// TODO
 	//  AND with task.locked. If result is true, note is locked and has not been
@@ -222,7 +232,7 @@ public class TaskDetailFragment extends Fragment {
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
 
-	/*
+	/**
 	 * If in tablet and added, rotating to portrait actually recreats the
 	 * fragment even though it isn't visible. So if this is true, don't load
 	 * anything.
@@ -464,7 +474,6 @@ public class TaskDetailFragment extends Fragment {
 		}).show();
 		*/
 	}
-
 
 
 	private void setDueText() {
@@ -747,23 +756,28 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
+	/**
+	 * Save mTask to database
+	 */
 	private void saveTask() {
 		// if mTask is null, the task has been deleted or cancelled
-		// If the task is not unlocked, editing is disabled
-		if (mTask != null && !isLocked()) {
-			// Needed for comparison
-			mTask.setText(taskText.getText().toString());
-			// if new item, only save if something has been entered
-			if ((mTask._id > 0 && !mTask.equals(mTaskOrg))
-					|| (mTask._id == -1 && isThereContent())) {
-				// mTask.setText(taskText.getText().toString());
-				mTask.save(getActivity());
-				// Set the intent to open the task.
-				// So we dont create a new one on rotation for example
-				fixIntent();
+		// If the task is locked, editing is disabled
+		if (mTask == null || isLocked()) {
+			return;
+		}
 
-				// TODO, should restart notification loader for new tasks
-			}
+		// Needed for comparison
+		mTask.setText(taskText.getText().toString());
+
+		// if new item, only save if something has been entered
+		if ((mTask._id > 0 && !mTask.equals(mTaskOrg)) || (mTask._id == -1 && isThereContent())) {
+			// mTask.setText(taskText.getText().toString());
+			mTask.save(getActivity());
+			// Set the intent to open the task.
+			// So we dont create a new one on rotation for example
+			fixIntent();
+
+			// TODO, should restart notification loader for new tasks
 		}
 	}
 
@@ -782,7 +796,8 @@ public class TaskDetailFragment extends Fragment {
 		if (mTask == null || mTask._id < 1)
 			return;
 
-		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
+		final Intent intent = new Intent()
+				.setAction(Intent.ACTION_EDIT)
 				.setClass(getActivity(), ActivityMain_.class)
 				.setData(mTask.getUri())
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, mTask.dblist);
@@ -813,6 +828,12 @@ public class TaskDetailFragment extends Fragment {
 		if (isLocked() && mTask != null && taskText != null) {
 			taskText.setText(mTask.title);
 		}
+
+		// TODO lazy fix for #412 --> instead you should stop onLoadFinished() when it
+		//  tries to load reminders that are already there
+		// remove all reminders from the list. Next time this Fragment is loaded,
+		// onLoadFinished() will add them back
+		notificationList.removeAllViews();
 	}
 
 	@Override
@@ -844,19 +865,19 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
-		if (getActivity() != null) {
-			@SuppressLint("InflateParams") View nv = LayoutInflater
-					.from(getActivity())
-					.inflate(R.layout.notification_view, null);
+		if (getActivity() == null) return;
 
-			// So we can update the view later
-			not.view = nv;
+		View nv = LayoutInflater
+				.from(getActivity())
+				.inflate(R.layout.notification_view, null);
 
-			// Setup all the listeners etc
-			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
+		// So we can update the view later
+		not.view = nv;
 
-			notificationList.addView(nv);
-		}
+		// Setup all the listeners, etc...
+		NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
+
+		notificationList.addView(nv);
 	}
 
 	@Override
