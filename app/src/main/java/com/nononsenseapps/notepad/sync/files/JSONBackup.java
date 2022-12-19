@@ -237,8 +237,8 @@ public class JSONBackup {
 		final JSONObject backup = getJSONBackup();
 
 		var uri = BackupPrefs.getSelectedBackupDirUri(this.context);
-		// user didn't choose a folder. The backup dialog already explains what to do
-		if (uri == null) return;
+		// user didn't choose a folder. This is checked before this function runs
+		if (uri == null) throw new IOException();
 
 		var newFile = DocumentFileHelper.createBackupJsonFile(this.context);
 		if (newFile == null || !newFile.exists() || !newFile.canWrite()) {

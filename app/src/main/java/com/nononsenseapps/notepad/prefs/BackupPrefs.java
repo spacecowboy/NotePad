@@ -69,11 +69,8 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		});
 
 		findPreference(KEY_EXPORT).setOnPreferenceClickListener(pref -> {
-
-
-
-
-			DialogExportBackup.showDialog(getFragmentManager(), () -> runBackupOrRestore(false));
+			DialogExportBackup.showDialog(getFragmentManager(),
+					() -> runBackupOrRestore(false));
 			return true;
 		});
 
@@ -96,8 +93,8 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 	private static void onUriDirPrefChange(Preference directoryUriPreference) {
 		Uri uri = getSelectedBackupDirUri(directoryUriPreference.getContext());
 		String summary = uri != null
-				? uri.toString()
-				: directoryUriPreference.getContext().getString(R.string.default_location);
+				? uri.getPath() // shows a pretty representation of the URI's destination
+				: directoryUriPreference.getContext().getString(R.string.not_selected_yet);
 		directoryUriPreference.setSummary(summary);
 	}
 
@@ -134,6 +131,13 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		// get them in this thread
 		Handler handler = new Handler(Looper.getMainLooper());
 		Context context = this.getContext();
+
+		if (getSelectedBackupDirUri(this.getContext()) == null) {
+			// the user tried to make a backup without having selected
+			// a folder first. The dialogs warn of this. Here, we just
+			// have to cancel the operation
+			return;
+		}
 
 		// replacement for AsyncTask<,,>
 		Executors.newSingleThreadExecutor().execute(() -> {

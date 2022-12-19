@@ -48,7 +48,7 @@ public class DialogExportBackup extends DialogConfirmBaseV11 {
 		if (uri == null)
 			return getString(R.string.unavailable_chose_directory);
 		else
-			return getString(R.string.backup_export_msg, uri.getPath());
+			return getString(R.string.backup_export_msg, "\n"+uri.getPath());
 	}
 
 	@Override
