@@ -20,14 +20,16 @@ import java.io.OutputStream;
 import java.util.Scanner;
 
 /**
- * Contains helper methods to deal with {@link MediaStore}, which is the only way
- * to save files in Documents/ and Download/ in Android API 29 and greater.
+ * An UNUSED class that
+ * contains (useless) helper methods to deal with {@link MediaStore}, which is
+ * an unreliable way to save files in Documents/ and Download/ in some android versions
  *
  * @implNote an unavoidable defect of this solution is that the app won't recognize the files
  * once it's uninstalled and reinstalled. There is no workaround for this.
  */
 @RequiresApi(api = Build.VERSION_CODES.Q)
-public final class MediaStoreHelper {
+@Deprecated
+final class MediaStoreHelper {
 
 	// forbid instances: it's a static class
 	private MediaStoreHelper() {}
