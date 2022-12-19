@@ -45,6 +45,7 @@ import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.build.Config;
+import com.nononsenseapps.helpers.FilePickerHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
@@ -77,9 +78,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
-	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
-	public static final String KEY_SD_DIR = "pref_sync_sd_dir";
-	private static final int PICK_SD_DIR_CODE = 1;
+	public static final String KEY_SD_SYNC_INFO = "pref_sdcard_sync_info";
+	public static final int PICK_SD_DIR_CODE = 1;
 
 	private Activity activity;
 
@@ -117,6 +117,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 
 	@Override
 	public void onAttach(Activity activity) {
+		// you can fix it AFTER you remove all google task sync code
 		super.onAttach(activity);
 		this.activity = activity;
 	}
@@ -167,30 +168,10 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			return true;
 		});
 
-		// folder URI for SD sync on the internal storage.
-		// this setting is DISABLED because the code can't use the URIs provided by the filepicker
-		prefSdDirURI = findPreference(KEY_SD_DIR_URI);
-		setSummaryForSdDirURI(sharedPrefs);
-
-		// when the user clicks on the settings entry to choose the directory, do this
-		prefSdDirURI.setOnPreferenceClickListener(preference -> {
-			boolean ok = PermissionsHelper.hasPermissions(
-					this.getContext(), PermissionsHelper.FOR_SDCARD);
-			if (ok) {
-				// we CAN read the filesystem => show the filepicker
-				showFolderPickerActivity();
-			} else {
-				this.requestPermissions(
-						PermissionsHelper.FOR_SDCARD,
-						PermissionsHelper.REQCODE_WRITE_SD);
-				// continues in onRequestPermissionsResult()
-			}
-			// tell android to update the preference value
-			return true;
-		});
-
-		// for the preference that shows a popup to choose among a few possible folders
-		BackupPrefs.setupFolderListPreference(this.getContext(), this, KEY_SD_DIR);
+		// write the folder path on the summary
+		String orgdirpath = FileHelper.getUserSelectedOrgDir(this.getContext());
+		String sdInfoSummary = this.getString(R.string.directory_summary_msg,orgdirpath);
+		findPreference(KEY_SD_SYNC_INFO).setSummary(sdInfoSummary);
 	}
 
 	@Override
@@ -231,39 +212,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		super.onRequestPermissionsResult(reqCode, permissions, grantResults);
 	}
 
-	/**
-	 * Shows the system's default filepicker, to  let the user choose a directory. See:
-	 * https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory
-	 */
-	private void showFolderPickerActivity() {
-		var i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 
-		// don't add this: it stops working on some devices, like the emulator with API 25!
-		// i.setType(DocumentsContract.Document.MIME_TYPE_DIR);
-
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-			// specify a URI for the directory that should be opened in
-			// the system file picker when it loads.
-			var sharPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-			// get the previously selected Uri, if available
-			String oldSetting = sharPrefs.getString(KEY_SD_DIR_URI, null);
-			if (oldSetting != null) {
-				Uri uriToLoad = Uri.parse(oldSetting);
-				i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
-			}
-			// else the filepicker will just open in its default state. whatever.
-		}
-
-		try {
-			// Start the built-in filepicker
-			startActivityForResult(i, PICK_SD_DIR_CODE);
-		} catch (ActivityNotFoundException e) {
-			Toast.makeText(this.getContext(),
-					R.string.file_picker_not_available, Toast.LENGTH_SHORT).show();
-		}
-	}
 
 	@Override
 	public void onDestroy() {
@@ -319,12 +268,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					// prefAccount.setSummary(getString(R.string.settings_account_summary));
 					break;
 				case KEY_SD_ENABLE:
-				case KEY_SD_DIR:
 					// Restart the sync service
 					OrgSyncService.stop(getActivity());
-					break;
-				case KEY_SD_DIR_URI:
-					setSummaryForSdDirURI(prefs);
 					break;
 			}
 		} catch (IllegalStateException e) {
@@ -355,32 +300,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		}
 
 		// "data" contains the URI for the user-selected directory, A.K.A. the "document tree"
-		onSdDirUriPicked(data.getData());
-	}
-
-	/**
-	 * Called when the user picks a "directory" with the system's filepicker
-	 *
-	 * @param uri points to the chosen "directory"
-	 */
-	private void onSdDirUriPicked(Uri uri) {
-
-		// represents the directory that the user just picked
-		// Use this instead of the "File" class
-		var docDir = DocumentFile.fromTreeUri(this.getContext(), uri);
-
-		if (FileHelper.documentIsWritableFolder(docDir)) {
-			// save it
-			PreferenceManager
-					.getDefaultSharedPreferences(getActivity())
-					.edit()
-					.putString(KEY_SD_DIR_URI, uri.toString())
-					.apply();
-			Toast.makeText(getActivity(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
-		} else {
-			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
-					.show();
-		}
+		FilePickerHelper.onSdDirUriPicked(data.getData(),this.getContext());
 	}
 
 	/**
@@ -478,24 +398,4 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		prefAccount.setTitle(sharedPreferences.getString(KEY_ACCOUNT, ""));
 		prefAccount.setSummary(R.string.settings_account_summary);
 	}
-
-	/**
-	 * Writes the description in the preferences item that lets users open the filepicker.
-	 * It is currently disabled
-	 */
-	private void setSummaryForSdDirURI(final SharedPreferences sharedPreferences) {
-		String actualDir = FileHelper.getUserSelectedOrgDir(getContext());
-		String valToSet = sharedPreferences.getString(KEY_SD_DIR_URI, null);
-		if (valToSet == null) {
-			// The filepicker was never used => show the actual directory in the description
-			valToSet = actualDir;
-		} else {
-			// show the file path that the uri from the filepicker is pointing to,
-			// and the one that will be actually used
-			valToSet = getContext().getString(R.string.filepicker_preference_description,
-					Uri.parse(valToSet).getPath(), actualDir);
-		}
-		prefSdDirURI.setSummary(valToSet);
-	}
-
 }
