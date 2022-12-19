@@ -1,6 +1,5 @@
 package com.nononsenseapps.helpers;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -9,13 +8,12 @@ import android.os.Build;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.documentfile.provider.DocumentFile;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 /**
  * Methods to use android's built-in file picker.
@@ -23,30 +21,20 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
  */
 public class FilePickerHelper {
 
-	static void setPrefOnClickAnswer(Preference prefDirUri, PreferenceFragmentCompat pfc) {
-		// when the user clicks on the settings entry to choose the directory, do this
-		prefDirUri.setOnPreferenceClickListener(preference -> {
-			boolean ok = PermissionsHelper
-					.hasPermissions(pfc.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
-			if (ok) {
-				// we CAN read the filesystem => show the filepicker
-				showFolderPickerActivity(pfc);
-			} else {
-				pfc.requestPermissions(
-						new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE },
-						/*PermissionsHelper.REQCODE_WRITE_SD*/1234);
-				// continues in onRequestPermissionsResult() that you have to implement
-			}
-			// tell android to update the preference value
-			return true;
-		});
-	}
+	/**
+	 * For onActivityResult
+	 */
+	public static final int REQ_CODE = 123321;
 
 	/**
 	 * Shows the system's default filepicker, to  let the user choose a directory. See:
 	 * https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory
+	 *
+	 * @param prefFragComp The settings page that launched this file picker
+	 * @param initialDir   the starting directory to show, or NULL if you don't care
 	 */
-	static void showFolderPickerActivity(PreferenceFragmentCompat pfc) {
+	public static void showFolderPickerActivity(PreferenceFragmentCompat prefFragComp,
+												@Nullable Uri initialDir) {
 		var i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 
 		// don't add this: it stops working on some devices, like the emulator with API 25!
@@ -54,45 +42,43 @@ public class FilePickerHelper {
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-			// specify a URI for the directory that should be opened in
-			// the system file picker when it loads.
-			var sharPrefs = PreferenceManager
-					.getDefaultSharedPreferences(pfc.getContext());
-
 			// get the previously selected Uri, if available
-			String oldSetting = null; //sharPrefs.getString(KEY_SD_DIR_URI, null);
-			if (oldSetting != null) {
-				Uri uriToLoad = Uri.parse(oldSetting);
-				i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
-			}
+			if (initialDir != null) i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialDir);
 			// else the filepicker will just open in its default state. whatever.
 		}
 		try {
 			// Start the built-in filepicker
-			pfc.startActivityForResult(i, SyncPrefs.PICK_SD_DIR_CODE);
+			prefFragComp.startActivityForResult(i, REQ_CODE);
 		} catch (ActivityNotFoundException e) {
-			Toast.makeText(pfc.getContext(),
-					R.string.file_picker_not_available, Toast.LENGTH_SHORT).show();
+			Toast.makeText(prefFragComp.getContext(), R.string.file_picker_not_available,
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	/**
 	 * Called when the user picks a "directory" with the system's filepicker
 	 *
-	 * @param uri points to the chosen "directory"
+	 * @param fromActivityResult an {@link Intent} from onActivityResult
+	 * @param keyOfPrefToUpdate key of the preference where "uri" will be saved in
 	 */
-	public static void onSdDirUriPicked(Uri uri, Context context) {
-
+	public static void onUriPicked(Intent fromActivityResult, Context context,
+								   String keyOfPrefToUpdate) {
+		Uri uri = fromActivityResult.getData();
 		// represents the directory that the user just picked
 		// Use this instead of the "File" class
 		var docDir = DocumentFile.fromTreeUri(context, uri);
 
-		if (FileHelper.documentIsWritableFolder(docDir)) {
+		// to maintain permission when the device restarts
+		context.getContentResolver().takePersistableUriPermission(uri,
+				Intent.FLAG_GRANT_READ_URI_PERMISSION
+						| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+		if (DocumentFileHelper.isWritableFolder(docDir)) {
 			// save it
 			PreferenceManager
 					.getDefaultSharedPreferences(context)
 					.edit()
-					.putString("KEY_SD_DIR_URI", uri.toString()) // replace with your pref. key
+					.putString(keyOfPrefToUpdate, uri.toString())
 					.apply();
 			Toast.makeText(context, R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
 		} else {
