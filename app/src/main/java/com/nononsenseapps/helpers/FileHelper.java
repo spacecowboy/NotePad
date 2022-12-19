@@ -15,7 +15,6 @@ import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -168,26 +167,12 @@ public final class FileHelper {
 
 	/**
 	 * @return the path of the directory where ORG files are saved, or NULL if
-	 * it could not get one. The user can choose among a few selected folders, see
-	 * {@link FileHelper#getPathsOfPossibleFolders(Context)}
+	 * it could not get one. This path is now hardcoded to something like Android/data/packagename
 	 */
 	public static String getUserSelectedOrgDir(@NonNull Context ctx) {
-		// see if the user requested a specific directory
-		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		String favDirPath = sharedPrefs.getString(SyncPrefs.KEY_SD_DIR, null);
-
-		// eventually you should use a DocumentFile from this:
-		// Uri dir = Uri.parse( sharedPrefs.getString(SyncPrefs.KEY_SD_DIR_URI, null));
-
-		File dir;
-		if (favDirPath != null) {
-			// the user requested a specific directory => save org files there
-			dir = new File(favDirPath);
-		} else {
-			// nothing was specified => we are going to use the default directory:
-			// /storage/emulated/0/Android/data/packagename/files/orgfiles/
-			dir = ctx.getExternalFilesDir("orgfiles");
-		}
+		// we are going to use the default directory:
+		// /storage/emulated/0/Android/data/packagename/files/orgfiles/
+		File dir = ctx.getExternalFilesDir("orgfiles");
 
 		// most likely, the shared storage is not available in this device/emulator
 		if (dir == null) return null;
