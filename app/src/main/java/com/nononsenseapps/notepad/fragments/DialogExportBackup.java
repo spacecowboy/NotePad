@@ -22,7 +22,7 @@ import android.os.Bundle;
 import androidx.fragment.app.FragmentManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.notepad.prefs.BackupPrefs;
 
 public class DialogExportBackup extends DialogConfirmBaseV11 {
 	static final String ID = "id";
@@ -44,8 +44,11 @@ public class DialogExportBackup extends DialogConfirmBaseV11 {
 
 	@Override
 	public CharSequence getMessage() {
-		String backupFilepath = FileHelper.getBackupJsonFile(this.getContext()).getAbsolutePath();
-		return getString(R.string.backup_export_msg, backupFilepath);
+		var uri = BackupPrefs.getSelectedBackupDirUri(this.getContext());
+		if (uri == null)
+			return getString(R.string.unavailable_chose_directory);
+		else
+			return getString(R.string.backup_export_msg, uri.getPath());
 	}
 
 	@Override
