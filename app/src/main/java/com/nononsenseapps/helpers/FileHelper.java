@@ -2,74 +2,26 @@ package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceManager;
-
-import com.nononsenseapps.notepad.prefs.BackupPrefs;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.function.Function;
 
 /**
  * Methods to help navigate through Google's mess regarding file access in
  * Android 10 and higher.
- *
- * Functions that start with "document" are related to {@link DocumentFile}
- * objects, which Google recommends, but which we can still avoid, for now.
  */
 public final class FileHelper {
-
-	public static boolean documentIsWritableFolder(DocumentFile docDir) {
-		return docDir != null && docDir.exists() && docDir.isDirectory() && docDir.canWrite();
-	}
-
-	/**
-	 * Get a {@link FileDescriptor} for the File at the given {@link Uri} and
-	 * run the code in the {@link Function}
-	 *
-	 * @return TRUE if it finished, FALSE if there was an error
-	 */
-	private static boolean doWithFileDescriptorFor(@NonNull Uri docUri, @NonNull Context context,
-												   Function<FileDescriptor, Void> function) {
-
-		// TODO this is here for the poor soul that will try to migrate from File to DocumentFile,
-		//  but as of now this code is useless
-		var docFile = DocumentFile.fromTreeUri(context, docUri);
-		if (docFile == null || docFile.isDirectory()) return false;
-
-		try {
-			ParcelFileDescriptor pfd = context
-					.getContentResolver()
-					.openFileDescriptor(docUri, "r");
-			FileDescriptor fileDescriptor = pfd.getFileDescriptor();
-
-			boolean ok = fileDescriptor.valid();
-			if (!ok) return false;
-
-			function.apply(fileDescriptor);
-			pfd.close();
-			return true;
-
-		} catch (Exception ex) {
-			NnnLogger.exception(ex);
-			return false;
-		}
-	}
 
 	/**
 	 * Writes the given {@link String} to the given {@link File}, using a method appropriate
@@ -77,6 +29,7 @@ public final class FileHelper {
 	 *
 	 * @return TRUE if it worked, FALSE otherwise
 	 */
+	@Deprecated
 	public static boolean writeStringToFile(String content, File target, Context context) {
 		if (content == null || target == null) return false;
 		if (target.isDirectory() || target.getParentFile() == null) return false;
@@ -100,6 +53,7 @@ public final class FileHelper {
 	 * or null if the simple {@link File} API should be used instead
 	 */
 	@Nullable
+	@Deprecated
 	private static String getRelativePathOrNull(File target) {
 		// these directories require the write permission
 		String dirDownload = Environment
@@ -145,8 +99,7 @@ public final class FileHelper {
 			NnnLogger.exception(se);
 			return false;
 		}
-// TODO useless & does not work
-		// .
+		// useless & does not work after API 28
 		//		if (!tryDeleteFile(target, context)) return false;
 		//		try {
 		//			if (!target.createNewFile()) return false;
@@ -193,7 +146,8 @@ public final class FileHelper {
 	@NonNull
 	public static File getBackupJsonFile(@NonNull Context ctx) {
 		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		String chosenPath = sharedPrefs.getString(BackupPrefs.KEY_BACKUP_LOCATION, null);
+		String chosenPath = null; //sharedPrefs.getString(BackupPrefs.KEY_BACKUP_LOCATION, null);
+		// TODO useless function. remove.
 		if (chosenPath == null) {
 			// the user did not choose a path yet => use a safe fallback path
 			chosenPath = ctx.getExternalFilesDir(null).getAbsolutePath();
@@ -208,51 +162,16 @@ public final class FileHelper {
 	}
 
 	/**
-	 * Android 10 and newer don't allow us to make a folder in the "root" of the external
-	 * storage. The workaround is to make the directory in the "Documents" folder, for example.
-	 *
-	 * @return an array of folder paths where files can be saved using the simple
-	 * {@link File} API, without bothering with filepickers and the Storage Access
-	 * Framework. The list consists of:<br/>
-	 * the app's folder in <i>/Android/data/</i> <br/>
-	 * the <i>Download</i> directory <br/>
-	 * the <i>Documents</i> directory <br/>
-	 * and subdirectories of those. <br/>
-	 * Every other folder is either dedicated to audio files, therefore useless for us, or
-	 * impossible to access in Android API >= 30 without using the DocumentFile API.
-	 * @implNote for some of these you have to ask for write permissions
-	 */
-	public static String[] getPathsOfPossibleFolders(@NonNull Context context) {
-		File dirDownload = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-		// (don't use DCIM, you can't write to it anymore with the File API)
-		File dirDocs = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-		String subDirName = "No Nonsense Notes/";
-
-		var dirs = new File[] {
-				// the safest, recommended option
-				context.getExternalFilesDir(null),
-				// The directories themselves
-				dirDownload,
-				dirDocs,
-				// a subfolder that identifies the app
-				new File(dirDownload, subDirName),
-				new File(dirDocs, subDirName),
-		};
-
-		String[] paths = Arrays.stream(dirs)
-				.map(File::getAbsolutePath)
-				.toArray(String[]::new);
-		return paths;
-	}
-
-	/**
 	 * When you delete a file in android, additional attention is required.
 	 * This function takes care of that
 	 */
 	public static boolean tryDeleteFile(@NonNull File toDelete, @NonNull Context context) {
-		// TODO test on API 30+ I think this should be replaced by MediaStore
+		boolean contains = toDelete
+				.getAbsolutePath()
+				.contains(getUserSelectedOrgDir(context));
+		// the File API only works in that directory
+		if (!contains) return false;
+
 		if (toDelete.exists()) {
 			try {
 				if (!toDelete.delete()) return false;
