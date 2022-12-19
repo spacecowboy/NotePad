@@ -41,7 +41,6 @@ import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.FileHelper;
-import com.nononsenseapps.helpers.FilePickerHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.PreferencesHelper;
@@ -74,17 +73,11 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_SYNC_INFO = "pref_sdcard_sync_info";
-	public static final int PICK_SD_DIR_CODE = 1;
 
 	private Activity activity;
 
 	private SwitchPreference prefSyncEnable;
 	private Preference prefAccount;
-
-	/**
-	 * Where you click to choose the directory to save the org files
-	 */
-	private Preference prefSdDirURI;
 
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
@@ -266,22 +259,13 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			// it was cancelled by the user. Let's ignore it in both cases
 			return;
 		}
-
 		if (requestCode == PICK_ACCOUNT_CODE) {
-			// the user has confirmed with a valid account
+			// the user has confirmed with a valid account on the account picker
 			String chosenAccountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
 			userChoseAnAccountWithName(chosenAccountName);
-			return;
 		}
 
-		if (requestCode != PICK_SD_DIR_CODE) {
-			// if it wasn't the filepiker nor the account picker, exit now
-			super.onActivityResult(requestCode, resultCode, data);
-			return;
-		}
-
-		// "data" contains the URI for the user-selected directory, A.K.A. the "document tree"
-		FilePickerHelper.onSdDirUriPicked(data.getData(), this.getContext());
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
