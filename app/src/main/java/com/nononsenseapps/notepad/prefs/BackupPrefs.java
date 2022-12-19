@@ -64,7 +64,8 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 
 		findPreference(KEY_IMPORT).setOnPreferenceClickListener(pref -> {
 			DialogRestoreBackup.showDialog(getFragmentManager(),
-					/*callback when confirmed:*/ () -> runBackupOrRestore(true));
+					 // callback when confirmed:
+					 () -> runBackupOrRestore(true));
 			return true;
 		});
 

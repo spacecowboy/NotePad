@@ -22,8 +22,10 @@ import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.nononsenseapps.helpers.DocumentFileHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.notepad.prefs.BackupPrefs;
 
 public class DialogRestoreBackup extends DialogConfirmBaseV11 {
 	static final String ID = "id";
@@ -44,8 +46,11 @@ public class DialogRestoreBackup extends DialogConfirmBaseV11 {
 
 	@Override
 	public CharSequence getMessage() {
-		String backupFilepath = FileHelper.getBackupJsonFile(this.getContext()).getAbsolutePath();
-		return getString(R.string.backup_import_msg, backupFilepath);
+		var file = DocumentFileHelper.getSelectedBackupJsonFile(this.getContext());
+		if (file == null)
+			return getString(R.string.unavailable_chose_directory);
+		else
+			return getString(R.string.backup_import_msg, "\n"+file.getUri().getPath());
 	}
 
 	@Override
