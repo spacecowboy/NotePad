@@ -124,7 +124,6 @@
 	<string name="no_sync_method_chosen">You did not choose a sync method</string>
 	<string name="gtasks_not_working">Google Tasks (does not work)</string>
 	<string name="file_picker_not_available">The file picker is not available</string>
-	<string name="filepicker_preference_description">Selected URI:\n %1$s \nbut this will be used instead:\n %2$s</string>
 	<string name="choose_backup_folder">Choose a backup folder</string>
 	<string name="default_location">Default location</string>
 	<string name="use_exact_alarms">Use exact alarms</string>
@@ -314,7 +313,6 @@
 	<string name="text_size">Text size</string>
 	<string name="text">Text</string>
 	<string name="add_a_reminder">Add a reminder</string>
-
 	<string name="backup">Backup</string>
 	<string name="backup_import">Import backup</string>
 	<string name="backup_export">Export backup</string>
@@ -327,9 +325,9 @@
 	<string name="backup_export_failed">Could not write to the backup file</string>
 	<string name="sd_card">SD card</string>
 	<string name="sd_card_sync">SD card sync</string>
-	<string name="sd_card_summary">Tasks are kept the same between the app and the SD card. Deleting the files thus delete the tasks in the app!</string>
+	<string name="sd_card_summary">Tasks are kept the same between the app and the SD card. Deleting the files thus deletes the tasks in the app!</string>
 	<string name="directory">Folder</string>
-	<string name="directory_summary">Where to store files.</string>
+	<string name="directory_summary_msg">Due to new restrictions from Google, files are saved in %s \nwhich you can still access with your file manager app. Notice that uninstalling the app will also delete these files: to keep your notes, please use the backup function</string>
 	<string name="cannot_write_to_directory">Cannot write to directory</string>
 	<string name="bigger_titles">Bigger titles</string>
 	<string name="bigger_titles_summary">The title is the first line</string>
