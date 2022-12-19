@@ -16,7 +16,10 @@
  */
 package com.nononsenseapps.notepad.prefs;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,19 +27,17 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.FilePickerHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogExportBackup;
 import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;
-import com.nononsenseapps.helpers.FileHelper;
-import com.nononsenseapps.helpers.PermissionsHelper;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.concurrent.Executors;
 
@@ -45,9 +46,14 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 	// settings IDs from app_pref_backup.xml
 	private static final String KEY_IMPORT = "backup_import";
 	private static final String KEY_EXPORT = "backup_export";
-	public static final String KEY_BACKUP_LOCATION = "key_backup_location";
+	private static final String KEY_BACKUP_DIR_URI = "key_backup_dir_uri";
 
 	private JSONBackup mTool;
+
+	/**
+	 * the folder that contains the backup json file
+	 */
+	Preference dirUriPref;
 
 	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
@@ -56,21 +62,68 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 
 		mTool = new JSONBackup(getActivity());
 
-		// setup each preference entry
-		setupFolderListPreference(this.getContext(), this, KEY_BACKUP_LOCATION);
-
-		findPreference(KEY_IMPORT).setOnPreferenceClickListener(preference -> {
+		findPreference(KEY_IMPORT).setOnPreferenceClickListener(pref -> {
 			DialogRestoreBackup.showDialog(getFragmentManager(),
-					// callback when confirmed:
-					() -> runBackupOrRestore(true));
+					/*callback when confirmed:*/ () -> runBackupOrRestore(true));
 			return true;
 		});
 
-		findPreference(KEY_EXPORT).setOnPreferenceClickListener(preference -> {
-			DialogExportBackup.showDialog(getFragmentManager(),
-					() -> runBackupOrRestore(false));
+		findPreference(KEY_EXPORT).setOnPreferenceClickListener(pref -> {
+
+
+
+
+			DialogExportBackup.showDialog(getFragmentManager(), () -> runBackupOrRestore(false));
 			return true;
 		});
+
+		dirUriPref = findPreference(KEY_BACKUP_DIR_URI);
+		dirUriPref.setOnPreferenceClickListener(pref -> {
+			// open the file picker on click
+			Uri initialDir = getSelectedBackupDirUri(this.getContext());
+			FilePickerHelper.showFolderPickerActivity(this, initialDir);
+			// tell android to update the preference value
+			return true;
+		});
+		// initialize
+		onUriDirPrefChange(dirUriPref);
+	}
+
+	/**
+	 * Updates the description of "directoryUriPreference"
+	 * with the newly selected backup directory Uri
+	 */
+	private static void onUriDirPrefChange(Preference directoryUriPreference) {
+		Uri uri = getSelectedBackupDirUri(directoryUriPreference.getContext());
+		String summary = uri != null
+				? uri.toString()
+				: directoryUriPreference.getContext().getString(R.string.default_location);
+		directoryUriPreference.setSummary(summary);
+	}
+
+	/**
+	 * @return the Uri of the folder that the user chose for saving Json backups,
+	 * or NULL if none is chosen
+	 */
+	@Nullable
+	public static Uri getSelectedBackupDirUri(Context context) {
+		var sharPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String uriVal = sharPrefs.getString(KEY_BACKUP_DIR_URI, null);
+		if (uriVal == null) return null;
+		return Uri.parse(uriVal);
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		// it was cancelled by the user. Let's ignore it
+		if (resultCode != Activity.RESULT_OK) return;
+
+		if (requestCode == FilePickerHelper.REQ_CODE) {
+			// "data" contains the URI for the user-selected directory, A.K.A. the "document tree"
+			FilePickerHelper.onUriPicked(data, this.getContext(), KEY_BACKUP_DIR_URI);
+			onUriDirPrefChange(dirUriPref);
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**
@@ -103,10 +156,8 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 	 */
 	private static int asyncTask_doInBackground(boolean isRestoring, JSONBackup backupMaker) {
 		try {
-			if (isRestoring)
-				backupMaker.restoreBackup();
-			else
-				backupMaker.writeBackup();
+			if (isRestoring) backupMaker.restoreBackup();
+			else backupMaker.writeBackup();
 			return 0;
 		} catch (FileNotFoundException e) {
 			return 1;
@@ -153,36 +204,5 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		Toast.makeText(mContext, msgId, Toast.LENGTH_SHORT).show();
 	}
 
-	/**
-	 * Sets up a {@link ListPreference} to show a popup where the user picks a folder.
-	 * Only folders where we can write using the {@link File} API are available. Example: <br/>
-	 * <br/>
-	 * <code>setupFolderListPreference(this.getContext(),this,this.KEY_BACKUP_LOCATION);</code>
-	 */
-	public static void setupFolderListPreference(@NonNull Context context,
-												 @NonNull PreferenceFragmentCompat prefPage,
-												 @NonNull String PREFERENCE_KEY) {
-		// list preference to choose the backup folder
-		String[] choices = FileHelper.getPathsOfPossibleFolders(context);
 
-		var sharPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String chosen = sharPrefs.getString(PREFERENCE_KEY, null);
-		String summary = chosen != null ? chosen : context.getString(R.string.default_location);
-
-		ListPreference lPref = prefPage.findPreference(PREFERENCE_KEY);
-		lPref.setSummary(summary);
-		lPref.setEntryValues(choices);
-		lPref.setEntries(choices);
-		lPref.setDefaultValue(choices[0]); // useless
-		lPref.setIcon(R.drawable.ic_folder_24dp);
-
-		lPref.setOnPreferenceChangeListener((preference, stringNewPath) -> {
-			// save and show the new value
-			var theDir = new File(stringNewPath.toString());
-			lPref.setSummary(theDir.getAbsolutePath());
-			// there's no need to ask for permission, because we use mediastore
-			// TODO check
-			return true;
-		});
-	}
 }
