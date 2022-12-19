@@ -24,37 +24,32 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
-import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.build.Config;
+import com.nononsenseapps.helpers.FileHelper;
 import com.nononsenseapps.helpers.FilePickerHelper;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.PermissionsHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.helpers.FileHelper;
-import com.nononsenseapps.helpers.PermissionsHelper;
-import com.nononsenseapps.helpers.PreferencesHelper;
-import com.nononsenseapps.helpers.SyncGtaskHelper;
 
 import java.io.IOException;
 
@@ -158,19 +153,19 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		prefSyncEnable.setEnabled(null != API_KEY && !API_KEY.contains(" "));
 
 		findPreference(KEY_SD_ENABLE).setOnPreferenceClickListener(p -> {
-			boolean ok = PermissionsHelper.hasPermissions(
-					this.getContext(), PermissionsHelper.FOR_SDCARD);
-			if (!ok) {
-				this.requestPermissions(PermissionsHelper.FOR_SDCARD,
-						PermissionsHelper.REQCODE_WRITE_SD);
-				// continues in onRequestPermissionsResult()
-			}
-			return true;
+			// if the ORG dir is inaccessible, disable SD sync
+			String dir = FileHelper.getUserSelectedOrgDir(this.getContext());
+			if (dir == null) {
+				PreferencesHelper.disableSdCardSync(this.getContext());
+				NnnLogger.warning(SyncPrefs.class, "Can't access org dir");
+				return false;
+			} else
+				return true;
 		});
 
 		// write the folder path on the summary
 		String orgdirpath = FileHelper.getUserSelectedOrgDir(this.getContext());
-		String sdInfoSummary = this.getString(R.string.directory_summary_msg,orgdirpath);
+		String sdInfoSummary = this.getString(R.string.directory_summary_msg, orgdirpath);
 		findPreference(KEY_SD_SYNC_INFO).setSummary(sdInfoSummary);
 	}
 
@@ -181,18 +176,6 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
 
 		switch (reqCode) {
-			case PermissionsHelper.REQCODE_WRITE_SD:
-				if (!granted) {
-					// warn the user that the permission was denied
-					Toast.makeText(this.getContext(), R.string.permission_denied,
-							Toast.LENGTH_SHORT).show();
-					PreferencesHelper.disableSdCardSync(this.getContext());
-
-					// SD card synchronization was disabled, but the UI does not know: reload
-					var myPref = (SwitchPreference) findPreference(KEY_SD_ENABLE);
-					if (myPref.isChecked()) myPref.setChecked(false);
-				}
-				break;
 			case PermissionsHelper.REQCODE_GOOGLETASKS:
 				if (granted) {
 					// Success => open the dialog
@@ -211,8 +194,6 @@ public class SyncPrefs extends PreferenceFragmentCompat
 
 		super.onRequestPermissionsResult(reqCode, permissions, grantResults);
 	}
-
-
 
 	@Override
 	public void onDestroy() {
@@ -300,7 +281,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		}
 
 		// "data" contains the URI for the user-selected directory, A.K.A. the "document tree"
-		FilePickerHelper.onSdDirUriPicked(data.getData(),this.getContext());
+		FilePickerHelper.onSdDirUriPicked(data.getData(), this.getContext());
 	}
 
 	/**

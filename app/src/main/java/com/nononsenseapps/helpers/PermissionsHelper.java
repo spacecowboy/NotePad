@@ -35,18 +35,11 @@ public final class PermissionsHelper {
 			Manifest.permission.INTERNET };
 
 	/**
-	 * Permissions to write to the internal storage
-	 */
-	public static final String[] FOR_SDCARD =
-			new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE };
-
-	/**
 	 * Permissions to show notifications
 	 */
 	public static final String[] FOR_NOTIFICATIONS =
 			new String[] { "android.permission.POST_NOTIFICATIONS" };
 
-	public static final int REQCODE_WRITE_SD = 1;
 	public static final int REQCODE_GOOGLETASKS = 2;
 	public static final int REQCODE_NOTIFICATIONS = 3;
 

@@ -35,9 +35,11 @@
 	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 	-->
 
-	<!-- Writing sync files to SD card. Works only in API 29 and lower,
-	 but those devices NEED it, so you still have to declare & ask for it -->
-	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	<!-- We don't need Write permission for the filesystem:
+		* /Android/data/packagename/ is always accessible to us
+	 	* Json backups are saved with methods that don't require write permission
+	 	See https://developer.android.com/training/data-storage
+	-->
 
 	<!-- For notifications -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
