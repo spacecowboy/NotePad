@@ -273,30 +273,4 @@ public final class FileHelper {
 		return true;
 	}
 
-	/**
-	 * Tested and works on API 32 & API 23 devices.
-	 * Returns FALSE with folders that are unreachable for us, like /data/
-	 *
-	 * @return TRUE only if the given {@link File} is a folder that CAN be written to
-	 * using the {@link File} API, but only if the user gives the
-	 * {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} permission.
-	 */
-	public static boolean folderNeedsAndroidWritePermission(@NonNull File folder) {
-		if (!folder.isDirectory()) return false;
-
-		String dirDownload = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-				.getAbsolutePath();
-		String dirDocs = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-				.getAbsolutePath();
-
-		// these directories require the write permission
-		if (folder.getAbsolutePath().contains(dirDownload)) return true;
-		if (folder.getAbsolutePath().contains(dirDocs)) return true;
-
-		// anything else: it's either writable without permissions, or unreachable at all
-		return false;
-	}
-
 }

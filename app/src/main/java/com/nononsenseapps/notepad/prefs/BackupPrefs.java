@@ -180,15 +180,8 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 			// save and show the new value
 			var theDir = new File(stringNewPath.toString());
 			lPref.setSummary(theDir.getAbsolutePath());
-
-			if (FileHelper.folderNeedsAndroidWritePermission(theDir)) {
-				boolean granted = PermissionsHelper.hasPermissions(prefPage.getContext(),
-						PermissionsHelper.FOR_SDCARD);
-				if (!granted)
-					prefPage.requestPermissions(PermissionsHelper.FOR_SDCARD,
-							PermissionsHelper.REQCODE_WRITE_SD);
-				// then, if you want, you can implement the callback in the PreferenceFragment
-			}
+			// there's no need to ask for permission, because we use mediastore
+			// TODO check
 			return true;
 		});
 	}

@@ -1,5 +1,6 @@
 package com.nononsenseapps.helpers;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -26,15 +27,15 @@ public class FilePickerHelper {
 		// when the user clicks on the settings entry to choose the directory, do this
 		prefDirUri.setOnPreferenceClickListener(preference -> {
 			boolean ok = PermissionsHelper
-					.hasPermissions(pfc.getContext(), PermissionsHelper.FOR_SDCARD);
+					.hasPermissions(pfc.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
 			if (ok) {
 				// we CAN read the filesystem => show the filepicker
 				showFolderPickerActivity(pfc);
 			} else {
 				pfc.requestPermissions(
-						PermissionsHelper.FOR_SDCARD,
-						PermissionsHelper.REQCODE_WRITE_SD);
-				// continues in onRequestPermissionsResult()
+						new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE },
+						/*PermissionsHelper.REQCODE_WRITE_SD*/1234);
+				// continues in onRequestPermissionsResult() that you have to implement
 			}
 			// tell android to update the preference value
 			return true;

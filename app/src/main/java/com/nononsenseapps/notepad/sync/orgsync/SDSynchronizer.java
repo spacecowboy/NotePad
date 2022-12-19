@@ -63,8 +63,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		// use the user-chosen folder to save ORG files
 		ORG_DIR = FileHelper.getUserSelectedOrgDir(context);
 
-		boolean permitted = PermissionsHelper
-				.hasPermissions(context, PermissionsHelper.FOR_SDCARD);
+		boolean permitted = ORG_DIR != null;
 		if (permitted) {
 			// we CAN save files in the external storage
 			configured = PreferencesHelper.isSdSyncEnabled(context);
