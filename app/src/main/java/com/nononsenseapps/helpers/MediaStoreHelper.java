@@ -21,7 +21,10 @@ import java.util.Scanner;
 
 /**
  * Contains helper methods to deal with {@link MediaStore}, which is the only way
- * to save files in Documents/ and Download/ in Android API 29 and greater
+ * to save files in Documents/ and Download/ in Android API 29 and greater.
+ *
+ * @implNote an unavoidable defect of this solution is that the app won't recognize the files
+ * once it's uninstalled and reinstalled. There is no workaround for this.
  */
 @RequiresApi(api = Build.VERSION_CODES.Q)
 public final class MediaStoreHelper {
@@ -86,7 +89,7 @@ public final class MediaStoreHelper {
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.Q)
 	public static boolean saveTextToFile(Context context, String content, File target,
-								   String relativePath) {
+										 String relativePath) {
 		// check if the file already exists
 		Uri uri = getExistingFileUri(context, relativePath, target);
 		if (uri == null) {
@@ -108,9 +111,9 @@ public final class MediaStoreHelper {
 		}
 	}
 
-	// TODO test and use this to save files. note that it can't overwrite files,
-	//  so the restore functionality should have a file picker to chose which json to use
-	//  see https://stackoverflow.com/a/62879112/6307322
+// TODO test and use this to save files. note that it can't overwrite files,
+//  so the restore functionality should have a file picker to chose which json to use
+//  see https://stackoverflow.com/a/62879112/6307322
 
 	/**
 	 * Saves "content" in "target", located in "relativePath", using {@link MediaStore}.
@@ -134,7 +137,6 @@ public final class MediaStoreHelper {
 		Uri dirUri = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
 		// useless alternatives:
 		// Uri u1 = MediaStore.Downloads.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-		// Uri u4 = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
 
 		Uri fileUri = context.getContentResolver().insert(dirUri, values);
 		if (fileUri == null) return false;
@@ -150,6 +152,13 @@ public final class MediaStoreHelper {
 			NnnLogger.exception(e);
 			return false;
 		}
-		// TODO TEST! on API 23, in all folders, with old & existing file, with a file from outside the phone, ...
+		// TODO TEST!
+		//  on API 23 all OK => look for problems with mediastore instead
+		//  test in all selectable folders,
+		//  test with no & with existing file,
+		//  test with a file from outside the phone (does the app recognize it ?
+		//  ...
+
+		//  TODO then use these classes for json backup & restore
 	}
 }

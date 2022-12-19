@@ -96,7 +96,8 @@ public final class FileHelper {
 	}
 
 	/**
-	 * @return the relative path to use with {@link MediaStore} in {@link MediaStoreHelper},
+	 * @return the relative path to use with {@link MediaStore} in
+	 * {@link MediaStoreHelper}, including the "No Nonsense Notes" subdirectory,
 	 * or null if the simple {@link File} API should be used instead
 	 */
 	@Nullable
@@ -112,10 +113,16 @@ public final class FileHelper {
 				.getAbsolutePath();
 		boolean isInDocsDir = target.getAbsolutePath().contains(dirDocs);
 
+		boolean hasSubDir = target.getAbsolutePath().contains("No Nonsense Notes");
+
 		if (isInDownloadDir) {
-			return Environment.DIRECTORY_DOWNLOADS;
+			return hasSubDir
+					? Environment.DIRECTORY_DOWNLOADS + "/No Nonsense Notes/"
+					: Environment.DIRECTORY_DOWNLOADS;
 		} else if (isInDocsDir) {
-			return Environment.DIRECTORY_DOCUMENTS;
+			return hasSubDir
+					? Environment.DIRECTORY_DOCUMENTS + "/No Nonsense Notes/"
+					: Environment.DIRECTORY_DOCUMENTS;
 		} else {
 			// file is in /Android/data/ so we can still use the simple function
 			return null;
@@ -123,7 +130,8 @@ public final class FileHelper {
 	}
 
 	/**
-	 * Easy, but doesn't work in android API 29 and newer
+	 * Easy, but doesn't work in android API 29 and newer.
+	 * Will create or overwrite the file automatically
 	 *
 	 * @return TRUE if it managed to write "content" to file "target"
 	 */
@@ -138,7 +146,7 @@ public final class FileHelper {
 			NnnLogger.exception(se);
 			return false;
 		}
-		// TODO useless & does not work
+// TODO useless & does not work
 		// .
 		//		if (!tryDeleteFile(target, context)) return false;
 		//		try {
@@ -230,9 +238,11 @@ public final class FileHelper {
 	 * @implNote for some of these you have to ask for write permissions
 	 */
 	public static String[] getPathsOfPossibleFolders(@NonNull Context context) {
-		File dirDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+		File dirDownload = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 		// (don't use DCIM, you can't write to it anymore with the File API)
-		File dirDocs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+		File dirDocs = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
 		String subDirName = "No Nonsense Notes/";
 
 		var dirs = new File[] {
