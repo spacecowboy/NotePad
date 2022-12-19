@@ -23,7 +23,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.nononsenseapps.helpers.DocumentFileHelper;
-import com.nononsenseapps.helpers.FileHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Notification;
@@ -38,9 +37,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -295,15 +294,18 @@ public class JSONBackup {
 	}
 
 	private JSONObject readBackup() throws JSONException, IOException, SecurityException {
-		// Try to read the backup file
-		final File backupFile = FileHelper.getBackupJsonFile(this.context);
-		if (backupFile.exists() && !backupFile.canRead()) {
-			// maybe we are missing the required android permission ?
-			throw new SecurityException();
+		var fileDoc = DocumentFileHelper.getSelectedBackupJsonFile(this.context);
+		if (fileDoc == null || !fileDoc.exists() || !fileDoc.canRead()) {
+			// it isn't a matter of permissions, the S.A.F. doesn't need permissions
+			NnnLogger.error(JSONBackup.class, "Can't access the documentfile");
+			throw new IOException();
 		}
+		InputStream inSt = this.context
+				.getContentResolver()
+				.openInputStream(fileDoc.getUri());
 		final StringBuilder sb = new StringBuilder();
 		String line;
-		BufferedReader reader = new BufferedReader(new FileReader(backupFile));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inSt));
 		while ((line = reader.readLine()) != null) {
 			sb.append(line);
 		}

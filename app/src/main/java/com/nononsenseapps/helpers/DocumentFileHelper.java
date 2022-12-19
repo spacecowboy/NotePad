@@ -10,6 +10,7 @@ import androidx.documentfile.provider.DocumentFile;
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -73,18 +74,23 @@ public final class DocumentFileHelper {
 	}
 
 	/**
+	 * Hardcoded filename of the backup file. The user chooses where to save this
+	 */
+	private static final String backupJsonFileName = "NoNonsenseNotes_Backup.json";
+
+
+	/**
 	 * Delete the existing Json file and create a new one, for the backup
 	 *
 	 * @return the newly created {@link DocumentFile}, or null if it wasn't possible to create one
 	 */
 	public static DocumentFile createBackupJsonFile(Context context) {
-		String displayName = "NoNonsenseNotes_Backup.json";
 		Uri dirUri = BackupPrefs.getSelectedBackupDirUri(context);
 		if (dirUri == null) return null;
 
 		var docDir = DocumentFile.fromTreeUri(context, dirUri);
 		if (docDir == null) return null;
-		var oldDocFile = docDir.findFile(displayName);
+		var oldDocFile = docDir.findFile(backupJsonFileName);
 		if (oldDocFile != null && oldDocFile.exists()) {
 			// already exists => delete it before creating a new one
 			oldDocFile.delete();
@@ -93,7 +99,23 @@ public final class DocumentFileHelper {
 		// android doesn't care about the mimetype anyway, having the extension
 		// in displayName is enough
 		String mt = MimeTypeMap.getSingleton().getMimeTypeFromExtension("json");
-		return docDir.createFile(mt, displayName);
+		return docDir.createFile(mt, backupJsonFileName);
+	}
+
+	/**
+	 * @return the {@link DocumentFile} representing the json file that will be read to restore
+	 * the backup, or NULL if it could not find the file. It's in the user-selected backup
+	 * directory. See {@link BackupPrefs}
+	 */
+	@Nullable
+	public static DocumentFile getSelectedBackupJsonFile(Context context) {
+		var dirUri = BackupPrefs.getSelectedBackupDirUri(context);
+		// user didn't choose a folder
+		if (dirUri == null) return null;
+
+		var dirDoc = DocumentFile.fromTreeUri(context, dirUri);
+		if (dirDoc == null) return null;
+		return dirDoc.findFile("NoNonsenseNotes_Backup.json");
 	}
 
 }
