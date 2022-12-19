@@ -9,7 +9,6 @@ import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.preference.PreferenceManager;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +29,7 @@ public final class FileHelper {
 	 * @return TRUE if it worked, FALSE otherwise
 	 */
 	@Deprecated
-	public static boolean writeStringToFile(String content, File target, Context context) {
+	private static boolean writeStringToFile(String content, File target, Context context) {
 		if (content == null || target == null) return false;
 		if (target.isDirectory() || target.getParentFile() == null) return false;
 
@@ -139,31 +138,10 @@ public final class FileHelper {
 	}
 
 	/**
-	 * @return a representation of the JSON file used for backups, located in the
-	 * folder chosen by the user in the Backup preferences page. NOT guaranteed
-	 * to be writable
-	 */
-	@NonNull
-	public static File getBackupJsonFile(@NonNull Context ctx) {
-		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		String chosenPath = null; //sharedPrefs.getString(BackupPrefs.KEY_BACKUP_LOCATION, null);
-		// TODO useless function. remove.
-		if (chosenPath == null) {
-			// the user did not choose a path yet => use a safe fallback path
-			chosenPath = ctx.getExternalFilesDir(null).getAbsolutePath();
-		}
-
-		String fName = "NoNonsenseNotes_Backup.json";
-		File fJson = new File(chosenPath, fName);
-
-		// checks like .mkdirs() and .canWrite() are up to the caller.
-		// The code already took care of those, anyway
-		return fJson;
-	}
-
-	/**
 	 * When you delete a file in android, additional attention is required.
-	 * This function takes care of that
+	 * This function takes care of that. Does not work above API 29
+	 *
+	 * @return TRUE if it succeeded, FALSE otherwise
 	 */
 	public static boolean tryDeleteFile(@NonNull File toDelete, @NonNull Context context) {
 		boolean contains = toDelete
