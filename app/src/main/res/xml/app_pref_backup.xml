@@ -19,19 +19,22 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="app_preference_backup">
 
-	<ListPreference
-		android:dialogIcon="@drawable/ic_folder_24dp"
-		android:key="key_backup_location"
+	<!-- launch the android file picker to choose a directory -->
+	<Preference
+		android:icon="@drawable/ic_folder_24dp"
+		android:key="key_backup_dir_uri"
 		app:singleLineTitle="false"
-		android:summary="added in BackupPrefs.java, it shows the chosen folder"
+		android:summary="added in BackupPrefs.java onUriDirPrefChange()"
 		android:title="@string/choose_backup_folder"/>
 
 	<Preference
 		android:key="backup_import"
+		android:icon="@drawable/ic_import"
 		android:title="@string/backup_import"/>
 
 	<Preference
 		android:key="backup_export"
+		android:icon="@drawable/ic_export"
 		android:title="@string/backup_export"/>
 
 </PreferenceScreen>
