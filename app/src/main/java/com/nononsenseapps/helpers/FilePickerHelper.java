@@ -72,6 +72,7 @@ public class FilePickerHelper {
 		DocumentFile docDir = DocumentFile.fromTreeUri(context, uri);
 
 		// to maintain permission when the device restarts
+		// TODO tests crash here. maybe make it optional ?
 		context.getContentResolver().takePersistableUriPermission(uri,
 				Intent.FLAG_GRANT_READ_URI_PERMISSION
 						| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
