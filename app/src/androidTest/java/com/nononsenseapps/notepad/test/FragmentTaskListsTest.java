@@ -24,10 +24,6 @@ public class FragmentTaskListsTest {
 	public ActivityTestRule<ActivityMain_> mActivityRule
 			= new ActivityTestRule<>(ActivityMain_.class, false);
 
-	@Rule
-	public GrantPermissionRule mRuntimePermissionRule
-			= GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
 	@Test
 	public void testSanity() {
 		assertEquals("This should succeed", 1, 1);
