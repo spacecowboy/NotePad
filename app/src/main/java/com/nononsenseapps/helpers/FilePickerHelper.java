@@ -66,7 +66,7 @@ public class FilePickerHelper {
 		Uri uri = fromActivityResult.getData();
 		// represents the directory that the user just picked
 		// Use this instead of the "File" class
-		var docDir = DocumentFile.fromTreeUri(context, uri);
+		DocumentFile docDir = DocumentFile.fromTreeUri(context, uri);
 
 		// to maintain permission when the device restarts
 		context.getContentResolver().takePersistableUriPermission(uri,
@@ -74,13 +74,12 @@ public class FilePickerHelper {
 						| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
 		if (DocumentFileHelper.isWritableFolder(docDir)) {
-			// save it
+			// save the uri in the preferences, with the given key
 			PreferenceManager
 					.getDefaultSharedPreferences(context)
 					.edit()
 					.putString(keyOfPrefToUpdate, uri.toString())
 					.apply();
-			Toast.makeText(context, R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(context, R.string.cannot_write_to_directory, Toast.LENGTH_SHORT).show();
 		}

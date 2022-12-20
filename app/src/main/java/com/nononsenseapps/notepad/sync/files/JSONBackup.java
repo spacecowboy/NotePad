@@ -298,7 +298,7 @@ public class JSONBackup {
 		if (fileDoc == null || !fileDoc.exists() || !fileDoc.canRead()) {
 			// it isn't a matter of permissions, the S.A.F. doesn't need permissions
 			NnnLogger.error(JSONBackup.class, "Can't access the documentfile");
-			throw new IOException();
+			throw new IOException("Can't access the documentfile");
 		}
 		InputStream inSt = this.context
 				.getContentResolver()
