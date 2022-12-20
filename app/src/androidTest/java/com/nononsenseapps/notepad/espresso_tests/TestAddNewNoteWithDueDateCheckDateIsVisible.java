@@ -28,8 +28,6 @@ public class TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass {
 
 	@Test
 	public void testAddNewNoteWithDueDateCheckDateIsVisible() {
-
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		EspressoHelper.createNoteWithName(noteName1);

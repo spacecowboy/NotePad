@@ -27,8 +27,6 @@ public class TestCreateNoteAndDeleteIt extends BaseTestClass {
 
 	@Test
 	public void testCreateNoteAndDeleteIt() {
-
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		EspressoHelper.createNoteWithName(noteName1);

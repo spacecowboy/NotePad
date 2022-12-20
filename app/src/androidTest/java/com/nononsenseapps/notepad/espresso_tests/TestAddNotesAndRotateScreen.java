@@ -34,7 +34,6 @@ public class TestAddNotesAndRotateScreen extends BaseTestClass {
 
 		String[] noteNames = { noteName1, noteName2, noteName3, noteName4 };
 
-		EspressoHelper.closeDrawer();
 		EspressoHelper.createNotes(noteNames);
 		EspressoHelper.navigateUp();
 

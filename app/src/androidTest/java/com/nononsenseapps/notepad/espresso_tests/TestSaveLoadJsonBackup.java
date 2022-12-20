@@ -28,7 +28,6 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 
 	@Test
 	public void testSaveLoadBackup() {
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		// add 2 notes

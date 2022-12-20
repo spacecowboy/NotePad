@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.not;
 
 import android.app.UiAutomation;
 import android.os.SystemClock;
@@ -32,17 +31,6 @@ import com.nononsenseapps.notepad.R;
 import org.junit.Assert;
 
 public class EspressoHelper {
-
-	// TODO useless ? the drawer is already closed when this is called
-	public static void closeDrawer() {
-		if (true) return;
-		// use the Espresso helper DrawerActions
-		try {
-			onView(withId(R.id.drawerLayout)).perform(DrawerActions.close());
-		} catch (Exception ignored) {
-			NnnLogger.error(EspressoHelper.class, "Can't close drawer");
-		}
-	}
 
 	/**
 	 * Wait for 500ms to work around timing issues on slow emulators. Every time

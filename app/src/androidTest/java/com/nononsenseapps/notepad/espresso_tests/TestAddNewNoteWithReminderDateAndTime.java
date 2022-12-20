@@ -26,8 +26,6 @@ public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass {
 
 	@Test
 	public void testAddNewNoteWithReminderDateAndTime() {
-
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		EspressoHelper.createNoteWithName(noteName1);

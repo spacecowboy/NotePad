@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain_;
@@ -23,12 +24,10 @@ import org.junit.Rule;
 public class BaseTestClass {
 
 	/**
-	 * A JUnit {@link Rule @Rule} to launch your activity under test. This is a replacement
+	 * A JUnit {@link Rule @Rule} to launch your activity under test. This replaces
 	 * for ActivityInstrumentationTestCase2.
-	 *
-	 * Rules are interceptors which are executed for each test method and will run before
+	 * Rules are executed for each test method and will run before
 	 * any of your setup code in the @Before method.
-	 *
 	 * This will create and launch of the activity for you and also expose
 	 * the activity under test. To get a reference to the activity you can use:
 	 * {@link ActivityTestRule#getActivity()}
@@ -37,7 +36,12 @@ public class BaseTestClass {
 	 */
 	@SuppressWarnings("deprecation")
 	@Rule
-	public ActivityTestRule<ActivityMain_> mActRule = new ActivityTestRule<>(ActivityMain_.class);
+	public ActivityTestRule<ActivityMain_> mActRule =
+			new ActivityTestRule<>(ActivityMain_.class);
+
+	@Rule
+	public GrantPermissionRule mNotifRule =
+			GrantPermissionRule.grant("android.permission.POST_NOTIFICATIONS");
 
 	/**
 	 * @return a string with the content of the given resourceId
