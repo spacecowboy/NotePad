@@ -3,8 +3,10 @@ package com.nononsenseapps.helpers;
 import android.content.Context;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
+import androidx.core.provider.DocumentsContractCompat;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
@@ -17,9 +19,19 @@ import java.io.FileOutputStream;
 import java.util.function.Function;
 
 /**
- * Functions to work with {@link DocumentFile}
+ * Functions to work with {@link DocumentFile}. See
+ * https://developer.android.com/training/data-storage/shared/documents-files#create-file
+ * And, to understand why {@link DocumentFile} is better than {@link MediaStore}, see
+ * https://developer.android.com/training/data-storage
+ * This API can read files created by this app even after you reinstall it, so it's
+ * better than {@link MediaStoreHelper}
  */
 public final class DocumentFileHelper {
+
+	/**
+	 * Hardcoded filename of the backup file. The user chooses where to save this
+	 */
+	private static final String backupJsonFileName = "NoNonsenseNotes_Backup.json";
 
 	public static boolean isWritableFolder(DocumentFile docDir) {
 		return docDir != null && docDir.exists() && docDir.isDirectory() && docDir.canWrite();
@@ -56,10 +68,13 @@ public final class DocumentFileHelper {
 	/**
 	 * Write "content" in "destination" using the {@link DocumentFile} API
 	 *
+	 * @param destination a file, not a folder
+	 *
 	 * @return TRUE if it succeeded, FALSE otherwise
 	 */
 	public static boolean write(String content, DocumentFile destination, Context context) {
 		if (content == null || destination == null || context == null) return false;
+		if (!DocumentsContractCompat.isDocumentUri(context,destination.getUri())) return false;
 		return doWithFileDescriptorFor(destination, context, fd -> {
 			try {
 				var fileOutputStream = new FileOutputStream(fd);
@@ -72,12 +87,6 @@ public final class DocumentFileHelper {
 			return true;
 		});
 	}
-
-	/**
-	 * Hardcoded filename of the backup file. The user chooses where to save this
-	 */
-	private static final String backupJsonFileName = "NoNonsenseNotes_Backup.json";
-
 
 	/**
 	 * Delete the existing Json file and create a new one, for the backup
@@ -109,13 +118,20 @@ public final class DocumentFileHelper {
 	 */
 	@Nullable
 	public static DocumentFile getSelectedBackupJsonFile(Context context) {
-		var dirUri = BackupPrefs.getSelectedBackupDirUri(context);
+		Uri dirUri = BackupPrefs.getSelectedBackupDirUri(context);
 		// user didn't choose a folder
 		if (dirUri == null) return null;
+		// somehow it's invalid
+		if (!DocumentsContractCompat.isTreeUri(dirUri)) return null;
 
-		var dirDoc = DocumentFile.fromTreeUri(context, dirUri);
+		DocumentFile dirDoc = DocumentFile.fromTreeUri(context, dirUri);
 		if (dirDoc == null) return null;
-		return dirDoc.findFile("NoNonsenseNotes_Backup.json");
+
+		DocumentFile fileDoc = dirDoc.findFile("NoNonsenseNotes_Backup.json");
+		if (fileDoc != null && DocumentsContractCompat.isDocumentUri(context, fileDoc.getUri()))
+			return fileDoc;
+		else
+			return null;
 	}
 
 }
