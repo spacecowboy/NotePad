@@ -9,6 +9,7 @@ import android.provider.DocumentsContract;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.provider.DocumentsContractCompat;
 import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -41,9 +42,9 @@ public class FilePickerHelper {
 		// i.setType(DocumentsContract.Document.MIME_TYPE_DIR);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
 			// get the previously selected Uri, if available
-			if (initialDir != null) i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialDir);
+			boolean uriIsOk = initialDir != null && DocumentsContractCompat.isTreeUri(initialDir);
+			if (uriIsOk) i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, initialDir);
 			// else the filepicker will just open in its default state. whatever.
 		}
 		try {
@@ -59,11 +60,13 @@ public class FilePickerHelper {
 	 * Called when the user picks a "directory" with the system's filepicker
 	 *
 	 * @param fromActivityResult an {@link Intent} from onActivityResult
-	 * @param keyOfPrefToUpdate key of the preference where "uri" will be saved in
+	 * @param keyOfPrefToUpdate  key of the preference where "uri" will be saved in
 	 */
 	public static void onUriPicked(Intent fromActivityResult, Context context,
 								   String keyOfPrefToUpdate) {
 		Uri uri = fromActivityResult.getData();
+		if (!DocumentsContractCompat.isTreeUri(uri)) return;
+
 		// represents the directory that the user just picked
 		// Use this instead of the "File" class
 		DocumentFile docDir = DocumentFile.fromTreeUri(context, uri);

@@ -225,7 +225,7 @@
     <string name="backup_export">Esporta il backup</string>
     <string name="backup_import_msg">Provo a importare il backup da %1$s? Questo sovrascriverà le note attuali!</string>
     <string name="backup_export_msg">Esportare tutte le note in %1$s?</string>
-    <string name="backup_import_success">Backup esportato correttamente</string>
+    <string name="backup_import_success">Backup importato correttamente</string>
     <string name="backup_file_not_found">File di backup non trovato</string>
     <string name="backup_import_failed">Impossibile leggere il file di backup</string>
     <string name="backup_export_success">Backup esportato correttamente</string>
@@ -234,7 +234,6 @@
     <string name="sd_card_sync">Sincronizzazione su scheda SD</string>
     <string name="sd_card_summary">Le note sono salvate anche sulla scheda SD. Le modifiche sono sincronizzate in entrambi i versi. Cancellare i file eliminerà anche le note nell\'app!</string>
     <string name="directory">Cartella</string>
-    <string name="directory_summary">Dove salvare i file</string>
     <string name="cannot_write_to_directory">Impossibile scrivere sulla cartella</string>
     <string name="libraries_used">Librerie usate</string>
     <string name="license">Licenza</string>
