@@ -17,12 +17,13 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.FragmentManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.notepad.prefs.BackupPrefs;
 
 public class DialogExportBackup extends DialogConfirmBaseV11 {
 	static final String ID = "id";
@@ -44,8 +45,11 @@ public class DialogExportBackup extends DialogConfirmBaseV11 {
 
 	@Override
 	public CharSequence getMessage() {
-		String backupFilepath = FileHelper.getBackupJsonFile(this.getContext()).getAbsolutePath();
-		return getString(R.string.backup_export_msg, backupFilepath);
+		Uri dir = BackupPrefs.getSelectedBackupDirUri(this.getContext());
+		if (dir == null) return getString(R.string.unavailable_chose_directory);
+
+		// ask users if they want to export to this folder
+		return getString(R.string.backup_export_msg, "\n" + dir.getLastPathSegment());
 	}
 
 	@Override

@@ -95,7 +95,7 @@ public class AppearancePrefs extends PreferenceFragmentCompat {
 		listPref.setSummary(valueToSet);
 
 		listPref.setOnPreferenceChangeListener((samePref, val) -> {
-			// TODO the theme reloads correctly, the locale doesn't. Please test
+			// reload activity to apply immediately the new theme or language
 			this.getActivity().recreate();
 			return true;
 		});

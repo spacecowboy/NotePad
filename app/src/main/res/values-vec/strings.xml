@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name_short">Note</string>
+	<string name="timemachine">Versioni vecie</string>
+	<string name="small">Ceo</string>
+	<string name="medium">Medio</string>
+	<string name="large">Grando</string>
+	<string name="normal">Normae</string>
+	<string name="dashclock_tomorrow">Doman</string>
+	<string name="dashclock_today">Oncò</string>
+	<string name="dashclock_pref_header_general">Impostasion</string>
+	<string name="priority">Priorità</string>
+	<string name="silent">Siensioso</string>
+	<string name="selected_one">Sèesionada %d nota</string>
+	<string name="selected_other">Sèesionae %d note</string>
+	<string name="transparency">Trasparensa</string>
+	<string name="hide_date">Scondi a data de scadensa</string>
+	<string name="hide_checkbox">Scondi a spunta</string>
+	<string name="this_week">Sta setimana</string>
+	<string name="next_5_days">Pròsimi 5 dì</string>
+	<string name="date_header_completed">Finia</string>
+	<string name="date_header_none">Sensa data</string>
+	<string name="date_header_future">Dopo</string>
+	<string name="date_header_tomorrow">Doman</string>
+	<string name="date_header_today">Oncò</string>
+	<string name="date_header_overdue">Scadue</string>
+	<string name="completed">Finia</string>
+	<string name="about">Informasiòn</string>
+	<string name="clear_password">Càva a pasword</string>
+	<string name="done">Finio</string>
+	<string name="distance">Distansa</string>
+	<string name="near">Visìn</string>
+	<string name="menu_delete">Cansea</string>
+	<string name="menu_deletelist">Cansea a lista</string>
+	<string name="menu_preferences">Impostasion</string>
+	<string name="delete_question">Vutu cansear?</string>
+	<string name="delete_list_message">Vutu cansear sta lista?</string>
+</resources>

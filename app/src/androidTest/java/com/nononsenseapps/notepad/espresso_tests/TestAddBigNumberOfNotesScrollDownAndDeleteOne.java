@@ -66,7 +66,6 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 
 	@Test
 	public void testAddBigNumberOfNotesScrollDownAndDeleteOne() {
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		EspressoHelper.createNotes(noteNameList);

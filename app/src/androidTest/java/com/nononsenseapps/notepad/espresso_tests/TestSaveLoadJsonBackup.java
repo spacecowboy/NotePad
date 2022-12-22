@@ -6,6 +6,8 @@ import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMe
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.Intents.intending;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -14,7 +16,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
+import android.app.Activity;
+import android.app.Instrumentation;
+import android.content.Intent;
+import android.net.Uri;
+
+import androidx.documentfile.provider.DocumentFile;
 import androidx.test.filters.LargeTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.notepad.R;
 
@@ -26,9 +35,25 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 	final String noteText1 = "random note";
 	final String noteText2 = "other random note";
 
+	private static Instrumentation.ActivityResult createResponseIntent() {
+		// TODO you're supposed to replicate the uri given by the filepicker.
+		//  but i have NO idea how. See FilePickerHelper.java it may help
+
+		// TODO see https://github.com/ViliusSutkus89/TestingStorageAccessFrameworkClients
+
+		Uri uri1 = Uri.parse("content://com.android.externalstorage.documents/tree/primary%3Agoogletest%2Ftest_outputfiles");
+		var context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+		var docDir = DocumentFile.fromTreeUri(context, uri1);
+		var uri2 = docDir.getUri();
+
+		var odtr = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE, uri2)
+				.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+				.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+		return new Instrumentation.ActivityResult(Activity.RESULT_OK, odtr);
+	}
+
 	@Test
 	public void testSaveLoadBackup() {
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		// add 2 notes
@@ -47,6 +72,14 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		String SETTINGS_BACKUP_TEXT = getStringResource(R.string.backup);
 		onView(withText(SETTINGS_BACKUP_TEXT)).perform(click());
 
+		// choose a backup directory
+		intending(hasAction(Intent.ACTION_OPEN_DOCUMENT_TREE))
+				.respondWith(createResponseIntent());
+
+		String CHOOSE_DIR = getStringResource(R.string.choose_backup_folder);
+		onView(withText(CHOOSE_DIR)).perform();
+
+		// then click export
 		String EXPORT_BACKUP_TEXT = getStringResource(R.string.backup_export);
 		onView(withText(EXPORT_BACKUP_TEXT)).perform(click());
 		onView(withId(android.R.id.button1)).check(matches(isDisplayed()));

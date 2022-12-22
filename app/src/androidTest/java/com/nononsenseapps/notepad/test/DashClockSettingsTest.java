@@ -39,10 +39,6 @@ public class DashClockSettingsTest {
 	public ActivityTestRule<DashclockPrefActivity> mActivityRule
 			= new ActivityTestRule<>(DashclockPrefActivity.class, false);
 
-	@Rule
-	public GrantPermissionRule writePermission
-			= GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
 	@Test
 	public void testLoadOK() {
 		assertNotNull(mActivityRule.getActivity());

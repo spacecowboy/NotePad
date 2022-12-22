@@ -36,18 +36,9 @@ if it does not work, [open an issue](https://github.com/spacecowboy/NotePad/issu
 
 ## Where are the files saved?
 
-<details>
-  
 The app can save 2 kinds of files:
-* ORG files, used for SD card synching. You can choose to save them in a subdirectory of your `Documents` folder, \
-where they will be visible to many apps, including your file manager.
-* JSON files, for the backup-restore functionality
-
-Unless otherwise specified, files are saved in a subfolder of `Android/data/` accessible only
-to this app. \
-It is still possible to view them by connecting the device to a computer.
-
-</details>
+* ORG files, used for SD card synchronization. They are saved in a subfolder of `Android/data/` where they will be visible to your file manager, if you want to manually edit them
+* JSON files, for the backup-restore functionality. These are saved wherever you want
 
 ## GPLv3+ License
 

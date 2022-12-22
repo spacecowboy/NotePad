@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;
 
 import org.androidannotations.annotations.AfterViews;
@@ -39,7 +40,8 @@ public class ActivitySearch extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Must do this before super.onCreate
-		ActivityHelper.readAndSetSettings(this);
+		ThemeHelper.setTheme(this);
+		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(savedInstanceState);
 
 		getSupportActionBar().setDisplayShowTitleEnabled(true);

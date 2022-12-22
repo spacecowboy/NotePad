@@ -30,7 +30,8 @@ public final class NnnLogger {
 	 * Logs the given exception with tag "NNN"
 	 */
 	public static void exception(@NonNull Exception e) {
-		Log.e("NNN", e.getMessage());
+		String msg = e.getMessage();
+		Log.e("NNN", msg == null ? "(No message)" : msg);
 
 		String stackTrace = Log.getStackTraceString(e);
 		Log.e("NNN", stackTrace);

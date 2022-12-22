@@ -20,7 +20,7 @@ public final class Constants {
 	public static final String KEY_LAST_SYNC = "lastSync";
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
-	public static final String KEY_SD_DIR = "pref_sync_sd_dir";
+
 	// Dropbox sync
 	public static final String KEY_DROPBOX_ENABLE = "pref_sync_dropbox_enabled";
 	public static final String KEY_DROPBOX_DIR = "pref_sync_dropbox_dir";

@@ -33,8 +33,6 @@ public class TestCompletedTasksAreCleared extends BaseTestClass {
 
 	@Test
 	public void testCompletedTasksAreCleared() {
-
-		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		String[] noteNames = { noteName1, noteName2, noteName3, noteName4 };

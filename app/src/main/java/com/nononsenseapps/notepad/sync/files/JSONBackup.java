@@ -22,23 +22,24 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.nononsenseapps.helpers.DocumentFileHelper;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.notepad.prefs.BackupPrefs;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -234,26 +235,19 @@ public class JSONBackup {
 		// Create JSON object
 		final JSONObject backup = getJSONBackup();
 
-		// Serialise the JSON object to a file
-		final File backupFile = FileHelper.getBackupJsonFile(this.context);
+		var uri = BackupPrefs.getSelectedBackupDirUri(this.context);
+		// user didn't choose a folder. This is checked before this function runs
+		if (uri == null) throw new IOException();
 
-		if (backupFile.exists() && !backupFile.canWrite()) {
-			// we don't have the permission to write on the backup file!
-			throw new SecurityException();
+		var newFile = DocumentFileHelper.createBackupJsonFile(this.context);
+		if (newFile == null || !newFile.exists() || !newFile.canWrite()) {
+			// it isn't a matter of permissions, the S.A.F. doesn't need permissions
+			NnnLogger.error(JSONBackup.class, "Can't access documentfile");
+			throw new IOException();
 		}
 
-		boolean ok = FileHelper.tryDeleteFile(backupFile, this.context);
-		if (!ok) throw new IOException("can't delete file: " + backupFile.getAbsolutePath());
-
-		backupFile.getParentFile().mkdirs();
-
-		// if you try to write to DCIM, here it crashes: that folder is not available anymore
-		backupFile.createNewFile();
-
-		final FileWriter writer = new FileWriter(backupFile);
-		writer.write(backup.toString(2));
-		writer.flush();
-		writer.close();
+		String json = backup.toString(2);
+		DocumentFileHelper.write(json, newFile, this.context);
 	}
 
 	/**
@@ -300,15 +294,18 @@ public class JSONBackup {
 	}
 
 	private JSONObject readBackup() throws JSONException, IOException, SecurityException {
-		// Try to read the backup file
-		final File backupFile = FileHelper.getBackupJsonFile(this.context);
-		if (backupFile.exists() && !backupFile.canRead()) {
-			// maybe we are missing the required android permission ?
-			throw new SecurityException();
+		var fileDoc = DocumentFileHelper.getSelectedBackupJsonFile(this.context);
+		if (fileDoc == null || !fileDoc.exists() || !fileDoc.canRead()) {
+			// it isn't a matter of permissions, the S.A.F. doesn't need permissions
+			NnnLogger.error(JSONBackup.class, "Can't access the documentfile");
+			throw new IOException("Can't access the documentfile");
 		}
+		InputStream inSt = this.context
+				.getContentResolver()
+				.openInputStream(fileDoc.getUri());
 		final StringBuilder sb = new StringBuilder();
 		String line;
-		BufferedReader reader = new BufferedReader(new FileReader(backupFile));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(inSt));
 		while ((line = reader.readLine()) != null) {
 			sb.append(line);
 		}

@@ -57,6 +57,7 @@ import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
@@ -396,7 +397,8 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void onCreate(Bundle b) {
 		// Must do this before super.onCreate
-		ActivityHelper.readAndSetSettings(this);
+		ThemeHelper.setTheme(this);
+		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(b);
 
 		syncStatusReceiver = new SyncStatusMonitor();

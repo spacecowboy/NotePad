@@ -21,6 +21,7 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.ui.TitleNoteTextView;
@@ -58,7 +59,8 @@ public class ActivityTaskHistory extends AppCompatActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Must do this before super.onCreate
-		ActivityHelper.readAndSetSettings(this);
+		ThemeHelper.setTheme(this);
+		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(savedInstanceState);
 
 		// Intent must contain a task id
