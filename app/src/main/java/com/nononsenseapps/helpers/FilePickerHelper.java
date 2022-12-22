@@ -17,8 +17,8 @@ import androidx.preference.PreferenceManager;
 import com.nononsenseapps.notepad.R;
 
 /**
- * Methods to use android's built-in file picker.
- * More of a reference, rather than something useful
+ * Methods to use android's built-in file picker. See {@link DocumentFileHelper}
+ * that you can use to handle the {@link Uri} returned by this file picker
  */
 public class FilePickerHelper {
 
@@ -72,10 +72,16 @@ public class FilePickerHelper {
 		DocumentFile docDir = DocumentFile.fromTreeUri(context, uri);
 
 		// to maintain permission when the device restarts
-		// TODO tests crash here. maybe make it optional ?
-		context.getContentResolver().takePersistableUriPermission(uri,
-				Intent.FLAG_GRANT_READ_URI_PERMISSION
-						| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+		try {
+			context.getContentResolver().takePersistableUriPermission(uri,
+					Intent.FLAG_GRANT_READ_URI_PERMISSION
+							| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+		} catch (SecurityException se) {
+			// no permissions found for this URI. isWritableFolder() will return false
+			NnnLogger.warning(FilePickerHelper.class,
+					"Can't take persistable uri permissions from: " + uri);
+			NnnLogger.exception(se);
+		}
 
 		if (DocumentFileHelper.isWritableFolder(docDir)) {
 			// save the uri in the preferences, with the given key
