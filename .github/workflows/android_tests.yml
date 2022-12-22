@@ -3,9 +3,12 @@ name: Android tests
 on:
   push:
     branches: [ "master" ]
-    # runs when you commit to the master branch,
-    # so also when merging pull requests.
+    # runs when you commit to the master branch, so also when merging pull requests.
     # Not on receiving pull requests: it would be a waste.
+    paths-ignore:
+      - '**.md'
+      - '.github/**'
+      - '!.github/workflows/build.yml'
 jobs:
   # this job runs all the tests
   job_tests:
