@@ -2,23 +2,19 @@ package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.media.MediaScannerConnection;
-import android.os.Build;
-import android.os.Environment;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 /**
- * Methods to help navigate through Google's mess regarding file access in
- * Android 10 and higher.
+ * Methods to help navigate through Google's mess regarding file access.
+ * These use the {@link File} API, so they work well only in
+ * {@link Context#getExternalFilesDir}. Avoid these for Android 10 and higher,
+ * prefer {@link FilePickerHelper} instead
  */
 public final class FileHelper {
 
