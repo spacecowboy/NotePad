@@ -70,8 +70,8 @@ android {
         // require a full app build and reinstallation, even for the smallest change.
         // If these values are fixed, incremental builds are optimized.
         // Also, f-droid prefers these values to be static => update them manually, please.
-        versionCode 70100
-        versionName "7.0.1"
+        versionCode 71000
+        versionName "7.1.0"
 
         vectorDrawables.useSupportLibrary = true
 
