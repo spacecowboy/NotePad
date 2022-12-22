@@ -106,7 +106,7 @@ fi
 read -r -p "Make tag? [y/N] " response
 if [[ "$response" =~ ^[yY]$ ]]
 then
-  git tag -asm "$(cat "${tmpfile}")" "${NEXT_VERSION}"
+  git tag -am "$(cat "${tmpfile}")" "${NEXT_VERSION}"
 fi
 
 echo "Status of git files:"
