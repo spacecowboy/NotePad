@@ -23,72 +23,16 @@ import java.io.PrintStream;
 public final class FileHelper {
 
 	/**
-	 * Writes the given {@link String} to the given {@link File}, using a method appropriate
-	 * for every android API version
+	 * Writes the given {@link String} to the given {@link File}. Does not work outside
+	 * of the external files directory, due to bad design by Google
 	 *
 	 * @return TRUE if it worked, FALSE otherwise
 	 */
 	@Deprecated
-	private static boolean writeStringToFile(String content, File target, Context context) {
+	private static boolean writeStringToFile(String content, File target) {
 		if (content == null || target == null) return false;
 		if (target.isDirectory() || target.getParentFile() == null) return false;
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			// bothersome requirements. Thanks Google
-			String relPath = getRelativePathOrNull(target);
-			if (relPath == null)
-				return FileHelper.writeStringToFileSimple(content, target);
-			else
-				// will create & overwrite the file as needed
-				return MediaStoreHelper.saveTextToFile(context, content, target, relPath);
-		} else {
-			return FileHelper.writeStringToFileSimple(content, target);
-		}
-	}
-
-	/**
-	 * @return the relative path to use with {@link MediaStore} in
-	 * {@link MediaStoreHelper}, including the "No Nonsense Notes" subdirectory,
-	 * or null if the simple {@link File} API should be used instead
-	 */
-	@Nullable
-	@Deprecated
-	private static String getRelativePathOrNull(File target) {
-		// these directories require the write permission
-		String dirDownload = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-				.getAbsolutePath();
-		boolean isInDownloadDir = target.getAbsolutePath().contains(dirDownload);
-
-		String dirDocs = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
-				.getAbsolutePath();
-		boolean isInDocsDir = target.getAbsolutePath().contains(dirDocs);
-
-		boolean hasSubDir = target.getAbsolutePath().contains("No Nonsense Notes");
-
-		if (isInDownloadDir) {
-			return hasSubDir
-					? Environment.DIRECTORY_DOWNLOADS + "/No Nonsense Notes/"
-					: Environment.DIRECTORY_DOWNLOADS;
-		} else if (isInDocsDir) {
-			return hasSubDir
-					? Environment.DIRECTORY_DOCUMENTS + "/No Nonsense Notes/"
-					: Environment.DIRECTORY_DOCUMENTS;
-		} else {
-			// file is in /Android/data/ so we can still use the simple function
-			return null;
-		}
-	}
-
-	/**
-	 * Easy, but doesn't work in android API 29 and newer.
-	 * Will create or overwrite the file automatically
-	 *
-	 * @return TRUE if it managed to write "content" to file "target"
-	 */
-	private static boolean writeStringToFileSimple(@NotNull String content, @NotNull File target) {
-		if (target.isDirectory() || target.getParentFile() == null) return false;
 		NnnLogger.debug(FileHelper.class,
 				"Writing, with PrintStream, to file " + target.getAbsolutePath());
 		try {
@@ -98,14 +42,6 @@ public final class FileHelper {
 			NnnLogger.exception(se);
 			return false;
 		}
-		// useless & does not work after API 28
-		//		if (!tryDeleteFile(target, context)) return false;
-		//		try {
-		//			if (!target.createNewFile()) return false;
-		//		} catch (IOException e) {
-		//			// you just can't write to that folder
-		//			return false;
-		//		}
 
 		try (PrintStream out = new PrintStream(new FileOutputStream(target))) {
 			out.print(content);
@@ -118,8 +54,9 @@ public final class FileHelper {
 	}
 
 	/**
-	 * @return the path of the directory where ORG files are saved, or NULL if
-	 * it could not get one. This path is now hardcoded to something like Android/data/packagename
+	 * @return the path of the directory where ORG files are saved,
+	 * or NULL if it could not get one. This path is now hardcoded
+	 * to something like Android/data/packagename
 	 */
 	public static String getUserSelectedOrgDir(@NonNull Context ctx) {
 		// we are going to use the default directory:

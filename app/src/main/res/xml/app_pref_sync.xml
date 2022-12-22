@@ -87,6 +87,17 @@
 			android:summary="@string/sd_card_summary"
 			android:title="@string/sd_card_sync"/>
 
+		<!-- The code uses File objects instead of URIs, so enabling this is just too
+	 			much work. I deleted the related java code in PR #455
+				If anyone wants to help, remove android:enabled="false" and start testing.
+		<Preference
+			android:dependency="pref_sync_sd_enabled"
+			android:key="pref_sync_sd_dir_uri"
+			android:enabled="false"
+			android:summary="@string/directory_summary"
+			android:title="@string/directory"/>
+		-->
+
 		<!-- Warn users that the org folder is hardcoded. See SyncPrefs.java -->
 		<Preference
 			android:title="@string/directory"
