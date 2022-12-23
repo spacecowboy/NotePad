@@ -50,7 +50,7 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
 		setContentView(R.layout.activity_main);
 
 		// Set support toolbar
-		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		mToolbar = findViewById(R.id.toolbar);
 		if (mToolbar != null) {
 			setSupportActionBar(mToolbar);
 		}
@@ -60,7 +60,7 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(
 				R.id.leftDrawer,
-				(DrawerLayout) findViewById(R.id.drawerLayout),
+				findViewById(R.id.drawerLayout),
 				mToolbar);
 
 		// Load main fragment

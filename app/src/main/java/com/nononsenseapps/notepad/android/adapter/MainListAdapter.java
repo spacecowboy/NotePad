@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 /**
@@ -47,8 +46,10 @@ public class MainListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 		mCursor = cursor;
 	}
 
+	@NonNull
 	@Override
-	public ItemViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int viewType) {
+	public ItemViewHolder onCreateViewHolder(@NonNull final ViewGroup viewGroup,
+											 final int viewType) {
 		switch (viewType) {
 			case VIEWTYPE_FOLDER:
 				return new FolderViewHolder(LayoutInflater.from(viewGroup.getContext())

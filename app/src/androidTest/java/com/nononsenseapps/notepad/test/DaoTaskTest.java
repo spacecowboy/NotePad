@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad.test;
 
+import static org.junit.Assert.assertNotEquals;
+
 import androidx.test.filters.MediumTest;
 
 import com.nononsenseapps.notepad.database.Task;
@@ -22,13 +24,13 @@ public class DaoTaskTest extends TestCase {
 		task1.note = "note1";
 
 		// Equals method should be true for these
-		assertTrue("Task should equal itself!", task1.equals(task1));
+		assertEquals("Task should equal itself!", task1, task1);
 
 		task1.due = 924592L;
-		assertTrue("Task should equal itself!", task1.equals(task1));
+		assertEquals("Task should equal itself!", task1, task1);
 
 		task1.completed = 230456L;
-		assertTrue("Task should equal itself!", task1.equals(task1));
+		assertEquals("Task should equal itself!", task1, task1);
 
 		// Create copy
 		final Task task2 = new Task();
@@ -36,62 +38,62 @@ public class DaoTaskTest extends TestCase {
 
 		assertTrue((task1.title != null && task1.title.equals(task2.title)));
 		assertTrue((task1.note != null && task1.note.equals(task2.note)));
-		assertTrue((task1.due == task2.due));
+		assertEquals(task1.due, task2.due);
 		assertTrue(((task1.completed != null) == (task2.completed != null)));
 
-		assertTrue("Task1 should equal task2!", task1.equals(task2));
+		assertEquals("Task1 should equal task2!", task1, task2);
 
 		// Completed should only care about null status
 		task2.completed = 9272958113551L;
-		assertTrue("Completed should only care about null values", task1.equals(task2));
+		assertEquals("Completed should only care about null values", task1, task2);
 
 		// Should all fail
 		copyValsFromTo(task1, task2);
 		task2.title = "badfa";
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.note = "badfa";
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.due = 29037572395L;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.completed = null;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.due = null;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.title = "badfa";
 		task2.note = "asdfal";
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.title = "badfa";
 		task2.due = null;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.note = "badfa";
 		task2.due = 292374522222L;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.title = "badfa";
 		task2.note = "asdf";
 		task2.due = null;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 
 		copyValsFromTo(task1, task2);
 		task2.title = "badfa";
 		task2.note = "asdf";
 		task2.due = null;
 		task2.completed = null;
-		assertFalse("Task1 should not equal task2!", task1.equals(task2));
+		assertNotEquals("Task1 should not equal task2!", task1, task2);
 	}
 }

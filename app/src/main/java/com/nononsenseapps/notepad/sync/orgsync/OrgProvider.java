@@ -68,9 +68,7 @@ public class OrgProvider extends ContentProvider {
 				writeToFile(file, orgFile);
 				return 1;
 			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		} catch (ParseException e) {
+		} catch (IOException | ParseException e) {
 			throw new RuntimeException(e);
 		}
 
@@ -93,7 +91,7 @@ public class OrgProvider extends ContentProvider {
 				return 1;
 			}
 		}
-		throw new RuntimeException("Failed to delete " + file.toString());
+		throw new RuntimeException("Failed to delete " + file);
 	}
 
 	@Nullable
@@ -194,14 +192,11 @@ public class OrgProvider extends ContentProvider {
 		// Implement this to handle requests to delete one or more rows.
 		String fragment = getFragment(uri);
 
-		switch (uriMatcher.match(uri)) {
-			case CODE_FILE_ID:
-				return fragment == null ?
-						deleteFile(uri) :
-						deleteItem(uri);
+		if (uriMatcher.match(uri) == CODE_FILE_ID) {
+			return fragment == null ? deleteFile(uri) : deleteItem(uri);
 		}
 
-		throw new UnsupportedOperationException("Delete not supported for " + uri.toString());
+		throw new UnsupportedOperationException("Delete not supported for " + uri);
 	}
 
 	@Override

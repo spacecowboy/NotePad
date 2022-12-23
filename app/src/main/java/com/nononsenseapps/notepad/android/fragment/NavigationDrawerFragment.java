@@ -23,12 +23,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import androidx.core.view.GravityCompat;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -162,7 +161,7 @@ public class NavigationDrawerFragment extends Fragment {
 		for (final ProviderManager.Provider provider : pm.getConfiguredProviders()) {
 			View view = inflater.inflate(R.layout.listitem_avatar, mNavContainer, false);
 			// provider might have icon
-			ImageView im = (ImageView) view.findViewById(android.R.id.icon1);
+			ImageView im = view.findViewById(android.R.id.icon1);
 			if (provider.getIcon() > 0) {
 				// An icon is specifed by the provider
 				im.setImageResource(provider.getIcon());
@@ -294,7 +293,7 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	@Override
-	public void onAttach(Context context) {
+	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
 		try {
 			mCallbacks = (NavigationDrawerCallbacks) getActivity();
@@ -304,18 +303,13 @@ public class NavigationDrawerFragment extends Fragment {
 	}
 
 	@Override
-	public void onDetach() {
-		super.onDetach();
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Forward the new configuration the drawer toggle component.
 		mDrawerToggle.onConfigurationChanged(newConfig);

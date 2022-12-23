@@ -77,7 +77,7 @@ public class OrgSyncTest {
 		Cursor c = resolver.query(TaskList.URI, TaskList.Columns
 				.FIELDS, null, null, null);
 
-		ArrayList<TaskList> result = new ArrayList<TaskList>();
+		ArrayList<TaskList> result = new ArrayList<>();
 		while (c.moveToNext()) {
 			result.add(new TaskList(c));
 		}
@@ -93,7 +93,7 @@ public class OrgSyncTest {
 				new String[] { Long.toString(listid) }, null
 		);
 
-		ArrayList<Task> result = new ArrayList<Task>();
+		ArrayList<Task> result = new ArrayList<>();
 		while (c.moveToNext()) {
 			result.add(new Task(c));
 		}
@@ -109,7 +109,7 @@ public class OrgSyncTest {
 				new String[] { ACCOUNT }, null
 		);
 
-		ArrayList<RemoteTaskList> result = new ArrayList<RemoteTaskList>();
+		ArrayList<RemoteTaskList> result = new ArrayList<>();
 		while (c.moveToNext()) {
 			result.add(new RemoteTaskList(c));
 		}
@@ -125,7 +125,7 @@ public class OrgSyncTest {
 				new String[] { ACCOUNT }, null
 		);
 
-		ArrayList<RemoteTask> result = new ArrayList<RemoteTask>();
+		ArrayList<RemoteTask> result = new ArrayList<>();
 		while (c.moveToNext()) {
 			result.add(new RemoteTask(c));
 		}
@@ -175,7 +175,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// See the result
@@ -211,7 +211,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// It should NOT have written to disk at all
@@ -282,7 +282,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Make sure the second one was renamed!
@@ -319,7 +319,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		File org = new File(DIR, OrgConverter.getTitleAsFilename
@@ -335,7 +335,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Make sure rename was successful
@@ -381,7 +381,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check that the database has removed it
@@ -428,7 +428,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check state of sync
@@ -455,7 +455,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check state of sync
@@ -486,7 +486,7 @@ public class OrgSyncTest {
 		assertTrue(listB._id > 0);
 
 		final int taskCount = 20;
-		ArrayList<Task> tasks = new ArrayList<Task>();
+		ArrayList<Task> tasks = new ArrayList<>();
 		for (int i = 0; i < taskCount; i++) {
 			Task t = new Task();
 			t.dblist = listA._id;
@@ -504,7 +504,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check state of sync
@@ -535,7 +535,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check state of sync
@@ -559,7 +559,7 @@ public class OrgSyncTest {
 		final int listCount = 12;
 		final int taskCount = 20;
 		final int movedTaskCount = 12;
-		ArrayList<Task> tasksToMove = new ArrayList<Task>();
+		ArrayList<Task> tasksToMove = new ArrayList<>();
 		TaskList listA = null, listB = null;
 		// First create Lists
 		for (int listIndex = 0; listIndex < listCount; listIndex++) {
@@ -593,7 +593,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check state of sync
@@ -633,7 +633,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check state of sync
@@ -655,7 +655,7 @@ public class OrgSyncTest {
 
 		int nowInB = 0;
 		for (RemoteTask remoteTask : remoteTasks) {
-			assertTrue(!"deleted".equals(remoteTask.deleted));
+			assertFalse("deleted".equals(remoteTask.deleted));
 			if (remoteTask.listdbid == listB._id) {
 				nowInB += 1;
 			}
@@ -692,14 +692,14 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check contents after sync
 		final TaskList listb = getTaskLists().get(0);
 
 		// Should no longer have slashes in name
-		assertTrue(!listb.title.contains("/"));
+		assertFalse(listb.title.contains("/"));
 		assertEquals("Test_List_Slash_Name", listb.title);
 	}
 
@@ -732,7 +732,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check contents after sync
@@ -757,7 +757,7 @@ public class OrgSyncTest {
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
-			assertTrue(e.getLocalizedMessage(), false);
+			fail(e.getLocalizedMessage());
 		}
 
 		// Check contents after sync
@@ -778,7 +778,7 @@ public class OrgSyncTest {
 		}
 	}
 
-	class TestSynchronizer extends SDSynchronizer {
+	static class TestSynchronizer extends SDSynchronizer {
 
 		private int putRemoteCount = 0;
 

@@ -19,18 +19,21 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Random;
 
 public class DBProviderMovementTest extends TestCase {
 
 	private ContentResolver resolver;
-	private Context context;
+
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-		resolver = context.getContentResolver();
+		resolver = InstrumentationRegistry
+				.getInstrumentation()
+				.getTargetContext()
+				.getContentResolver();
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class DBProviderMovementTest extends TestCase {
 
 	private Cursor assertCursorGood(final Cursor c) {
 		assertNotNull(c);
-		assertEquals(false, c.isClosed());
+		assertFalse(c.isClosed());
 
 		return c;
 	}
@@ -74,7 +77,7 @@ public class DBProviderMovementTest extends TestCase {
 			assertTrue("Left must be less than right! " + t.left + " !< "
 					+ t.right, t.left < t.right);
 			assertTrue("Previous item must have smaller left",
-					prev < (long) t.left);
+					prev < t.left);
 			if (t.right == t.left + 1) {
 				prev = t.right;
 			} else {
@@ -88,17 +91,17 @@ public class DBProviderMovementTest extends TestCase {
 				new String[] { Long.toString(listId) }, Task.Columns.RIGHT
 						+ " DESC");
 		assertCursorGood(c);
-		HashSet<Long> positions = new HashSet<Long>();
+		HashSet<Long> positions = new HashSet<>();
 		if (c.getCount() > 0) {
 			// Right most will be twice the number of tasks
 			assertTrue(c.moveToFirst());
 			final Task last = new Task(c);
 
-			assertTrue(String.format("%d != 2 * %d", last.right, c.getCount()),
-					last.right == 2 * c.getCount());
+			assertEquals(String.format(Locale.US, "%d != 2 * %d", last.right, c.getCount()),
+					(long) last.right, 2L * c.getCount());
 
 			// Make sure there are no duplicates and such
-			for (long i = 1; i <= c.getCount() * 2; i++) {
+			for (long i = 1; i <= c.getCount() * 2L; i++) {
 				positions.add(i);
 			}
 
@@ -133,7 +136,7 @@ public class DBProviderMovementTest extends TestCase {
 	}
 
 	private ArrayList<Task> insertTasks(final long listId, final int number) {
-		ArrayList<Task> results = new ArrayList<Task>(number);
+		ArrayList<Task> results = new ArrayList<>(number);
 		for (int i = 0; i < number; i++) {
 			int count = 0;
 			Task t = new Task();
@@ -153,7 +156,7 @@ public class DBProviderMovementTest extends TestCase {
 	}
 
 	private ArrayList<Task> getTasks(final long listId) {
-		final ArrayList<Task> results = new ArrayList<Task>();
+		final ArrayList<Task> results = new ArrayList<>();
 		final Cursor c = resolver.query(Task.URI,
 				Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
 				new String[] { Long.toString(listId) }, Task.Columns.LEFT);
@@ -180,7 +183,7 @@ public class DBProviderMovementTest extends TestCase {
 	}
 
 	private ArrayList<Task> getDeletedTask(final String title) {
-		final ArrayList<Task> results = new ArrayList<Task>();
+		final ArrayList<Task> results = new ArrayList<>();
 		final Cursor c = resolver.query(Task.URI_DELETED_QUERY,
 				Task.Columns.FIELDS, Task.Columns.TITLE + "IS ?",
 				new String[] { title }, null);
@@ -214,8 +217,7 @@ public class DBProviderMovementTest extends TestCase {
 		val.put(Task.Columns.DBLIST, tl._id);
 
 		// where _ID in (1, 2, 3)
-		final String whereId = new StringBuilder(Task.Columns._ID).append(" IN (")
-				.append(DAO.arrayToCommaString(ids)).append(")").toString();
+		final String whereId = Task.Columns._ID + " IN (" + DAO.arrayToCommaString(ids) + ")";
 
 		var mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 		mContext.getContentResolver().update(Task.URI, val, whereId, null);
@@ -242,8 +244,7 @@ public class DBProviderMovementTest extends TestCase {
 		if (movingTask._id != targetTask._id)
 			assertTrue("Moving a task should update rows", 0 < result);
 		else
-			assertTrue("Moving a task to itself shouldn't change anything",
-					0 == result);
+			assertEquals("Moving a task to itself shouldn't change anything", 0, result);
 
 		// Find new values
 		final ArrayList<Task> newtasks = getTasks(tl._id);
@@ -283,8 +284,7 @@ public class DBProviderMovementTest extends TestCase {
 
 		// assertEquals("Target should have moved 2 steps", 2,);
 
-		assertTrue("Number of tasks should not change",
-				oldtasks.size() == newtasks.size());
+		assertEquals("Number of tasks should not change", oldtasks.size(), newtasks.size());
 		assertTaskLeftRightAreSequential(tl._id);
 
 		return getTasks(tl._id);
@@ -345,7 +345,7 @@ public class DBProviderMovementTest extends TestCase {
 			thrown = true;
 		}
 
-		assertTrue(uri == null);
+		assertNull(uri);
 		assertTasksCountIs(wrongId, 0);
 	}
 
@@ -665,5 +665,7 @@ public class DBProviderMovementTest extends TestCase {
 				c.moveToFirst());
 
 		deleteList(tl);
+
+		c.close();
 	}
 }

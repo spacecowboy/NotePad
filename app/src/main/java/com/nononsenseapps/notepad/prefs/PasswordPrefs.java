@@ -16,7 +16,7 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +27,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -37,14 +38,14 @@ public class PasswordPrefs extends Fragment {
 
 	public static final String KEY_PASSWORD = "secretPassword";
 
-	private Activity activity;
+	private Context activity;
 	private EditText password1;
 	private EditText password2;
 
 	// TODO copy from DialogPasswordSettings.java and delete that file
 
 	@Override
-	public void onAttach(Activity activity) {
+	public void onAttach(@NonNull Context activity) {
 		super.onAttach(activity);
 		this.activity = activity;
 	}

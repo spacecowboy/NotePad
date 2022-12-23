@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.view.View;
 
@@ -381,14 +380,11 @@ public class Notification extends DAO {
 	 */
 	public static void removeWithTaskIds(final Context context, final Long... ids) {
 		if (ids.length > 0) {
-			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
-				@Override
-				protected Void doInBackground(final Long... ids) {
-					removeWithTaskIdsSynced(context, ids);
-					return null;
-				}
-			};
-			task.execute(ids);
+			// replacement for AsyncTask<,,>
+			Executors.newSingleThreadExecutor().execute(() -> {
+				// Background work here
+				removeWithTaskIdsSynced(context, ids);
+			});
 		}
 	}
 
@@ -495,42 +491,32 @@ public class Notification extends DAO {
 	 */
 	public static void setTimeForListAndBefore(final Context context, final long listId,
 											   final long maxTime, final long newTime) {
-		final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
-			@Override
-			protected Void doInBackground(final Long... ids) {
-				// First get the list of tasks in that list
-				final Cursor c = context.getContentResolver()
-						.query(Task.URI,
-								Task.Columns.FIELDS,
-								Task.Columns.DBLIST
-										+ " IS ? AND "
-										+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
-										+ " IS NULL",
-								new String[] { Long.toString(listId) },
-								null);
+		// replacement for AsyncTask<,,>
+		Executors.newSingleThreadExecutor().execute(() -> {
+			// Background work here
+			// First get the list of tasks in that list
+			final Cursor c = context.getContentResolver()
+					.query(Task.URI, Task.Columns.FIELDS, Task.Columns.DBLIST
+									+ " IS ? AND "
+									+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
+									+ " IS NULL", new String[] { Long.toString(listId) },
+							null);
 
-				String idStrings = "(";
-				while (c.moveToNext()) {
-					idStrings += c.getLong(0) + ",";
-				}
-				c.close();
-				idStrings = idStrings.substring(0, idStrings.length() - 1);
-				idStrings += ")";
-
-				final ContentValues values = new ContentValues();
-				values.put(Columns.TIME, newTime);
-
-				context.getContentResolver().update(
-						URI,
-						values,
-						Columns.TIME + " <= " + maxTime + " AND "
-								+ Columns.TASKID
-								+ " IN "
-								+ idStrings, null);
-				return null;
+			String idStrings = "(";
+			while (c.moveToNext()) {
+				idStrings += c.getLong(0) + ",";
 			}
-		};
-		task.execute(listId);
+			c.close();
+			idStrings = idStrings.substring(0, idStrings.length() - 1);
+			idStrings += ")";
+
+			final ContentValues values = new ContentValues();
+			values.put(Columns.TIME, newTime);
+
+			context.getContentResolver().update(URI, values,
+					Columns.TIME + " <= " + maxTime + " AND " + Columns.TASKID + " IN "
+							+ idStrings, null);
+		});
 	}
 
 	/**

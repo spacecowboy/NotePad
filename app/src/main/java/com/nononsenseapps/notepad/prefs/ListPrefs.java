@@ -39,7 +39,7 @@ public class ListPrefs extends PreferenceFragmentCompat {
 		addPreferencesFromResource(R.xml.app_pref_list);
 
 		// Fill listpreferences
-		setEntries((ListPreference) findPreference(getString(R.string.pref_defaultlist)));
+		setEntries(findPreference(getString(R.string.pref_defaultlist)));
 
 		// Bind summaries
 		PrefsActivity.bindSummaryToValue(findPreference(getString(R.string.pref_sorttype)));

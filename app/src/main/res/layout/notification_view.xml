@@ -20,7 +20,6 @@
  and 7 buttons for the week days -->
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -62,6 +61,7 @@
 		android:layout_toRightOf="@id/notificationTypeTime"
 		android:background="?android:attr/selectableItemBackground"
 		android:clickable="true"
+		android:focusable="true"
 		android:fontFamily="sans-serif-light"
 		android:gravity="center"
 		android:hint="@string/time"
@@ -80,6 +80,7 @@
 		android:layout_toRightOf="@id/notificationDate"
 		android:background="?android:attr/selectableItemBackground"
 		android:clickable="true"
+		android:focusable="true"
 		android:fontFamily="sans-serif-light"
 		android:gravity="center"
 		android:hint="@string/time"
