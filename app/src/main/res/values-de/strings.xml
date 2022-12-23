@@ -59,7 +59,6 @@
     <string name="settings_theme">Aktuelles Design</string>
     <string name="settings_theme_dialog">Design verwenden</string>
     <string name="settings_lang">Sprache</string>
-    <string name="settings_lang_dialog">Verschieben</string>
     <string name="settings_summary_theme_black">Schwarz</string>
     <string name="settings_summary_theme_dark">Dunkel</string>
     <string name="settings_summary_theme_light">Hell</string>
@@ -71,7 +70,6 @@
     <string name="settings_sync_enable_title">mit Google Tasks sync.</string>
     <string name="gtasks_sync_info">Nicht alle Informationen können mit Google Tasks synchronisiert werden. Lediglich Notizen, Fälligkeitsdaten (außer der Uhrzeit) und der Todo-Status werden synchronisiert</string>
     <string name="settings_cat_syncing">Synchronisation</string>
-    <string name="gtasks">Google Aufgaben</string>
     <string name="show_from_all_lists">Alle Listen</string>
     <string name="lists">Listen</string>
     <string name="deleted">Gelöscht</string>

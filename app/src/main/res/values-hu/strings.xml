@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Google Feladatok szinkronizálása</string>
     <string name="gtasks_sync_info">Nem minden információ szinkronizálható a Google Feladatokal. Csak a jegyzetek, a lejárati dátum (az időpont nem) és a teendő állapot.</string>
     <string name="settings_cat_syncing">Szinkronizálás</string>
-    <string name="gtasks">Google Feladatok</string>
     <string name="show_from_all_lists">Összes lista</string>
     <string name="lists">Listák</string>
     <string name="deleted">Törölve</string>
@@ -191,7 +190,6 @@
     <string name="dashclock_next7">Egy hét múlva</string>
     <string name="dashclock_anytime">Bármikor</string>
     <string name="dashclock_will_show_as_many_as_possible">Annyit jelenít meg amennyit csak lehet</string>
-    <string name="dashclock_will_only_show_the_task_due_first">A határidő szerint a következőt jeleníti meg</string>
     <string name="dashclock_show_only_the_next_task">Csak a soron következő feladat megjelenítése</string>
     <string name="dashclock_header_shown">A lista neve félkövéren jelenik meg. Ha minden lista látszik akkor a a lista neve helyett \"Feladatok\" jelenik meg.</string>
     <string name="dashclock_first_task_shown">Az első feladat címe lesz félkövér</string>

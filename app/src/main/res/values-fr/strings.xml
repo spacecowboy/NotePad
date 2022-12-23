@@ -66,7 +66,6 @@
     <string name="settings_sync_enable_title">Sync. Google Tâches</string>
     <string name="gtasks_sync_info">Les informations ne peuvent toutes être synchronisées avec Google Tâches. Seulement les notes, dates d\'échéance et les statuts sont synchronisés.</string>
     <string name="settings_cat_syncing">Synchronisation</string>
-    <string name="gtasks">Google Tâches</string>
     <string name="show_from_all_lists">Toutes les listes</string>
     <string name="lists">Listes</string>
     <string name="deleted">Supprimé</string>
@@ -175,7 +174,6 @@
 
     <string name="tasks">Tâches</string>
     <string name="all_tasks">Toutes les tâches</string>
-    <string name="dashclock_tasks">Tâches</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restreindre les tâches à une liste spécifique</string>
     <string name="dashclock_show_overdue_tasks">Afficher les tâches passées dues</string>
     <string name="dashclock_overdue_tasks_show">Les tâches seront affichées</string>
@@ -188,7 +186,6 @@
     <string name="dashclock_next7">7 prochains jours</string>
     <string name="dashclock_anytime">N\'importe quand</string>
     <string name="dashclock_will_show_as_many_as_possible">En affichera autant que possible</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Affichera seulement les tâches dues</string>
     <string name="dashclock_show_only_the_next_task">Afficher seulement la prochaine tâche</string>
     <string name="dashclock_header_shown">Le nom de la liste s\'affichera en gras</string>
     <string name="dashclock_first_task_shown">Le titre de la première tâches s\'affichera en premier</string>

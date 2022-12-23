@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Sincroniz. con Google Tasks</string>
     <string name="gtasks_sync_info">No toda la información se puede sincronizar con Google Tasks. Sólo notas, fecha de vencimiento (excepto la hora) y estado de la tarea están sincronizados.</string>
     <string name="settings_cat_syncing">Sincronización</string>
-    <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">Todas las listas</string>
     <string name="lists">Listas</string>
     <string name="deleted">Borrado</string>
@@ -126,7 +125,7 @@
     <string name="date_header_future">Más tarde</string>
     <string name="date_header_none">Sin fecha</string>
     <string name="date_header_completed">Completadas</string>
-    <string name="next_5_days">Próximos 5 dias</string>
+    <string name="next_5_days">Próximos 5 días</string>
     <string name="next_n_days">Próximos %d días</string>
     <string name="this_week">Esta semana</string>
     <string name="please_select_note">Por favor, seleccione o cree una nota nueva</string>
@@ -184,7 +183,7 @@
     <string name="dashclock_pref_header_general">General</string>
     <string name="dashclock_today">Hoy</string>
     <string name="dashclock_tomorrow">Mañana</string>
-    <string name="dashclock_next7">Próximos 7 dias</string>
+    <string name="dashclock_next7">Próximos 7 días</string>
     <string name="dashclock_anytime">Cualquier día</string>
     <string name="dashclock_will_show_as_many_as_possible">Se mostrará tanto como sea posible</string>
     <string name="dashclock_show_only_the_next_task">Mostrar solo la próxima tarea</string>

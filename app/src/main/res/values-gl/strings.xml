@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Sincronizar con Google Tasks</string>
     <string name="gtasks_sync_info">Non toda a información se pode sincronizar con Google Tasks. Só notas, datas de vencemento (sen a hora) e a indicación de se se completou ou non.</string>
     <string name="settings_cat_syncing">Sincronización</string>
-    <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">Todas as listaxes</string>
     <string name="lists">Listaxes</string>
     <string name="deleted">Eliminada</string>

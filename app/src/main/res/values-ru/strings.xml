@@ -54,14 +54,12 @@
     <string name="sort_list_manual">Вручную</string>
     <string name="search_description">Заметки как задачи</string>
     <string name="archive">Архив</string>
-    <string name="view_deletedtasks">Архив</string>
     <string name="restore">Восстановить</string>
     <string name="restore_to">Восстановить в</string>
     <string name="search_hint">Поиск</string>
     <string name="settings_theme">Текущая тема</string>
     <string name="settings_theme_dialog">Использовать тему</string>
     <string name="settings_lang">Язык</string>
-    <string name="settings_lang_dialog">Настройки языка диалога</string>
     <string name="settings_summary_theme_black">Черная</string>
     <string name="settings_summary_theme_dark">Тёмная</string>
     <string name="settings_summary_theme_light">Светлая</string>
@@ -171,7 +169,6 @@
     <string name="notifications">Уведомления</string>
     <string name="tasks">Заметки</string>
     <string name="all_tasks">Все заметки</string>
-    <string name="dashclock_tasks">Задачи</string>
     <string name="dashclock_show_overdue_tasks">Показать просроченные задачи</string>
     <string name="dashclock_overdue_tasks_show">Просроченные задачи будут отображаться</string>
     <string name="dashclock_overdue_tasks_hide">Просроченные задачи не будут показаны</string>

@@ -158,11 +158,11 @@
     <string name="loading_widget">Widget yükleniyor</string>
     <string name="default_list">Varsayılan liste</string>
     <string name="please_type_before_reminder">Lütfen bir hatırlatıcı ayarlamadan önce bir kaç metin yazın</string>
-    <string name="notecopied_one">Bir not kopyalandı</string>
+    <string name="notecopied_one">%d not kopyalandı</string>
     <string name="notecopied_other">%d tane not kopyalandı</string>
-    <string name="notedeleted_one">Bir not silindi</string>
+    <string name="notedeleted_one">%d not silindi</string>
     <string name="notedeleted_other">%d tane not silindi</string>
-    <string name="selected_one">Bir not seçildi</string>
+    <string name="selected_one">%d not seçildi</string>
     <string name="selected_other">%d tane not seçildi</string>
     <string name="background_sync">Arkaplan senkronizasyonu</string>
     <string name="background_sync_info">Saatte bir defa senkronize et</string>

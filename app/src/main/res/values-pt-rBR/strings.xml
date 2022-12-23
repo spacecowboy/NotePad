@@ -157,7 +157,6 @@
     <string name="notification_prio_low">Baixa: Escondida, minimizada</string>
     <string name="priority">Prioridade</string>
     <string name="notifications">Notificações</string>
-    <string name="dashclock_tasks">Tarefas</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restringir tarefas a uma lista específica</string>
     <string name="dashclock_show_overdue_tasks">Mostrar tarefas atrasadas</string>
     <string name="dashclock_overdue_tasks_show">Tarefas atrasadas serão exibidas</string>
@@ -169,7 +168,6 @@
     <string name="dashclock_next7">Próximos 7 dias</string>
     <string name="dashclock_anytime">A qualquer hora</string>
     <string name="dashclock_will_show_as_many_as_possible">Irá mostrar o máximo possível</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Irá mostrar somente a tarefa que vencer primeiro</string>
     <string name="dashclock_show_only_the_next_task">Mostrar somente a próxima tarefa</string>
     <string name="dashclock_header_shown">O nome da lista será exibido em negrito. Se \"Todas as listas\" for selecionado, irá mostrar \"Tarefas\"</string>
     <string name="dashclock_first_task_shown">O título da primeira tarefa será exibido em negrito</string>

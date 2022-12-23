@@ -69,7 +69,6 @@
     <string name="settings_sync_enable_title">Sincronizza con Google Tasks</string>
     <string name="gtasks_sync_info">Con Google Tasks si possono sincronizzare tutte le informazioni. Verranno sincronizzate solo le note, la data di scadenza (non l\'ora) e lo stato (da fare o fatta).</string>
     <string name="settings_cat_syncing">Sincronizzazione</string>
-    <string name="gtasks">Google Task</string>
     <string name="show_from_all_lists">Tutti gli elenchi</string>
     <string name="deleted">Eliminata</string>
     <string name="repeat">Ripeti</string>
@@ -187,7 +186,6 @@
     <string name="dashclock_next7">Prossimi 7 giorni</string>
     <string name="dashclock_anytime">Sempre</string>
     <string name="dashclock_will_show_as_many_as_possible">Mostrerà più attività possibili</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Mostrerà solo l\'attività in scadenza immediata</string>
     <string name="dashclock_show_only_the_next_task">Mostra solo la prossima attività</string>
     <string name="dashclock_header_shown">Il nome dell\'elenco sarà mostrato in grassetto</string>
     <string name="dashclock_first_task_shown">Il titolo della prima attività sarà mostrato in grassetto</string>

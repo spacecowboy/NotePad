@@ -134,7 +134,6 @@
     <string name="dashclock_next7">الأيام ٧ القادمة</string>
     <string name="dashclock_anytime">اي وقت</string>
     <string name="dashclock_will_show_as_many_as_possible">سيتم الإظهار بقدر المستطاع</string>
-    <string name="dashclock_will_only_show_the_task_due_first">سيتم عرض المهام حسب الأولوية</string>
     <string name="dashclock_show_only_the_next_task">عرض المهمة التالية فقط</string>
     <string name="dashclock_first_task_shown">سيتم عرض عنوان المهمة الأولى بخط سميك</string>
 </resources>

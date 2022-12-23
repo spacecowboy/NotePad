@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Google Taken synchronisatie</string>
     <string name="gtasks_sync_info">Niet alle informatie kan met Google Taken gesynchroniseerd worden. Enkel notities, vervaldatum (geen tijd) en todo-status worden gesynchroniseerd.</string>
     <string name="settings_cat_syncing">Synchronisatie</string>
-    <string name="gtasks">Google Taken</string>
     <string name="show_from_all_lists">Alle lijsten</string>
     <string name="lists">Lijsten</string>
     <string name="deleted">Verwijderd</string>
@@ -179,7 +178,6 @@
     <string name="notifications">Meldingen</string>
     <string name="tasks">Taken</string>
     <string name="all_tasks">Alle taken</string>
-    <string name="dashclock_tasks">Taken</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Beperk tot taken uit een specifieke lijst</string>
     <string name="dashclock_show_overdue_tasks">Toon verlopen taken</string>
     <string name="dashclock_overdue_tasks_show">Verlopen taken worden getoond</string>
@@ -192,7 +190,6 @@
     <string name="dashclock_next7">Volgende 7 dagen</string>
     <string name="dashclock_anytime">Willekeurig</string>
     <string name="dashclock_will_show_as_many_as_possible">Toont er zoveel mogelijk</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Toont alleen taken die het eerst verlopen</string>
     <string name="dashclock_show_only_the_next_task">Toon alleen de volgende taak</string>
     <string name="dashclock_header_shown">Lijstnamen worden vet getoond.  Als \"Alle Lijsten\" is geselecteerd,  \"Taken\" wordt getoond</string>
     <string name="dashclock_first_task_shown">Titel van de eerste taak wordt vet getoond</string>

@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Google Tasks synk</string>
     <string name="gtasks_sync_info">All information kan inte synkroniseras med Google Tasks. Endast anteckningar, förfallodatum (inte tid) och utfördstatus synkroniseras.</string>
     <string name="settings_cat_syncing">Synkronisering</string>
-    <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">Alla listor</string>
     <string name="lists">Listor</string>
     <string name="deleted">Tog bort</string>

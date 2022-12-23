@@ -71,7 +71,6 @@
     <string name="settings_sync_enable_title">Синхронизиране с Google Задачи</string>
     <string name="gtasks_sync_info">Не цялата информация може да бъде синхронизирана с Google Задачи. Само бележки, дати (без час) и статус се синхронизират.</string>
     <string name="settings_cat_syncing">Синхронизация</string>
-    <string name="gtasks">Google Задачи</string>
     <string name="show_from_all_lists">Всички списъци</string>
     <string name="lists">Списъци</string>
     <string name="deleted">Изтрита</string>
@@ -179,7 +178,6 @@
     <string name="notifications">Известия</string>
     <string name="tasks">Задачи</string>
     <string name="all_tasks">Всички задачи</string>
-    <string name="dashclock_tasks">Задачи</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Ограничаване до задачите в определен списък</string>
     <string name="dashclock_show_overdue_tasks">Показване на просрочените задачи</string>
     <string name="dashclock_overdue_tasks_show">Просрочените задачи ще бъдат показвани</string>
@@ -192,7 +190,6 @@
     <string name="dashclock_next7">Следващите 7 дни</string>
     <string name="dashclock_anytime">По всяко време</string>
     <string name="dashclock_will_show_as_many_as_possible">Ще покаже възможно най-много</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Ще покаже само първата задача</string>
     <string name="dashclock_show_only_the_next_task">Покажи само следващата задача</string>
     <string name="dashclock_header_shown">Името на списъка ще бъде показвано с удебелен шрифт. Ако е избрано „Всички списъци“, ще се показва „Задачи“.</string>
     <string name="dashclock_first_task_shown">Името на първата задача ще бъде показвано с удебелен шрифт.</string>

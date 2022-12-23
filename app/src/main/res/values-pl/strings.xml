@@ -189,7 +189,6 @@
     <string name="dashclock_next7">W następnych 7 dniach</string>
     <string name="dashclock_anytime">Kiedykolwiek</string>
     <string name="dashclock_will_show_as_many_as_possible">Wyświetlanych będzie tak wiele jak to możliwe</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Wyświetlane będzie tylko pierwsze zadanie</string>
     <string name="dashclock_show_only_the_next_task">Wyświetlaj tylko nastepne zadanie</string>
     <string name="dashclock_header_shown">Nazwa listy będzie pogrubiona</string>
     <string name="dashclock_first_task_shown">Tytuł pierwszego zadania będzie pogrubiony</string>

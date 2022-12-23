@@ -54,14 +54,12 @@
     <string name="sort_list_manual">Sorteer handmatig</string>
     <string name="search_description">Notas en take</string>
     <string name="archive">Argief</string>
-    <string name="view_deletedtasks">Bekyk gewiste take</string>
     <string name="restore">Herstel</string>
     <string name="restore_to">Herstel na</string>
     <string name="search_hint">Soek</string>
     <string name="settings_theme">Huidige styl</string>
     <string name="settings_theme_dialog">Gebruik styl</string>
     <string name="settings_lang">Taal</string>
-    <string name="settings_lang_dialog">Taalinstellings</string>
     <string name="settings_summary_theme_black">Swart</string>
     <string name="settings_summary_theme_dark">Donker</string>
     <string name="settings_summary_theme_light">Lig</string>
@@ -73,7 +71,6 @@
     <string name="settings_sync_enable_title">Sinkroniseer met Google Take</string>
     <string name="gtasks_sync_info">Slegs notas, take, sperdatums en moet-doen status word gesinkroniseer (nie tydstip nie).</string>
     <string name="settings_cat_syncing">Sinkronisasie</string>
-    <string name="gtasks">Google Take</string>
     <string name="show_from_all_lists">Alle lyste</string>
     <string name="lists">Lyste</string>
     <string name="deleted">Uitgevee</string>

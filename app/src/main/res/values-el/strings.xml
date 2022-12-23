@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Συγχρονισμός με Google Tasks</string>
     <string name="gtasks_sync_info">Δεν μπορούν να συγχρονιστούν όλες οι πληροφορίες με το Google Tasks. Μόνο οι σημειώσεις, η ημερομηνία λήξης (όχι η ώρα) και η κατάσταση todo συγχρονίζονται.</string>
     <string name="settings_cat_syncing">Συγχρονισμός </string>
-    <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">Όλες οι λίστες</string>
     <string name="lists">Λίστες</string>
     <string name="deleted">Διαγράφηκε</string>

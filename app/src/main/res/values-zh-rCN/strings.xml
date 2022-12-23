@@ -69,7 +69,6 @@
     <string name="settings_sync_enable_title">Google 工作表同步</string>
     <string name="gtasks_sync_info">并非所有信息都可以与 Google 任务同步。仅笔记、到期日（不是时间）与待办状态可以同步。</string>
     <string name="settings_cat_syncing">同步</string>
-    <string name="gtasks">Google 工作表</string>
     <string name="show_from_all_lists">所有列表</string>
     <string name="lists">列表</string>
     <string name="deleted">已删除</string>
@@ -178,7 +177,6 @@
     <string name="notifications">通知</string>
     <string name="tasks">任务</string>
     <string name="all_tasks">所有任务</string>
-    <string name="dashclock_tasks">任务</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">仅限特定列表中的任务</string>
     <string name="dashclock_show_overdue_tasks">显示过期任务</string>
     <string name="dashclock_overdue_tasks_show">显示过期任务</string>
@@ -191,7 +189,6 @@
     <string name="dashclock_next7">一周内</string>
     <string name="dashclock_anytime">所有时间</string>
     <string name="dashclock_will_show_as_many_as_possible">显示尽可能多的内容</string>
-    <string name="dashclock_will_only_show_the_task_due_first">仅会显示即将过期的任务</string>
     <string name="dashclock_show_only_the_next_task">仅显示下一任务</string>
     <string name="dashclock_header_shown">加粗列表名</string>
     <string name="dashclock_first_task_shown">加粗第一个任务的标题</string>

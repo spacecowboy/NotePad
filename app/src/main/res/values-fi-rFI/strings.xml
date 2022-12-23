@@ -178,7 +178,6 @@
     <string name="notifications">Ilmoitukset</string>
     <string name="tasks">Tehtävät</string>
     <string name="all_tasks">Kaikki tehtävät</string>
-    <string name="dashclock_tasks">Tehtävät</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Rajaa tietyssä listassa oleviin tehtäviin</string>
     <string name="dashclock_show_overdue_tasks">Näytä erääntyneet tehtävät</string>
     <string name="dashclock_overdue_tasks_show">Erääntyneet tehtävät näytetään</string>

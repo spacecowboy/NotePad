@@ -69,7 +69,6 @@
     <string name="settings_sync_enable_title">Google 工作表同步</string>
     <string name="gtasks_sync_info">並非所有資料都可同步至 Google 工作表。只有便箋、過期日（不是時間）以及待辦狀態可以同步。</string>
     <string name="settings_cat_syncing">同步</string>
-    <string name="gtasks">Google 工作表</string>
     <string name="show_from_all_lists">所有清單</string>
     <string name="deleted">已刪除</string>
     <string name="repeat">重複</string>
@@ -155,7 +154,6 @@
     <string name="notification_prio_low">低級別：隱藏並最小化顯示</string>
     <string name="priority">優先級</string>
     <string name="notifications">通知</string>
-    <string name="dashclock_tasks">任務</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">僅限特定清單中的任務</string>
     <string name="dashclock_show_overdue_tasks">顯示已到期任務</string>
     <string name="dashclock_overdue_tasks_show">已到期任務將會顯示</string>
@@ -168,7 +166,6 @@
     <string name="dashclock_next7">一周內</string>
     <string name="dashclock_anytime">所有時間</string>
     <string name="dashclock_will_show_as_many_as_possible">將會顯示更多內容</string>
-    <string name="dashclock_will_only_show_the_task_due_first">只顯示最早到期的任務</string>
     <string name="dashclock_show_only_the_next_task">只顯示下一任務</string>
     <string name="dashclock_header_shown">清單名稱將以粗體顯示。如果“所有清單”被選中，將會顯示為“任務”。</string>
     <string name="dashclock_first_task_shown">第一個任務的標題將加粗顯示</string>

@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Google Opravila sinhronizacijo</string>
     <string name="gtasks_sync_info">Niso vsi podatki lahko sinhronizirali z Google Opravila. Samo opombe, datum zapadlosti (ni časa) in todo-status je sinhronizirana.</string>
     <string name="settings_cat_syncing">Sinhronizacija</string>
-    <string name="gtasks">Google Opravila</string>
     <string name="show_from_all_lists">Vsi seznami</string>
     <string name="lists">Seznami</string>
     <string name="deleted">Črta</string>

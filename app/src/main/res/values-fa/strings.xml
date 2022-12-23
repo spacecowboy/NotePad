@@ -72,7 +72,6 @@
     <string name="settings_sync_enable_title">هماهنگ کردن با گوگل تسک</string>
     <string name="gtasks_sync_info">نمی تونیم همه اطلاعات رو با گوگل تسک هماهنگ کنیم. فقط یادداشت ها، زمان انجام کار(وقتشون نه!) و حالات انجام کار هماهنگ می شه.</string>
     <string name="settings_cat_syncing">هماهنگ کردن</string>
-    <string name="gtasks">گوگل تسک</string>
     <string name="show_from_all_lists">همه لیست ها</string>
     <string name="deleted">پاک شده ها</string>
     <string name="repeat">تکرار کن</string>
