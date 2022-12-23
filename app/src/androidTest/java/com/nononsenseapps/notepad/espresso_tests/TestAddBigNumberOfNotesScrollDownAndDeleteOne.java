@@ -5,10 +5,8 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
@@ -22,10 +20,8 @@ import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.filters.LargeTest;
 
 import com.mobeta.android.dslv.DragSortListView;
-import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;

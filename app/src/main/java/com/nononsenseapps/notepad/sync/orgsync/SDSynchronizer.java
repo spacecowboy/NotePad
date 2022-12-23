@@ -23,7 +23,6 @@ import android.content.Context;
 import android.os.FileObserver;
 
 import com.nononsenseapps.helpers.FileHelper;
-import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.PreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;

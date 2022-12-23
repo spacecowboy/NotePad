@@ -53,7 +53,7 @@ public final class ProviderHelperKt {
 	 *                     *
 	 * @return the list uri: content://my.provider.authority/list/foo/bar
 	 */
-	public static final Uri getListUri(@NotNull Uri base, @NotNull String relativePath) {
+	public static Uri getListUri(@NotNull Uri base, @NotNull String relativePath) {
 		return Uri.withAppendedPath(Uri.withAppendedPath(base, "list"),
 				relativePath);
 	}
@@ -68,7 +68,7 @@ public final class ProviderHelperKt {
 	 * @return the details uri: content://my.provider.authority/details/foo/bar
 	 */
 	@NotNull
-	public static final Uri getDetailsUri(@NotNull Uri base, @NotNull String relativePath) {
+	public static Uri getDetailsUri(@NotNull Uri base, @NotNull String relativePath) {
 		return Uri.withAppendedPath(Uri.withAppendedPath(base, "details"),
 				relativePath);
 	}
@@ -80,7 +80,7 @@ public final class ProviderHelperKt {
 	 *            *
 	 * @return uri with only scheme and authority: content://my.provider.authority
 	 */
-	public static final Uri getBase(@NotNull Uri uri) {
+	public static Uri getBase(@NotNull Uri uri) {
 		return Uri.parse(uri.getScheme() + "://" + uri.getAuthority());
 	}
 
@@ -92,12 +92,12 @@ public final class ProviderHelperKt {
 	 * @return relative path without action part like /foo/bar
 	 */
 	@NotNull
-	public static final String getRelativePath(@NotNull Uri uri) {
+	public static String getRelativePath(@NotNull Uri uri) {
 		return getRelativePath(uri.getPath());
 	}
 
 	@NotNull
-	public static final String getRelativePath(@NotNull String path) {
+	public static String getRelativePath(@NotNull String path) {
 		var i = path.indexOf("/");
 		if (i == 0) {
 			return getRelativePath(path.substring(1));
@@ -117,10 +117,10 @@ public final class ProviderHelperKt {
 	 * @return array like [foo, bar, baz]
 	 */
 	@NotNull
-	public static final String[] split(@NotNull String fullPath) {
+	public static String[] split(@NotNull String fullPath) {
 
 		while (true) {
-			CharSequence var2 = (CharSequence) fullPath;
+			CharSequence var2 = fullPath;
 			Regex var3 = new Regex("/+");
 			String var4 = "/";
 			String path = var3.replace(var2, var4);
@@ -132,19 +132,20 @@ public final class ProviderHelperKt {
 					List var12;
 					label35:
 					{
-						var2 = (CharSequence) path;
+						var2 = path;
 						var3 = new Regex("/");
 						byte var10 = 0;
 						List $this$dropLastWhile$iv = var3.split(var2, var10);
 						$i$f$toTypedArray = false;
 						if (!$this$dropLastWhile$iv.isEmpty()) {
-							ListIterator iterator$iv = $this$dropLastWhile$iv.listIterator($this$dropLastWhile$iv.size());
+							ListIterator iterator$iv = $this$dropLastWhile$iv
+									.listIterator($this$dropLastWhile$iv.size());
 
 							while (iterator$iv.hasPrevious()) {
 								String it = (String) iterator$iv.previous();
 								boolean var6 = false;
 								if (((CharSequence) it).length() != 0) {
-									var12 = CollectionsKt.take((Iterable) $this$dropLastWhile$iv, iterator$iv.nextIndex() + 1);
+									var12 = CollectionsKt.take($this$dropLastWhile$iv, iterator$iv.nextIndex() + 1);
 									break label35;
 								}
 							}
@@ -153,7 +154,7 @@ public final class ProviderHelperKt {
 						var12 = CollectionsKt.emptyList();
 					}
 
-					Collection $this$toTypedArray$iv = (Collection) var12;
+					Collection $this$toTypedArray$iv = var12;
 					$i$f$toTypedArray = false;
 					Object[] var13 = $this$toTypedArray$iv.toArray(new String[0]);
 					return (String[]) var13;
@@ -172,7 +173,7 @@ public final class ProviderHelperKt {
 	 * @return first part of path like foo
 	 */
 	@NotNull
-	public static final String firstPart(@NotNull String path) {
+	public static String firstPart(@NotNull String path) {
 		var i = path.indexOf("/");
 		if (i == 0) {
 			return firstPart(path.substring(1));
@@ -193,7 +194,7 @@ public final class ProviderHelperKt {
 	 * @return the bit after first like bar/baz (without starting slash)
 	 */
 	@NotNull
-	public static final String restPart(@NotNull String path) {
+	public static String restPart(@NotNull String path) {
 		var i = path.indexOf("/");
 		if (i == 0) {
 			return restPart(path.substring(1));
@@ -204,7 +205,7 @@ public final class ProviderHelperKt {
 		}
 	}
 
-	public static final int matchUri(@NotNull Uri uri) {
+	public static int matchUri(@NotNull Uri uri) {
 		return matchPath(uri.getPath());
 	}
 
@@ -216,7 +217,7 @@ public final class ProviderHelperKt {
 	 *             *
 	 * @return type of the path
 	 */
-	public static final int matchPath(@Nullable String path) {
+	public static int matchPath(@Nullable String path) {
 		while (true) {
 			if (path != null && ((CharSequence) path).length() != 0) {
 				String var10000;
@@ -259,7 +260,7 @@ public final class ProviderHelperKt {
 	 * @return /foo/bar
 	 */
 	@NotNull
-	public static final String join(@NotNull String path1, @NotNull String path2) {
+	public static String join(@NotNull String path1, @NotNull String path2) {
 		if (path1.endsWith("/")) {
 			if (path2.startsWith("/")) {
 				return path1 + path2.substring(1);

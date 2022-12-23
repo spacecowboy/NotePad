@@ -6,7 +6,6 @@ import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMe
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -17,13 +16,12 @@ import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
 
-import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
 public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 
-	String[] taskListNames = { "Lorem", "ipsum ", "dolor ", "sit ", "amet", "consectetur ",
+	final String[] taskListNames = { "Lorem", "ipsum ", "dolor ", "sit ", "amet", "consectetur ",
 			"adipiscing ", "elit", "sed ", "do ", "eiusmod ", "tempor ", "incididunt ",
 			"ut ", "labore " };
 

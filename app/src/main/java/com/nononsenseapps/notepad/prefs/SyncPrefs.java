@@ -104,7 +104,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
+	public void onAttach(@NonNull Activity activity) {
 		// you can fix it AFTER you remove all google task sync code
 		super.onAttach(activity);
 		this.activity = activity;
@@ -140,7 +140,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			return true;
 		});
 
-		prefSyncEnable = (SwitchPreference) findPreference(KEY_SYNC_ENABLE);
+		prefSyncEnable = findPreference(KEY_SYNC_ENABLE);
 		// Disable prefs if this is not correct build
 		String API_KEY = Config.getGtasksApiKey(getActivity());
 		prefSyncEnable.setEnabled(null != API_KEY && !API_KEY.contains(" "));
@@ -168,21 +168,17 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		// if we got all permissions
 		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
 
-		switch (reqCode) {
-			case PermissionsHelper.REQCODE_GOOGLETASKS:
-				if (granted) {
-					// Success => open the dialog
-					showAccountDialog();
-				} else {
-					// user refused: show warning and disable sync
-					Toast.makeText(this.getContext(), R.string.permission_denied,
-							Toast.LENGTH_SHORT).show();
-					PreferencesHelper
-							.put(getActivity(), SyncPrefs.KEY_SYNC_ENABLE, false);
-				}
-				break;
-			default:
-				break;
+		if (reqCode == PermissionsHelper.REQCODE_GOOGLETASKS) {
+			if (granted) {
+				// Success => open the dialog
+				showAccountDialog();
+			} else {
+				// user refused: show warning and disable sync
+				Toast.makeText(this.getContext(), R.string.permission_denied,
+						Toast.LENGTH_SHORT).show();
+				PreferencesHelper
+						.put(getActivity(), SyncPrefs.KEY_SYNC_ENABLE, false);
+			}
 		}
 
 		super.onRequestPermissionsResult(reqCode, permissions, grantResults);

@@ -49,7 +49,7 @@ public final class ProviderManager {
 	 */
 	@NotNull
 	public final List<Provider> getAvailableProviders() {
-		ArrayList<Provider> availableUris = new ArrayList<Provider>();
+		ArrayList<Provider> availableUris = new ArrayList<>();
 		PackageManager pm = this.applicationContext.getPackageManager();
 		var var10000 = pm
 				.queryIntentContentProviders(
@@ -140,10 +140,10 @@ public final class ProviderManager {
 			this.uriList = Uri.withAppendedPath(this.uriBase, "/list");
 			this.uriDetails = Uri.withAppendedPath(this.uriBase, "/details");
 			this.icon = providerInfo.getIconResource();
-			/*if (null != providerInfo.metaData) {
+			if (null != providerInfo.metaData) {
                 // Optional stuff like settingsActivity and capabilities
-                String settingsActivity = providerInfo.metaData.getString("settingsActivity");
-            }*/
+                // String settingsActivity = providerInfo.metaData.getString("settingsActivity");
+            }
 		}
 
 		@NotNull

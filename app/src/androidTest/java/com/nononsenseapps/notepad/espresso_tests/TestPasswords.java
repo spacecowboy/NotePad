@@ -5,7 +5,6 @@ import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMe
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.RootMatchers.isDialog;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -20,13 +19,13 @@ import org.junit.Test;
 public class TestPasswords extends BaseTestClass {
 
 	// when the note is locked, only this is shown
-	String noteTitle = "this is my note";
+	final String noteTitle = "this is my note";
 
 	// note tile + content, shown in the edittext
-	String fullNoteText1 = noteTitle + "\n.\ncontent line";
+	final String fullNoteText1 = noteTitle + "\n.\ncontent line";
 
 	// typed into the popup
-	String password = "itsnotasecrettoanybody";
+	final String password = "itsnotasecrettoanybody";
 
 	@Test
 	public void testAddNoteLockWithPassword() {

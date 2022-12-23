@@ -137,6 +137,7 @@ public final class TimeFormatter {
 		final Locale locale = getLocale(lang);
 		SimpleDateFormat sdf;
 		try {
+			//noinspection UnusedAssignment
 			sdf = new SimpleDateFormat(withSuitableTime(context, format), locale);
 		} catch (IllegalArgumentException iae) {
 			NnnLogger.error(TimeFormatter.class,

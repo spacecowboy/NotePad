@@ -122,7 +122,7 @@ public class TextFileProvider extends ContentProvider {
 				relativePath = ProviderHelperKt.getRelativePath(uri);
 				break;
 			default:
-				throw new IllegalArgumentException("Unknown path: " + uri.toString());
+				throw new IllegalArgumentException("Unknown path: " + uri);
 		}
 
 		final File filePath = new File(ProviderHelperKt.join(mRootPath, relativePath));

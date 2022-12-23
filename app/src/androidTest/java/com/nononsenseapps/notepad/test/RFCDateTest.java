@@ -69,7 +69,7 @@ public class RFCDateTest extends TestCase {
 			assertEquals("TimeInMilli did not match", long1 / 1000, long3 / 1000);
 			//assertEquals("RFC String did not match", string1, string2);
 		} catch (Exception e) {
-			assertFalse(e.getLocalizedMessage(), true);
+			fail(e.getLocalizedMessage());
 		}
 
 	}

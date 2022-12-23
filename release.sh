@@ -13,16 +13,10 @@ TARGET="${1:-HEAD}"
 current_default="$(git describe --tags --abbrev=0 "${TARGET}")"
 
 
-echo >&2 -n "Current version [just press 'enter' to confirm ${current_default}]: "
-read -r current_in
+echo >&2 -n "Current version is ${current_default}"
+# read -r current_in
 
-if [ -z "${current_in}" ]; then
-  CURRENT_VERSION="${current_default}"
-else
-  CURRENT_VERSION="${current_in}"
-fi
-
-next_default="$(cat app/build.gradle | grep "versionName" | sed "s|\s*versionName \"\(.*\)\"|\\1|")"
+next_default="$(grep "versionName" ./app/build.gradle | sed "s|\s*versionName \"\(.*\)\"|\\1|")"
 echo >&2 -n "Next version [press 'enter' for ${next_default}]: "
 read -r next_in
 
@@ -32,12 +26,12 @@ else
   NEXT_VERSION="${next_in}"
 fi
 
-CURRENT_CODE="$(cat app/build.gradle | grep "versionCode" | sed "s|\s*versionCode \([0-9]\+\)|\\1|")"
+CURRENT_CODE="$(grep "versionCode" ./app/build.gradle | sed "s|\s*versionCode \([0-9]\+\)|\\1|")"
 echo >&2 "Current code ${CURRENT_CODE}"
 
 # The old version was 57130, so we have to use the thousands for the minor code, like 70100.
 # The last 2 digits are useless, but it can't be helped
-let next_code_default=CURRENT_CODE+100
+next_code_default=$(( CURRENT_CODE + 100 ))
 
 echo >&2 -n "Next code [press 'enter' to confirm ${next_code_default}]: "
 read -r next_code_in
@@ -55,7 +49,7 @@ then
 fi
 
 # changelog template. To add all the new commit messages, move this line inside the ""
-# $(git shortlog -w76,2,9 --format='* [%h] %s' ${CURRENT_VERSION}..HEAD)
+# $(git shortlog -w76,2,9 --format='* [%h] %s' ${current_in}..HEAD)
 CL="NoNonsense Notes v${NEXT_VERSION}
 
 Highlights:
