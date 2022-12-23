@@ -98,7 +98,6 @@
     <string name="premiums_unlocked_and_thanks">Funkcje specjalne odblkowane. Dziękujemy za wsparcie!</string>
     <string name="move">Przenieś</string>
     <string name="move_to">Przenieś do</string>
-    <string name="moved_x_to_list">Przeniesiono do %2$s</string>
     <string name="lock_note">Zablokuj notatkę</string>
     <string name="unlock_note">Odblokuj notatkę</string>
     <string name="locked">Zablokowana</string>

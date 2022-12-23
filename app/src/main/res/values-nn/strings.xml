@@ -55,7 +55,7 @@
     <string name="settings_sync_enable_title">Google Huskeliste-synkronisering</string>
     <string name="gtasks_sync_info">Ikke all informasjon kan synkroniseres med Google Huskeliste. Kun notater, utløpsdato (ikke tid) og å gjøre-status blir synkronisert.</string>
     <string name="settings_cat_syncing">Synkronisering</string>
-    <string name="gtasks">Google Huskeliste</string>
+
     <string name="show_from_all_lists">Alle lister</string>
     <string name="lists">Lister</string>
     <string name="deleted">Slettet</string>

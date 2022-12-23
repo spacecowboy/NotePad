@@ -70,7 +70,7 @@
     <string name="settings_sync_enable_title">Sincronizare Sarcini Google</string>
     <string name="gtasks_sync_info">Nu toate informațiile poti fi sincronizate cu Google Tasks. Doar notițele, data scadenței (nu ora) și statutul-todo sunt sincronizate.</string>
     <string name="settings_cat_syncing">Sincronizare</string>
-    <string name="gtasks">Google Tasks</string>
+
     <string name="show_from_all_lists">Toate listele</string>
     <string name="lists">Liste</string>
     <string name="deleted">Ștearsă</string>

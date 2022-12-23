@@ -134,11 +134,8 @@
     <string name="loading_widget">正在加載小部件...</string>
     <string name="default_list">默認清單</string>
     <string name="please_type_before_reminder">請在設定提醒前輸入一些文字</string>
-    <string name="notecopied_one">已複製 1 個便箋</string>
     <string name="notecopied_other">已複製 %d 個便箋</string>
-    <string name="notedeleted_one">已刪除 1 個便箋</string>
     <string name="notedeleted_other">已刪除 %d 個便箋</string>
-    <string name="selected_one">已選擇 1 個便箋</string>
     <string name="selected_other">已選擇 %d 個便箋</string>
     <string name="background_sync">後台同步</string>
     <string name="background_sync_info">每小時同步一次</string>

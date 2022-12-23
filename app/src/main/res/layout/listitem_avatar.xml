@@ -23,6 +23,8 @@
 	android:layout_height="?android:listPreferredItemHeight"
 	android:background="?android:selectableItemBackground">
 
+	<!-- TODO useless. remove ? -->
+
 	<ImageView
 		android:id="@android:id/icon1"
 		android:layout_width="24dp"

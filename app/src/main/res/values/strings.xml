@@ -196,7 +196,7 @@
 	<string name="unlocked">Unlocked</string>
 	<string name="password_required">Password required</string>
 	<string name="select_account">Select an account</string>
-	<string name="password" translatable="false">Password</string>
+	<string name="password">Password</string>
 	<string name="password_set">Password set</string>
 	<string name="password_cleared">Password cleared</string>
 	<string name="passwords_dont_match">Passwords do not match</string>

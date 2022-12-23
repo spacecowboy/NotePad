@@ -70,7 +70,6 @@
     <string name="settings_sync_enable_title">Sinkronisasi Google Tasks</string>
     <string name="gtasks_sync_info">Tidak semua informasi dapat disinkronkan dengan Google Tasks. Hanya catatan, tanggal jatuh tempo (not time) dan todo-status yang disinkronkan.</string>
     <string name="settings_cat_syncing">Sinkronisasi</string>
-    <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">Semua daftar</string>
     <string name="lists">Daftar</string>
     <string name="deleted">Terhapus</string>

@@ -70,7 +70,7 @@
     <string name="settings_sync_enable_title">Google Görevler ile senk.</string>
     <string name="gtasks_sync_info">Google görevleri ile tüm görevler senkronize edilemez. Sadece notlar, son teslim tarihi (saate göre değil) ve yapmak için durum senkronize edilir.</string>
     <string name="settings_cat_syncing">Senkronizasyon</string>
-    <string name="gtasks">Google görevleri</string>
+
     <string name="show_from_all_lists">Tüm listeler</string>
     <string name="lists">Listeler</string>
     <string name="deleted">Silindi: </string>
