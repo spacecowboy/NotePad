@@ -106,7 +106,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty()
 						&& account != null
 						&& account.name.equals(
-								settings.getString(SyncPrefs.KEY_ACCOUNT, ""))) {
+						settings.getString(SyncPrefs.KEY_ACCOUNT, ""))) {
 
 					NnnLogger.debug(SyncAdapter.class, "onPerformSync");
 					mContext.sendBroadcast(new Intent(SYNC_STARTED));

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -50,99 +51,99 @@ import com.nononsenseapps.notepad.providercontract.ProviderContract;
  */
 public class MainListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, MainListAdapter.OnItemClickHandler {
 
-    // Fragment arguments
-    private static final String ARG_URI = "arg_uri";
+	// Fragment arguments
+	private static final String ARG_URI = "arg_uri";
 
-    private RecyclerView mRecyclerView;
-    private MainListAdapter mAdapter;
-    private Uri mUri;
+	private RecyclerView mRecyclerView;
+	private MainListAdapter mAdapter;
+	private Uri mUri;
 
-    public MainListFragment() {
-        // Required empty public constructor
-    }
+	public MainListFragment() {
+		// Required empty public constructor
+	}
 
-    /**
-     * @param uri to list items in
-     * @return a new instance of this fragment
-     */
-    public static MainListFragment newInstance(Uri uri) {
-        MainListFragment fragment = new MainListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_URI, uri.toString());
-        fragment.setArguments(args);
-        return fragment;
-    }
+	/**
+	 * @param uri to list items in
+	 * @return a new instance of this fragment
+	 */
+	public static MainListFragment newInstance(Uri uri) {
+		MainListFragment fragment = new MainListFragment();
+		Bundle args = new Bundle();
+		args.putString(ARG_URI, uri.toString());
+		fragment.setArguments(args);
+		return fragment;
+	}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        mUri = Uri.parse(getArguments().getString(ARG_URI));
+		mUri = Uri.parse(getArguments().getString(ARG_URI));
 
-        // Load data
-        getLoaderManager().restartLoader(0, Bundle.EMPTY, this);
-    }
+		// Load data
+		getLoaderManager().restartLoader(0, Bundle.EMPTY, this);
+	}
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        int id = -1 ; // R.layout.fragment_main_list // a recyclerview + FAB
-        View root = inflater.inflate(id, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		int id = -1; // R.layout.fragment_main_list // a recyclerview + FAB
+		View root = inflater.inflate(id, container, false);
 
-        mRecyclerView = (RecyclerView) root.findViewById(android.R.id.list);
-        // improve performance if you know that changes in content
-        // do not change the size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+		mRecyclerView = (RecyclerView) root.findViewById(android.R.id.list);
+		// improve performance if you know that changes in content
+		// do not change the size of the RecyclerView
+		mRecyclerView.setHasFixedSize(true);
+		mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new MainListAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
+		mAdapter = new MainListAdapter(this);
+		mRecyclerView.setAdapter(mAdapter);
 
-        View fab = null; // root.findViewById(R.id.fab_add);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO do something more interesting
-                ContentValues values = new ContentValues();
-                values.put(ProviderContract.COLUMN_TITLE, "A random title");
-                getContext().getContentResolver().insert(mUri, values);
-            }
-        });
+		View fab = null; // root.findViewById(R.id.fab_add);
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO do something more interesting
+				ContentValues values = new ContentValues();
+				values.put(ProviderContract.COLUMN_TITLE, "A random title");
+				getContext().getContentResolver().insert(mUri, values);
+			}
+		});
 
-        return root;
-    }
+		return root;
+	}
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(getContext(), mUri,
-                ProviderContract.sMainListProjection, null, null, null);
-    }
+	@Override
+	public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+		return new CursorLoader(getContext(), mUri,
+				ProviderContract.sMainListProjection, null, null, null);
+	}
 
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        mAdapter.setData(cursor);
-        mAdapter.notifyDataSetChanged();
-    }
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+		mAdapter.setData(cursor);
+		mAdapter.notifyDataSetChanged();
+	}
 
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mAdapter.setData(null);
-    }
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		mAdapter.setData(null);
+	}
 
-    @Override
-    public void onItemClick(ItemViewHolder viewHolder) {
-        if (viewHolder.isFolder()) {
-            Intent i = new Intent(getContext(), FolderListActivity.class);
-            i.putExtra(ProviderContract.COLUMN_TITLE, viewHolder.textView.getText().toString());
-            i.setData(ProviderHelperKt.getListUri(ProviderHelperKt.getBase(mUri),
-                    viewHolder.getPath()));
-            startActivity(i);
-        }
-    }
+	@Override
+	public void onItemClick(ItemViewHolder viewHolder) {
+		if (viewHolder.isFolder()) {
+			Intent i = new Intent(getContext(), FolderListActivity.class);
+			i.putExtra(ProviderContract.COLUMN_TITLE, viewHolder.textView.getText().toString());
+			i.setData(ProviderHelperKt.getListUri(ProviderHelperKt.getBase(mUri),
+					viewHolder.getPath()));
+			startActivity(i);
+		}
+	}
 
-    @Override
-    public boolean onItemLongClick(ItemViewHolder viewHolder) {
-        return false;
-    }
+	@Override
+	public boolean onItemLongClick(ItemViewHolder viewHolder) {
+		return false;
+	}
 }

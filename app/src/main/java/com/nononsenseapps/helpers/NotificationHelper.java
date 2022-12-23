@@ -220,7 +220,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 			// The user turned OFF notifications for this app => send a warning
 			NnnLogger.warning(NotificationHelper.class,
 					"areNotificationsVisible() claims the user denied notifications");
-			Toast.makeText(context, R.string.msg_enable_notifications,Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, R.string.msg_enable_notifications, Toast.LENGTH_SHORT).show();
 		}
 
 		// Fetch sound and vibrate settings. The following settings are ARE ONLY VALID

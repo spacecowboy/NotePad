@@ -38,38 +38,38 @@ import com.nononsenseapps.notepad.providercontract.ProviderContract;
  */
 public class FolderListActivity extends AppCompatActivity {
 
-    // TODO the whole "com.nononsenseapps.notepad.android.*" namespace is useless.
-    //  take a look at these classes, choose what to keep, delete the rest
+	// TODO the whole "com.nononsenseapps.notepad.android.*" namespace is useless.
+	//  take a look at these classes, choose what to keep, delete the rest
 
-    private Toolbar mToolbar;
-    private Fragment mFragment;
+	private Toolbar mToolbar;
+	private Fragment mFragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_folder);
+		setContentView(R.layout.activity_folder);
 
-        // Set support toolbar
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
+		// Set support toolbar
+		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		if (mToolbar != null) {
+			setSupportActionBar(mToolbar);
+		}
 
-        // Set up-navigation
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setDisplayHomeAsUpEnabled(true);
-            ab.setHomeButtonEnabled(true);
-            //ab.setDisplayShowTitleEnabled(false);
-        }
+		// Set up-navigation
+		ActionBar ab = getSupportActionBar();
+		if (ab != null) {
+			ab.setDisplayHomeAsUpEnabled(true);
+			ab.setHomeButtonEnabled(true);
+			//ab.setDisplayShowTitleEnabled(false);
+		}
 
-        // Setup tabs
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+		// Setup tabs
+		ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+		setupViewPager(viewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+		tabLayout.setupWithViewPager(viewPager);
 
         /*NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.leftDrawer);
@@ -81,32 +81,32 @@ public class FolderListActivity extends AppCompatActivity {
                     mToolbar);
         }*/
 
-        if (getIntent().hasExtra(ProviderContract.COLUMN_TITLE)) {
-            setTitle(getIntent().getStringExtra(ProviderContract.COLUMN_TITLE));
-        }
-    }
+		if (getIntent().hasExtra(ProviderContract.COLUMN_TITLE)) {
+			setTitle(getIntent().getStringExtra(ProviderContract.COLUMN_TITLE));
+		}
+	}
 
-    protected void setupViewPager(ViewPager viewPager) {
-        // Load fragments
-        // TODO savedInstanceState?
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
-        adapter.addFragment(FolderListFragment.newInstance(getIntent()),
-                "Sub items");
+	protected void setupViewPager(ViewPager viewPager) {
+		// Load fragments
+		// TODO savedInstanceState?
+		FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
+		adapter.addFragment(FolderListFragment.newInstance(getIntent()),
+				"Sub items");
 
-        // TODO Details fragment
-        adapter.addFragment(FolderListFragment.newInstance(getIntent()),
-                 "Details");
-        viewPager.setAdapter(adapter);
-    }
+		// TODO Details fragment
+		adapter.addFragment(FolderListFragment.newInstance(getIntent()),
+				"Details");
+		viewPager.setAdapter(adapter);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 }

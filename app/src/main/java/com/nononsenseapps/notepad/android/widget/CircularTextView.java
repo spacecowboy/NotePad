@@ -25,25 +25,25 @@ import android.widget.TextView;
  * A simple text view which clips to a circular outline.
  */
 public class CircularTextView extends androidx.appcompat.widget.AppCompatTextView {
-    public CircularTextView(Context context) {
-        this(context, null);
-    }
+	public CircularTextView(Context context) {
+		this(context, null);
+	}
 
-    public CircularTextView(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
+	public CircularTextView(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
+	}
 
-    public CircularTextView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        setClipToOutline(true);
-    }
+	public CircularTextView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+		setClipToOutline(true);
+	}
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (w > 0 && h > 0) {
-            setOutlineProvider(new RoundOutlineProvider(Math.min(w, h)));
-        }
-    }
+	@Override
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		if (w > 0 && h > 0) {
+			setOutlineProvider(new RoundOutlineProvider(Math.min(w, h)));
+		}
+	}
 
 }

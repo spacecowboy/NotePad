@@ -343,12 +343,16 @@
 			android:enabled="true"
 			android:exported="true">
 			<intent-filter>
-				<action android:name="com.nononsenseapps.notepad.PROVIDER" />
+				<action android:name="com.nononsenseapps.notepad.PROVIDER"/>
 			</intent-filter>
 			<!-- Required, only one possible value atm -->
-			<meta-data android:name="protocolVersion" android:value="1" />
+			<meta-data
+				android:name="protocolVersion"
+				android:value="1"/>
 			<!-- Optional, if absent assumed to be false -->
-			<meta-data android:name="requiresConfig" android:value="false" />
+			<meta-data
+				android:name="requiresConfig"
+				android:value="false"/>
 			<!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
 			<!--<meta-data android:name="settingsActivity"
 				android:value=".ExampleSettingsActivity" />-->
@@ -357,7 +361,9 @@
 			<!-- <meta-data android:name="fabBehaviorRoot" android:value="containersAndItems" /> -->
 			<!-- Optional, same values as root, but specifies behavior anywhere.
 				 Root-value takes precedence at root-level, otherwise this value is used. -->
-			<meta-data android:name="fabBehavior" android:value="containersAndItems" />
+			<meta-data
+				android:name="fabBehavior"
+				android:value="containersAndItems"/>
 		</provider>
 
 		<!-- TODO useless ? -->
@@ -370,21 +376,29 @@
 			android:enabled="true"
 			android:exported="true">
 			<intent-filter>
-				<action android:name="com.nononsenseapps.notepad.PROVIDER" />
+				<action android:name="com.nononsenseapps.notepad.PROVIDER"/>
 			</intent-filter>
 			<!-- Required, only one possible value atm -->
-			<meta-data android:name="protocolVersion" android:value="1" />
+			<meta-data
+				android:name="protocolVersion"
+				android:value="1"/>
 			<!-- Optional, if absent assumed to be false -->
-			<meta-data android:name="requiresConfig" android:value="false" />
+			<meta-data
+				android:name="requiresConfig"
+				android:value="false"/>
 			<!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
 			<!--<meta-data android:name="settingsActivity"
 				android:value=".ExampleSettingsActivity" />-->
 			<!-- Optional, specifies behavior of "+"-button in root view.
 				 Possible values: containers, items, containersAndItems,nestableItems-->
-			<meta-data android:name="fabBehaviorRoot" android:value="nestableItems" />
+			<meta-data
+				android:name="fabBehaviorRoot"
+				android:value="nestableItems"/>
 			<!-- Optional, same values as root, but specifies behavior anywhere.
 				 Root-value takes precedence at root-level, otherwise this value is used. -->
-			<meta-data android:name="fabBehavior" android:value="nestableItems" />
+			<meta-data
+				android:name="fabBehavior"
+				android:value="nestableItems"/>
 		</provider>
 
 	</application>

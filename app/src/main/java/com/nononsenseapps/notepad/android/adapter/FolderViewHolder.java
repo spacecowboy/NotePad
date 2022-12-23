@@ -25,13 +25,13 @@ import android.view.View;
  */
 public class FolderViewHolder extends ItemViewHolder {
 
-    public FolderViewHolder(View itemView, MainListAdapter.OnItemClickHandler onItemClickHandler) {
-        super(itemView, onItemClickHandler);
-        // TODO remove this, just for dev
-        textView.setTextColor(Color.RED);
-    }
+	public FolderViewHolder(View itemView, MainListAdapter.OnItemClickHandler onItemClickHandler) {
+		super(itemView, onItemClickHandler);
+		// TODO remove this, just for dev
+		textView.setTextColor(Color.RED);
+	}
 
-    public boolean isFolder() {
-        return true;
-    }
+	public boolean isFolder() {
+		return true;
+	}
 }

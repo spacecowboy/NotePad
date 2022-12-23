@@ -37,53 +37,53 @@ import java.util.List;
  */
 public class MainListActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    // TODO it's supposed to replace com.nononsenseapps.notepad.ActivityMain
+	// TODO it's supposed to replace com.nononsenseapps.notepad.ActivityMain
 
-    private Toolbar mToolbar;
-    private Fragment mFragment;
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+	private Toolbar mToolbar;
+	private Fragment mFragment;
+	private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_main);
 
-        // Set support toolbar
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (mToolbar != null) {
-            setSupportActionBar(mToolbar);
-        }
+		// Set support toolbar
+		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		if (mToolbar != null) {
+			setSupportActionBar(mToolbar);
+		}
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.leftDrawer);
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.leftDrawer,
-                (DrawerLayout) findViewById(R.id.drawerLayout),
-                mToolbar);
+		mNavigationDrawerFragment = (NavigationDrawerFragment)
+				getSupportFragmentManager().findFragmentById(R.id.leftDrawer);
+		// Set up the drawer.
+		mNavigationDrawerFragment.setUp(
+				R.id.leftDrawer,
+				(DrawerLayout) findViewById(R.id.drawerLayout),
+				mToolbar);
 
-        // Load main fragment
-        if (savedInstanceState == null) {
+		// Load main fragment
+		if (savedInstanceState == null) {
 
-            // TODO just load first provider we find, change this later
-            ProviderManager pm = new ProviderManager(this);
-            List<ProviderManager.Provider> providers = pm.getConfiguredProviders();
+			// TODO just load first provider we find, change this later
+			ProviderManager pm = new ProviderManager(this);
+			List<ProviderManager.Provider> providers = pm.getConfiguredProviders();
 
-            if (providers.size() > 0) {
-                mNavigationDrawerFragment.selectProvider(providers.get(0));
-            }
-        } else {
-            mFragment = getSupportFragmentManager().findFragmentByTag("single_pane");
-        }
-    }
+			if (providers.size() > 0) {
+				mNavigationDrawerFragment.selectProvider(providers.get(0));
+			}
+		} else {
+			mFragment = getSupportFragmentManager().findFragmentByTag("single_pane");
+		}
+	}
 
-    @Override
-    public void switchProvider(ProviderManager.Provider provider) {
-        // Called by navigation drawer
-        setTitle(provider.getLabel());
-        mFragment = MainListFragment.newInstance(provider.getUriList());
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment1, mFragment, "single_pane").commit();
-    }
+	@Override
+	public void switchProvider(ProviderManager.Provider provider) {
+		// Called by navigation drawer
+		setTitle(provider.getLabel());
+		mFragment = MainListFragment.newInstance(provider.getUriList());
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.fragment1, mFragment, "single_pane").commit();
+	}
 }

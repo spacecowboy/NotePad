@@ -28,7 +28,6 @@
 	<!-- Make icons white for dark themes (85% transparency) -->
 	<color name="white_alpha85">#D9FFFFFF</color>
 
-
 	<!-- Unchecked. some of these should be deleted -->
 
 	<!-- 12% black in LIGHT THEME -->

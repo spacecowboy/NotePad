@@ -628,9 +628,6 @@ public class DBProviderMovementTest extends TestCase {
 //	}
 
 
-
-
-
 	public void testTaskContent() {
 		Task t = new Task();
 		t.title = "Hej";

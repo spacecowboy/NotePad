@@ -27,46 +27,47 @@ import androidx.recyclerview.widget.RecyclerView;
  */
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-    public final TextView textView;
-    private String mPath = null;
+	public final TextView textView;
+	private String mPath = null;
 
-    public ItemViewHolder(final View itemView, final MainListAdapter.OnItemClickHandler onItemClickHandler) {
-        super(itemView);
-        textView = (TextView) itemView.findViewById(android.R.id.text1);
+	public ItemViewHolder(final View itemView, final MainListAdapter.OnItemClickHandler onItemClickHandler) {
+		super(itemView);
+		textView = (TextView) itemView.findViewById(android.R.id.text1);
 
-        if (onItemClickHandler != null) {
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onItemClickHandler.onItemClick(ItemViewHolder.this);
-                }
-            });
+		if (onItemClickHandler != null) {
+			itemView.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					onItemClickHandler.onItemClick(ItemViewHolder.this);
+				}
+			});
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    return onItemClickHandler.onItemLongClick(ItemViewHolder.this);
-                }
-            });
-        }
-    }
+			itemView.setOnLongClickListener(new View.OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					return onItemClickHandler.onItemLongClick(ItemViewHolder.this);
+				}
+			});
+		}
+	}
 
-    public boolean isFolder() {
-        return false;
-    }
-    /**
-     * Set the uri for this item. Should only be called in onBindViewHolder methods
-     * @param path for the item.
-     */
-    public void setPath(String path) {
-        mPath = path;
-    }
+	public boolean isFolder() {
+		return false;
+	}
 
-    /**
-     *
-     * @return path for item backing this viewholder.
-     */
-    public String getPath() {
-        return mPath;
-    }
+	/**
+	 * Set the uri for this item. Should only be called in onBindViewHolder methods
+	 *
+	 * @param path for the item.
+	 */
+	public void setPath(String path) {
+		mPath = path;
+	}
+
+	/**
+	 * @return path for item backing this viewholder.
+	 */
+	public String getPath() {
+		return mPath;
+	}
 }

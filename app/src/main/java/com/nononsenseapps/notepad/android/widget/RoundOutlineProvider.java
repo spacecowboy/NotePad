@@ -26,18 +26,18 @@ import android.view.ViewOutlineProvider;
  */
 public class RoundOutlineProvider extends ViewOutlineProvider {
 
-    private final int mSize;
+	private final int mSize;
 
-    public RoundOutlineProvider(int size) {
-        if (0 > size) {
-            throw new IllegalArgumentException("size needs to be > 0. Not " + size);
-        }
-        mSize = size;
-    }
+	public RoundOutlineProvider(int size) {
+		if (0 > size) {
+			throw new IllegalArgumentException("size needs to be > 0. Not " + size);
+		}
+		mSize = size;
+	}
 
-    @Override
-    public final void getOutline(View view, Outline outline) {
-        outline.setOval(0, 0, mSize, mSize);
-    }
+	@Override
+	public final void getOutline(View view, Outline outline) {
+		outline.setOval(0, 0, mSize, mSize);
+	}
 
 }

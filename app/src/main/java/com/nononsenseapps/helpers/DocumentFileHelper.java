@@ -69,12 +69,11 @@ public final class DocumentFileHelper {
 	 * Write "content" in "destination" using the {@link DocumentFile} API
 	 *
 	 * @param destination a file, not a folder
-	 *
 	 * @return TRUE if it succeeded, FALSE otherwise
 	 */
 	public static boolean write(String content, DocumentFile destination, Context context) {
 		if (content == null || destination == null || context == null) return false;
-		if (!DocumentsContractCompat.isDocumentUri(context,destination.getUri())) return false;
+		if (!DocumentsContractCompat.isDocumentUri(context, destination.getUri())) return false;
 		return doWithFileDescriptorFor(destination, context, fd -> {
 			try {
 				var fileOutputStream = new FileOutputStream(fd);
