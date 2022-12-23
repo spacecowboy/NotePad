@@ -1,0 +1,13 @@
+v7.0.0: NoNonsense Notes
+
+重点：
+- 兼容 Android 12
+- 去除 Google Tasks 同步
+- 可以将 ORG 和 JSON 文件保存在几个选定的地方。你可以选择保存在哪个地方。
+
+详情：
+- 提高 target SDK 到 version 32
+- 升级 AndroidX 库
+- 修复所有 tests
+- 升级依赖项和 Gradle
+- 常规代码清理
