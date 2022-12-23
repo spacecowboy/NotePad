@@ -44,8 +44,7 @@ public abstract class DialogConfirmBaseV11 extends DialogFragment {
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		int style = ThemeHelper.getPickerDialogTheme(getActivity());
-		return new AlertDialog.Builder(getActivity(), style)
+		return new AlertDialog.Builder(getActivity())
 				.setTitle(getTitle())
 				.setMessage(getMessage())
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> onOKClick())

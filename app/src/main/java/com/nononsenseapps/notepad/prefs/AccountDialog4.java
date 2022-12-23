@@ -64,8 +64,7 @@ class AccountDialog4 extends DialogFragment implements
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle args) {
-		int style = ThemeHelper.getPickerDialogTheme(activity);
-		var builder = new AlertDialog.Builder(activity, style)
+		var builder = new AlertDialog.Builder(activity)
 				.setTitle(R.string.select_account);
 		final Account[] accounts = AccountManager
 				.get(activity)

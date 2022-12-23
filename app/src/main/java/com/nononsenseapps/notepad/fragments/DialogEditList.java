@@ -91,6 +91,9 @@ public class DialogEditList extends DialogFragment {
 		return dialog;
 	}
 
+	/**
+	 * To edit an exising list
+	 */
 	public static DialogEditList_ getInstance(final long listid) {
 		DialogEditList_ dialog = new DialogEditList_();
 		Bundle args = new Bundle();
@@ -164,8 +167,8 @@ public class DialogEditList extends DialogFragment {
 
 		// Check if this is the default list
 		final long defList = Long.parseLong(PreferenceManager
-						.getDefaultSharedPreferences(getActivity())
-						.getString(getString(R.string.pref_defaultlist), "-1"));
+				.getDefaultSharedPreferences(getActivity())
+				.getString(getString(R.string.pref_defaultlist), "-1"));
 		if (mTaskList._id > 0 && defList == mTaskList._id) {
 			defaultListBox.setChecked(true);
 		}

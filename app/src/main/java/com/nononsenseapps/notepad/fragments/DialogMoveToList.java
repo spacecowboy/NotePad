@@ -44,7 +44,11 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-@EFragment(resName = "fragment_dialog_movetolist")
+/**
+ * When you long-click a note, you can press a button on the actionbar to move it
+ * to anoter list. Then, this popup shows up to let the user choose the destination
+ */
+@EFragment(R.layout.fragment_dialog_movetolist)
 public class DialogMoveToList extends DialogFragment {
 
 	static final String TASK_IDS = "task_ids";
