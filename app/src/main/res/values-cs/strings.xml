@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Poznámky</string>
+  --><resources>
+    <string name="app_name_short">Poznámky</string>
     <string name="title_create">Nová poznámka</string>
     <string name="timemachine">Stroj času</string>
     <string name="time">Čas</string>
@@ -151,7 +150,7 @@
     <string name="transparency">Průhlednost</string>
     <string name="notes_shortcut">Zkratka poznámek</string>
     <string name="shortcut_help1">Pokud zaškrtnuto, zkratka vytvoří novou poznámku ve vybraném seznamu a otevře editor. Pokud nezaškrtnuto, zkratka otevře vybraný seznam.</string>
-    <string name="loading_widget">Nahrávání widgetu&#8230;</string>
+    <string name="loading_widget">Nahrávání widgetu…</string>
     <string name="default_list">Výchozí seznam</string>
     <string name="please_type_before_reminder">Prosím napište nějaký text před nastavením připomínky</string>
     <string name="notecopied_one">%d poznámka zkopírována</string>
@@ -178,7 +177,6 @@
     <string name="notification_prio_low">Nízká: Skryté, minimalizovat</string>
     <string name="priority">Priorita</string>
     <string name="notifications">Upozornění</string>
-
     <string name="tasks">Úkoly</string>
     <string name="all_tasks">Všechny úkoly</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Omezit na úkoly v</string>
@@ -225,6 +223,5 @@
     <string name="sd_card_sync">Synchronizace SD karty</string>
     <string name="sd_card_summary">Úkoly jsou zrcadleny na SD kartu. Změny se synchronizují oběma směry. Všimněte si, že smazání souborů odstraní úkoly v aplikaci!</string>
     <string name="directory">Adresář</string>
-    <string name="directory_summary">Kde by měly být uloženy soubory.</string>
     <string name="cannot_write_to_directory">Nelze zapisovat do adresáře</string>
 </resources>

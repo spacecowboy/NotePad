@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Notatki</string>
+  --><resources>
+    <string name="app_name_short">Notatki</string>
     <string name="title_create">Nowa notatka</string>
     <string name="timemachine">Kapsuła czasu</string>
     <string name="time">Czas</string>
@@ -150,7 +149,7 @@
     <string name="transparency">Przeźroczystość</string>
     <string name="notes_shortcut">Skrót notatki</string>
     <string name="shortcut_help1">Jeżeli zaznaczone, skrót będzie tworzył nową notatkę w zaznaczonej liście i otwierał edytor. Jeżeli nie zaznaczone, skrót będzie otwierał zaznaczoną listę.</string>
-    <string name="loading_widget">Ładowanie widżetu&#8230;</string>
+    <string name="loading_widget">Ładowanie widżetu…</string>
     <string name="default_list">Domyślna lista</string>
     <string name="please_type_before_reminder">Proszę wpisać tekst przed ustawieniem przypomnienia</string>
     <string name="notecopied_one">Skopiowano jedną notatkę </string>
@@ -224,6 +223,5 @@
     <string name="sd_card_sync">Synchronizacja Karty SD</string>
     <string name="sd_card_summary">Zadania są dublowane na karcie SD. Zmiany są synchronizowane w obie strony. Należy pamiętać, że usunięcie plików usunie zadania w aplikacji!</string>
     <string name="directory">Katalog</string>
-    <string name="directory_summary">Gdzie powinny być trzymane pliki.</string>
     <string name="cannot_write_to_directory">Nie można zapisać do katalogu</string>
 </resources>

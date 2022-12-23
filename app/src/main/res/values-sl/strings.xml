@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Opombe</string>
+  --><resources>
+    <string name="app_name_short">Opombe</string>
     <string name="title_create">Nova opomba</string>
     <string name="timemachine">Časovni stroj</string>
     <string name="time">Čas</string>
@@ -54,14 +53,12 @@
     <string name="sort_list_manual">Naročite ročno</string>
     <string name="search_description">Opombe in opravila</string>
     <string name="archive">Arhiv</string>
-    
     <string name="restore">Obnovitev</string>
     <string name="restore_to">Obnovi v </string>
     <string name="search_hint">Išči</string>
     <string name="settings_theme">Trenutna tema</string>
     <string name="settings_theme_dialog">Uporabi temo</string>
     <string name="settings_lang">Jezik</string>
-    
     <string name="settings_summary_theme_black">Črna</string>
     <string name="settings_summary_theme_dark">Temno</string>
     <string name="settings_summary_theme_light">Svetlobe</string>
@@ -153,18 +150,15 @@
     <string name="transparency">Preglednost</string>
     <string name="notes_shortcut">Opombe bližnjico</string>
     <string name="shortcut_help1">Če je potrjeno, bližnjico ustvarite novo opombo v izbranem seznamu in odprite urejevalnik. Če bližnjica odpre izbrani seznam.</string>
-    <string name="loading_widget">Nalaganje widget&#8230;</string>
+    <string name="loading_widget">Nalaganje widget…</string>
     <string name="default_list">Privzeti seznam</string>
     <string name="please_type_before_reminder">Vnesite nekaj besedila, preden nastavite opomnik</string>
     <string name="notecopied_one">Opomba prekopirane %d</string>
     <string name="notecopied_other">Kopirane %d opombe</string>
-    
     <string name="notedeleted_one">Opomba izbrisani %d</string>
     <string name="notedeleted_other">Izbrisati %d opombe</string>
-    
     <string name="selected_one">Opomba izbrani %d</string>
     <string name="selected_other">Izbrati %d opombe</string>
-    
     <string name="background_sync">Ozadju sinhronizacijo</string>
     <string name="background_sync_info">Sinhronizira enkrat na uro</string>
     <string name="sync_on_change">Sinhronizacijo na spremembe</string>
@@ -183,10 +177,8 @@
     <string name="notification_prio_low">Nizko: Skrit, minimirano</string>
     <string name="priority">Prednost</string>
     <string name="notifications">Obvestila</string>
-
     <string name="tasks">Naloge</string>
     <string name="all_tasks">Vsa opravila</string>
-    
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Omejiti naloge v</string>
     <string name="dashclock_show_overdue_tasks">Pokaži zapadla opravila</string>
     <string name="dashclock_overdue_tasks_show">Bo prikazan zapadla opravila</string>
@@ -199,7 +191,6 @@
     <string name="dashclock_next7">Naslednjih 7 dni</string>
     <string name="dashclock_anytime">Kadarkoli</string>
     <string name="dashclock_will_show_as_many_as_possible">Bo pokazati čim več</string>
-    
     <string name="dashclock_show_only_the_next_task">Prikaz naslednjega opravila</string>
     <string name="dashclock_header_shown">Ime seznama, bo prikazan v krepko</string>
     <string name="dashclock_first_task_shown">Naziv prva naloga bo prikazan v krepko</string>
@@ -232,6 +223,5 @@
     <string name="sd_card_sync">SD kartico Sinhroniziranje</string>
     <string name="sd_card_summary">Naloge se zrcalijo na SD kartico. Spremembe se sinhronizirajo obeh načinov. Upoštevajte, da bo izbris pila izbrisati opravila v uporabi!</string>
     <string name="directory">Imenik</string>
-    <string name="directory_summary">Kam naj se datoteke shranijo.</string>
     <string name="cannot_write_to_directory">Ne more pisati v imenik</string>
 </resources>

@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">Notlar</string>
     <string name="title_create">Yeni not</string>
     <string name="timemachine">Zaman makinesi</string>
@@ -23,7 +22,6 @@
     <string name="done">Tamam</string>
     <string name="saved">Kaydedildi</string>
     <string name="distance">Mesafe</string>
-
     <string name="near">Yakın</string>
     <string name="menu_save_and_add">not ekleyin ve Kaydedin</string>
     <string name="menu_delete">Sil</string>
@@ -55,15 +53,12 @@
     <string name="sort_list_manual">Manuel olarak sırala</string>
     <string name="search_description">Notlar ve görevler</string>
     <string name="archive">Arşiv</string>
-
-
     <string name="restore">Eski haline çevir</string>
     <string name="restore_to">Eski haline çevir</string>
     <string name="search_hint">Ara</string>
     <string name="settings_theme">Kullanılan tema</string>
     <string name="settings_theme_dialog">Tema seçin</string>
     <string name="settings_lang">Dil</string>
-
     <string name="settings_summary_theme_black">Siyah</string>
     <string name="settings_summary_theme_dark">Koyu</string>
     <string name="settings_summary_theme_light">Açık</string>
@@ -165,13 +160,10 @@
     <string name="please_type_before_reminder">Lütfen bir hatırlatıcı ayarlamadan önce bir kaç metin yazın</string>
     <string name="notecopied_one">Bir not kopyalandı</string>
     <string name="notecopied_other">%d tane not kopyalandı</string>
-    
     <string name="notedeleted_one">Bir not silindi</string>
     <string name="notedeleted_other">%d tane not silindi</string>
-    
     <string name="selected_one">Bir not seçildi</string>
     <string name="selected_other">%d tane not seçildi</string>
-    
     <string name="background_sync">Arkaplan senkronizasyonu</string>
     <string name="background_sync_info">Saatte bir defa senkronize et</string>
     <string name="sync_on_change">Değişiklikleri senkronize et</string>
@@ -190,10 +182,8 @@
     <string name="notification_prio_low">Düşük: Gizlendi, küçültüldü</string>
     <string name="priority">Öncelikli</string>
     <string name="notifications">Bildirimler</string>
-
     <string name="tasks">Görevler</string>
     <string name="all_tasks">Tüm görevler</string>
-
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Görevleri sınırla</string>
     <string name="dashclock_show_overdue_tasks">Gecikmiş görevleri göster</string>
     <string name="dashclock_overdue_tasks_show">Gecikmiş görevler gösterilecek</string>
@@ -206,7 +196,6 @@
     <string name="dashclock_next7">7 gün sonra</string>
     <string name="dashclock_anytime">Herzaman</string>
     <string name="dashclock_will_show_as_many_as_possible">Mümkün olduğu kadar fazla gösterecek</string>
-    
     <string name="dashclock_show_only_the_next_task">Yalnızca bir sonraki görevi göster</string>
     <string name="dashclock_header_shown">Liste adı kalın yazıyla gösterilecek</string>
     <string name="dashclock_first_task_shown">İlk görevin başlığı kalın gösterilecek</string>
@@ -239,8 +228,5 @@
     <string name="sd_card_sync">SD kart senkronizasyonu</string>
     <string name="sd_card_summary">Görevler SD karta yansıtıldı. Değişiklikler her iki açıdan senkronize edildi. Dosyaları silmenin , uygulamadaki görevleri sileceğini unutmayın!</string>
     <string name="directory">Rehber</string>
-    <string name="directory_summary">Dosyaların saklanacağı yer.</string>
-
     <string name="cannot_write_to_directory">Rehbere yazılmıyor</string>
-
 </resources>

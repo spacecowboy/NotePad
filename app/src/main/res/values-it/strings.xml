@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">Note</string>
     <string name="title_create">Nuova nota</string>
     <string name="timemachine">Cronologia Nota</string>
@@ -98,7 +97,6 @@
     <string name="no_sync_method_chosen">Non hai attivato la sincronizzazione</string>
     <string name="gtasks_not_working">Google Tasks (NON FUNZIONA)</string>
     <string name="file_picker_not_available">L\'app per gestire i file non è disponibile</string>
-    <string name="filepicker_preference_description">Uri selezionato:\n %1$s \nma invece useremo questo:\n %2$s</string>
     <string name="choose_backup_folder">Scegli la cartella per i backup</string>
     <string name="default_location">Posizione predefinita</string>
     <string name="move">Sposta</string>
@@ -176,7 +174,6 @@
     <string name="notification_prio_low">Bassa: nascosta, minimizzata</string>
     <string name="priority">Priorità</string>
     <string name="notifications">Notifiche</string>
-
     <string name="tasks">Attività</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Limita alle attività in un elenco specifico</string>
     <string name="dashclock_show_overdue_tasks">Mostra attività scadute</string>

@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">Σημειώσεις</string>
     <string name="title_create">Νέα Σημείωση</string>
     <string name="timemachine">Χρονομηχανή</string>
@@ -23,7 +22,6 @@
     <string name="done">Έγινε</string>
     <string name="saved">Αποθηκεύτηκε</string>
     <string name="distance">Απόσταση</string>
-
     <string name="near">Κοντά </string>
     <string name="menu_save_and_add">Αποθήκευση και άνοιγμα νέας σημείωσης</string>
     <string name="menu_delete">Διαγραφή</string>
@@ -55,15 +53,12 @@
     <string name="sort_list_manual">Χειροκίνητη ταξινόμηση</string>
     <string name="search_description">Σημειώσεις και εργασίες</string>
     <string name="archive">Αρχείο</string>
-
-
     <string name="restore">Επαναφορά</string>
     <string name="restore_to">Επαναφορά σε</string>
     <string name="search_hint">Αναζήτηση</string>
     <string name="settings_theme">Τρέχον θέμα</string>
     <string name="settings_theme_dialog">Χρήση θέματος</string>
     <string name="settings_lang">Γλώσσα</string>
-
     <string name="settings_summary_theme_black">Μαύρο</string>
     <string name="settings_summary_theme_dark">Σκοτεινό</string>
     <string name="settings_summary_theme_light">Ανοιχτόχρωμο</string>
@@ -102,7 +97,6 @@
     <string name="showcase_timemachine_msg">Οι αλλαγές αποθηκεύονται πάντα. Χρησιμοποιήστε τη χρονομηχανή για να επαναφέρετε μια προηγούμενη έκδοση.</string>
     <string name="donate_to_unlock">Κάντε δωρεά για να ξεκλειδώσετε</string>
     <string name="premiums_unlocked_and_thanks">Τα Premium χαρακτηριστικά ξεκλειδώθηκαν. Σας ευχαριστούμε για την υποστήριξή σας!</string>
-    
     <string name="move">Μετακίνηση</string>
     <string name="move_to">Μετακίνηση σε</string>
     <string name="moved_x_to_list">Μετακινήθηκαν %1$d στο %2$s</string>
@@ -157,18 +151,15 @@
     <string name="transparency">Διαφάνεια</string>
     <string name="notes_shortcut">Συντόμευση σημειώσεων</string>
     <string name="shortcut_help1">Εάν επιλεγεί, η συντόμευση θα δημιουργήσει μια νέα σημείωση στην επιλεγμένη λίστα και θα ανοίξει το πρόγραμμα επεξεργασίας. Εάν δεν είναι επιλεγμένη, η συντόμευση θα ανοίξει την επιλεγμένη λίστα.</string>
-    <string name="loading_widget">Φόρτωση Widget&#8230;</string>
+    <string name="loading_widget">Φόρτωση Widget…</string>
     <string name="default_list">Προεπιλεγμένη λίστα</string>
     <string name="please_type_before_reminder">Παρακαλώ πληκτρολογήστε κάποιο κείμενο πριν να ορίσετε μια υπενθύμιση</string>
     <string name="notecopied_one">Αντιγραφή %d σημείωσης</string>
     <string name="notecopied_other">Αντιγραφή %d σημειώσεων</string>
-    
     <string name="notedeleted_one">Διαγραφή %d σημείωσης</string>
     <string name="notedeleted_other">Διαγράφηκαν %d σημειώσεις</string>
-    
     <string name="selected_one">Επιλέχτηκε %d σημείωση</string>
     <string name="selected_other">Επιλέχτηκαν %d σημειώσεις</string>
-    
     <string name="background_sync">Συγχρονισμός στο παρασκήνιο</string>
     <string name="background_sync_info">Συγχρονίζεται κάθε μία ώρα</string>
     <string name="sync_on_change">Συγχρονισμός σε κάθε αλλαγή</string>
@@ -187,10 +178,8 @@
     <string name="notification_prio_low">Χαμηλή: Κρυφή, ελαχιστοποιημένη</string>
     <string name="priority">Προτεραιότητα</string>
     <string name="notifications">Ειδοποιήσεις</string>
-
     <string name="tasks">Εργασίες</string>
     <string name="all_tasks">Όλες οι εργασίες</string>
-    
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Περιορισμός σε εργασίες στο</string>
     <string name="dashclock_show_overdue_tasks">Εμφάνιση εκπρόθεσμων εργασιών</string>
     <string name="dashclock_overdue_tasks_show">Οι εκπρόθεσμες εργασίες θα εμφανίζονται</string>
@@ -203,7 +192,6 @@
     <string name="dashclock_next7">Επόμενες 7 ημέρες</string>
     <string name="dashclock_anytime">Οποτεδήποτε</string>
     <string name="dashclock_will_show_as_many_as_possible">Θα εμφανίζονται όσο το δυνατόν περισσότερα</string>
-    
     <string name="dashclock_show_only_the_next_task">Εμφάνισε μόνο την επόμενη εργασία</string>
     <string name="dashclock_header_shown">Το όνομα της λίστα θα εμφανίζεται με έντονη γραφή</string>
     <string name="dashclock_first_task_shown">Ο τίτλος της πρώτης εργασίας θα εμφανίζεται με έντονους χαρακτήρες</string>
@@ -236,8 +224,5 @@
     <string name="sd_card_sync">Συγχρονισμός κάρτας SD</string>
     <string name="sd_card_summary">Οι εργασίες συγχρονίζονται στην κάρτα SD. Οι αλλαγές συγχρονίζονται αμφίδρομα. Σημειώστε ότι διαγράφοντας τα αρχεία θα διαγραφούν οι εργασίες στην εφαρμογή!</string>
     <string name="directory">Κατάλογος</string>
-    <string name="directory_summary">Πού θα πρέπει να αποθηκεύονται τα αρχεία.</string>
-
     <string name="cannot_write_to_directory">Δεν είναι δυνατή η εγγραφή στον φάκελο</string>
-
 </resources>

@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Notities</string>
+  --><resources>
+    <string name="app_name_short">Notities</string>
     <string name="title_create">Nieuwe notitie</string>
     <string name="timemachine">Tijdmachine</string>
     <string name="time">Tijd</string>
@@ -151,7 +150,7 @@
     <string name="transparency">Transparantie</string>
     <string name="notes_shortcut">Notities snelkoppeling</string>
     <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst,</string>
-    <string name="loading_widget">Laden widget&#8230;</string>
+    <string name="loading_widget">Laden widget…</string>
     <string name="default_list">Standaard lijst</string>
     <string name="please_type_before_reminder">Typ een tekst voordat je een herinnering plaatst</string>
     <string name="notecopied_one">%d notitie gekopieerd</string>
@@ -178,7 +177,6 @@
     <string name="notification_prio_low">Laag: Verborgen, geminimaliseerd</string>
     <string name="priority">Prioriteit</string>
     <string name="notifications">Meldingen</string>
-
     <string name="tasks">Taken</string>
     <string name="all_tasks">Alle taken</string>
     <string name="dashclock_tasks">Taken</string>
@@ -226,6 +224,5 @@
     <string name="sd_card">SD-kaart</string>
     <string name="sd_card_summary">De taken in de app zijn een afspiegeling van de SD-kaart. Wijzigingen in beide worden direct doorgevoerd. Als je de bestanden verwijderd, verdwijnen ook de taken in de app!</string>
     <string name="directory">Directory</string>
-    <string name="directory_summary">Waar bestanden moeten worden opgeslagen.</string>
     <string name="cannot_write_to_directory">Kan niet schrijven naar directory</string>
 </resources>

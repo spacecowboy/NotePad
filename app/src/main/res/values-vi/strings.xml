@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Ghi chú</string>
+  --><resources>
+    <string name="app_name_short">Ghi chú</string>
     <string name="title_create">Ghi chú mới</string>
     <string name="timemachine">Máy thời gian</string>
     <string name="time">Thời gian</string>
@@ -150,7 +149,7 @@
     <string name="transparency">Độ trong suốt</string>
     <string name="notes_shortcut">Lối tắt ghi chú</string>
     <string name="shortcut_help1">Nếu được chọn, lối tắt sẽ tạo một ghi chú mới trong danh sách và mở ghi chú đó. Ngược lại, lối tắt sẽ mở danh sách được chọn.</string>
-    <string name="loading_widget">Đang tải widget&#8230;</string>
+    <string name="loading_widget">Đang tải widget…</string>
     <string name="default_list">Danh sách mặc định</string>
     <string name="please_type_before_reminder">Hãy nhập ghi chú trước khi đặt nhắc nhở</string>
     <string name="notecopied_one">Đã sao chép %d ghi chú</string>
@@ -177,7 +176,6 @@
     <string name="notification_prio_low">Thấp: Ẩn hộp thoại</string>
     <string name="priority">Ưu tiên</string>
     <string name="notifications">Thông báo</string>
-
     <string name="tasks">Nhiệm vụ</string>
     <string name="all_tasks">Tất cả nhiệm vụ</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Áp dụng cho các nhiệm vụ trong danh sách</string>
@@ -224,6 +222,5 @@
     <string name="sd_card_sync">Đồng bộ hoá với thẻ SD</string>
     <string name="sd_card_summary">Các ghi chú được lưu cả trên thẻ SD và trong ứng dụng. Cảnh báo: Nếu xoá tập tin đồng bộ, các ghi chú sẽ bị mất.</string>
     <string name="directory">Đường dẫn</string>
-    <string name="directory_summary">Nơi lưu tập tin đồng bộ</string>
     <string name="cannot_write_to_directory">Không thể ghi vào đường đẫn</string>
 </resources>

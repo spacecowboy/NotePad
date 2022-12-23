@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Anteckningar</string>
+  --><resources>
+    <string name="app_name_short">Anteckningar</string>
     <string name="title_create">Ny anteckning</string>
     <string name="timemachine">Tidsmaskin</string>
     <string name="time">Tid</string>
@@ -54,14 +53,12 @@
     <string name="sort_list_manual">Sortera manuellt</string>
     <string name="search_description">Anteckningar och uppgifter</string>
     <string name="archive">Arkiv</string>
-    
     <string name="restore">Återställ</string>
     <string name="restore_to">Återställ till</string>
     <string name="search_hint">Sök</string>
     <string name="settings_theme">Nuvarande tema</string>
     <string name="settings_theme_dialog">Använd tema</string>
     <string name="settings_lang">Språk</string>
-    
     <string name="settings_summary_theme_black">Svart</string>
     <string name="settings_summary_theme_dark">Mörk</string>
     <string name="settings_summary_theme_light">Ljus</string>
@@ -153,7 +150,7 @@
     <string name="transparency">Transparens</string>
     <string name="notes_shortcut">Anteckningsgenväg</string>
     <string name="shortcut_help1">Om vald, så kommer genvägen att skapa en ny anteckning i den valda listan. Annars öppnas bara den valda listan.</string>
-    <string name="loading_widget">Laddar widget&#8230;</string>
+    <string name="loading_widget">Laddar widget…</string>
     <string name="default_list">Standardlista</string>
     <string name="please_type_before_reminder">Skriv en anteckning innan du sätter en påminnelse</string>
     <string name="notecopied_one">Kopierade %d anteckning</string>
@@ -162,7 +159,6 @@
     <string name="notedeleted_other">Raderade %d anteckningar</string>
     <string name="selected_one">Markerade %d anteckning</string>
     <string name="selected_other">Markerade %d anteckningar</string>
-    
     <string name="background_sync">Synka i bakgrunden</string>
     <string name="background_sync_info">Synka en gång per timme</string>
     <string name="sync_on_change">Synka vid ändringar</string>
@@ -181,10 +177,8 @@
     <string name="notification_prio_low">Låg: Gömd, minimerad</string>
     <string name="priority">Prioritet</string>
     <string name="notifications">Påminnelser</string>
-
     <string name="tasks">Uppgifter</string>
     <string name="all_tasks">Alla uppgifter</string>
-    
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Endast uppgifter i</string>
     <string name="dashclock_show_overdue_tasks">Visa försenade uppgifter</string>
     <string name="dashclock_overdue_tasks_show">Försenade uppgifter visas</string>
@@ -197,7 +191,6 @@
     <string name="dashclock_next7">Kommande 7 dagarna</string>
     <string name="dashclock_anytime">När som helst</string>
     <string name="dashclock_will_show_as_many_as_possible">Visar så många som möjligt</string>
-    
     <string name="dashclock_show_only_the_next_task">Visar endast nästa uppgift</string>
     <string name="dashclock_header_shown">Listans namn visas i fetstil</string>
     <string name="dashclock_first_task_shown">Den första uppgiftens titel visas i fetstil</string>
@@ -230,6 +223,5 @@
     <string name="sd_card_sync">SD-synkronisering</string>
     <string name="sd_card_summary">Anteckningar kopieras till SD-kortet. Ändringar synkroniseras båda till och från SD-kortet. Notera att filer som raderas från SD-kortet även raderar listorna i appen!</string>
     <string name="directory">Mapp</string>
-    <string name="directory_summary">Var filerna ska sparas</string>
     <string name="cannot_write_to_directory">Kan inte skriva till mapp</string>
 </resources>

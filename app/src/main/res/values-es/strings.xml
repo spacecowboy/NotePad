@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">Notas</string>
     <string name="title_create">Nueva nota</string>
     <string name="timemachine">Máquina del tiempo</string>
@@ -213,6 +212,5 @@
     <string name="sd_card_sync">Sincronización de tarjeta SD</string>
     <string name="sd_card_summary">Las tareas se duplican en la tarjeta SD. Los cambios se sincronizan en ambos sentidos. Tenga en cuenta que eliminar los archivos eliminará las tareas en la aplicación!</string>
     <string name="directory">Carpeta</string>
-    <string name="directory_summary">Dónde deben ser guardados los archivos.</string>
     <string name="cannot_write_to_directory">No se puede escribir en el directorio</string>
 </resources>
