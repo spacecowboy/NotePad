@@ -24,8 +24,7 @@
          colorOnBackground colorSurface colorOnSurface
 	 -->
 
-	<!-- a base theme used by ThemeGoogleNowDark for the app & ThemeWidgetConfig
-	 	 for the widget. Things for the DARK theme can go here -->
+	<!-- a base theme used for the app & the widget. Things for the DARK theme can go here -->
 	<style name="ThemeBaseDark" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -44,6 +43,12 @@
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark
 		</item>
+		<!-- make all dialogs in the app use this dialog theme.
+		 I chose a dark theme consistent with the device's OS design. -->
+		<item name="alertDialogTheme">@android:style/Theme.DeviceDefault.Dialog</item>
+		<item name="android:alertDialogTheme">?alertDialogTheme</item>
+		<item name="dialogTheme">?alertDialogTheme</item>
+		<item name="android:dialogTheme">?alertDialogTheme</item>
 		<!-- white icons for dark themes. All 3 are needed -->
 		<item name="iconTint">@color/white_alpha85</item>
 		<item name="android:drawableTint">@color/white_alpha85</item>
@@ -102,6 +107,12 @@
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight
 		</item>
 		<item name="colorAccent">@color/accent</item>
+		<!-- make all dialogs in the app use this dialog theme.
+		 I chose a LIGHT theme consistent with the device's OS design. -->
+		<item name="alertDialogTheme">@android:style/Theme.DeviceDefault.Light.Dialog</item>
+		<item name="android:alertDialogTheme">?alertDialogTheme</item>
+		<item name="dialogTheme">?alertDialogTheme</item>
+		<item name="android:dialogTheme">?alertDialogTheme</item>
 		<!-- these 3 decide the color of every xml drawable icon (while this "light" theme
 		 is active). Use	?colorPrimary	 to inherit from android 13's
 		 user set dynamic primary color -->
