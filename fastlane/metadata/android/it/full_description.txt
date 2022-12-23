@@ -1,5 +1,4 @@
-Recentemente aggiornata per supportare android 12,
-quest'applicazione open source vanta le seguenti funzioni:
+Aggiornata per supportare la Android 13, quest'applicazione open source vanta le seguenti funzioni:
 
 * Supporto per Dash Clock (si, funziona ancora)
 * Notifiche, anche con ripetizione settimanale
@@ -10,13 +9,12 @@ quest'applicazione open source vanta le seguenti funzioni:
 * Liste dove si possono riordinare a piacere le note
 * Ricerca tra le note
 * Disponibili temi chiari e scuri
-* Importazione & esportazione su file JSON
-* Sincronizzazione con file nella memoria locale
+* Importazione & esportazione delle note su file JSON
+* Sincronizzazione con file ORG nella memoria locale
 * Cronologia nota
 * Elenco di note eliminate
 
 Se vuoi migliorare quest'app, o condividere qualche idea, visita la nostra pagina su github.
-
 
 Una possibile alternativa è https://f-droid.org/packages/com.orgzly
 Orgzly è un'app per le note in sviluppo attivo che può importare le note di quest'app
