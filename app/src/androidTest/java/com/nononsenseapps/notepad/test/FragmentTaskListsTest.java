@@ -2,13 +2,11 @@ package com.nononsenseapps.notepad.test;
 
 import static org.junit.Assert.*;
 
-import android.Manifest;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
@@ -21,7 +19,7 @@ public class FragmentTaskListsTest {
 	// the replacement, ActivityScenarioRule does not work
 	@SuppressWarnings("deprecation")
 	@Rule
-	public ActivityTestRule<ActivityMain_> mActivityRule
+	public final ActivityTestRule<ActivityMain_> mActivityRule
 			= new ActivityTestRule<>(ActivityMain_.class, false);
 
 	@Test
@@ -45,7 +43,7 @@ public class FragmentTaskListsTest {
 		assertTrue("List pager fragment should be visible",
 				listPagerFragment.isAdded() && listPagerFragment.isVisible());
 
-		ListView taskList = (ListView) listPagerFragment
+		ListView taskList = listPagerFragment
 				.getView()
 				.findViewById(android.R.id.list);
 

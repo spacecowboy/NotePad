@@ -292,36 +292,9 @@ public abstract class DAO {
 
 	}
 
-	protected void afterInsert(final Context context, final SQLiteDatabase db) {
+	protected void afterInsert(final Context context, final SQLiteDatabase db) {}
 
-	}
-
-	protected void beforeUpdate(final Context context, final SQLiteDatabase db) {
-
-	}
-
-	protected void afterUpdate(final Context context, final SQLiteDatabase db) {
-
-	}
-
-	protected void beforeRemove(final Context context, final SQLiteDatabase db) {
-
-	}
-
-	protected void afterRemove(final Context context, final SQLiteDatabase db) {
-
-	}
-
-	protected DAO(final Cursor c) {
-	}
-
-	protected DAO(final ContentValues values) {
-
-	}
-
-	protected DAO() {
-
-	}
+	protected DAO() {}
 
 	public abstract ContentValues getContent();
 

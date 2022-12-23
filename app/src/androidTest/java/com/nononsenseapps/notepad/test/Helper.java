@@ -15,8 +15,6 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Helper {
 
@@ -37,11 +35,9 @@ public class Helper {
 	}
 
 	/**
-	 * Takes a screenshots and saves it as
+	 * Takes a screenshots and saves it as "filename", for example
 	 * /storage/emulated/0/Android/data/com.nononsenseapps.notepad/files/screenshots/fileName.png
 	 * This is mandatory in new android versions, since it's the only folder we can easily write to
-	 *
-	 * @param fileName
 	 */
 	public static void takeScreenshot(String fileName) {
 		// wait a second for the activity to load.

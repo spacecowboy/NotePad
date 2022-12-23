@@ -122,14 +122,14 @@ public class DummyProvider extends ContentProvider {
 				notifyOnChange(uri);
 				return ProviderHelperKt.getDetailsUri(ProviderHelperKt.getBase(uri), item.path);
 			default:
-				throw new IllegalArgumentException("Can't perform insert at: " + uri.toString());
+				throw new IllegalArgumentException("Can't perform insert at: " + uri);
 		}
 	}
 
 	@Override
 	public Cursor query(@NonNull Uri uri, String[] projection, String selection,
 						String[] selectionArgs, String sortOrder) {
-		Log.d(TAG, "Uri: " + uri.toString());
+		Log.d(TAG, "Uri: " + uri);
 
 		String path;
 		MatrixCursor mc = new MatrixCursor(ProviderContract.sMainListProjection);
@@ -155,7 +155,7 @@ public class DummyProvider extends ContentProvider {
 				mc.addRow(getNestedItem(path).asRow());
 				break;
 			default:
-				throw new IllegalArgumentException("Unknown path: " + uri.toString());
+				throw new IllegalArgumentException("Unknown path: " + uri);
 		}
 
 		return mc;
@@ -164,8 +164,6 @@ public class DummyProvider extends ContentProvider {
 	/**
 	 * Sets the notifcation uri on the cursor.
 	 *
-	 * @param c
-	 * @param uri
 	 */
 	protected void setNotificationUri(Cursor c, Uri uri) {
 		Context context = getContext();
@@ -258,7 +256,7 @@ public class DummyProvider extends ContentProvider {
 				notifyOnChange(uri);
 				break;
 			default:
-				throw new IllegalArgumentException("Can't perform insert at: " + uri.toString());
+				throw new IllegalArgumentException("Can't perform insert at: " + uri);
 		}
 
 		// TODO: Implement this to handle requests to update one or more rows.

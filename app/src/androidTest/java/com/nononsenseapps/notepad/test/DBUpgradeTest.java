@@ -21,12 +21,12 @@ import junit.framework.TestCase;
 public class DBUpgradeTest extends TestCase {
 	static final String PREFIX = "dbupgrade_test_";
 
-	String aTime = "2013-03-23T02:43:35.000Z";
-	String anId = "MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow";
-	String anAccount = "fake@account.com";
+	final String aTime = "2013-03-23T02:43:35.000Z";
+	final String anId = "MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow";
+	final String anAccount = "fake@account.com";
 
-	int numOfLegacyLists = 2;
-	int numOfLegacyNotes = 4;
+	final int numOfLegacyLists = 2;
+	final int numOfLegacyNotes = 4;
 
 	private Context context;
 
@@ -180,7 +180,7 @@ public class DBUpgradeTest extends TestCase {
 						listId);
 
 				// Gets the current system time in milliseconds
-				Long now = Long.valueOf(System.currentTimeMillis());
+				Long now = System.currentTimeMillis();
 				values.put(
 						LegacyDBHelper.NotePad.Notes.COLUMN_NAME_CREATE_DATE,
 						now);

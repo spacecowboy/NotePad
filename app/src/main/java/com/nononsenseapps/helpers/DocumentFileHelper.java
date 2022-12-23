@@ -24,7 +24,7 @@ import java.util.function.Function;
  * And, to understand why {@link DocumentFile} is better than {@link MediaStore}, see
  * https://developer.android.com/training/data-storage
  * This API can read files created by this app even after you reinstall it, so it's
- * better than {@link MediaStoreHelper}
+ * better than {@link MediaStore}
  */
 public final class DocumentFileHelper {
 

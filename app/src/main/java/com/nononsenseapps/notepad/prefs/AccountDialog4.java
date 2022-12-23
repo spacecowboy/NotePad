@@ -34,7 +34,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.SyncGtaskHelper;
-import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;

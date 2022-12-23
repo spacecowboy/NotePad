@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -37,7 +38,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.android.activity.FolderListActivity;
 import com.nononsenseapps.notepad.android.adapter.ItemViewHolder;
 import com.nononsenseapps.notepad.android.adapter.MainListAdapter;
@@ -94,7 +94,7 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 		int id = -1; // R.layout.fragment_main_list; a recyclerview + FAB
 		View root = inflater.inflate(id, container, false);
 
-		mRecyclerView = (RecyclerView) root.findViewById(android.R.id.list);
+		mRecyclerView = root.findViewById(android.R.id.list);
 		// improve performance if you know that changes in content
 		// do not change the size of the RecyclerView
 		mRecyclerView.setHasFixedSize(true);
@@ -117,6 +117,7 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 		return root;
 	}
 
+	@NonNull
 	@Override
 	public Loader<Cursor> onCreateLoader(int i, Bundle args) {
 		Log.d(TAG, "Creating loader for: " + mUri.toString());
@@ -125,13 +126,13 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 		mAdapter.setData(cursor);
 		mAdapter.notifyDataSetChanged();
 	}
 
 	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
+	public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 		mAdapter.setData(null);
 	}
 

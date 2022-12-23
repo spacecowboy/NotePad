@@ -19,7 +19,6 @@ package com.nononsenseapps.notepad.android.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
  * A simple text view which clips to a circular outline.

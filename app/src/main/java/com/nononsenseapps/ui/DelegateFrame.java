@@ -51,7 +51,7 @@ import com.nononsenseapps.notepad.R;
  */
 public class DelegateFrame extends RelativeLayout implements OnClickListener {
 
-	// TODO is this useless ? it wraps 2 checkboxes
+	// TODO is this useless ? it wraps 2 checkboxes. try to delete it
 
 	private final int enlargedViewId;
 	private View cachedView;

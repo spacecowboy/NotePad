@@ -86,7 +86,7 @@ adb logcat -c
 GRADLE_RETURN_CODE=$?
 
 # dump the logcat to a file. Log level: Debug
-adb logcat -d *:D > logcat-dump.txt
+adb logcat -d '*:D' > logcat-dump.txt
 
 # check if pictures, videos & logs exist
 echo "----------"

@@ -16,7 +16,7 @@ public class FragmentTaskListsViewPagerTest {
 	// the replacement, ActivityScenarioRule does not work
 	@SuppressWarnings("deprecation")
 	@Rule
-	public ActivityTestRule<ActivityMain_> mActivityRule
+	public final ActivityTestRule<ActivityMain_> mActivityRule
 			= new ActivityTestRule<>(ActivityMain_.class, false);
 
 	@Test

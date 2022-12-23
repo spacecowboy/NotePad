@@ -81,7 +81,7 @@ public class DBProviderTest extends TestCase {
 	}
 
 	private ArrayList<Task> insertSomeTasks(final TaskList list, final int count) {
-		ArrayList<Task> tasks = new ArrayList<Task>();
+		ArrayList<Task> tasks = new ArrayList<>();
 		for (int i = 0; i < count; i++) {
 			Task t = new Task();
 			t.title = "testTask" + i;

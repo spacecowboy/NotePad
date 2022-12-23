@@ -11,7 +11,6 @@ import android.preference.PreferenceManager;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
-import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -37,7 +36,7 @@ public class BaseTestClass {
 	 */
 	@SuppressWarnings("deprecation")
 	@Rule
-	public IntentsTestRule<ActivityMain_> mActRule =
+	public final IntentsTestRule<ActivityMain_> mActRule =
 			new IntentsTestRule<>(ActivityMain_.class);
 
 	@Rule

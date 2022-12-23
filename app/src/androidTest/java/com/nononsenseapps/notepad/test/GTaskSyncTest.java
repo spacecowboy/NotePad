@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class GTaskSyncTest extends TestCase {
-	String balle = "balle";
-	String balleRemote = "balleremote";
-	String account = "balleman";
+	final String balle = "balle";
+	final String balleRemote = "balleremote";
+	final String account = "balleman";
 
 	ArrayList<TaskList> localLists;
 	ArrayList<GoogleTaskList> remoteListsInDB;
@@ -35,14 +35,14 @@ public class GTaskSyncTest extends TestCase {
 	HashMap<GoogleTaskList, ArrayList<GoogleTask>> remoteTasksSubSet;
 
 	int remoteOnlyCount = 2;
-	int localOnlyCount = 1;
+	final int localOnlyCount = 1;
 
 	int localListNewestCount = 0;
 	int remoteListNewestCount = 0;
 	int localTaskNewestCount = 0;
 	int remoteTaskNewestCount = 0;
 
-	Context mContext;
+	final Context mContext;
 
 	public GTaskSyncTest() {mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();}
 
@@ -61,12 +61,12 @@ public class GTaskSyncTest extends TestCase {
 				GoogleTask.Columns.ACCOUNT + " IS ?", new String[] { account });
 
 		// First insert some lists and remote stuff
-		localLists = new ArrayList<TaskList>();
-		remoteListsInDB = new ArrayList<GoogleTaskList>();
-		remoteListsSubset = new ArrayList<GoogleTaskList>();
-		localTasks = new HashMap<TaskList, ArrayList<Task>>();
-		remoteTasksInDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
-		remoteTasksSubSet = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
+		localLists = new ArrayList<>();
+		remoteListsInDB = new ArrayList<>();
+		remoteListsSubset = new ArrayList<>();
+		localTasks = new HashMap<>();
+		remoteTasksInDB = new HashMap<>();
+		remoteTasksSubSet = new HashMap<>();
 
 		int max = 8;
 		for (int i = 0; i < max; i++) {
@@ -76,7 +76,7 @@ public class GTaskSyncTest extends TestCase {
 			// In the past
 			l.save(mContext, 5L);
 			localLists.add(l);
-			localTasks.put(l, new ArrayList<Task>());
+			localTasks.put(l, new ArrayList<>());
 			if (i < (max - localOnlyCount)) {
 				gl = new GoogleTaskList(l, account);
 				// 0 2 4 6
@@ -90,8 +90,8 @@ public class GTaskSyncTest extends TestCase {
 				gl.remoteId = l.title;
 				gl.save(mContext);
 				remoteListsInDB.add(gl);
-				remoteTasksInDB.put(gl, new ArrayList<GoogleTask>());
-				remoteTasksSubSet.put(gl, new ArrayList<GoogleTask>());
+				remoteTasksInDB.put(gl, new ArrayList<>());
+				remoteTasksSubSet.put(gl, new ArrayList<>());
 				// 0 2
 				if (i < 4) {
 					remoteListsSubset.add(gl);
@@ -366,7 +366,7 @@ public class GTaskSyncTest extends TestCase {
 
 //		assertTrue("Only one item was supposed to be remote and deleted locally",
 //				localNullCount == remoteOnlyCount);
-		assertTrue("Expected only one 'new local list'", remoteNullCount == 1);
+		assertEquals("Expected only one 'new local list'", 1, remoteNullCount);
 
 		assertTrue(localNewestCount > 0);
 		assertTrue(remoteNewestCount > 0);
@@ -389,7 +389,7 @@ public class GTaskSyncTest extends TestCase {
 
 		List<Pair<Task, GoogleTask>> pairs = GoogleTaskSync
 				.synchronizeTasksLocally(mContext, remoteTasks,
-						new Pair<TaskList, GoogleTaskList>(tl, gl));
+						new Pair<>(tl, gl));
 
 		assertNotNull(pairs);
 		assertEquals("Synced pairs have wrong length", localOnlyCount + localTaskNewestCount, pairs.size());
@@ -411,7 +411,7 @@ public class GTaskSyncTest extends TestCase {
 						pair.second.title);
 				assertEquals("local id should be set", (Long) pair.first._id,
 						pair.second.dbid);
-				assertEquals("list id should be set", (Long) pair.first.dblist,
+				assertEquals("list id should be set", pair.first.dblist,
 						pair.second.listdbid);
 
 				if (pair.first.updated > pair.second.updated) {

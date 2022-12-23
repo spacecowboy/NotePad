@@ -24,8 +24,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import com.nononsenseapps.helpers.ThemeHelper;
-
 /**
  * Simple confirm dialog fragment, extending from V11 fragment
  */
