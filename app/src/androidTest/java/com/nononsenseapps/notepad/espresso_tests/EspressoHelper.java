@@ -95,6 +95,7 @@ public class EspressoHelper {
 		// fill the popup
 		onViewWithIdInDialog(R.id.titleField).perform(typeText(taskListName));
 		onViewWithIdInDialog(R.id.dialog_yes).check(matches(isDisplayed()));
+		onViewWithIdInDialog(R.id.dialog_yes).perform(closeSoftKeyboard());
 		onViewWithIdInDialog(R.id.dialog_yes).perform(click());
 	}
 
