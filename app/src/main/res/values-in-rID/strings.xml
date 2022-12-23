@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">Catatan</string>
     <string name="title_create">Catatan Baru</string>
     <string name="timemachine">Mesin waktu</string>
@@ -23,7 +22,6 @@
     <string name="done">Selesai</string>
     <string name="saved">Disimpan</string>
     <string name="distance">Jarak</string>
-
     <string name="near">Dekat</string>
     <string name="menu_save_and_add">Simpan dan tambahkan catatan</string>
     <string name="menu_delete">Hapus</string>
@@ -55,15 +53,12 @@
     <string name="sort_list_manual">Pesan secara manual</string>
     <string name="search_description">Catatan dan tugas</string>
     <string name="archive">Arsip</string>
-
-
     <string name="restore">Kembalikan</string>
     <string name="restore_to">Kembalikan ke</string>
     <string name="search_hint">Cari</string>
     <string name="settings_theme">Tema saat ini</string>
     <string name="settings_theme_dialog">Gunakan tema</string>
     <string name="settings_lang">Bahasa</string>
-
     <string name="settings_summary_theme_black">Hitam</string>
     <string name="settings_summary_theme_dark">Gelap</string>
     <string name="settings_summary_theme_light">Terang</string>
@@ -102,7 +97,6 @@
     <string name="showcase_timemachine_msg">Perubahan selalu disimpan. Gunakan mesin waktu untuk mengembalikan versi sebelumnya.</string>
     <string name="donate_to_unlock">Donasi untuk membuka kunci</string>
     <string name="premiums_unlocked_and_thanks">Fitur premium tidak terkunci. Terima kasih atas dukungan Anda!</string>
-
     <string name="move">Pindah</string>
     <string name="move_to">Pindah ke</string>
     <string name="moved_x_to_list">Pindah %1$d ke %2$s</string>
@@ -157,15 +151,13 @@
     <string name="transparency">Transparansi</string>
     <string name="notes_shortcut">Catatan pintas</string>
     <string name="shortcut_help1">Jika dicentang, shortcut akan membuat catatan baru di daftar yang dipilih dan buka editornya. Jika tidak dicentang, shortcut akan membuka daftar yang dipilih.</string>
-    <string name="loading_widget">Memuat widget&#8230;</string>
+    <string name="loading_widget">Memuat widget…</string>
     <string name="default_list">Daftar default</string>
     <string name="please_type_before_reminder">Harap ketik beberapa teks sebelum menyetel pengingat</string>
     <string name="notecopied_one">Disalin %d catatan</string>
     <string name="notecopied_other">Disalin %d catatan</string>
-    
     <string name="notedeleted_one">Dihapus %d catatan</string>
     <string name="notedeleted_other">Dihapus %d catatan</string>
-    
     <string name="selected_one">Dipilih %d catatan</string>
     <string name="selected_other">Dipilih %d catatan</string>
     <string name="background_sync">Sinkronisasi di latar belakang</string>
@@ -186,10 +178,8 @@
     <string name="notification_prio_low">Rendah: Tersembunyi, dipersempit</string>
     <string name="priority">Prioritas</string>
     <string name="notifications">notifikasi</string>
-
     <string name="tasks">Tugas</string>
     <string name="all_tasks">Semua tugas</string>
-
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Batasi tugas di</string>
     <string name="dashclock_show_overdue_tasks">Tampilkan tugas yang sudah lewat</string>
     <string name="dashclock_overdue_tasks_show">Tugas yang terlambat akan ditampilkan</string>
@@ -202,7 +192,6 @@
     <string name="dashclock_next7">7 hari berikutnya</string>
     <string name="dashclock_anytime">Kapan saja</string>
     <string name="dashclock_will_show_as_many_as_possible">Akan tampil sebanyak mungkin</string>
-
     <string name="dashclock_show_only_the_next_task">Hanya tampilkan tugas selanjutnya</string>
     <string name="dashclock_header_shown">Nama daftar akan ditampilkan dengan huruf tebal</string>
     <string name="dashclock_first_task_shown">Judul tugas pertama akan ditampilkan dalam huruf tebal</string>
@@ -235,8 +224,5 @@
     <string name="sd_card_sync">Sinkronkan Kartu SD</string>
     <string name="sd_card_summary">Tugas dicerminkan pada kartu SD. Perubahan disinkronisasi dua arah. Perhatikan bahwa menghapus file akan menghapus tugas di aplikasi!</string>
     <string name="directory">Direktori</string>
-    <string name="directory_summary">Dimana file harus disimpan.</string>
-
     <string name="cannot_write_to_directory">Tidak bisa menulis ke direktori</string>
-
 </resources>

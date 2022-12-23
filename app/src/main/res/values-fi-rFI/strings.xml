@@ -14,9 +14,8 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Muistiinpanot</string>
+  --><resources>
+    <string name="app_name_short">Muistiinpanot</string>
     <string name="title_create">Uusi muistiinpano</string>
     <string name="timemachine">Aikakone</string>
     <string name="time">Aika</string>
@@ -224,6 +223,5 @@
     <string name="sd_card_sync">Muistikorttisynkronointi</string>
     <string name="sd_card_summary">Tehtävät peilataan muistikortille. Muutokset synkronoidaan molempiin suuntiin. Huomaa, että tiedostojen poistaminen poistaa tehtävät myös sovelluksesta!</string>
     <string name="directory">Hakemisto</string>
-    <string name="directory_summary">Minne tiedot tulisi tallentaa.</string>
     <string name="cannot_write_to_directory">Hakemistoon ei voitu kirjoittaa</string>
 </resources>

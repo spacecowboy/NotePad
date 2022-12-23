@@ -178,7 +178,6 @@
     <string name="notification_prio_low">Niedrig: versteckt, minimiert</string>
     <string name="priority">Priorität</string>
     <string name="notifications">Benachrichtigungen</string>
-
     <string name="tasks">Aufgaben</string>
     <string name="all_tasks">Alle Aufgaben</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Auf Aufgaben in bestimmter Liste beschränken</string>
@@ -224,6 +223,5 @@
     <string name="sd_card_sync">SD-Karten-Sync</string>
     <string name="sd_card_summary">Aufgaben werden auf die SD-Karte gespiegelt. Änderungen werden in beide Richtungen synchronisiert. Wenn die Dateien gelöscht werden, werden auf die Aufgaben in der App gelöscht!</string>
     <string name="directory">Ordner</string>
-    <string name="directory_summary">Wo die Dateien gespeichert werden sollen.</string>
     <string name="cannot_write_to_directory">In Ordner kann nicht geschrieben werden</string>
 </resources>

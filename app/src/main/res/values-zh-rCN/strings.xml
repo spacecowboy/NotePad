@@ -176,7 +176,6 @@
     <string name="notification_prio_low">低：隐藏并最小化显示</string>
     <string name="priority">优先级</string>
     <string name="notifications">通知</string>
-
     <string name="tasks">任务</string>
     <string name="all_tasks">所有任务</string>
     <string name="dashclock_tasks">任务</string>
@@ -225,6 +224,5 @@
     <string name="sd_card_sync">SD 卡同步</string>
     <string name="sd_card_summary">应用和 SD 卡中的任务保持相同。 删除文件即意味着删除应用中的任务！</string>
     <string name="directory">文件夹</string>
-    <string name="directory_summary">文件应该存储在哪里。</string>
     <string name="cannot_write_to_directory">无法写入目录</string>
 </resources>
