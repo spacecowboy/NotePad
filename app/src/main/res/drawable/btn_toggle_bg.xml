@@ -17,8 +17,35 @@
 
 <!-- background of a button of the 'week days' view -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@android:id/background"
-		android:drawable="@android:color/transparent"/>
-	<item android:id="@android:id/toggle"
-		android:drawable="@drawable/btn_toggle"/>
+
+	<item android:id="@android:id/background">
+		<selector>
+			<!-- show a grey background when the user touches
+			 or holds the finger on the view -->
+			<item android:drawable="@color/widget_pressed_background"
+				android:state_pressed="true"/>
+
+			<!-- default fallback background is invisible,
+			 for when the user's finger is not on this widget -->
+			<item android:drawable="@android:color/transparent"/>
+
+		</selector>
+	</item>
+
+	<item android:id="@android:id/toggle">
+		<selector>
+
+			<!-- underline the text when the togglebutton
+			is in the ON state -->
+			<item
+				android:drawable="@drawable/ic_underline_accent"
+				android:state_checked="true"/>
+
+			<!-- default fallback background is invisible,
+			 for the OFF state -->
+			<item android:drawable="@android:color/transparent"/>
+
+		</selector>
+	</item>
+
 </layer-list>

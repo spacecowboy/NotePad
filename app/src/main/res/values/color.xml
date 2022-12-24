@@ -28,6 +28,11 @@
 	<!-- Make icons white for dark themes (85% transparency) -->
 	<color name="white_alpha85">#D9FFFFFF</color>
 
+	<!-- it's supposed to be the same background color that you get when you hold your finger
+	 on a clickable textview, like the due date box in the task detail view. If you find a
+	  style attribute to use instead of this hardcoded value, check out btn_toggle_bg.xml -->
+	<color name="widget_pressed_background">#40808080</color>
+
 	<!-- Unchecked. some of these should be deleted -->
 
 	<!-- 12% black in LIGHT THEME -->

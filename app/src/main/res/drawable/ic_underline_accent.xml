@@ -1,0 +1,16 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:height="24dp"
+	android:width="24dp"
+	android:viewportWidth="24"
+	android:viewportHeight="24">
+
+	<!-- a rectangle, near the bottom half of the picture,
+	 that uses the theme's accent color. So it picks up
+	 the accent color chosen by the user for material YOU
+	 themes in android 13. To see it in the preview panel
+	 of android studio use "ThemeBaseDark" in the style
+	 spinner on the corner -->
+
+	<path android:fillColor="?colorAccent"
+		android:pathData="M21,5M3,21V19H21V21H3Z" />
+</vector>
