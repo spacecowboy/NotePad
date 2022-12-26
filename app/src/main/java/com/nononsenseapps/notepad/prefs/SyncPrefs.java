@@ -297,7 +297,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	private void afterGettingAuthToken(AccountManagerFuture<Bundle> future, Account account) {
 		try {
 			NnnLogger.debug(SyncPrefs.class, "step two");
-			// If the user has authorized your application to use the tasks API a token is available.
+			// If the user authorized your app to use the tasks API, a token is available
 			// TODO here it crashes because the app is not registered into some kind of console
 			String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
 

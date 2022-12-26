@@ -102,16 +102,6 @@ public final class NotificationItemHelper {
 		final TextView notDateButton = nv.findViewById(R.id.notificationDate);
 		notDateButton.setText(getDateString(fragment.getActivity(), not.time));
 
-		final OnMenuItemClickListener onTypeListener = item -> {
-			int itemId = item.getItemId();
-			if (itemId == R.id.not_type_time) {
-				switchToTime(nv);
-				return true;
-			} else {
-				return false;
-			}
-		};
-
 		final View notRemoveButton = nv.findViewById(R.id.notificationRemove);
 
 		// Remove button
