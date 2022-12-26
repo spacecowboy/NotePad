@@ -32,7 +32,7 @@
 		android:scaleType="fitCenter"
 		android:layout_gravity="center_vertical|start"
 		android:layout_marginStart="@dimen/keyline_1"
-		app:tint="@color/icons"/>
+		app:tint="?iconTint"/>
 
 	<TextView
 		android:id="@android:id/text1"

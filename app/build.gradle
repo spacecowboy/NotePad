@@ -63,8 +63,10 @@ android {
 
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
-        minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
         targetSdkVersion 33
+        // most people have at least android 7.1 anyway: https://apilevels.com/
+        // 90% of users are on API>=27 => don't write special code for 23<=API<=26, it's worthless
+        minSdkVersion 23
 
         // Making either of these two values dynamic in the defaultConfig will
         // require a full app build and reinstallation, even for the smallest change.
@@ -91,10 +93,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    /* kotlinOptions {
-        // compile kotlin to java 11, for compatibility
-        jvmTarget = 11
-    } */
+    // kotlinOptions { jvmTarget = 11 } // compile kotlin to java 11, for compatibility
 
     if (project.hasProperty('STORE_FILE')) {
         buildTypes {
