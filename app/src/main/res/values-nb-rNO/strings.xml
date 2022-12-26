@@ -249,4 +249,15 @@
     <string name="backup_import_msg">Prøv å importere sikkerhetskopi fra %1$s\? Dette tømmer nåværende database.</string>
     <string name="sd_card_summary">Gjøremål vil være de samme i programmet og SD-kortet. Merk at sletting av filer derfor også sletter gjøremålene i programmet!</string>
     <string name="open_channel_settings_description">Åpne en side for å redigere merknadsinnstillingene for programmet. Disse overskrive alle innstillinger valgt annensteds hen.</string>
+    <string name="disable_android_hibernation_desc">Denne funksjonen gjør programmet mindre pålitelig og kan blokkere påminnelsene dine. Åpne dette, se etter noe ala «hvilemodus for program hvis ubrukt» og skru det av</string>
+    <string name="msg_enable_notifications">Gå til innstillinger → merknader for å skru dem på</string>
+    <string name="disable_android_hibernation">Skru av Android-dvalgang</string>
+    <string name="unavailable_chose_directory">Utilgjengelig. Velg en mappe først.</string>
+    <string name="notifications_enabled">Merknader synlige</string>
+    <string name="notifications_blocked">Merknader er usynlige, slik at du ikke ser påminnelsene. Trykk her, finn tilgangskategorien, og skru på merknader for dette programmet.</string>
+    <string name="not_selected_yet">Ingen valgt enda</string>
+    <string name="directory_summary_msg">Som følge av begrensninger fra Google er filer lagret i %s
+\nsom du har tilgang til med filbehandleren. Merk at å avinstallere programmet også sletter disse filene. Bruk sikkerhetskopifunksjonen for å beholde notatene dine.</string>
+    <string name="notifications_visibility">Merknadssynlighet</string>
+    <string name="msg_hibernation_already_off">Android-dvalgang er allerede avslått. Du trenger ikke dette.</string>
 </resources>

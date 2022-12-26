@@ -1,11 +1,11 @@
 NoNonsense Notes v7.1.0
 
 Highlights:
-- improved file picker for backup files
-- moved org files to a default folder
-- updated translations using Weblate
-- fixed a bug that cloned reminders when re-opening notes
+- Improved file-picker for backup files
+- Moved ORG files to a default folder
+- Updated translations using Weblate
+- Fixed a bug that cloned reminders when re-opening notes
 
 Details:
-- Target android 13
+- Target Android 13
 - UI tweaks
