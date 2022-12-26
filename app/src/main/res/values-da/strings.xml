@@ -224,4 +224,6 @@
     <string name="app_about_translations">Bistå oversættelsen på https://hosted.weblate.org/engage/no-nonsense-notes/</string>
     <string name="file_picker_not_available">Filvælgeren er ikke tilgængelig</string>
     <string name="allow_exact_reminders">Tillad eksakte påmindelser</string>
+    <string name="undo">Angre</string>
+    <string name="sorting">Sortering</string>
 </resources>
