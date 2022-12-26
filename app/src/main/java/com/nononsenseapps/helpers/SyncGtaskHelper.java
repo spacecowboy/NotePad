@@ -107,11 +107,13 @@ public class SyncGtaskHelper {
 	/**
 	 * Removes account name from sharedpreferences if one is saved.
 	 */
-	@SuppressLint("CommitPrefEdits")
 	public static void disableSync(@NonNull Context context) {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-				(context);
-		sharedPreferences.edit().putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false).commit();
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		sharedPreferences
+				.edit()
+				.putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
+				.commit();
 		toggleSync(context, sharedPreferences);
 	}
 

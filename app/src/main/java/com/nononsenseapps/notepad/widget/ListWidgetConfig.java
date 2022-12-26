@@ -63,7 +63,7 @@ import org.androidannotations.annotations.ViewById;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@EActivity(resName = "activity_widget_config")
+@EActivity(R.layout.activity_widget_config)
 public class ListWidgetConfig extends AppCompatActivity {
 	public static final String KEY_LIST = "widget1_key_list";
 	public static final String KEY_LIST_TITLE = "widget1_key_list_title";

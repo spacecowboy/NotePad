@@ -32,7 +32,7 @@ import com.nononsenseapps.notepad.fragments.FragmentSearch;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 
-@EActivity(resName = "fullscreen_fragment")
+@EActivity(R.layout.fullscreen_fragment)
 public class ActivitySearch extends AppCompatActivity {
 
 	protected String mQuery = "";

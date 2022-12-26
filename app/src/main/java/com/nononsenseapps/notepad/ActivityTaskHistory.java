@@ -36,7 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-@EActivity(resName = "activity_task_history")
+@EActivity(R.layout.activity_task_history)
 public class ActivityTaskHistory extends AppCompatActivity {
 	public static final String RESULT_TEXT_KEY = "task_text_key";
 	private long mTaskID;

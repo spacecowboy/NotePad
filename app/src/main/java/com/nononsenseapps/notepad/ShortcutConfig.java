@@ -25,7 +25,7 @@ import org.androidannotations.annotations.ViewById;
  * Shows a window to configure the app's smaller widget,
  * letting the user choose which note list will be opened
  */
-@EActivity(resName = "activity_shortcut_config")
+@EActivity(R.layout.activity_shortcut_config)
 public class ShortcutConfig extends AppCompatActivity {
 
 	@ViewById(resName = "createNoteSwitch")

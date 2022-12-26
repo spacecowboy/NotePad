@@ -23,7 +23,7 @@ import com.nononsenseapps.notepad.fragments.FragmentSearchDeleted_;
 
 import org.androidannotations.annotations.EActivity;
 
-@EActivity(resName = "fullscreen_fragment")
+@EActivity(R.layout.fullscreen_fragment)
 public class ActivitySearchDeleted extends ActivitySearch {
 
 	@Override

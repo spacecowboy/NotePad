@@ -96,7 +96,7 @@ import java.util.concurrent.Executors;
  * in release 6.0.0 beta, it has to do with getting rid of the annotations
  * library that generates {@link ActivityMain_}
  */
-@EActivity(resName = "activity_main")
+@EActivity(R.layout.activity_main)
 public class ActivityMain extends AppCompatActivity
 		implements OnFragmentInteractionListener, OnSyncStartStopListener,
 		MenuStateController, OnSharedPreferenceChangeListener {
