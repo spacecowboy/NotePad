@@ -17,12 +17,14 @@
 -->
 
 <!-- This represents a "list of notes" shown in the drawer menu on the left.
- See also drawer_layout.xml which hosts these list items -->
+ See also drawer_layout.xml which hosts these list items.
+ Minimum height is set to 64dp by the 2° Textview, but this item will
+ enlarge to show all the text of the notelist name -->
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="64dp"
+	android:layout_height="wrap_content"
 	android:background="?android:attr/selectableItemBackground"
 	android:orientation="horizontal">
 
@@ -32,7 +34,7 @@
 		android:id="@android:id/text1"
 		style="?attr/LeftDrawerListItemStyle"
 		android:layout_width="0dp"
-		android:layout_height="64dp"
+		android:layout_height="wrap_content"
 		android:layout_gravity="start|center_vertical"
 		android:layout_weight="1"
 		android:fontFamily="sans-serif-light"
