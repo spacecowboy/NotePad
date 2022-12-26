@@ -87,9 +87,9 @@ public class OrgSyncService extends Service {
 	}
 
 	public static void stop(Context context) {
-		NnnLogger.debug(OrgSyncService.class, "got here #5");
+		NnnLogger.debug(OrgSyncService.class, "stop() #1");
 		context.stopService(new Intent(context, OrgSyncService.class));
-		NnnLogger.debug(OrgSyncService.class, "got here #6");
+		NnnLogger.debug(OrgSyncService.class, "stop() #2");
 	}
 
 	public static boolean areAnyEnabled(Context context) {

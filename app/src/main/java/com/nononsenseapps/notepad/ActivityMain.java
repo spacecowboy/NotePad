@@ -54,6 +54,7 @@ import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.PermissionsHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
@@ -347,6 +348,13 @@ public class ActivityMain extends AppCompatActivity
 			if (!syncing) setRefreshOfAllSwipeLayoutsTo(false);
 		}
 		*/
+		if (!PreferencesHelper.isSincEnabledAtAll(this)) {
+			Toast.makeText(this, R.string.no_sync_method_chosen,
+					Toast.LENGTH_SHORT).show();
+			setRefreshOfAllSwipeLayoutsTo(false);
+			return;
+		}
+
 		boolean syncing = false;
 		// GTasks
 		if (SyncGtaskHelper.isGTasksConfigured(ActivityMain.this)) {
@@ -1247,8 +1255,9 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	/**
-	 * sets the refreshing status of all {@link SwipeRefreshLayout} in this activity:
-	 * FALSE if they should stop the animation, TRUE if they should show it
+	 * sets the refreshing status of all {@link SwipeRefreshLayout} in this activity
+	 *
+	 * @param newState FALSE if they should stop the animation, TRUE if they should show it
 	 */
 	private void setRefreshOfAllSwipeLayoutsTo(boolean newState) {
 		for (SwipeRefreshLayout layout : swpRefLayouts) {

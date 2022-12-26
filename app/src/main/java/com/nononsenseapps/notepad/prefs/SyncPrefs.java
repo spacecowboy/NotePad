@@ -78,6 +78,11 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	private Preference prefAccount;
 
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
+		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
+			// user does not want sync features
+			return;
+		}
+
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
@@ -207,8 +212,10 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	 * @param key   The key of the preference that was changed, added, or removed
 	 */
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+		NnnLogger.debug(SyncPrefs.class, "onChanged");
+		final String keySyncMaster = this.getString(R.string.key_pref_sync_enabled_master);
 		try {
-			NnnLogger.debug(SyncPrefs.class, "onChanged");
+
 			if (this.getActivity().isFinishing()) {
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
@@ -216,22 +223,20 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			}
 
 			// => now we can safely continue
-			switch (key) {
-				case KEY_SYNC_ENABLE:
-					toggleSync(prefs);
-					break;
-				case KEY_BACKGROUND_SYNC:
-					setSyncInterval(this.getContext(), prefs);
-					break;
-				case KEY_ACCOUNT:
-					NnnLogger.debug(SyncPrefs.class, "account");
-					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
-					// prefAccount.setSummary(getString(R.string.settings_account_summary));
-					break;
-				case KEY_SD_ENABLE:
-					// Restart the sync service
-					OrgSyncService.stop(getActivity());
-					break;
+			if (KEY_SYNC_ENABLE.equals(key)) {
+				// for google tasks only
+				toggleSync(prefs);
+			} else if (KEY_BACKGROUND_SYNC.equals(key)) {
+				setSyncInterval(this.getContext(), prefs);
+			} else if (KEY_ACCOUNT.equals(key)) {
+				NnnLogger.debug(SyncPrefs.class, "account");
+				prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
+				// prefAccount.setSummary(getString(R.string.settings_account_summary));
+			} else if (KEY_SD_ENABLE.equals(key)) {
+				// Restart the sync service
+				OrgSyncService.stop(getActivity());
+			} else if (keySyncMaster.equals(key)) {
+				// TODO force stop / re-enable all (user selected) sync services
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough

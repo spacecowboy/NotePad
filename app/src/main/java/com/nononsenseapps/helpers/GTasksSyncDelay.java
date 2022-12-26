@@ -31,6 +31,8 @@ public final class GTasksSyncDelay extends Service {
 	// Delay this long before doing the sync
 	private static final int delaySecs = 60;
 
+	// TODO useless. delete by ~summer 2023
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		/* Schedule a sync if settings say so */
