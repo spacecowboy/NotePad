@@ -17,7 +17,8 @@
 
 package com.nononsenseapps.notepad.dashclock;
 
-import android.app.Activity;
+
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -109,7 +110,7 @@ public class DashclockPrefsFragment extends PreferenceFragmentCompat {
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
 	 */
-	private static void setEntries(Activity activity, ListPreference listSpinner) {
+	private static void setEntries(Context context, ListPreference listSpinner) {
 
 		ArrayList<CharSequence> entries = new ArrayList<>();
 		ArrayList<CharSequence> values = new ArrayList<>();
@@ -120,7 +121,7 @@ public class DashclockPrefsFragment extends PreferenceFragmentCompat {
 		// Set it as the default value also
 		//listSpinner.setDefaultValue("-1");
 
-		Cursor cursor = activity
+		Cursor cursor = context
 				.getContentResolver()
 				.query(TaskList.URI, TaskList.Columns.FIELDS, null, null,
 						TaskList.Columns.TITLE);
@@ -137,11 +138,8 @@ public class DashclockPrefsFragment extends PreferenceFragmentCompat {
 
 		// Set the values
 		if (listSpinner != null) {
-			listSpinner.setEntries(
-					entries.toArray(new CharSequence[0]));
-			listSpinner.setEntryValues(
-					values.toArray(new CharSequence[0]));
-
+			listSpinner.setEntries(entries.toArray(new CharSequence[0]));
+			listSpinner.setEntryValues(values.toArray(new CharSequence[0]));
 			listSpinner.setSummary(listSpinner.getEntry());
 		}
 	}

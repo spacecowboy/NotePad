@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.prefs;
 
+
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;

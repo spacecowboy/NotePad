@@ -19,7 +19,7 @@ package com.nononsenseapps.helpers;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
+
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -28,6 +28,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
@@ -36,13 +37,14 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 public final class SyncStatusMonitor extends BroadcastReceiver {
-	Activity activity;
+
+	AppCompatActivity activity;
 	OnSyncStartStopListener listener;
 
 	/**
 	 * Call this in the activity's onResume
 	 */
-	public void startMonitoring(Activity activity, OnSyncStartStopListener listener) {
+	public void startMonitoring(AppCompatActivity activity, OnSyncStartStopListener listener) {
 		// in the caller, the activity acts also as the listener, anyway
 		this.activity = activity;
 		this.listener = listener;

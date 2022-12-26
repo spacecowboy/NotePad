@@ -1,10 +1,11 @@
 package com.nononsenseapps.ui;
 
-import android.app.Activity;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentActivity;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
@@ -20,10 +21,10 @@ public final class ShowcaseHelper {
 
 	/**
 	 * Create, configure and show a view to highlight a functionality, using an appropriate
-	 * library. The view is shown above the given {@link Activity} and features a title and a
-	 * short description
+	 * library. The view is shown above the given {@link AppCompatActivity} and features a
+	 * title and a short description
 	 */
-	public static void showForView(Activity activity, View targetToHighlight,
+	public static void showForView(AppCompatActivity activity, View targetToHighlight,
 								   int titleStringId, int descriptionStringId) {
 		// always a good idea to check
 		if (targetToHighlight == null) {
@@ -38,7 +39,7 @@ public final class ShowcaseHelper {
 		finishConfiguringAndShow(target2, activity);
 	}
 
-	public static void showForOverflowMenu(@NonNull Activity activity,
+	public static void showForOverflowMenu(@NonNull FragmentActivity activity,
 										   int titleStringId, int descriptionStringId) {
 		// get the toolbar from the activity
 		Toolbar tBar = activity.findViewById(androidx.appcompat.R.id.action_bar);
@@ -59,7 +60,7 @@ public final class ShowcaseHelper {
 	/**
 	 * All functions share this common configuration for the TapTargetView
 	 */
-	private static void finishConfiguringAndShow(TapTarget target, Activity activity) {
+	private static void finishConfiguringAndShow(TapTarget target, FragmentActivity activity) {
 		// TODO can *you* make it prettier ? See also https://github.com/KeepSafe/TapTargetView
 		target.outerCircleAlpha(0.9f)
 				.drawShadow(true)

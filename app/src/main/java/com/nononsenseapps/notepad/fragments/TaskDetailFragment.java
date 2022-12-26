@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;

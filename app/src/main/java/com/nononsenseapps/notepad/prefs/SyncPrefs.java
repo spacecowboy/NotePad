@@ -23,6 +23,7 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -74,7 +76,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_SYNC_INFO = "pref_sdcard_sync_info";
 
-	private Activity activity;
+	private FragmentActivity activity;
 
 	private SwitchPreference prefSyncEnable;
 	private Preference prefAccount;
@@ -104,14 +106,9 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	@Override
-	public void onAttach(@NonNull Activity activity) {
-		// you can fix it AFTER you remove all google task sync code
-		super.onAttach(activity);
-		this.activity = activity;
-	}
-
-	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
+
+		this.activity = this.getActivity();
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_sync);
@@ -279,7 +276,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			NnnLogger.debug(SyncPrefs.class, "step one");
 
 			// work continues in callback, method afterGettingAuthToken()
-			AccountManagerCallback<Bundle> callback = (b) -> afterGettingAuthToken(b, chosenAccount);
+			AccountManagerCallback<Bundle> callback =
+					(b) -> afterGettingAuthToken(b, chosenAccount);
 
 			// Request user's permission
 			GoogleTasksClient.getAuthTokenAsync(activity, chosenAccount, callback);
@@ -318,8 +316,10 @@ public class SyncPrefs extends PreferenceFragmentCompat
 						.commit();
 
 				// Set it syncable
-				ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
-				ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
+				ContentResolver
+						.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
+				ContentResolver
+						.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
 				// Set sync frequency
 				SyncPrefs.setSyncInterval(activity, customSharedPreference);
 				// Set it syncable
