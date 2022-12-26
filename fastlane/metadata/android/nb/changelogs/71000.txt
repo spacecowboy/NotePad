@@ -1,0 +1,11 @@
+NoNonsense-notater v7.1.0
+
+Høydepunkter:
+- Forbedret filvelger for sikkerhetskopifiler
+- ORG-filer flyttet til forvalgt mappe
+- Oppdaterte oversettelser fra Weblate
+- Fikset feil som klonet påminnelser ved gjenåpning av notater
+
+Detaljer:
+- Innrettet mot Android 13
+- Grensesnittsforbedringer

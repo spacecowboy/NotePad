@@ -214,4 +214,14 @@
     <string name="sd_card_summary">Opgaver er spejlet på SD kortet. Ændringer synkroniseres begge veje. Bemærk at sletning af filerne også vil slette opgaverne i app\'et!</string>
     <string name="directory">Mappe</string>
     <string name="cannot_write_to_directory">Kan ikke skrive til mappe</string>
+    <string name="special_thanks">Speciel takk</string>
+    <string name="no_sync_method_chosen">Du har ikke valgt en synkroniseringsmetode</string>
+    <string name="gtasks_not_working">Google Tasks (fungerer ikke)</string>
+    <string name="default_location">Standard placering</string>
+    <string name="choose_backup_folder">Vælg mappe for sikkerhedskopiering</string>
+    <string name="use_exact_alarms">Eksakte alarmer</string>
+    <string name="changelog">Ændringslog</string>
+    <string name="app_about_translations">Bistå oversættelsen på https://hosted.weblate.org/engage/no-nonsense-notes/</string>
+    <string name="file_picker_not_available">Filvælgeren er ikke tilgængelig</string>
+    <string name="allow_exact_reminders">Tillad eksakte påmindelser</string>
 </resources>
