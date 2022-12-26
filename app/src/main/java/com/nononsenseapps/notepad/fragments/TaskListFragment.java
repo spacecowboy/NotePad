@@ -83,7 +83,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-@EFragment(resName = "fragment_task_list")
+@EFragment(R.layout.fragment_task_list)
 public class TaskListFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	// Must be less than -1

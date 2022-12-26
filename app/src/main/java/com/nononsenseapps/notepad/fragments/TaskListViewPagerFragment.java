@@ -66,7 +66,7 @@ import org.androidannotations.annotations.ViewById;
  * Displays many listfragments across a viewpager. Supports selecting a certain
  * one on startup.
  */
-@EFragment(resName = "fragment_tasklist_viewpager")
+@EFragment(R.layout.fragment_tasklist_viewpager)
 public class TaskListViewPagerFragment extends Fragment implements
 		EditListDialogListener, ListOpener {
 

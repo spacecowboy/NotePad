@@ -47,7 +47,7 @@ import org.androidannotations.annotations.UiThread;
 
 import java.util.HashSet;
 
-@EFragment(resName = "fragment_search")
+@EFragment(R.layout.fragment_search)
 public class FragmentSearchDeleted extends FragmentSearch {
 
 	@AfterViews

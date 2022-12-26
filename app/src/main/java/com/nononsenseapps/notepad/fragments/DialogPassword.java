@@ -38,7 +38,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-@EFragment(resName = "fragment_dialog_password")
+@EFragment(R.layout.fragment_dialog_password)
 public class DialogPassword extends DialogFragment {
 
 	// TODO @ViewById() can be replaced with viewbindings. It's easy! See https://developer.android.com/topic/libraries/view-binding and try

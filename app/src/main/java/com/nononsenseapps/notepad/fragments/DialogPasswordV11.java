@@ -44,7 +44,7 @@ import org.androidannotations.annotations.ViewById;
  * It is called when the user changes the existing password.
  * It asks to input the old password.
  */
-@EFragment(resName = "fragment_dialog_password")
+@EFragment(R.layout.fragment_dialog_password)
 public class DialogPasswordV11 extends DialogFragment {
 
 	// TODO DialogPassword.java is better. Try to put the functions of this dialog back into that file, then delete this file

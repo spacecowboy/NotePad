@@ -39,7 +39,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
 
-@EFragment(resName = "fragment_dialog_restore")
+@EFragment(R.layout.fragment_dialog_restore)
 public class DialogRestore extends DialogFragment {
 
 	public interface OnListSelectedListener {

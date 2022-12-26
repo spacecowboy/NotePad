@@ -54,7 +54,7 @@ import org.androidannotations.annotations.ViewById;
  * For the search widget of the "main" view, see
  * {@link TaskListViewPagerFragment#onCreateOptionsMenu}
  */
-@EFragment(resName = "fragment_search")
+@EFragment(R.layout.fragment_search)
 public class FragmentSearch extends Fragment {
 
 	public final static String QUERY = "query";
