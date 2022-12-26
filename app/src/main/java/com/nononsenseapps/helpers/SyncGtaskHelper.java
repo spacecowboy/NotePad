@@ -127,9 +127,9 @@ public class SyncGtaskHelper {
 	 * with a valid google account
 	 */
 	public static boolean toggleSync(@NonNull Context context,
-									 @NonNull SharedPreferences sharedPreferences) {
-		final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
-		String accountName = sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, "");
+									 @NonNull SharedPreferences sharePrefs) {
+		final boolean enabled = sharePrefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+		String accountName = sharePrefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 
 		boolean currentlyEnabled = false;
 
@@ -141,7 +141,7 @@ public class SyncGtaskHelper {
 					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
 					ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
 					// Also set sync frequency
-					SyncPrefs.setSyncInterval(context, sharedPreferences);
+					SyncPrefs.setSyncInterval(context, sharePrefs);
 					currentlyEnabled = true;
 				} else {
 					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, false);
@@ -153,8 +153,8 @@ public class SyncGtaskHelper {
 			}
 		}
 		if (!currentlyEnabled) {
-			forgetAccountOnce(sharedPreferences);
-			disableSyncOnce(sharedPreferences);
+			forgetAccountOnce(sharePrefs);
+			disableSyncOnce(sharePrefs);
 		}
 		return currentlyEnabled;
 	}
@@ -179,7 +179,10 @@ public class SyncGtaskHelper {
 	 */
 	private static void disableSyncOnce(@NonNull SharedPreferences sharedPreferences) {
 		if (sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)) {
-			sharedPreferences.edit().putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false).apply();
+			sharedPreferences
+					.edit()
+					.putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
+					.apply();
 		}
 	}
 
@@ -189,7 +192,10 @@ public class SyncGtaskHelper {
 	 */
 	private static void forgetAccountOnce(@NonNull SharedPreferences sharedPreferences) {
 		if (sharedPreferences.contains(SyncPrefs.KEY_ACCOUNT)) {
-			sharedPreferences.edit().remove(SyncPrefs.KEY_ACCOUNT).apply();
+			sharedPreferences
+					.edit()
+					.remove(SyncPrefs.KEY_ACCOUNT)
+					.apply();
 		}
 	}
 
@@ -230,7 +236,8 @@ public class SyncGtaskHelper {
 	}
 
 	private static void requestDelayedGTasksSync(final Context context) {
-		context.startService(new Intent(context, GTasksSyncDelay.class)); // TODO startservice. does this work correctly in newer android versions ?
+		// startservice may crash in newer devices, but we'll kill Gtasks anyway...
+		context.startService(new Intent(context, GTasksSyncDelay.class));
 	}
 
 	private static boolean shouldSyncGTasksOnChange(final Context context) {
