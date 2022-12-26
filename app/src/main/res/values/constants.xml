@@ -64,6 +64,7 @@
 	<string name="key_pref_allow_exact_reminders">key_pref_allow_exact_reminders</string>
 	<string name="key_pref_disable_hibernation">key_pref_disable_hibernation</string>
 	<string name="key_pref_notif_visibility">key_pref_notif_visibility</string>
+	<string name="key_pref_sync_enabled_master">key_pref_sync_enabled_master</string>
 	<string name="pref_locale">pref_key_locale</string>
 	<string name="key_pref_item_max_height">item_max_height</string>
 	<string name="key_pref_dateformat_long">dateformat_long</string>

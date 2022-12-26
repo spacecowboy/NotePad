@@ -154,6 +154,8 @@
 	<string name="notifications_blocked">Notifications are not visible, so you will not see the reminders. Touch here, find the permissions category, and enable notifications for this app</string>
 	<string name="unavailable_chose_directory">Unavailable. Please choose a directory first</string>
 	<string name="not_selected_yet">Not selected yet</string>
+	<string name="enable_sync">Enable synchronization</string>
+	<string name="enable_sync_desc">Enables synchronization features and allows to choose a sync source. Backups are not affected</string>
 
 	<!--
 		Use few if language need it. In English is the same.

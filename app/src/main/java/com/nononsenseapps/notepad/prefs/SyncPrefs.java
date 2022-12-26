@@ -23,7 +23,6 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-
 import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -35,7 +34,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -76,8 +74,6 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_SYNC_INFO = "pref_sdcard_sync_info";
 
-	private FragmentActivity activity;
-
 	private SwitchPreference prefSyncEnable;
 	private Preference prefAccount;
 
@@ -108,13 +104,11 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
-		this.activity = this.getActivity();
-
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_sync);
 
 		final SharedPreferences sharedPrefs = PreferenceManager
-				.getDefaultSharedPreferences(activity);
+				.getDefaultSharedPreferences(this.getContext());
 		// Set up a listener whenever a key changes
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -174,7 +168,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 				Toast.makeText(this.getContext(), R.string.permission_denied,
 						Toast.LENGTH_SHORT).show();
 				PreferencesHelper
-						.put(getActivity(), SyncPrefs.KEY_SYNC_ENABLE, false);
+						.put(this.getContext(), SyncPrefs.KEY_SYNC_ENABLE, false);
 			}
 		}
 
@@ -184,7 +178,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		PreferenceManager.getDefaultSharedPreferences(activity)
+		PreferenceManager.getDefaultSharedPreferences(this.getContext())
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
@@ -215,7 +209,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		try {
 			NnnLogger.debug(SyncPrefs.class, "onChanged");
-			if (activity.isFinishing()) {
+			if (this.getActivity().isFinishing()) {
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 				return;
@@ -227,7 +221,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					toggleSync(prefs);
 					break;
 				case KEY_BACKGROUND_SYNC:
-					setSyncInterval(activity, prefs);
+					setSyncInterval(this.getContext(), prefs);
 					break;
 				case KEY_ACCOUNT:
 					NnnLogger.debug(SyncPrefs.class, "account");
@@ -266,7 +260,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	 */
 	private void userChoseAnAccountWithName(String chosenAccountName) {
 		Account[] allAccounts = AccountManager
-				.get(this.activity)
+				.get(this.getContext())
 				.getAccountsByType("com.google");
 
 		for (var chosenAccount : allAccounts) {
@@ -280,7 +274,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					(b) -> afterGettingAuthToken(b, chosenAccount);
 
 			// Request user's permission
-			GoogleTasksClient.getAuthTokenAsync(activity, chosenAccount, callback);
+			GoogleTasksClient.getAuthTokenAsync(this.getActivity(), chosenAccount, callback);
 
 			// do that only for the 1° match
 			return;
@@ -308,7 +302,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 				NnnLogger.debug(SyncPrefs.class, "step three: " + account.name);
 
 				SharedPreferences customSharedPreference = PreferenceManager
-						.getDefaultSharedPreferences(activity);
+						.getDefaultSharedPreferences(this.getContext());
 				customSharedPreference
 						.edit()
 						.putString(SyncPrefs.KEY_ACCOUNT, account.name)
@@ -321,11 +315,11 @@ public class SyncPrefs extends PreferenceFragmentCompat
 				ContentResolver
 						.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
 				// Set sync frequency
-				SyncPrefs.setSyncInterval(activity, customSharedPreference);
+				SyncPrefs.setSyncInterval(this.getContext(), customSharedPreference);
 				// Set it syncable
-				SyncGtaskHelper.toggleSync(this.activity, customSharedPreference);
+				SyncGtaskHelper.toggleSync(this.getContext(), customSharedPreference);
 				// And schedule an immediate sync
-				SyncGtaskHelper.requestSyncIf(this.activity, SyncGtaskHelper.MANUAL);
+				SyncGtaskHelper.requestSyncIf(this.getContext(), SyncGtaskHelper.MANUAL);
 			}
 		} catch (OperationCanceledException | AuthenticatorException | IOException e) {
 			// OperationCanceledException:
@@ -339,8 +333,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			// * indicates that it encountered an IOException while
 			// * communicating with the authentication server
 			String errMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
-			Toast.makeText(this.activity, errMsg, Toast.LENGTH_SHORT).show();
-			SyncGtaskHelper.disableSync(this.activity);
+			Toast.makeText(this.getContext(), errMsg, Toast.LENGTH_SHORT).show();
+			SyncGtaskHelper.disableSync(this.getContext());
 		}
 	}
 
