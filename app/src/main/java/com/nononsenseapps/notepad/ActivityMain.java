@@ -510,6 +510,7 @@ public class ActivityMain extends AppCompatActivity
 			restartAndRefresh();
 		}
 		super.onResume();
+
 		// activate monitor
 		if (syncStatusReceiver != null) {
 			syncStatusReceiver.startMonitoring(this, this);

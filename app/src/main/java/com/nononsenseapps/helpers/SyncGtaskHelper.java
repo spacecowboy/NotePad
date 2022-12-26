@@ -33,6 +33,7 @@ import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 
 import java.util.Calendar;
 
@@ -52,6 +53,11 @@ public class SyncGtaskHelper {
 	public static final String KEY_LAST_SYNC = "lastSync";
 
 	public static void requestSyncIf(final Context context, final int TYPE) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
+			NnnLogger.debug(SyncGtaskHelper.class,
+					"not starting: sync is disabled in the prefs");
+			return;
+		}
 		if (!isGTasksConfigured(context)) {
 			return;
 		}

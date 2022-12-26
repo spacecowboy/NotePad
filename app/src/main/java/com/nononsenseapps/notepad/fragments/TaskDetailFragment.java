@@ -586,7 +586,8 @@ public class TaskDetailFragment extends Fragment {
 	void hideTaskParts(final TaskList list) {
 		String type;
 		if (list.listtype == null) {
-			type = PreferenceManager.getDefaultSharedPreferences(getActivity())
+			type = PreferenceManager
+					.getDefaultSharedPreferences(getActivity())
 					.getString(getString(R.string.pref_listtype), getString(R.string.default_listtype));
 		} else {
 			type = list.listtype;

@@ -33,6 +33,7 @@ import android.os.Process;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -62,8 +63,15 @@ public class OrgSyncService extends Service {
 	private final ArrayList<SynchronizerInterface> synchronizers;
 
 	public static void start(Context context) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
+			NnnLogger.debug(OrgSyncService.class,
+					"not starting: sync is disabled in the prefs");
+			return;
+		}
+
 		NnnLogger.debug(OrgSyncService.class, "got here #1");
-		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
+		// TODO startservice. does this work correctly in newer android versions ?
+		context.startService(new Intent(context, OrgSyncService.class)
 				.setAction(ACTION_START));
 		NnnLogger.debug(OrgSyncService.class, "got here #2");
 	}
@@ -84,8 +92,10 @@ public class OrgSyncService extends Service {
 	}
 
 	public static boolean areAnyEnabled(Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		return prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) return false;
+		if (!PreferencesHelper.isSdSyncEnabled(context)) return false;
+
+		return true;
 	}
 
 	public OrgSyncService() {
@@ -107,7 +117,7 @@ public class OrgSyncService extends Service {
 			syncers.add(sd);
 		}
 
-		// if we add another synchronization service, add code here
+		// TODO if we add another synchronization service, add code here
 
 		return syncers;
 	}
@@ -248,9 +258,9 @@ public class OrgSyncService extends Service {
 						// Save last sync time
 						PreferenceManager
 								.getDefaultSharedPreferences(OrgSyncService.this)
-								.edit().putLong(SyncPrefs.KEY_LAST_SYNC,
-										Calendar.getInstance()
-												.getTimeInMillis())
+								.edit()
+								.putLong(SyncPrefs.KEY_LAST_SYNC,
+										Calendar.getInstance().getTimeInMillis())
 								.commit();
 						break;
 				}
@@ -288,9 +298,10 @@ public class OrgSyncService extends Service {
 		@Override
 		public void startMonitor(final SyncHandler handler) {
 			// Monitor both lists and tasks
-			getContentResolver().registerContentObserver(TaskList.URI, true,
-					this);
-			getContentResolver().registerContentObserver(Task.URI, true, this);
+			getContentResolver()
+					.registerContentObserver(TaskList.URI, true, this);
+			getContentResolver()
+					.registerContentObserver(Task.URI, true, this);
 		}
 
 		@Override

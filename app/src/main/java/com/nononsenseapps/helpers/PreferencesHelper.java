@@ -31,6 +31,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
  * Helper class to save common options to shared preferences.
  */
 public final class PreferencesHelper {
+
 	private static SharedPreferences Prefs(@NonNull Context context) {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
@@ -51,6 +52,15 @@ public final class PreferencesHelper {
 		Prefs(context).edit().putBoolean(SyncPrefs.KEY_SD_ENABLE, false).apply();
 	}
 
+	/**
+	 * @return TRUE if synchronization is enabled in the global preference,
+	 * regardless of any sync method chosen. This being false should block all sync code
+	 * from running at all
+	 */
+	public static boolean isSincEnabledAtAll(@NonNull Context context) {
+		String key = context.getString(R.string.key_pref_sync_enabled_master);
+		return Prefs(context).getBoolean(key, false);
+	}
 
 	private static String getStr(@NonNull Context c, int id) {
 		return c.getResources().getString(id);
@@ -84,12 +94,6 @@ public final class PreferencesHelper {
 
 	public static void put(@NonNull Context context, @NonNull String key, boolean value) {
 		Prefs(context).edit().putBoolean(key, value).apply();
-	}
-
-
-	public static @NonNull
-	String getGoogleAccount(@NonNull Context context) {
-		return Prefs(context).getString(SyncPrefs.KEY_ACCOUNT, "");
 	}
 
 	/**

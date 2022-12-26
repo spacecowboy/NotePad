@@ -49,6 +49,12 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 		this.activity = activity;
 		this.listener = listener;
 
+		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
+			NnnLogger.debug(SyncStatusMonitor.class,
+					"not starting: sync is disabled in the prefs");
+			return;
+		}
+
 		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
 		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
 
