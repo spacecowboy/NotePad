@@ -49,14 +49,14 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 		this.activity = activity;
 		this.listener = listener;
 
+		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
+		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
+
 		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
 			NnnLogger.debug(SyncStatusMonitor.class,
 					"not starting: sync is disabled in the prefs");
 			return;
 		}
-
-		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
-		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
 
 		final String accountName = PreferenceManager
 				.getDefaultSharedPreferences(activity)
@@ -92,6 +92,13 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
+
+		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
+			NnnLogger.debug(SyncStatusMonitor.class,
+					"not starting: sync is disabled in the prefs");
+			return;
+		}
+
 		if (intent.getAction().equals(SyncAdapter.SYNC_STARTED)) {
 			activity.runOnUiThread(() -> {
 				try {

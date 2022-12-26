@@ -323,7 +323,7 @@ public class ActivityMain extends AppCompatActivity
 		} else {
 			// If not popped, then send the call to the fragment
 			// directly
-			Log.d("nononsenseapps list", "calling listOpener");
+			NnnLogger.debug(ActivityMain.class, "calling listOpener");
 			listOpener.openList(id);
 		}
 

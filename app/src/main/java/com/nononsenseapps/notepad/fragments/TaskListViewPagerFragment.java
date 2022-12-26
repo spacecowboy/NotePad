@@ -111,7 +111,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		setHasOptionsMenu(true);
 
 		mListIdToSelect = getArguments().getLong(START_LIST_ID, -1);
-		Log.d("nononsenseapps list", "onCreate: " + savedState);
+		NnnLogger.debug(TaskDetailFragment.class, "onCreate: " + savedState);
 		if (savedState != null) {
 			mListIdToSelect = savedState.getLong(START_LIST_ID);
 		}
@@ -251,7 +251,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void openList(final long id) {
 		// If it fails, will load on refresh
 		mListIdToSelect = id;
-		Log.d("nononsenseapps list", "openList: " + mListIdToSelect);
+		NnnLogger.debug(TaskListViewPagerFragment.class, "openList: " + mListIdToSelect);
 		if (mSectionsPagerAdapter != null) {
 
 			final int pos;

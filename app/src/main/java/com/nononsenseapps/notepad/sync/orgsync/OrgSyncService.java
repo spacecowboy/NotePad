@@ -79,10 +79,11 @@ public class OrgSyncService extends Service {
 	// TODO this service crashes in API 23 - default image on github
 
 	public static void pause(Context context) {
-		NnnLogger.debug(OrgSyncService.class, "got here #3");
-		context.startService(new Intent(context, OrgSyncService.class) // TODO startservice. does this work correctly in newer android versions ?
+		NnnLogger.debug(OrgSyncService.class, "pause() #1");
+		// TODO startservice. does this work correctly in newer android versions ?
+		context.startService(new Intent(context, OrgSyncService.class)
 				.setAction(ACTION_PAUSE));
-		NnnLogger.debug(OrgSyncService.class, "got here #4");
+		NnnLogger.debug(OrgSyncService.class, "pause() #2");
 	}
 
 	public static void stop(Context context) {

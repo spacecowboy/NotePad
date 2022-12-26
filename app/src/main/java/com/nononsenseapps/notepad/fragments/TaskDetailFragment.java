@@ -132,10 +132,10 @@ public class TaskDetailFragment extends Fragment {
 						// Don't want updates while editing
 						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
 						// Only update the list if that changes
-						Log.d("nononsenseapps listedit",
+						NnnLogger.debug(TaskDetailFragment.class,
 								"Updating list in task from " + mTask.dblist);
 						mTask.dblist = new Task(c).dblist;
-						Log.d("nononsenseapps listedit",
+						NnnLogger.debug(TaskDetailFragment.class,
 								"Updating list in task to " + mTask.dblist);
 						if (mTaskOrg != null) {
 							mTaskOrg.dblist = mTask.dblist;
