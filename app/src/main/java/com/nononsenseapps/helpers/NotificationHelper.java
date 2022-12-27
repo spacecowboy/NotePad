@@ -139,22 +139,16 @@ public final class NotificationHelper extends BroadcastReceiver {
 		String name = context.getString(R.string.notification_channel_name);
 		String description = context.getString(R.string.notification_channel_description);
 
-		// not higher, not lower. This is equivalent to notifications before API 24
+		// This is equivalent to notifications before API 24
+		// the user can change it in the system's settings page
 		int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
 		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
 		channel.setDescription(description);
 
-		// well if the users dislike this they can change it through the settings
-		channel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
-		// here you could also set:
-		// * the sound: channel.setSound()
-		// * the vibration: channel.enableVibration()
-		// * the light color: channel.enableLights() & channel.setLightColor()
-		// but the user can set all of these in the system's notification channel pref. page,
-		// which can be opened through our NotificationPrefs fragment. And that's
-		// better than us rewriting android code!
+		// here you could also set other stuff, but the user can set all of those in the system's
+		// notification channel pref. page, which can be opened through our NotificationPrefs
+		// fragment. And that's better than us rewriting android code!
 		nm.createNotificationChannel(channel);
 	}
 
@@ -166,7 +160,6 @@ public final class NotificationHelper extends BroadcastReceiver {
 				true,
 				getObserver(context));
 	}
-
 
 	public static void clearNotification(@NonNull final Context context,
 										 @NonNull final Intent intent) {
