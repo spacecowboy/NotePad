@@ -53,10 +53,12 @@
 		android:summary=""
 		android:title="@string/backup"/>
 	<Preference
-		android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
 		android:icon="@drawable/ic_help_24dp"
 		android:summary=""
-		android:title="@string/changelog_full_title"/>
+		android:title="@string/changelog_online">
+		<intent android:action="android.intent.action.VIEW"
+			android:data="https://github.com/spacecowboy/NotePad/releases" />
+	</Preference>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
 		android:icon="@drawable/ic_info_24dp"

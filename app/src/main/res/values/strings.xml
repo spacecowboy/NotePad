@@ -148,6 +148,7 @@
 	<string name="not_selected_yet">Not selected yet</string>
 	<string name="enable_sync">Enable synchronization</string>
 	<string name="enable_sync_desc">Enables synchronization features and allows to choose a sync source. Backups are not affected</string>
+	<string name="changelog_online">Changelog (online)</string>
 
 	<!--
 		Use few if language need it. In English is the same.
@@ -204,7 +205,7 @@
 	<string name="about">About</string>
 	<string name="sync_failed">Sync failed</string>
 	<string name="sync_login_failed">Could not log in to use Google Tasks</string>
-	<string name="changelog_full_title">Changelog</string>
+
 	<string name="completed">Completed</string>
 	<string name="date_header_overdue">Overdue</string>
 	<string name="date_header_today">Today</string>
@@ -323,6 +324,5 @@
 	<string name="bigger_titles_summary">The title is the first line</string>
 	<string name="sorting">Sorting</string>
 	<string name="undo">Undo</string>
-	<string name="changelog">Changelog</string>
 
 </resources>
