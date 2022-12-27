@@ -260,4 +260,5 @@
 \nsom du har tilgang til med filbehandleren. Merk at å avinstallere programmet også sletter disse filene. Bruk sikkerhetskopifunksjonen for å beholde notatene dine.</string>
     <string name="notifications_visibility">Merknadssynlighet</string>
     <string name="msg_hibernation_already_off">Android-dvalgang er allerede avslått. Du trenger ikke dette.</string>
+    <string name="password">Passord</string>
 </resources>
