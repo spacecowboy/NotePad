@@ -39,20 +39,6 @@ public class ProviderHelperTest {
 	}
 
 	@Test
-	public void testSplit() throws Exception {
-		String[] expected = new String[] { "foo", "bar", "baz" };
-
-		assertArrayEquals(expected, ProviderHelperKt.split("/foo/bar/baz"));
-		assertArrayEquals(expected, ProviderHelperKt.split("foo/bar/baz"));
-		assertArrayEquals(expected, ProviderHelperKt.split("foo/bar/baz/"));
-		assertArrayEquals(expected, ProviderHelperKt.split("/foo/bar/baz/"));
-
-		assertArrayEquals(expected, ProviderHelperKt.split("//foo///bar////baz/////"));
-
-		assertArrayEquals(new String[] {}, ProviderHelperKt.split("/"));
-	}
-
-	@Test
 	public void testFirstPart() throws Exception {
 		assertEquals("", ProviderHelperKt.firstPart(""));
 		assertEquals("foo", ProviderHelperKt.firstPart("foo"));

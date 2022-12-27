@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -821,7 +822,7 @@ public class ActivityMain extends AppCompatActivity
 				@Override
 				public void onDrawerClosed(View view) {
 					// hide 'Notes' (R.string.app_name_short) from the toolbar
-					getSupportActionBar().setTitle(null);
+					getSupportActionBar().setDisplayShowTitleEnabled(false);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 				}
@@ -841,6 +842,7 @@ public class ActivityMain extends AppCompatActivity
 
 					// If it's not idle, it isn't closed
 					if (DrawerLayout.STATE_IDLE != newState) {
+						getSupportActionBar().setDisplayShowTitleEnabled(true);
 						getSupportActionBar().setTitle(R.string.show_from_all_lists);
 						// Is in motion, hide action items
 						isDrawerClosed = false;
@@ -853,14 +855,15 @@ public class ActivityMain extends AppCompatActivity
 			drawerLayout.setDrawerListener(mDrawerToggle);
 		}
 
-		if (getSupportActionBar() == null) {
+		ActionBar supActBar = getSupportActionBar();
+		if (supActBar == null) {
 			NnnLogger.error(ActivityMain.class,
 					"Coding error: actionbar is null. A crash will follow");
 		} else {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			getSupportActionBar().setHomeButtonEnabled(true);
+			supActBar.setDisplayHomeAsUpEnabled(true);
+			supActBar.setHomeButtonEnabled(true);
 			// hide 'Notes' (R.string.app_name_short) from the toolbar
-			getSupportActionBar().setTitle(null);
+			supActBar.setDisplayShowTitleEnabled(false);
 		}
 
 		// Use extra items. From top to bottom, they are "TASKS", "Overdue", "Today",
