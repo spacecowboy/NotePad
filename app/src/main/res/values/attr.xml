@@ -53,7 +53,6 @@
 	<attr name="img_default_selector" format="reference"/>
 
 	<attr name="viewpager_bg" format="reference"/>
-	<attr name="textColorSecondary" format="reference|color"/>
 	<attr name="list_item_card_background" format="reference"/>
 	<attr name="labelAddItemTextColor" format="reference|color"/>
 	<attr name="drag_handle_color" format="reference|color"/>

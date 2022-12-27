@@ -31,7 +31,7 @@
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_dark</item>
 		<item name="viewpager_bg">@android:drawable/dark_header</item>
-		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
+
 		<item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
 		<item name="list_item_card_background">@drawable/card_dark</item>
 		<item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
@@ -96,7 +96,6 @@
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_light</item>
 		<item name="viewpager_bg">@color/googlenow_grey_trans</item>
-		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
 		<item name="list_item_card_background">@drawable/card_light</item>
 		<item name="drag_handle_color">@color/dragHandleColorLight</item>

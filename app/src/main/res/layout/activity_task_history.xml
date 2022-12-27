@@ -40,7 +40,7 @@
 		android:fontFamily="sans-serif-light"
 		android:text="@string/drag_to_timetravel"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textColor="?attr/textColorSecondary"
+		android:textColor="?android:attr/textColorSecondary"
 		/>
 
 	<ScrollView

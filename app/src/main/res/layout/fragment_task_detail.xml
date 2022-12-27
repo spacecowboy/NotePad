@@ -139,7 +139,7 @@
 				android:text="@string/add_a_reminder"
 				android:textAllCaps="false"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textColor="?attr/textColorSecondary"
+				android:textColor="?android:attr/textColorSecondary"
 				app:drawableLeftCompat="@drawable/ic_alarm_add_24dp"/>
 
 			<LinearLayout

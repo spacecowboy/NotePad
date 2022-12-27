@@ -18,6 +18,6 @@
 		android:background="?attr/viewpager_bg"
 		android:paddingTop="4dp"
 		android:paddingBottom="4dp"
-		android:textColor="?attr/textColorSecondary"/>
+		android:textColor="?android:attr/textColorSecondary"/>
 
 </androidx.viewpager.widget.ViewPager>
