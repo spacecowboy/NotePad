@@ -85,9 +85,6 @@ public class DialogMoveToList extends DialogFragment {
 		return dialog;
 	}
 
-	// TODO this dialog moves notes to existing lists. Add a title or a header to explain
-	//  what it does: as of now it simply shows a list of esisting notelists
-
 	public DialogMoveToList() {}
 
 	@AfterViews

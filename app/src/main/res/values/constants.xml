@@ -111,7 +111,7 @@
 	<string name="dateformat_just_date">MMMM d</string>
 
 	<!-- potential alternatives -->
-	<!-- TODO instead of translations, add these dateformat_* and more,
+	<!-- TODO instead of translations, add these dateformats,
 	      so that users from other countries have more choice,
 	      without having to translate these strings. See arrays.xml & java code -->
 	<string name="dateformat_just_date_2">d MMMM</string>

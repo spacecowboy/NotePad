@@ -65,7 +65,7 @@
 	<application
 		android:name="com.nononsenseapps.notepad.NnnApp"
 		android:allowBackup="true"
-		android:backupAgent="com.nononsenseapps.notepad.BackupAgent"
+		android:backupAgent="com.nononsenseapps.notepad.NnnBackupAgent"
 		android:hardwareAccelerated="true"
 		android:icon="@drawable/app_icon"
 		android:label="@string/nononsense_notes"

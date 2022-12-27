@@ -30,16 +30,15 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 /**
  * Backs up the user's preferences
  */
-public class BackupAgent extends BackupAgentHelper {
+public class NnnBackupAgent extends BackupAgentHelper {
+
 	private static final String PREFS_BACKUP_KEY = "prefs";
 
-	// TODO this should manage backups done through android. test if it works
-
-	// Allocate a helper and add it to the backup agent
 	@Override
 	public void onCreate() {
 		// Compute the default preferences filename.
 		String defaultPrefsFilename = getPackageName() + "_preferences";
+		// Allocate a helper and add it to the backup agent
 		addHelper(PREFS_BACKUP_KEY, new PrefBackupHelper(this, defaultPrefsFilename));
 	}
 
@@ -53,8 +52,7 @@ public class BackupAgent extends BackupAgentHelper {
 		}
 
 		/**
-		 * Restore as usual, but when complete, delete information about sync
-		 * times!
+		 * Restore as usual, but when complete, delete information about sync times!
 		 */
 		@Override
 		public void restoreEntity(BackupDataInputStream data) {
