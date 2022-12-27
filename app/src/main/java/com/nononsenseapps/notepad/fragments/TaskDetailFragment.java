@@ -439,7 +439,7 @@ public class TaskDetailFragment extends Fragment {
 		// configure and show a popup with a date-picker calendar view
 		var dpDiag = new DatePickerDialog(
 				this.getActivity(),
-				ThemeHelper.getPickerDialogTheme(this.getContext()),
+				// ThemeHelper.getPickerDialogTheme(this.getContext()),
 				this::onDateSet,
 				localTime.get(Calendar.YEAR),
 				localTime.get(Calendar.MONTH),
@@ -919,7 +919,6 @@ public class TaskDetailFragment extends Fragment {
 		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
 		return new TimePickerDialog(
 				this.getActivity(),
-				ThemeHelper.getPickerDialogTheme(this.getActivity()),
 				listener, // set the callback for when the user chooses a time
 				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
 				localTime.get(Calendar.MINUTE),

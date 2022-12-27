@@ -49,6 +49,8 @@
 		<item name="android:alertDialogTheme">?alertDialogTheme</item>
 		<item name="dialogTheme">?alertDialogTheme</item>
 		<item name="android:dialogTheme">?alertDialogTheme</item>
+		<item name="android:datePickerDialogTheme">?alertDialogTheme</item>
+		<item name="android:timePickerDialogTheme">?alertDialogTheme</item>
 		<!-- white icons for dark themes. All 3 are needed -->
 		<item name="iconTint">@color/white_alpha85</item>
 		<item name="android:drawableTint">@color/white_alpha85</item>
@@ -93,7 +95,6 @@
 		<item name="editorBackgroundColor">@drawable/card_light</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_light</item>
-
 		<item name="viewpager_bg">@color/googlenow_grey_trans</item>
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
@@ -113,6 +114,8 @@
 		<item name="android:alertDialogTheme">?alertDialogTheme</item>
 		<item name="dialogTheme">?alertDialogTheme</item>
 		<item name="android:dialogTheme">?alertDialogTheme</item>
+		<item name="android:datePickerDialogTheme">?alertDialogTheme</item>
+		<item name="android:timePickerDialogTheme">?alertDialogTheme</item>
 		<!-- these 3 decide the color of every xml drawable icon (while this "light" theme
 		 is active). Use	?colorPrimary	 to inherit from android 13's
 		 user set dynamic primary color -->
