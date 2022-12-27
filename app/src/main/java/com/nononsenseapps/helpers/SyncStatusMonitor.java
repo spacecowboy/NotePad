@@ -93,7 +93,7 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 
-		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
 			NnnLogger.debug(SyncStatusMonitor.class,
 					"ignore onReceive(): sync is disabled in the prefs");
 			return;

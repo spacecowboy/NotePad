@@ -331,7 +331,7 @@
 	<string name="sd_card_sync">SD card sync</string>
 	<string name="sd_card_summary">Tasks are kept the same between the app and the SD card. Deleting the files thus deletes the tasks in the app!</string>
 	<string name="directory">Folder</string>
-	<string name="directory_summary_msg">Due to new restrictions from Google, files are saved in %s \nwhich you can still access with your file manager app. Notice that uninstalling the app will also delete these files: to keep your notes, please use the backup function</string>
+	<string name="directory_summary_msg">Files are saved in %s \nwhich you can access with your file manager app. Uninstalling the app will also delete these files: to keep your notes, make a backup</string>
 	<string name="cannot_write_to_directory">Cannot write to directory</string>
 	<string name="bigger_titles">Bigger titles</string>
 	<string name="bigger_titles_summary">The title is the first line</string>
