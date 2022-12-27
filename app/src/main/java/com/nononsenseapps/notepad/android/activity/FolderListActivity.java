@@ -18,7 +18,6 @@
 package com.nononsenseapps.notepad.android.activity;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,8 +27,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.android.adapter.FragmentAdapter;
-import com.nononsenseapps.notepad.android.fragment.FolderListFragment;
 import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 /**
@@ -66,7 +63,7 @@ public class FolderListActivity extends AppCompatActivity {
 
 		// Setup tabs
 		ViewPager viewPager = findViewById(R.id.viewpager);
-		setupViewPager(viewPager);
+
 
 		TabLayout tabLayout = findViewById(R.id.tabs);
 		tabLayout.setupWithViewPager(viewPager);
@@ -86,27 +83,7 @@ public class FolderListActivity extends AppCompatActivity {
 		}
 	}
 
-	protected void setupViewPager(ViewPager viewPager) {
-		// Load fragments
-		// TODO savedInstanceState?
-		FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
-		adapter.addFragment(FolderListFragment.newInstance(getIntent()),
-				"Sub items");
 
-		// TODO Details fragment
-		adapter.addFragment(FolderListFragment.newInstance(getIntent()),
-				"Details");
-		viewPager.setAdapter(adapter);
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
-		}
-	}
+
 }

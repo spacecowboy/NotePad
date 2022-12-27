@@ -121,18 +121,9 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		prefAccount = findPreference(KEY_ACCOUNT);
 		setAccountTitle(sharedPrefs);
 		prefAccount.setOnPreferenceClickListener(preference -> {
-			// ask for permissions needed to use google tasks
 			// TODO useless, remove
-			boolean granted = PermissionsHelper
-					.hasPermissions(this.getContext(), PermissionsHelper.FOR_GOOGLETASKS);
-			if (granted) {
-				// Show dialog
-				showAccountDialog();
-			} else {
-				this.requestPermissions(
-						PermissionsHelper.FOR_GOOGLETASKS,
-						PermissionsHelper.REQCODE_GOOGLETASKS);
-			}
+			// Show dialog. All runtime permissions were automatically granted by the OS
+			showAccountDialog();
 			return true;
 		});
 
@@ -159,31 +150,10 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int reqCode, @NonNull String[] permissions,
-										   @NonNull int[] grantResults) {
-		// if we got all permissions
-		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
-
-		if (reqCode == PermissionsHelper.REQCODE_GOOGLETASKS) {
-			if (granted) {
-				// Success => open the dialog
-				showAccountDialog();
-			} else {
-				// user refused: show warning and disable sync
-				Toast.makeText(this.getContext(), R.string.permission_denied,
-						Toast.LENGTH_SHORT).show();
-				PreferencesHelper
-						.put(this.getContext(), SyncPrefs.KEY_SYNC_ENABLE, false);
-			}
-		}
-
-		super.onRequestPermissionsResult(reqCode, permissions, grantResults);
-	}
-
-	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		PreferenceManager.getDefaultSharedPreferences(this.getContext())
+		PreferenceManager
+				.getDefaultSharedPreferences(this.getContext())
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 

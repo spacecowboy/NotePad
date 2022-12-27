@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DummyProvider extends ContentProvider {
+
 	// TODO change authority and add corresponding manifest entry
 	public static final String AUTHORITY = "com.nononsenseapps.notepad.DUMMYPROVIDER";
 	public static final String SCHEME = "content://";
@@ -70,7 +71,9 @@ public class DummyProvider extends ContentProvider {
 				top.children.add(sub);
 
 				for (int k = 0; k < 3; k++) {
-					DummyItem subsub = new DummyItem(sub.getPath() + "/" + k, "Subsub item " + k);
+					DummyItem subsub = new DummyItem(
+							sub.getPath() + "/" + k,
+							"Subsub item " + k);
 					sub.children.add(subsub);
 				}
 			}
@@ -136,7 +139,8 @@ public class DummyProvider extends ContentProvider {
 
 		switch (ProviderHelperKt.matchUri(uri)) {
 			case ProviderHelperKt.URI_ROOT:
-				setNotificationUri(mc, ProviderHelperKt.getListUri(ProviderHelperKt.getBase(uri), ""));
+				setNotificationUri(mc, ProviderHelperKt
+						.getListUri(ProviderHelperKt.getBase(uri), ""));
 				for (DummyItem item : mData) {
 					mc.addRow(item.asRow());
 				}
