@@ -22,91 +22,91 @@ import org.junit.Test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-import com.nononsenseapps.notepad.android.provider.ProviderHelperKt;
+import com.nononsenseapps.notepad.android.provider.ProviderHelper;
 
 public class ProviderHelperTest {
 
 	@Test
 	public void testGetRelativePath() throws Exception {
 		assertEquals("/foo/bar",
-				ProviderHelperKt.getRelativePath("/ACTION/foo/bar"));
+				ProviderHelper.getRelativePath("/ACTION/foo/bar"));
 		assertEquals("/foo/bar",
-				ProviderHelperKt.getRelativePath("ACTION/foo/bar"));
+				ProviderHelper.getRelativePath("ACTION/foo/bar"));
 		assertEquals("/",
-				ProviderHelperKt.getRelativePath("/Action"));
+				ProviderHelper.getRelativePath("/Action"));
 		assertEquals("/",
-				ProviderHelperKt.getRelativePath("Action"));
+				ProviderHelper.getRelativePath("Action"));
 	}
 
 	@Test
 	public void testFirstPart() throws Exception {
-		assertEquals("", ProviderHelperKt.firstPart(""));
-		assertEquals("foo", ProviderHelperKt.firstPart("foo"));
-		assertEquals("foo", ProviderHelperKt.firstPart("/foo"));
-		assertEquals("foo", ProviderHelperKt.firstPart("/foo/bar"));
-		assertEquals("foo", ProviderHelperKt.firstPart("foo/bar"));
+		assertEquals("", ProviderHelper.firstPart(""));
+		assertEquals("foo", ProviderHelper.firstPart("foo"));
+		assertEquals("foo", ProviderHelper.firstPart("/foo"));
+		assertEquals("foo", ProviderHelper.firstPart("/foo/bar"));
+		assertEquals("foo", ProviderHelper.firstPart("foo/bar"));
 	}
 
 	@Test
 	public void testRestPart() throws Exception {
-		assertEquals("", ProviderHelperKt.restPart("foo"));
-		assertEquals("", ProviderHelperKt.restPart("/foo"));
-		assertEquals("", ProviderHelperKt.restPart("/foo/"));
-		assertEquals("bar/baz", ProviderHelperKt.restPart("/foo/bar/baz"));
-		assertEquals("bar/baz", ProviderHelperKt.restPart("foo/bar/baz"));
-		assertEquals("bar/baz", ProviderHelperKt.restPart("/foo/bar/baz"));
+		assertEquals("", ProviderHelper.restPart("foo"));
+		assertEquals("", ProviderHelper.restPart("/foo"));
+		assertEquals("", ProviderHelper.restPart("/foo/"));
+		assertEquals("bar/baz", ProviderHelper.restPart("/foo/bar/baz"));
+		assertEquals("bar/baz", ProviderHelper.restPart("foo/bar/baz"));
+		assertEquals("bar/baz", ProviderHelper.restPart("/foo/bar/baz"));
 	}
 
 	@Test
 	public void testMatchPath() throws Exception {
 		// Root cases
-		assertEquals(ProviderHelperKt.URI_ROOT,
-				ProviderHelperKt.matchPath(null));
-		assertEquals(ProviderHelperKt.URI_ROOT,
-				ProviderHelperKt.matchPath(""));
-		assertEquals(ProviderHelperKt.URI_ROOT,
-				ProviderHelperKt.matchPath("/"));
+		assertEquals(ProviderHelper.URI_ROOT,
+				ProviderHelper.matchPath(null));
+		assertEquals(ProviderHelper.URI_ROOT,
+				ProviderHelper.matchPath(""));
+		assertEquals(ProviderHelper.URI_ROOT,
+				ProviderHelper.matchPath("/"));
 
 		// List
-		assertEquals(ProviderHelperKt.URI_LIST,
-				ProviderHelperKt.matchPath("/list"));
-		assertEquals(ProviderHelperKt.URI_LIST,
-				ProviderHelperKt.matchPath("/list/"));
-		assertEquals(ProviderHelperKt.URI_LIST,
-				ProviderHelperKt.matchPath("list/"));
-		assertEquals(ProviderHelperKt.URI_LIST,
-				ProviderHelperKt.matchPath("/list/"));
+		assertEquals(ProviderHelper.URI_LIST,
+				ProviderHelper.matchPath("/list"));
+		assertEquals(ProviderHelper.URI_LIST,
+				ProviderHelper.matchPath("/list/"));
+		assertEquals(ProviderHelper.URI_LIST,
+				ProviderHelper.matchPath("list/"));
+		assertEquals(ProviderHelper.URI_LIST,
+				ProviderHelper.matchPath("/list/"));
 
-		assertEquals(ProviderHelperKt.URI_LIST,
-				ProviderHelperKt.matchPath("/list/foo"));
-		assertEquals(ProviderHelperKt.URI_LIST,
-				ProviderHelperKt.matchPath("list/foo/bar/"));
+		assertEquals(ProviderHelper.URI_LIST,
+				ProviderHelper.matchPath("/list/foo"));
+		assertEquals(ProviderHelper.URI_LIST,
+				ProviderHelper.matchPath("list/foo/bar/"));
 
 		// Details
-		assertEquals(ProviderHelperKt.URI_DETAILS,
-				ProviderHelperKt.matchPath("/details/foo"));
-		assertEquals(ProviderHelperKt.URI_DETAILS,
-				ProviderHelperKt.matchPath("details/foo/bar/"));
+		assertEquals(ProviderHelper.URI_DETAILS,
+				ProviderHelper.matchPath("/details/foo"));
+		assertEquals(ProviderHelper.URI_DETAILS,
+				ProviderHelper.matchPath("details/foo/bar/"));
 
 		// These uris are invalid
-		assertEquals(ProviderHelperKt.URI_NOMATCH,
-				ProviderHelperKt.matchPath("details"));
+		assertEquals(ProviderHelper.URI_NOMATCH,
+				ProviderHelper.matchPath("details"));
 
-		assertEquals(ProviderHelperKt.URI_NOMATCH,
-				ProviderHelperKt.matchPath("details/"));
+		assertEquals(ProviderHelper.URI_NOMATCH,
+				ProviderHelper.matchPath("details/"));
 
-		assertEquals(ProviderHelperKt.URI_NOMATCH,
-				ProviderHelperKt.matchPath("unknownpredicate/foo/bar"));
+		assertEquals(ProviderHelper.URI_NOMATCH,
+				ProviderHelper.matchPath("unknownpredicate/foo/bar"));
 	}
 
 	@Test
 	public void testJoin() throws Exception {
-		assertEquals("/foo/bar", ProviderHelperKt.join("/foo", "bar"));
-		assertEquals("/foo/bar", ProviderHelperKt.join("/foo", "/bar"));
-		assertEquals("/foo/bar", ProviderHelperKt.join("/foo/", "/bar"));
-		assertEquals("/foo/bar", ProviderHelperKt.join("/foo/", "bar"));
-		assertEquals("/", ProviderHelperKt.join("/", "/"));
-		assertEquals("/", ProviderHelperKt.join("/", ""));
-		assertEquals("/", ProviderHelperKt.join("", "/"));
+		assertEquals("/foo/bar", ProviderHelper.join("/foo", "bar"));
+		assertEquals("/foo/bar", ProviderHelper.join("/foo", "/bar"));
+		assertEquals("/foo/bar", ProviderHelper.join("/foo/", "/bar"));
+		assertEquals("/foo/bar", ProviderHelper.join("/foo/", "bar"));
+		assertEquals("/", ProviderHelper.join("/", "/"));
+		assertEquals("/", ProviderHelper.join("/", ""));
+		assertEquals("/", ProviderHelper.join("", "/"));
 	}
 }

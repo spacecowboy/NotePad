@@ -19,23 +19,18 @@ package com.nononsenseapps.notepad.android.provider;
 
 import android.net.Uri;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import androidx.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 import java.util.Objects;
 
-import kotlin.collections.CollectionsKt;
-import kotlin.text.Regex;
-import kotlin.text.StringsKt;
 
 /**
  * Helper functions related to provider operations.
  */
-public final class ProviderHelperKt {
+public final class ProviderHelper {
 
 	public static final int URI_NOMATCH = -1;
 	public static final int URI_ROOT = 101;
@@ -162,7 +157,7 @@ public final class ProviderHelperKt {
 		while (true) {
 			if (path != null && ((CharSequence) path).length() != 0) {
 				String var10000;
-				if (StringsKt.startsWith(path, "/", false)) {
+				if (path.startsWith("/")) {
 					var10000 = path.substring(1);
 
 					path = var10000;
