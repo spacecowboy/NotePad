@@ -141,7 +141,6 @@ public final class NotificationItemHelper {
 			// configure and show a popup with a date-picker calendar view
 			final DatePickerDialog datedialog = new DatePickerDialog(
 					fragment.getContext(),
-					ThemeHelper.getPickerDialogTheme(fragment.getContext()),
 					onDateSetListnr,
 					localTime.get(Calendar.YEAR),
 					localTime.get(Calendar.MONTH),

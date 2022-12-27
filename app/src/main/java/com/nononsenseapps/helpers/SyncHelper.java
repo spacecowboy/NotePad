@@ -26,7 +26,7 @@ import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
  */
 public class SyncHelper {
 
-	// TODO class may be useless. check who calls onManualSyncRequest()
+	// TODO class is useless. maybe move some code here ?
 
 	public static boolean onManualSyncRequest(final Context context) {
 		boolean syncing = false;

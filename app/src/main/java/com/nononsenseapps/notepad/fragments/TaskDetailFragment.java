@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -131,10 +132,10 @@ public class TaskDetailFragment extends Fragment {
 						// Don't want updates while editing
 						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
 						// Only update the list if that changes
-						Log.d("nononsenseapps listedit",
+						NnnLogger.debug(TaskDetailFragment.class,
 								"Updating list in task from " + mTask.dblist);
 						mTask.dblist = new Task(c).dblist;
-						Log.d("nononsenseapps listedit",
+						NnnLogger.debug(TaskDetailFragment.class,
 								"Updating list in task to " + mTask.dblist);
 						if (mTaskOrg != null) {
 							mTaskOrg.dblist = mTask.dblist;
@@ -438,7 +439,7 @@ public class TaskDetailFragment extends Fragment {
 		// configure and show a popup with a date-picker calendar view
 		var dpDiag = new DatePickerDialog(
 				this.getActivity(),
-				ThemeHelper.getPickerDialogTheme(this.getContext()),
+				// ThemeHelper.getPickerDialogTheme(this.getContext()),
 				this::onDateSet,
 				localTime.get(Calendar.YEAR),
 				localTime.get(Calendar.MONTH),
@@ -585,7 +586,8 @@ public class TaskDetailFragment extends Fragment {
 	void hideTaskParts(final TaskList list) {
 		String type;
 		if (list.listtype == null) {
-			type = PreferenceManager.getDefaultSharedPreferences(getActivity())
+			type = PreferenceManager
+					.getDefaultSharedPreferences(getActivity())
 					.getString(getString(R.string.pref_listtype), getString(R.string.default_listtype));
 		} else {
 			type = list.listtype;
@@ -893,7 +895,6 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
-	// @Override
 	public void onTimeTravel(Intent data) {
 		if (taskText != null) {
 			taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
@@ -918,7 +919,6 @@ public class TaskDetailFragment extends Fragment {
 		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
 		return new TimePickerDialog(
 				this.getActivity(),
-				ThemeHelper.getPickerDialogTheme(this.getActivity()),
 				listener, // set the callback for when the user chooses a time
 				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
 				localTime.get(Calendar.MINUTE),

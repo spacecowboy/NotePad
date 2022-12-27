@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -54,6 +55,7 @@ import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.PermissionsHelper;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
@@ -323,7 +325,7 @@ public class ActivityMain extends AppCompatActivity
 		} else {
 			// If not popped, then send the call to the fragment
 			// directly
-			Log.d("nononsenseapps list", "calling listOpener");
+			NnnLogger.debug(ActivityMain.class, "calling listOpener");
 			listOpener.openList(id);
 		}
 
@@ -347,6 +349,13 @@ public class ActivityMain extends AppCompatActivity
 			if (!syncing) setRefreshOfAllSwipeLayoutsTo(false);
 		}
 		*/
+		if (!PreferencesHelper.isSincEnabledAtAll(this)) {
+			Toast.makeText(this, R.string.no_sync_method_chosen,
+					Toast.LENGTH_SHORT).show();
+			setRefreshOfAllSwipeLayoutsTo(false);
+			return;
+		}
+
 		boolean syncing = false;
 		// GTasks
 		if (SyncGtaskHelper.isGTasksConfigured(ActivityMain.this)) {
@@ -412,8 +421,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		// If user has donated some other time
-		final SharedPreferences prefs =
-				PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
 		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
@@ -510,6 +518,7 @@ public class ActivityMain extends AppCompatActivity
 			restartAndRefresh();
 		}
 		super.onResume();
+
 		// activate monitor
 		if (syncStatusReceiver != null) {
 			syncStatusReceiver.startMonitoring(this, this);
@@ -813,7 +822,7 @@ public class ActivityMain extends AppCompatActivity
 				@Override
 				public void onDrawerClosed(View view) {
 					// hide 'Notes' (R.string.app_name_short) from the toolbar
-					getSupportActionBar().setTitle(null);
+					getSupportActionBar().setDisplayShowTitleEnabled(false);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 				}
@@ -833,6 +842,7 @@ public class ActivityMain extends AppCompatActivity
 
 					// If it's not idle, it isn't closed
 					if (DrawerLayout.STATE_IDLE != newState) {
+						getSupportActionBar().setDisplayShowTitleEnabled(true);
 						getSupportActionBar().setTitle(R.string.show_from_all_lists);
 						// Is in motion, hide action items
 						isDrawerClosed = false;
@@ -845,14 +855,15 @@ public class ActivityMain extends AppCompatActivity
 			drawerLayout.setDrawerListener(mDrawerToggle);
 		}
 
-		if (getSupportActionBar() == null) {
+		ActionBar supActBar = getSupportActionBar();
+		if (supActBar == null) {
 			NnnLogger.error(ActivityMain.class,
 					"Coding error: actionbar is null. A crash will follow");
 		} else {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-			getSupportActionBar().setHomeButtonEnabled(true);
+			supActBar.setDisplayHomeAsUpEnabled(true);
+			supActBar.setHomeButtonEnabled(true);
 			// hide 'Notes' (R.string.app_name_short) from the toolbar
-			getSupportActionBar().setTitle(null);
+			supActBar.setDisplayShowTitleEnabled(false);
 		}
 
 		// Use extra items. From top to bottom, they are "TASKS", "Overdue", "Today",
@@ -1246,8 +1257,9 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	/**
-	 * sets the refreshing status of all {@link SwipeRefreshLayout} in this activity:
-	 * FALSE if they should stop the animation, TRUE if they should show it
+	 * sets the refreshing status of all {@link SwipeRefreshLayout} in this activity
+	 *
+	 * @param newState FALSE if they should stop the animation, TRUE if they should show it
 	 */
 	private void setRefreshOfAllSwipeLayoutsTo(boolean newState) {
 		for (SwipeRefreshLayout layout : swpRefLayouts) {

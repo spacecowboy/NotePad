@@ -74,12 +74,15 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_SYNC_INFO = "pref_sdcard_sync_info";
 
-	private Activity activity;
-
 	private SwitchPreference prefSyncEnable;
 	private Preference prefAccount;
 
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
+		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
+			// user does not want sync features
+			return;
+		}
+
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
@@ -104,20 +107,13 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	@Override
-	public void onAttach(@NonNull Activity activity) {
-		// you can fix it AFTER you remove all google task sync code
-		super.onAttach(activity);
-		this.activity = activity;
-	}
-
-	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_sync);
 
 		final SharedPreferences sharedPrefs = PreferenceManager
-				.getDefaultSharedPreferences(activity);
+				.getDefaultSharedPreferences(this.getContext());
 		// Set up a listener whenever a key changes
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -125,18 +121,9 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		prefAccount = findPreference(KEY_ACCOUNT);
 		setAccountTitle(sharedPrefs);
 		prefAccount.setOnPreferenceClickListener(preference -> {
-			// ask for permissions needed to use google tasks
 			// TODO useless, remove
-			boolean granted = PermissionsHelper
-					.hasPermissions(this.getContext(), PermissionsHelper.FOR_GOOGLETASKS);
-			if (granted) {
-				// Show dialog
-				showAccountDialog();
-			} else {
-				this.requestPermissions(
-						PermissionsHelper.FOR_GOOGLETASKS,
-						PermissionsHelper.REQCODE_GOOGLETASKS);
-			}
+			// Show dialog. All runtime permissions were automatically granted by the OS
+			showAccountDialog();
 			return true;
 		});
 
@@ -163,31 +150,10 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	@Override
-	public void onRequestPermissionsResult(int reqCode, @NonNull String[] permissions,
-										   @NonNull int[] grantResults) {
-		// if we got all permissions
-		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
-
-		if (reqCode == PermissionsHelper.REQCODE_GOOGLETASKS) {
-			if (granted) {
-				// Success => open the dialog
-				showAccountDialog();
-			} else {
-				// user refused: show warning and disable sync
-				Toast.makeText(this.getContext(), R.string.permission_denied,
-						Toast.LENGTH_SHORT).show();
-				PreferencesHelper
-						.put(getActivity(), SyncPrefs.KEY_SYNC_ENABLE, false);
-			}
-		}
-
-		super.onRequestPermissionsResult(reqCode, permissions, grantResults);
-	}
-
-	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		PreferenceManager.getDefaultSharedPreferences(activity)
+		PreferenceManager
+				.getDefaultSharedPreferences(this.getContext())
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
@@ -216,31 +182,31 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	 * @param key   The key of the preference that was changed, added, or removed
 	 */
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+		NnnLogger.debug(SyncPrefs.class, "onChanged");
+		final String keySyncMaster = this.getString(R.string.key_pref_sync_enabled_master);
 		try {
-			NnnLogger.debug(SyncPrefs.class, "onChanged");
-			if (activity.isFinishing()) {
+
+			if (this.getActivity().isFinishing()) {
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 				return;
 			}
 
 			// => now we can safely continue
-			switch (key) {
-				case KEY_SYNC_ENABLE:
-					toggleSync(prefs);
-					break;
-				case KEY_BACKGROUND_SYNC:
-					setSyncInterval(activity, prefs);
-					break;
-				case KEY_ACCOUNT:
-					NnnLogger.debug(SyncPrefs.class, "account");
-					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
-					// prefAccount.setSummary(getString(R.string.settings_account_summary));
-					break;
-				case KEY_SD_ENABLE:
-					// Restart the sync service
-					OrgSyncService.stop(getActivity());
-					break;
+			if (KEY_SYNC_ENABLE.equals(key)) {
+				// for google tasks only
+				toggleSync(prefs);
+			} else if (KEY_BACKGROUND_SYNC.equals(key)) {
+				setSyncInterval(this.getContext(), prefs);
+			} else if (KEY_ACCOUNT.equals(key)) {
+				NnnLogger.debug(SyncPrefs.class, "account");
+				prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
+				// prefAccount.setSummary(getString(R.string.settings_account_summary));
+			} else if (KEY_SD_ENABLE.equals(key)) {
+				// Restart the sync service
+				OrgSyncService.stop(getActivity());
+			} else if (keySyncMaster.equals(key)) {
+				// TODO force stop / re-enable all (user selected) sync services
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough
@@ -269,7 +235,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	 */
 	private void userChoseAnAccountWithName(String chosenAccountName) {
 		Account[] allAccounts = AccountManager
-				.get(this.activity)
+				.get(this.getContext())
 				.getAccountsByType("com.google");
 
 		for (var chosenAccount : allAccounts) {
@@ -279,10 +245,11 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			NnnLogger.debug(SyncPrefs.class, "step one");
 
 			// work continues in callback, method afterGettingAuthToken()
-			AccountManagerCallback<Bundle> callback = (b) -> afterGettingAuthToken(b, chosenAccount);
+			AccountManagerCallback<Bundle> callback =
+					(b) -> afterGettingAuthToken(b, chosenAccount);
 
 			// Request user's permission
-			GoogleTasksClient.getAuthTokenAsync(activity, chosenAccount, callback);
+			GoogleTasksClient.getAuthTokenAsync(this.getActivity(), chosenAccount, callback);
 
 			// do that only for the 1° match
 			return;
@@ -310,7 +277,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 				NnnLogger.debug(SyncPrefs.class, "step three: " + account.name);
 
 				SharedPreferences customSharedPreference = PreferenceManager
-						.getDefaultSharedPreferences(activity);
+						.getDefaultSharedPreferences(this.getContext());
 				customSharedPreference
 						.edit()
 						.putString(SyncPrefs.KEY_ACCOUNT, account.name)
@@ -318,14 +285,16 @@ public class SyncPrefs extends PreferenceFragmentCompat
 						.commit();
 
 				// Set it syncable
-				ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
-				ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
+				ContentResolver
+						.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
+				ContentResolver
+						.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
 				// Set sync frequency
-				SyncPrefs.setSyncInterval(activity, customSharedPreference);
+				SyncPrefs.setSyncInterval(this.getContext(), customSharedPreference);
 				// Set it syncable
-				SyncGtaskHelper.toggleSync(this.activity, customSharedPreference);
+				SyncGtaskHelper.toggleSync(this.getContext(), customSharedPreference);
 				// And schedule an immediate sync
-				SyncGtaskHelper.requestSyncIf(this.activity, SyncGtaskHelper.MANUAL);
+				SyncGtaskHelper.requestSyncIf(this.getContext(), SyncGtaskHelper.MANUAL);
 			}
 		} catch (OperationCanceledException | AuthenticatorException | IOException e) {
 			// OperationCanceledException:
@@ -339,8 +308,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			// * indicates that it encountered an IOException while
 			// * communicating with the authentication server
 			String errMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
-			Toast.makeText(this.activity, errMsg, Toast.LENGTH_SHORT).show();
-			SyncGtaskHelper.disableSync(this.activity);
+			Toast.makeText(this.getContext(), errMsg, Toast.LENGTH_SHORT).show();
+			SyncGtaskHelper.disableSync(this.getContext());
 		}
 	}
 

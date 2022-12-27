@@ -50,8 +50,8 @@ public final class TimeFormatter {
 	/**
 	 * Formats date according to the designated locale
 	 */
-	public static String getLocalDateString(final Context context,
-											final String lang, final String format, final long timeInMillis) {
+	public static String getLocalDateString(final Context context, final String lang,
+											final String format, final long timeInMillis) {
 		return getLocalFormatter(context, lang, format).format(
 				new Date(timeInMillis));
 	}
@@ -76,13 +76,11 @@ public final class TimeFormatter {
 		return getLocalFormatterLong(context).format(new Date(time));
 	}
 
-	public static String getLocalDateOnlyStringLong(final Context context,
-													final long time) {
+	public static String getLocalDateOnlyStringLong(final Context context, final long time) {
 		return getLocalFormatterLongDateOnly(context).format(new Date(time));
 	}
 
-	public static String getLocalTimeOnlyString(final Context context,
-												final long time) {
+	public static String getLocalTimeOnlyString(final Context context, final long time) {
 		final String format;
 		if (android.text.format.DateFormat.is24HourFormat(context)) {
 			// 00:59
@@ -110,8 +108,7 @@ public final class TimeFormatter {
 	 * Replaces first "localtime" in format string to a time which respects
 	 * global 24h setting.
 	 */
-	private static String withSuitableTime(final Context context,
-										   final String formatString) {
+	private static String withSuitableTime(final Context context, final String formatString) {
 		if (android.text.format.DateFormat.is24HourFormat(context)) {
 			// 00:59
 			return formatString.replaceFirst("localtime", "HH:mm");
@@ -152,9 +149,9 @@ public final class TimeFormatter {
 	}
 
 	public static GregorianCalendar getLocalCalendar(final Context context) {
-		final Locale locale = getLocale(PreferenceManager
-				.getDefaultSharedPreferences(context).getString(
-						context.getString(R.string.pref_locale), ""));
+		var prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		final Locale locale = getLocale(prefs
+				.getString(context.getString(R.string.pref_locale), ""));
 		return new GregorianCalendar(locale);
 	}
 

@@ -22,8 +22,9 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.nononsenseapps.helpers.NnnLogger;
 
@@ -78,7 +79,7 @@ public class GoogleTasksClient {
 	 * Get an AuthToken asynchronously. Use this in a foreground activity which will ask the user
 	 * for permission.
 	 */
-	public static void getAuthTokenAsync(Activity activity, @NotNull Account account,
+	public static void getAuthTokenAsync(FragmentActivity activity, @NotNull Account account,
 										 AccountManagerCallback<Bundle> callback) {
 		NnnLogger.debug(GoogleTasksClient.class, "getAuthTokenAsync");
 

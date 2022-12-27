@@ -25,7 +25,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -111,7 +110,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		setHasOptionsMenu(true);
 
 		mListIdToSelect = getArguments().getLong(START_LIST_ID, -1);
-		Log.d("nononsenseapps list", "onCreate: " + savedState);
+		NnnLogger.debug(TaskDetailFragment.class, "onCreate: " + savedState);
 		if (savedState != null) {
 			mListIdToSelect = savedState.getLong(START_LIST_ID);
 		}
@@ -201,6 +200,15 @@ public class TaskListViewPagerFragment extends Fragment implements
 		// enlarge the suggestions box so that it occupies the whole screen
 		var autoCompTxtVi = (AutoCompleteTextView) searchView
 				.findViewById(androidx.appcompat.R.id.search_src_text);
+
+		// TODO in some devices, the default layout for the search suggestions cuts the text
+		//  horizontally. To fix this, you need a custom layout for the search suggestion list
+		//  item. To use it, you must make a custom adapter, instead of using setSearchableInfo().
+		//  Start here:
+		// CursorAdapter xx1 = searchView.getSuggestionsAdapter();
+		// ListAdapter xx2 = autoCompTxtVi.getAdapter();
+		// assert xx1 == xx2;
+
 		final View dropDownSugg = searchView.findViewById(autoCompTxtVi.getDropDownAnchor());
 		if (dropDownSugg == null) return;
 		dropDownSugg.addOnLayoutChangeListener(
@@ -251,7 +259,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void openList(final long id) {
 		// If it fails, will load on refresh
 		mListIdToSelect = id;
-		Log.d("nononsenseapps list", "openList: " + mListIdToSelect);
+		NnnLogger.debug(TaskListViewPagerFragment.class, "openList: " + mListIdToSelect);
 		if (mSectionsPagerAdapter != null) {
 
 			final int pos;

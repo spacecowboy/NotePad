@@ -16,6 +16,7 @@
  */
 package com.nononsenseapps.notepad.prefs;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;

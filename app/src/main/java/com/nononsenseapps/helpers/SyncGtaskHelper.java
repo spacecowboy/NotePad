@@ -33,6 +33,7 @@ import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 
 import java.util.Calendar;
 
@@ -52,6 +53,11 @@ public class SyncGtaskHelper {
 	public static final String KEY_LAST_SYNC = "lastSync";
 
 	public static void requestSyncIf(final Context context, final int TYPE) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
+			NnnLogger.debug(SyncGtaskHelper.class,
+					"not starting: sync is disabled in the prefs");
+			return;
+		}
 		if (!isGTasksConfigured(context)) {
 			return;
 		}
@@ -79,6 +85,7 @@ public class SyncGtaskHelper {
 	}
 
 	public static boolean isGTasksConfigured(final Context context) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) return false;
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 		final boolean syncEnabled = prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
@@ -128,6 +135,11 @@ public class SyncGtaskHelper {
 	 */
 	public static boolean toggleSync(@NonNull Context context,
 									 @NonNull SharedPreferences sharePrefs) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
+			NnnLogger.debug(SyncGtaskHelper.class,
+					"not starting: sync is disabled in the prefs");
+			return false;
+		}
 		final boolean enabled = sharePrefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
 		String accountName = sharePrefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 
@@ -203,6 +215,11 @@ public class SyncGtaskHelper {
 	 * Request sync right now.
 	 */
 	private static void forceGTaskSyncNow(final Context context) {
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
+			NnnLogger.debug(SyncGtaskHelper.class,
+					"not starting: sync is disabled in the prefs");
+			return;
+		}
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		// Do nothing if gtask not enabled
 		if (!isGTasksConfigured(context)) {

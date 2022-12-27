@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;

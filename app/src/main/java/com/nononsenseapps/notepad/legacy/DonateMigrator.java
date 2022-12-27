@@ -45,6 +45,8 @@ import java.util.HashMap;
 @EService
 public class DonateMigrator extends IntentService {
 
+	// TODO useless, remove
+
 	public static final String PREFS_ALREADY_IMPORTED = "already_imported_donate_data";
 	static final String DONATE_AUTHORITY = "com.nononsenseapps.donate.NotePad";
 	static final Uri BASEURI = Uri.parse(MyContentProvider.SCHEME

@@ -44,7 +44,6 @@
 
 	<!-- For notifications -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-	<uses-permission android:name="android.permission.VIBRATE"/>
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
 
@@ -65,7 +64,7 @@
 	<application
 		android:name="com.nononsenseapps.notepad.NnnApp"
 		android:allowBackup="true"
-		android:backupAgent="com.nononsenseapps.notepad.BackupAgent"
+		android:backupAgent="com.nononsenseapps.notepad.NnnBackupAgent"
 		android:hardwareAccelerated="true"
 		android:icon="@drawable/app_icon"
 		android:label="@string/nononsense_notes"

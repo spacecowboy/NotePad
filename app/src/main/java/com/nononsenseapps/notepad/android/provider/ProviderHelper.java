@@ -19,23 +19,18 @@ package com.nononsenseapps.notepad.android.provider;
 
 import android.net.Uri;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import androidx.annotation.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Locale;
 import java.util.Objects;
 
-import kotlin.collections.CollectionsKt;
-import kotlin.text.Regex;
-import kotlin.text.StringsKt;
 
 /**
  * Helper functions related to provider operations.
  */
-public final class ProviderHelperKt {
+public final class ProviderHelper {
 
 	public static final int URI_NOMATCH = -1;
 	public static final int URI_ROOT = 101;
@@ -109,65 +104,6 @@ public final class ProviderHelperKt {
 	}
 
 	/**
-	 * Split a path on "/", taking initial slashes into account.
-	 * Multiple slashes are interpreted as single slashes, just as on the file system.
-	 *
-	 * @param fullPath like /foo/bar/baz
-	 *                 *
-	 * @return array like [foo, bar, baz]
-	 */
-	@NotNull
-	public static String[] split(@NotNull String fullPath) {
-
-		while (true) {
-			CharSequence var2 = fullPath;
-			Regex var3 = new Regex("/+");
-			String var4 = "/";
-			String path = var3.replace(var2, var4);
-			if (!StringsKt.startsWith(path, "/", false)) {
-				if (((CharSequence) path).length() == 0) {
-					return new String[0];
-				} else {
-					boolean $i$f$toTypedArray;
-					List var12;
-					label35:
-					{
-						var2 = path;
-						var3 = new Regex("/");
-						byte var10 = 0;
-						List $this$dropLastWhile$iv = var3.split(var2, var10);
-						$i$f$toTypedArray = false;
-						if (!$this$dropLastWhile$iv.isEmpty()) {
-							ListIterator iterator$iv = $this$dropLastWhile$iv
-									.listIterator($this$dropLastWhile$iv.size());
-
-							while (iterator$iv.hasPrevious()) {
-								String it = (String) iterator$iv.previous();
-								boolean var6 = false;
-								if (((CharSequence) it).length() != 0) {
-									var12 = CollectionsKt.take($this$dropLastWhile$iv, iterator$iv.nextIndex() + 1);
-									break label35;
-								}
-							}
-						}
-
-						var12 = CollectionsKt.emptyList();
-					}
-
-					Collection $this$toTypedArray$iv = var12;
-					$i$f$toTypedArray = false;
-					Object[] var13 = $this$toTypedArray$iv.toArray(new String[0]);
-					return (String[]) var13;
-				}
-			}
-
-			String var10000 = path.substring(1);
-			fullPath = var10000;
-		}
-	}
-
-
-	/**
 	 * @param path like /foo/bar
 	 *             *
 	 * @return first part of path like foo
@@ -221,7 +157,7 @@ public final class ProviderHelperKt {
 		while (true) {
 			if (path != null && ((CharSequence) path).length() != 0) {
 				String var10000;
-				if (StringsKt.startsWith(path, "/", false)) {
+				if (path.startsWith("/")) {
 					var10000 = path.substring(1);
 
 					path = var10000;

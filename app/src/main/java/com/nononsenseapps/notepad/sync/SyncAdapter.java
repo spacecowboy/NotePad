@@ -93,15 +93,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		 * is a space in the api key.
 		 */
 
-		Intent doneIntent = new Intent(SYNC_FINISHED);
-		doneIntent.putExtra(SYNC_RESULT, ERROR);
+		Intent doneIntent = new Intent(SYNC_FINISHED)
+				.putExtra(SYNC_RESULT, ERROR);
 		try {
 			// Gtasks first
 			// Dummy key has a space in it. Only builds using real api keys
 			// should not have spaces
-			if (com.nononsenseapps.build.Config.getGtasksApiKey(mContext) !=
-					null && !com.nononsenseapps.build.Config
-					.getGtasksApiKey(mContext).contains(" ")) {
+			String apiKey = com.nononsenseapps.build.Config.getGtasksApiKey(mContext);
+
+			if (apiKey != null && !apiKey.contains(" ")) {
 				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
 						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty()
 						&& account != null

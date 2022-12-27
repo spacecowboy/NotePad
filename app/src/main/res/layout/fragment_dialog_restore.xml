@@ -15,6 +15,7 @@
   limitations under the License.
   -->
 
+<!-- the popup that comes up if you restore a deleted task from the history page -->
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -22,14 +23,6 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical"
 	android:paddingTop="16dp">
-
-	<!-- <TextView
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:fontFamily="sans-serif-light"
-		android:text="@string/select_restore_list"
-		android:layout_marginBottom="4dp"
-		android:textAppearance="@android:style/TextAppearance.Large" /> -->
 
 	<Spinner
 		android:id="@+id/listSpinner"

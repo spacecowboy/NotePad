@@ -64,6 +64,7 @@
 	<string name="key_pref_allow_exact_reminders">key_pref_allow_exact_reminders</string>
 	<string name="key_pref_disable_hibernation">key_pref_disable_hibernation</string>
 	<string name="key_pref_notif_visibility">key_pref_notif_visibility</string>
+	<string name="key_pref_sync_enabled_master">key_pref_sync_enabled_master</string>
 	<string name="pref_locale">pref_key_locale</string>
 	<string name="key_pref_item_max_height">item_max_height</string>
 	<string name="key_pref_dateformat_long">dateformat_long</string>
@@ -110,7 +111,7 @@
 	<string name="dateformat_just_date">MMMM d</string>
 
 	<!-- potential alternatives -->
-	<!-- TODO instead of translations, add these dateformat_* and more,
+	<!-- TODO instead of translations, add these dateformats,
 	      so that users from other countries have more choice,
 	      without having to translate these strings. See arrays.xml & java code -->
 	<string name="dateformat_just_date_2">d MMMM</string>

@@ -43,6 +43,7 @@ import java.util.Objects;
  * The widget's AppWidgetProvider.
  */
 public class ListWidgetProvider extends AppWidgetProvider {
+
 	// private static final String TAG = "WIDGETPROVIDER";
 	public static final String COMPLETE_ACTION = "com.nononsenseapps.notepad.widget.COMPLETE";
 	public static final String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
@@ -52,7 +53,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	public static final String EXTRA_NOTE_ID = "com.nononsenseapps.notepad.widget.note_id";
 	public static final String EXTRA_LIST_ID = "com.nononsenseapps.notepad.widget.list_id";
 
-	// gets called by android.app.AppComponentFactory
+	// called by android.app.AppComponentFactory
 	public ListWidgetProvider() {}
 
 	/**

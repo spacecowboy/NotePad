@@ -5,9 +5,12 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
+import android.Manifest;
 import android.content.Context;
+import android.os.Build;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.RequiresApi;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
@@ -39,9 +42,13 @@ public class BaseTestClass {
 	public final IntentsTestRule<ActivityMain_> mActRule =
 			new IntentsTestRule<>(ActivityMain_.class);
 
+	/**
+	 * API 33 requires permission for notifications, older APIs crash if you run this
+	 */
+	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 	@Rule
-	public GrantPermissionRule mNotifRule =
-			GrantPermissionRule.grant("android.permission.POST_NOTIFICATIONS");
+	public GrantPermissionRule mNotifRule = GrantPermissionRule
+			.grant(Manifest.permission.POST_NOTIFICATIONS);
 
 	/**
 	 * @return a string with the content of the given resourceId

@@ -67,8 +67,9 @@ public final class ProviderManager {
 	}
 
 	/**
-	 * @return a list of providers which are available for use. Note that a provider might appear
-	 * * more than once here, if it's been configured with different settings (different folders/user accounts, etc).
+	 * @return a list of providers which are available for use. Note that a provider might
+	 * appear more than once here, if it's been configured with different settings
+	 * (different folders/user accounts, etc).
 	 */
 	// First get all providers which do not require configuration
 	// Instead of wrapping code in multiple ifs
