@@ -29,18 +29,12 @@ import androidx.core.content.ContextCompat;
  */
 public final class PermissionsHelper {
 
-	public static final String[] FOR_GOOGLETASKS = new String[] {
-			Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_SYNC_SETTINGS,
-			Manifest.permission.READ_SYNC_SETTINGS, Manifest.permission.READ_SYNC_STATS,
-			Manifest.permission.INTERNET };
-
 	/**
 	 * Permissions to show notifications
 	 */
 	public static final String[] FOR_NOTIFICATIONS =
 			new String[] { "android.permission.POST_NOTIFICATIONS" };
 
-	public static final int REQCODE_GOOGLETASKS = 2;
 	public static final int REQCODE_NOTIFICATIONS = 3;
 
 	/**

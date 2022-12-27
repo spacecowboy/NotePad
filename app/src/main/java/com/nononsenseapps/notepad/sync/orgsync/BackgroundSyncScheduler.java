@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import com.nononsenseapps.helpers.NnnLogger;
 
 public class BackgroundSyncScheduler extends BroadcastReceiver {
+
 	// Unique ID for schedule
 	private final static int scheduleCode = 2832;
 

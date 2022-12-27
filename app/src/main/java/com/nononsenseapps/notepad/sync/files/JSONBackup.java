@@ -60,8 +60,10 @@ public class JSONBackup {
 	private List<TaskList> getTaskLists() {
 		final ArrayList<TaskList> taskLists = new ArrayList<>();
 
-		final Cursor c = context.getContentResolver().query(TaskList.URI,
-				TaskList.Columns.FIELDS, null, null, TaskList.Columns.TITLE);
+		final Cursor c = context
+				.getContentResolver()
+				.query(TaskList.URI, TaskList.Columns.FIELDS,
+						null, null, TaskList.Columns.TITLE);
 
 		while (c != null && c.moveToNext()) {
 			taskLists.add(new TaskList(c));
@@ -114,10 +116,13 @@ public class JSONBackup {
 	private List<RemoteTask> getRemotesOf(final Task task) {
 		final ArrayList<RemoteTask> remotes = new ArrayList<>();
 
-		final Cursor c = context.getContentResolver().query(RemoteTask.URI,
-				RemoteTask.Columns.FIELDS, RemoteTask.Columns.DBID + " IS ?",
-				new String[] { Long.toString(task._id) },
-				RemoteTask.Columns.SERVICE);
+		final Cursor c = context
+				.getContentResolver()
+				.query(RemoteTask.URI,
+						RemoteTask.Columns.FIELDS,
+						RemoteTask.Columns.DBID + " IS ?",
+						new String[] { Long.toString(task._id) },
+						RemoteTask.Columns.SERVICE);
 
 		while (c != null && c.moveToNext()) {
 			remotes.add(new RemoteTask(c));
@@ -132,11 +137,13 @@ public class JSONBackup {
 	private List<Notification> getRemindersFor(final Task task) {
 		final ArrayList<Notification> reminders = new ArrayList<>();
 
-		final Cursor c = context.getContentResolver().query(Notification.URI,
-				Notification.Columns.FIELDS,
-				Notification.Columns.TASKID + " IS ?",
-				new String[] { Long.toString(task._id) },
-				Notification.Columns.TIME);
+		final Cursor c = context
+				.getContentResolver()
+				.query(Notification.URI,
+						Notification.Columns.FIELDS,
+						Notification.Columns.TASKID + " IS ?",
+						new String[] { Long.toString(task._id) },
+						Notification.Columns.TIME);
 
 		while (c != null && c.moveToNext()) {
 			reminders.add(new Notification(c));

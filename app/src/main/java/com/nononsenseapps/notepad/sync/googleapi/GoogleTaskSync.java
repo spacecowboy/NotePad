@@ -31,6 +31,7 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
@@ -61,9 +62,9 @@ public class GoogleTaskSync {
 								   final ContentProviderClient provider,
 								   final SyncResult syncResult) {
 		NnnLogger.debug(GoogleTaskSync.class, "fullSync");
-		if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.FOR_GOOGLETASKS)) {
-			NnnLogger.debug(GoogleTaskSync.class, "Missing permissions, disabling sync");
-			SyncGtaskHelper.disableSync(context);
+		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
+			NnnLogger.debug(GoogleTaskSync.class,
+					"not starting: sync is disabled in the prefs");
 			return false;
 		}
 
