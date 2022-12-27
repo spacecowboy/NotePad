@@ -6,6 +6,10 @@
 	android:layout_height="wrap_content"
 	android:orientation="vertical">
 
+	<!-- replicates the bottom row of an AlertDialog, with "Cancel" on the left
+	 and "OK" on the right. It uses the default style, and supports Android 13
+	  user-picked accent colors for buttons -->
+
 	<!-- TODO There should be an androidX class that builds this: remove and use that -->
 
 	<View
@@ -15,14 +19,14 @@
 		android:background="?android:attr/dividerHorizontal"/>
 
 	<LinearLayout
-		style="?android:attr/buttonBarStyle"
+		style="?buttonBarStyle"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal">
 
 		<Button
 			android:id="@+id/dialog_no"
-			style="?android:attr/buttonBarButtonStyle"
+			style="?buttonBarButtonStyle"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
@@ -30,7 +34,7 @@
 
 		<Button
 			android:id="@+id/dialog_yes"
-			style="?android:attr/buttonBarButtonStyle"
+			style="?buttonBarButtonStyle"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
