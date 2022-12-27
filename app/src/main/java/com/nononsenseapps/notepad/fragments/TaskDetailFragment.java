@@ -895,7 +895,6 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
-	// @Override
 	public void onTimeTravel(Intent data) {
 		if (taskText != null) {
 			taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));

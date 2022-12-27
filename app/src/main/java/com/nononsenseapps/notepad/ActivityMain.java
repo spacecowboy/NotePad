@@ -420,8 +420,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		// If user has donated some other time
-		final SharedPreferences prefs =
-				PreferenceManager.getDefaultSharedPreferences(this);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
 		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);

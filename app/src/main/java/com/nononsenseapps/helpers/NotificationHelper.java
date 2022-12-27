@@ -452,7 +452,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 				= com.nononsenseapps.notepad.database.Notification
 				.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
-		// TODO when updating to targetSDK 33 check these:
+		// TODO check these:
 		//  https://developer.android.com/reference/android/Manifest.permission#SCHEDULE_EXACT_ALARM
 		//  https://developer.android.com/reference/android/Manifest.permission#USE_EXACT_ALARM
 
@@ -523,8 +523,8 @@ public final class NotificationHelper extends BroadcastReceiver {
 	 */
 	private static long getTimeForAlarm(com.nononsenseapps.notepad.database.Notification input) {
 		// TODO since android takes some time to understand that it has to send the reminder,
-		//  here we could subtract 60~100 seconds so that, by the time it understands what to do,
-		//  we're not late with the reminder. Seems paranoic, though
+		//  here we could subtract 60~100 seconds so that, by the time it understands what to
+		//  do, we're not late with the reminder. Seems paranoic, though
 		return input.time; // - 60 * 1000
 	}
 

@@ -52,8 +52,9 @@ public class BackgroundSyncScheduler extends BroadcastReceiver {
 	 * Schedule a synchronization for later.
 	 */
 	public static void scheduleSync(final Context context) {
-		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		final Intent action = new Intent(context, BackgroundSyncScheduler.class) // EXPLICIT intent!
+		final AlarmManager alarmManager = (AlarmManager) context
+				.getSystemService(Context.ALARM_SERVICE);
+		final Intent action = new Intent(context, BackgroundSyncScheduler.class) // EXPLICIT intent
 				.setAction(Intent.ACTION_RUN);
 		final PendingIntent operation = PendingIntent.getBroadcast(context, scheduleCode, action,
 				PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
