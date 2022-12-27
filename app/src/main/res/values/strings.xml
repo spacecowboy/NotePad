@@ -25,8 +25,6 @@
 	<string name="time">Time</string>
 	<string name="done">Done</string>
 	<string name="saved">Saved</string>
-	<string name="distance">Distance</string>
-	<string name="near">Near</string>
 	<string name="menu_save_and_add">Save and add note</string>
 	<string name="menu_delete">Delete</string>
 	<string name="menu_deletelist">Delete list</string>
@@ -112,20 +110,15 @@
 	<string name="showcase_timemachine_title">Save your notes</string>
 	<string name="showcase_timemachine_msg">Changes are always saved. Use the time machine to restore a previous version.</string>
 
-	<string name="donate_to_unlock">Donate to unlock</string>
-	<string name="premiums_unlocked_and_thanks">Premium features unlocked. Thank you for your support!</string>
-
 	<!-- new strings added since 2022 -->
 	<string name="notification_channel_name">Reminders for notes</string>
 	<string name="notification_channel_description">Shows the note content at the time of the chosen reminder</string>
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
 	<string name="permission_denied">Can not proceed: you denied the permission</string>
-	<string name="special_thanks">Special thanks</string>
 	<string name="no_sync_method_chosen">You did not choose a sync method</string>
 	<string name="gtasks_not_working">Google Tasks (does not work)</string>
 	<string name="file_picker_not_available">The file picker is not available</string>
 	<string name="choose_backup_folder">Choose a backup folder</string>
-	<string name="default_location">Default location</string>
 	<string name="use_exact_alarms">Use exact alarms</string>
 	<string name="exact_alarms_summary">Uses more battery to show notification reminders in a more reliable way</string>
 	<string name="disable_battery_optimizations">Turn off battery optimizations</string>
@@ -139,7 +132,6 @@
 	<string name="notification_channel_settings">Notification channel settings</string>
 	<string name="open_channel_settings_description">Open a page to edit the notification settings for this app. These override any settings chosen elsewhere</string>
 	<string name="libraries_used">Libraries</string>
-	<string name="license">License</string>
 	<string name="app_about_dev_team">Created by Jonas Kalderstam and maintained by Campello Manuel</string>
 	<string name="app_about_git_repo">This app is copylefted libre software, available at https://github.com/spacecowboy/NotePad</string>
 	<string name="app_about_license">Licensed GPLv3+, https://www.gnu.org/licenses.</string>
@@ -213,7 +205,6 @@
 	<string name="sync_failed">Sync failed</string>
 	<string name="sync_login_failed">Could not log in to use Google Tasks</string>
 	<string name="changelog_full_title">Changelog</string>
-	<string name="changelog_title">What\'s new</string>
 	<string name="completed">Completed</string>
 	<string name="date_header_overdue">Overdue</string>
 	<string name="date_header_today">Today</string>
@@ -233,11 +224,8 @@
 	<string name="item_max_height">Max height of notes/tasks, in rows</string>
 	<string name="long_date_format">Long-date format</string>
 	<string name="short_date_format">Short-date format</string>
-	<string name="rows">rows</string>
 	<string name="select_date">Select date</string>
 	<string name="localedefault">Device default</string>
-	<string name="donate">Donate</string>
-	<string name="donate_thanks">Thank you for your support ♥</string>
 
 	<!-- settings string keys -->
 	<string name="hide_header">Hide entire widget header</string>
@@ -271,8 +259,6 @@
 	<string name="sync_on_change_info">Schedules a sync shortly after a note has changed</string>
 	<string name="sync_on_start">Sync on app start</string>
 	<string name="sync_on_start_info">Limits syncing to once every 5 minutes</string>
-	<string name="sync_full_force">Full sync next time</string>
-	<string name="sync_full_force_info">Use this if some items are missing.</string>
 	<string name="snooze">Snooze</string>
 	<string name="silent">Silent</string>
 	<string name="sound">Sound</string>
@@ -335,11 +321,6 @@
 	<string name="cannot_write_to_directory">Cannot write to directory</string>
 	<string name="bigger_titles">Bigger titles</string>
 	<string name="bigger_titles_summary">The title is the first line</string>
-	<string name="sd_card_touch_hint">Touch to change directory</string>
-	<string name="new_password">New password</string>
-	<string name="current_password">Current password</string>
-	<string name="const_preference_password_key" translatable="false">preference_password_key</string>
-	<string name="legacy">Legacy</string>
 	<string name="sorting">Sorting</string>
 	<string name="undo">Undo</string>
 	<string name="changelog">Changelog</string>
