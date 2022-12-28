@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Contains the "main menu" fragment for the settings activity -->
-<androidx.fragment.app.FragmentContainerView
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/fragment"
-	android:name="com.nononsenseapps.notepad.prefs.IndexPrefs"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"/>
+	android:layout_height="match_parent"
+	android:orientation="horizontal">
 
-	<!-- see activity_settings_dual for the tablet-landscape version -->
+	<!-- Contains the "main menu" fragment for the settings activity -->
+
+	<androidx.fragment.app.FragmentContainerView
+		android:id="@+id/fragment"
+		android:name="com.nononsenseapps.notepad.prefs.IndexPrefs"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+
+</LinearLayout>
