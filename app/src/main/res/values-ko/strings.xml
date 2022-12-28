@@ -14,16 +14,13 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">노트</string>
     <string name="title_create">새 노트</string>
     <string name="timemachine">타임머신</string>
     <string name="time">시간</string>
     <string name="done">완료</string>
     <string name="saved">저장 완료</string>
-    <string name="distance">거리</string>
-
     <string name="near">근처</string>
     <string name="menu_save_and_add">저장하고 메모 추가</string>
     <string name="menu_delete">지우기</string>
@@ -87,7 +84,6 @@
     <string name="about">정보</string>
     <string name="sync_failed">동기화 실패</string>
     <string name="sync_login_failed">로그인을 실패하여 Google Tasks에 연결할 수 없음</string>
-    <string name="changelog_full_title">애플리케이션 변경 사항</string>
     <string name="changelog_title">새로운 기능</string>
     <string name="completed">완료됨</string>
     <string name="date_header_overdue">목표 날짜 지남</string>
@@ -106,7 +102,7 @@
     <!-- settings string keys -->
     <string name="hide_header">위젯 제목 숨기기</string>
     <string name="shortcut_help1">체크하면, 바로가기를 누르면 선택한 리스트에 새 노트를 만들고 편집기를 엽니다. 체크하지 않으면, 선택한 리스트만 보여줍니다.</string>
-    <string name="loading_widget">위젯 읽고 있음&#8230;</string>
+    <string name="loading_widget">위젯 읽고 있음…</string>
     <string name="notecopied_one">노트 복사됨</string>
     <string name="notecopied_other">노트 %d개 복사됨</string>
     <string name="notedeleted_one">노트 지워짐</string>
@@ -119,7 +115,6 @@
     <string name="sync_on_change_info">노트를 고치고 나면 동기화 되도록 설정</string>
     <string name="sync_on_start">애플리케이션 시작할 때마다 동기화하기</string>
     <string name="sync_on_start_info">애플리케이션을 \'새로\' 시작할 때에만 동기화됨</string>
-    <string name="sync_full_force">다음 번에 무조건 모두 동기화하도록 하기</string>
     <string name="sync_full_force_info">몇몇 사항이 제대로 동기화되고 있지 않을 때에만 체크</string>
     <string name="silent">조용히</string>
     <string name="sound">소리</string>

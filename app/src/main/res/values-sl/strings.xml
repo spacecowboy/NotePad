@@ -21,7 +21,6 @@
     <string name="time">Čas</string>
     <string name="done">Končano</string>
     <string name="saved">Shranjene</string>
-    <string name="distance">Oddaljenost</string>
     <string name="near">Blizu</string>
     <string name="menu_save_and_add">Shrani in dodaj opombo</string>
     <string name="menu_delete">Izbriši</string>
@@ -94,7 +93,6 @@
     <string name="showcase_drawer_msg">Dolgo pritisnite za urejanje ali brisanje</string>
     <string name="showcase_timemachine_title">Shranite zapiske</string>
     <string name="showcase_timemachine_msg">Spremembe so vedno shranjene. Uporabite časovni stroj za obnovitev prejšnje različice.</string>
-    <string name="donate_to_unlock">Darujte za odklepanje</string>
     <string name="premiums_unlocked_and_thanks">Nagrada zunanja oblika odkleniti. Zahvaljujemo se vam za vašo podporo!</string>
     <string name="move">Premakni</string>
     <string name="move_to">Premakni v</string>
@@ -119,7 +117,6 @@
     <string name="about">O</string>
     <string name="sync_failed">Sinhroniziranje ni uspelo</string>
     <string name="sync_login_failed">Prijava ni uspela, ni bilo mogoče vzpostaviti Google opravila</string>
-    <string name="changelog_full_title">Dnevnik sprememb</string>
     <string name="changelog_title">Kaj je novega</string>
     <string name="completed">Dokončana</string>
     <string name="date_header_overdue">Zapadle</string>
@@ -140,10 +137,8 @@
     <string name="item_max_height">Maks višina opombe/nalog</string>
     <string name="long_date_format">Dolga oblika datuma</string>
     <string name="short_date_format">Kratka oblika datuma</string>
-    <string name="rows">vrstice</string>
     <string name="select_date">Izberite datum</string>
     <string name="localedefault">Privzete področne nastavitve</string>
-    <string name="donate">Darovati</string>
     <string name="donate_thanks">Zahvaljujemo se vam za vašo podporo!</string>
     <string name="hide_header">Skriti celotno widget glave</string>
     <string name="transparency">Preglednost</string>
@@ -164,7 +159,6 @@
     <string name="sync_on_change_info">Urniki sinhrono, kmalu potem, ko je spremenil opombo</string>
     <string name="sync_on_start">Sync on application start</string>
     <string name="sync_on_start_info">Sinhronizira na večini vsakih 5 minut</string>
-    <string name="sync_full_force">Sila polno sinhronizaciji naslednjič</string>
     <string name="sync_full_force_info">Le to preverite, če menite, da sinhronizacijo manjka nekaj elementov.</string>
     <string name="snooze">Dremež</string>
     <string name="silent">Tiho</string>

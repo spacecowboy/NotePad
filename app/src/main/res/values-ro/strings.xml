@@ -21,7 +21,6 @@
     <string name="time">Timp</string>
     <string name="done">Terminat</string>
     <string name="saved">Salvat</string>
-    <string name="distance">Distanța</string>
     <string name="near">Aproape</string>
     <string name="menu_save_and_add">Salvează si adauga nota</string>
     <string name="menu_delete">Șterge</string>
@@ -70,7 +69,6 @@
     <string name="settings_sync_enable_title">Sincronizare Sarcini Google</string>
     <string name="gtasks_sync_info">Nu toate informațiile poti fi sincronizate cu Google Tasks. Doar notițele, data scadenței (nu ora) și statutul-todo sunt sincronizate.</string>
     <string name="settings_cat_syncing">Sincronizare</string>
-
     <string name="show_from_all_lists">Toate listele</string>
     <string name="lists">Liste</string>
     <string name="deleted">Ștearsă</string>
@@ -95,7 +93,6 @@
     <string name="showcase_drawer_msg">Apasă lung pentru a edita sau șterge</string>
     <string name="showcase_timemachine_title">Salvează-ți notițele</string>
     <string name="showcase_timemachine_msg">Schimbările sunt întotdeauna salvate. Utilizează mașina timpului pentru a restabili o versiune anterioară.</string>
-    <string name="donate_to_unlock">Donează pentru a debloca</string>
     <string name="premiums_unlocked_and_thanks">Caracteristicile premium au fost deblocate. Mulțumim pentru sprijinul acordat!</string>
     <string name="move">Mută</string>
     <string name="move_to">Mută la</string>
@@ -120,7 +117,6 @@
     <string name="about">Despre</string>
     <string name="sync_failed">Sincronizarea a eșuat</string>
     <string name="sync_login_failed">Autentificarea a eșuat, eroare conexiune la Sarcini Google</string>
-    <string name="changelog_full_title">Modificări</string>
     <string name="changelog_title">Ce e nou</string>
     <string name="completed">Finalizat</string>
     <string name="date_header_overdue">Depășit</string>
@@ -141,10 +137,8 @@
     <string name="item_max_height">Înălțimea maximă a notițelor/sarcinilor</string>
     <string name="long_date_format">Format extensiv</string>
     <string name="short_date_format">Format compact</string>
-    <string name="rows">rânduri</string>
     <string name="select_date">Selectează date</string>
     <string name="localedefault">Implicit telefon</string>
-    <string name="donate">Donează</string>
     <string name="donate_thanks">Mulțumim pentru sprijinul acordat!</string>
     <!-- settings string keys -->
     <string name="hide_header">Ascunde tot antetul</string>
@@ -166,7 +160,6 @@
     <string name="sync_on_change_info">Programează o sincronizare la scurt timp după ce o notiță a fost schimbată</string>
     <string name="sync_on_start">Sincronizare la pornirea aplicației</string>
     <string name="sync_on_start_info">Se va sincroniza la fiecare 5 minute</string>
-    <string name="sync_full_force">Forțează sincronizarea completă data viitoare</string>
     <string name="sync_full_force_info">Verifică asta doar dacă crezi că sincronizării îi lipsesc anumite elemente.</string>
     <string name="snooze">Amână</string>
     <string name="silent">Silențios</string>

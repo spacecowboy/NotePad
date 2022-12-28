@@ -14,15 +14,13 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">便箋</string>
+  --><resources>
+    <string name="app_name_short">便箋</string>
     <string name="title_create">新建便箋</string>
     <string name="timemachine">時光機</string>
     <string name="time">時間</string>
     <string name="done">完成</string>
     <string name="saved">已儲存</string>
-    <string name="distance">距離</string>
     <string name="menu_save_and_add">保存並打開一個新便箋</string>
     <string name="menu_delete">刪除</string>
     <string name="menu_deletelist">刪除清單</string>
@@ -104,7 +102,6 @@
     <string name="about">關於</string>
     <string name="sync_failed">同步失敗</string>
     <string name="sync_login_failed">登入失敗，無法連接到 Google 工作表</string>
-    <string name="changelog_full_title">更新日誌</string>
     <string name="changelog_title">最近更新</string>
     <string name="completed">已完成</string>
     <string name="date_header_overdue">過期日</string>
@@ -122,9 +119,7 @@
     <string name="item_max_height">便箋/任務的</string>
     <string name="long_date_format">長日期格式</string>
     <string name="short_date_format">短日期格式</string>
-    <string name="rows">行</string>
     <string name="localedefault">使用所在地區預設值</string>
-    <string name="donate">捐贈</string>
     <string name="donate_thanks">感謝您的支持！</string>
     <string name="hide_header">隱藏整個小部件標題行</string>
     <string name="transparency">透明度</string>
@@ -142,7 +137,6 @@
     <string name="sync_on_change_info">對便箋作出變更後立即同步</string>
     <string name="sync_on_start">應用啟動時同步</string>
     <string name="sync_on_start_info">只在初次啟動時同步，再次打開應用時不再同步</string>
-    <string name="sync_full_force">強制下次進行完整同步</string>
     <string name="sync_full_force_info">只在您確信存在數據缺失時選擇此項</string>
     <string name="snooze">打盹</string>
     <string name="silent">靜音</string>

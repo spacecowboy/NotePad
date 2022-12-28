@@ -6,7 +6,6 @@
     <string name="time">Tid</string>
     <string name="done">Ferdig</string>
     <string name="saved">Lagret</string>
-    <string name="distance">Avstand</string>
     <string name="near">Nær</string>
     <string name="menu_save_and_add">Lagre og legg til notat</string>
     <string name="menu_delete">Slett</string>
@@ -55,7 +54,6 @@
     <string name="settings_sync_enable_title">Google Huskeliste-synkronisering</string>
     <string name="gtasks_sync_info">Ikke all informasjon kan synkroniseres med Google Huskeliste. Kun notater, utløpsdato (ikke tid) og å gjøre-status blir synkronisert.</string>
     <string name="settings_cat_syncing">Synkronisering</string>
-
     <string name="show_from_all_lists">Alle lister</string>
     <string name="lists">Lister</string>
     <string name="deleted">Slettet</string>
@@ -80,7 +78,6 @@
     <string name="showcase_drawer_msg">Hold for å redigere eller slette</string>
     <string name="showcase_timemachine_title">Lagre notatene dine</string>
     <string name="showcase_timemachine_msg">Endringer lagres alltid. Bruk tidsmaskinen til å gjenopprette en tidligere versjon.</string>
-    <string name="donate_to_unlock">Donér for å låse opp</string>
     <string name="premiums_unlocked_and_thanks">Premiumfunksjoner låst opp. Tusen takk for støtten!</string>
     <string name="move">Flytt</string>
     <string name="move_to">Flytt til</string>
@@ -105,7 +102,6 @@
     <string name="about">Om</string>
     <string name="sync_failed">Synkronisering feilet</string>
     <string name="sync_login_failed">Pålogging mislykket, kunne ikke koble til Google Huskeliste</string>
-    <string name="changelog_full_title">Endringslogg</string>
     <string name="changelog_title">Hva som er nytt</string>
     <string name="completed">Fullført</string>
     <string name="date_header_overdue">Utløpt</string>
@@ -126,10 +122,8 @@
     <string name="item_max_height">Makshøyde for notater/oppgaver</string>
     <string name="long_date_format">Langt datoformat</string>
     <string name="short_date_format">Kort datoformat</string>
-    <string name="rows">rekker</string>
     <string name="select_date">Velg dato</string>
     <string name="localedefault">Systemspråk</string>
-    <string name="donate">Donér</string>
     <string name="donate_thanks">Tusen takk for støtten!</string>
     <string name="hide_header">Gjem hele widgettittelen</string>
     <string name="transparency">Gjennomsiktighet</string>
@@ -150,7 +144,6 @@
     <string name="sync_on_change_info">Planlegger en synkronisering rett etter et notat har blitt redigert</string>
     <string name="sync_on_start">Synkronisér ved oppstart</string>
     <string name="sync_on_start_info">Vil synkronisere i det minste hvert 5. minutt</string>
-    <string name="sync_full_force">Tving full synkronisering neste gang</string>
     <string name="sync_full_force_info">Bare avkryss dette hvis du tror synkroniseringen mangler noen elementer.</string>
     <string name="snooze">Slumre</string>
     <string name="silent">Stille</string>

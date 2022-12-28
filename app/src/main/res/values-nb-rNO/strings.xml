@@ -11,14 +11,11 @@
     <string name="dashclock_tomorrow">I morgen</string>
     <string name="dashclock_next7">De neste 7 dagene</string>
     <string name="text_size">Tekststørrelse</string>
-    <string name="changelog">Endringslogg</string>
     <string name="localedefault">Enhetsforvalg</string>
     <string name="menu_sync">Synkroniser</string>
     <string name="delete_question">Slett\?</string>
-    <string name="distance">Avstand</string>
     <string name="done">Ferdig</string>
     <string name="saved">Lagret</string>
-    <string name="near">Nær</string>
     <string name="menu_save_and_add">Lagre og legg til notat</string>
     <string name="menu_share">Del</string>
     <string name="menu_preferences">Innstillinger</string>
@@ -50,7 +47,6 @@
     <string name="settings_list_dialog">Velg en liste</string>
     <string name="import_started">Importerer data …</string>
     <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
-    <string name="donate_to_unlock">Doner for å låse opp</string>
     <string name="showcase_main_msg">Trykk på ikonet eller dra fra venstre kant</string>
     <string name="showcase_timemachine_msg">Endringer lagres alltid. Bruk tidsmaskinen for å gjenopprette en tidligere versjon.</string>
     <string name="feature_is_WIP">Denne funksjonen er under konstruksjon.</string>
@@ -77,7 +73,6 @@
     <string name="hide_date">Skjul fristdato</string>
     <string name="long_date_format">Langt datoformat</string>
     <string name="short_date_format">Kort datoformat</string>
-    <string name="rows">rader</string>
     <string name="transparency">Gjennomsiktighet</string>
     <string name="notes_shortcut">Notatsnarvei</string>
     <string name="loading_widget">Laster inn miniprogram …</string>
@@ -100,9 +95,7 @@
     <string name="directory">Mappe</string>
     <string name="cannot_write_to_directory">Kan ikke skrive til mappe</string>
     <string name="bigger_titles_summary">Navnet er første linje</string>
-    <string name="sd_card_touch_hint">Trykk for å endre mappe</string>
     <string name="new_password">Nytt passord</string>
-    <string name="current_password">Nåværende passord</string>
     <string name="sorting">Sortering</string>
     <string name="title_create">Nytt notat</string>
     <string name="timemachine">Tidsmaskin</string>
@@ -134,9 +127,7 @@
     <string name="deleted">Slettet</string>
     <string name="repeat">Gjenta</string>
     <string name="settings_list">Liste</string>
-    <string name="special_thanks">Spesiell takk</string>
     <string name="default_location">Forvalgt plassering</string>
-    <string name="license">Lisens</string>
     <string name="move_to">Flytt til</string>
     <string name="import_error">Noe gikk galt: %s</string>
     <string name="showcase_drawer_title">Håndter listene dine</string>
@@ -150,20 +141,16 @@
     <string name="password_required">Passord kreves</string>
     <string name="select_account">Velg en konto</string>
     <string name="password_cleared">Passord fjernet</string>
-    <string name="changelog_full_title">Endringslogg</string>
     <string name="completed">Fullført</string>
     <string name="date_header_tomorrow">I morgen</string>
-    <string name="donate_thanks">Takk for din støtte ♥</string>
     <string name="tasks">Gjøremål</string>
     <string name="enter_new_password">Skriv inn nytt passord</string>
     <string name="clear_password">Fjern passord</string>
     <string name="sync_failed">Synkronisering mislyktes</string>
-    <string name="changelog_title">Nyheter</string>
     <string name="date_header_today">I dag</string>
     <string name="date_header_completed">Fullført</string>
     <string name="please_create_note">Opprett et notat</string>
     <string name="select_date">Velg dato</string>
-    <string name="donate">Doner</string>
     <string name="default_list">Forvalgt liste</string>
     <string name="archive">Arkiv</string>
     <string name="sort_list_updated">Sist oppdatert</string>
@@ -205,15 +192,12 @@
     <string name="sync_on_change">Synkroniser ved endringer</string>
     <string name="sync_on_start">Synkroniser ved programstart</string>
     <string name="sync_on_start_info">Begrenser synkronisering til hvert femte minutt</string>
-    <string name="sync_full_force">Full synkronisering neste gang</string>
     <string name="notification_prio_low">Lav: Skjult, minimert</string>
     <string name="bigger_titles">Større navn</string>
-    <string name="legacy">Gammeldags</string>
     <string name="please_type_before_reminder">Skriv litt tekst før du legger til påminnelse</string>
     <string name="notification_prio_high">Høy: Øverst, utvidet</string>
     <string name="permission_read_label">lesing av notater og lister</string>
     <string name="drag_to_timetravel">Dra for tidsreise</string>
-    <string name="premiums_unlocked_and_thanks">Premiumsfunksjoner opplåst. Takk for din støtte.</string>
     <string name="date_header_overdue">Forfalt</string>
     <string name="hide_checkbox">Skjul avkryssningsboks</string>
     <string name="hide_checkbox_summary_off">Viser avkryssningsboksen</string>
@@ -243,7 +227,6 @@
     <string name="prefs_improved_reliability">Innstillinger for økt pålitelighet</string>
     <string name="exact_alarms_summary">Bruker mer batteri for å vise merknader for påminnelser mer pålitelig</string>
     <string name="allow_exact_reminders_summary">Åpne en side for å tillate dette programmet å sende påminnelser mer pålitelig. Trengs kun siden Android 12 Snow Cone.</string>
-    <string name="sync_full_force_info">Velg dette hvis du tror noen elementer mangler.</string>
     <string name="bold">Fet</string>
     <string name="app_about_license">Lisensiert GPLv3+, tilgjengelig på https://www.gnu.org/licenses.</string>
     <string name="backup_import_msg">Prøv å importere sikkerhetskopi fra %1$s\? Dette tømmer nåværende database.</string>
@@ -260,4 +243,5 @@
 \nsom du har tilgang til med filbehandleren. Merk at å avinstallere programmet også sletter disse filene. Bruk sikkerhetskopifunksjonen for å beholde notatene dine.</string>
     <string name="notifications_visibility">Merknadssynlighet</string>
     <string name="msg_hibernation_already_off">Android-dvalgang er allerede avslått. Du trenger ikke dette.</string>
+    <string name="password">Passord</string>
 </resources>
