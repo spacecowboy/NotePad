@@ -17,7 +17,7 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import android.annotation.SuppressLint;
+
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -30,17 +30,14 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.loader.app.LoaderManager;
@@ -53,18 +50,15 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.ActivityWidgetConfigBinding;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 import com.nononsenseapps.ui.TitleNoteTextView;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-@EActivity(R.layout.activity_widget_config)
 public class ListWidgetConfig extends AppCompatActivity {
+
 	public static final String KEY_LIST = "widget1_key_list";
 	public static final String KEY_LIST_TITLE = "widget1_key_list_title";
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
@@ -79,6 +73,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 	public static final String KEY_HIDDENDATE = "widget1_key_hiddendate";
 	public static final String KEY_HIDDENCHECKBOX = "widget1_key_hiddencheckbox";
 	public static final String KEY_TITLEROWS = "widget1_key_titlerows";
+
 	/**
 	 * Used in widget service/provider
 	 */
@@ -100,56 +95,23 @@ public class ListWidgetConfig extends AppCompatActivity {
 	// All lists id
 	public final static int ALL_LISTS_ID = -2;
 
-	@ViewById(resName = "widgetPreviewWrapper")
-	View widgetPreviewWrapper;
-
-	@ViewById(resName = "listSpinner")
-	Spinner listSpinner;
-
-	@ViewById(resName = "sortingSpinner")
-	Spinner sortingSpinner;
-
-	@ViewById(resName = "itemRowsSeekBar")
-	SeekBar itemRowsSeekBar;
-
-	@ViewById(resName = "transparencySeekBar")
-	SeekBar transparencySeekBar;
-
-	@ViewById(resName = "themeSpinner")
-	Spinner themeSpinner;
-
-	@ViewById(resName = "shade")
-	ImageView shade;
-
-	@ViewById(resName = "notesList")
-	ListView notesList;
-
-	@ViewById(resName = "titleButton")
-	TextView titleButton;
-
-	@ViewById(resName = "widgetHeader")
-	View widgetHeader;
-
-	@ViewById(resName = "transparentHeaderCheckBox")
-	CheckBox transparentHeaderCheckBox;
-
-	@ViewById(resName = "hideCheckBox")
-	CheckBox hideCheckBox;
-
-	@ViewById(resName = "hideDateCheckBox")
-	CheckBox hideDateCheckBox;
-
 	private int appWidgetId;
-
 	private SimpleWidgetPreviewAdapter mNotesAdapter;
-
 	private LoaderCallbacks<Cursor> mCallback;
-
 	private ExtrasCursorAdapter mListAdapter;
+
+	/**
+	 * for {@link R.layout#activity_widget_config}
+	 */
+	private ActivityWidgetConfigBinding mBinding;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		mBinding = ActivityWidgetConfigBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
+
 		setResult(RESULT_CANCELED);
 
 		Intent intent = getIntent();
@@ -166,9 +128,12 @@ public class ListWidgetConfig extends AppCompatActivity {
 			setResult(RESULT_CANCELED, resultValue);
 			finish();
 		}
+
+		setupPreview();
+		setupActionBar();
+		setupConfig();
 	}
 
-	@AfterViews
 	void setupPreview() {
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
@@ -266,7 +231,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 		});
 
-		notesList.setAdapter(mNotesAdapter);
+		mBinding.widgetPreviewWrapper.widgetPreview.notesList.setAdapter(mNotesAdapter);
 
 		mCallback = new LoaderCallbacks<>() {
 
@@ -334,7 +299,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 							widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID));
 					//if (c.getCount() > 0) {
 					// Set current item
-					listSpinner.setSelection(pos);
+					mBinding.widgetConfWrapper.listSpinner.setSelection(pos);
 					//}
 				} else {
 					mNotesAdapter.swapCursor(c);
@@ -358,14 +323,13 @@ public class ListWidgetConfig extends AppCompatActivity {
 		LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 	}
 
-	@AfterViews
 	void setupActionBar() {
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
 		LayoutInflater inflater = (LayoutInflater) getSupportActionBar()
 				.getThemedContext()
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
-		@SuppressLint("InflateParams") final View customActionBarView = inflater
+		final View customActionBarView = inflater
 				.inflate(R.layout.actionbar_custom_view_done, null);
 		customActionBarView.findViewById(R.id.actionbar_done)
 				.setOnClickListener(v -> {
@@ -396,7 +360,6 @@ public class ListWidgetConfig extends AppCompatActivity {
 		getSupportActionBar().setCustomView(customActionBarView);
 	}
 
-	@AfterViews
 	void setupConfig() {
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
@@ -413,7 +376,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 		}
 
-		sortingSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		mBinding.widgetConfWrapper.sortingSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 									   int pos, long id) {
@@ -425,11 +388,11 @@ public class ListWidgetConfig extends AppCompatActivity {
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) {}
 		});
-		sortingSpinner.setSelection(getArrayPositionOf(
+		mBinding.widgetConfWrapper.sortingSpinner.setSelection(getArrayPositionOf(
 				sortTypeValues,
 				widgetPrefs.getString(KEY_SORT_TYPE, getString(R.string.default_sorttype))));
 
-		themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		mBinding.widgetConfWrapper.themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 									   int pos, long id) {
@@ -439,12 +402,16 @@ public class ListWidgetConfig extends AppCompatActivity {
 				final int secondaryTextColor;
 				if (theme.equals(getString(R.string.settings_summary_theme_light))) {
 					mTheme = THEME_LIGHT;
-					primaryTextColor = getResources().getColor(android.R.color.primary_text_light);
-					secondaryTextColor = getResources().getColor(android.R.color.secondary_text_light);
+					primaryTextColor = ContextCompat
+							.getColor(ListWidgetConfig.this, android.R.color.primary_text_light);
+					secondaryTextColor = ContextCompat
+							.getColor(ListWidgetConfig.this, android.R.color.secondary_text_light);
 				} else {
 					mTheme = THEME_DARK;
-					primaryTextColor = getResources().getColor(android.R.color.primary_text_dark);
-					secondaryTextColor = getResources().getColor(android.R.color.secondary_text_dark);
+					primaryTextColor = ContextCompat
+							.getColor(ListWidgetConfig.this, android.R.color.primary_text_dark);
+					secondaryTextColor = ContextCompat
+							.getColor(ListWidgetConfig.this, android.R.color.secondary_text_dark);
 				}
 				widgetPrefs.putInt(KEY_THEME, mTheme);
 				widgetPrefs.putInt(KEY_TEXTPRIMARY, primaryTextColor);
@@ -461,10 +428,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 		} else {
 			currentThemeString = getString(R.string.settings_summary_theme_dark);
 		}
-		themeSpinner.setSelection(getSpinnerPositionOf(
-				themeSpinner.getAdapter(), currentThemeString));
+		mBinding.widgetConfWrapper.themeSpinner.setSelection(getSpinnerPositionOf(
+				mBinding.widgetConfWrapper.themeSpinner.getAdapter(), currentThemeString));
 
-		itemRowsSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mBinding.widgetConfWrapper.itemRowsSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {}
@@ -482,9 +449,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 				}
 			}
 		});
-		itemRowsSeekBar.setProgress(widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS) - 1);
+		mBinding.widgetConfWrapper.itemRowsSeekBar.setProgress(widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS) - 1);
 
-		transparencySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mBinding.widgetConfWrapper.transparencySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 			@Override
 			public void onStopTrackingTouch(SeekBar seekBar) {}
 
@@ -508,9 +475,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 		opacity &= 0xff;
 		// Get percentage
 		opacity = (100 * opacity) / 0xff;
-		transparencySeekBar.setProgress(opacity);
+		mBinding.widgetConfWrapper.transparencySeekBar.setProgress(opacity);
 
-		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+		mBinding.widgetConfWrapper.listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View arg1, int pos, long id) {
 				widgetPrefs.putLong(KEY_LIST, id);
@@ -526,7 +493,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 				// Need to reload tasks
 				reloadTasks();
 				// And set title
-				titleButton.setText(widgetPrefs.getString(KEY_LIST_TITLE, ""));
+				mBinding.widgetPreviewWrapper.widgetPreview.titleButton.setText(widgetPrefs.getString(KEY_LIST_TITLE, ""));
 			}
 
 			@Override
@@ -539,28 +506,28 @@ public class ListWidgetConfig extends AppCompatActivity {
 				new int[] { R.string.show_from_all_lists },
 				android.R.layout.simple_spinner_dropdown_item);
 
-		listSpinner.setAdapter(mListAdapter);
+		mBinding.widgetConfWrapper.listSpinner.setAdapter(mListAdapter);
 
-		transparentHeaderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+		mBinding.widgetConfWrapper.transparentHeaderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			mBinding.widgetPreviewWrapper.widgetPreview.widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
 			widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
 		});
-		transparentHeaderCheckBox
+		mBinding.widgetConfWrapper.transparentHeaderCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER, false));
 
-		hideCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+		mBinding.widgetConfWrapper.hideCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
 			if (mNotesAdapter != null)
 				mNotesAdapter.notifyDataSetChanged();
 		});
-		hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
+		mBinding.widgetConfWrapper.hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
 
-		hideDateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+		mBinding.widgetConfWrapper.hideDateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
 			if (mNotesAdapter != null)
 				mNotesAdapter.notifyDataSetChanged();
 		});
-		hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
+		mBinding.widgetConfWrapper.hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
 	}
 
 	private int getListPositionOf(final Adapter adapter, final long id) {
@@ -600,11 +567,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 	}
 
 	void updateBG(final int color) {
-		if (shade != null) {
-			shade.setBackgroundColor(color);
-			shade.setVisibility((color & 0xff000000) == 0 ? View.GONE
-					: View.VISIBLE);
-		}
+		mBinding.widgetPreviewWrapper.widgetPreview.shade.setBackgroundColor(color);
+		mBinding.widgetPreviewWrapper.widgetPreview.shade
+				.setVisibility((color & 0xff000000) == 0 ? View.GONE : View.VISIBLE);
 	}
 
 	void updateTheme(final int theme, final WidgetPrefs widgetPrefs) {
