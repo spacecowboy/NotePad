@@ -616,16 +616,14 @@ public class ActivityMain extends AppCompatActivity
 				// Get a share text (null safe)
 				// In a list (if specified, or default otherwise)
 				left = TaskDetailFragment.getInstance(getNoteShareText(intent),
-						TaskListViewPagerFragment
-								.getARealList(this, getListId(intent))
-				);
+						TaskListViewPagerFragment.getARealList(this, getListId(intent)));
 			}
 			// fucking stack
 			while (getSupportFragmentManager().popBackStackImmediate()) {
 				// Need to pop the entire stack and then load
 			}
 			if (shouldAddToBackStack) {
-				transaction.addToBackStack(null); // !!
+				transaction.addToBackStack(null); // TODO is this the problem
 			}
 
 			setHomeAsDrawer(false);
@@ -651,6 +649,8 @@ public class ActivityMain extends AppCompatActivity
 			mBinding.taskHint.setVisibility(View.GONE);
 		}
 		transaction.replace(R.id.fragment1, left, leftTag);
+
+
 
 		// Commit transaction
 		// Allow state loss as workaround for bug
@@ -1080,35 +1080,21 @@ public class ActivityMain extends AppCompatActivity
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		// User clicked a task in the list
-
-		// tablet
 		if (mBinding.fragment2 != null) {
+			// tablet
+
 			// Set the intent here also so rotations open the same item
 			setIntent(intent);
-			getSupportFragmentManager().beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top,
-							R.anim.slide_out_bottom).replace(R.id.fragment2,
-							TaskDetailFragment.getInstance(taskUri))
+			getSupportFragmentManager()
+					.beginTransaction()
+					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
+					.replace(R.id.fragment2, TaskDetailFragment.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			mBinding.taskHint.setVisibility(View.GONE);
 		}
-		// phone
 		else {
-
-			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-			// && origin != null) {
-			// Log.d("nononsenseapps animation", "Animating");
-			// //intent.putExtra(ANIMATEEXIT, true);
-			// startActivity(
-			// intent,
-			// ActivityOptions.makeCustomAnimation(this,
-			// R.anim.activity_slide_in_left,
-			// R.anim.activity_slide_out_left).toBundle());
-
-			// }
-			// else {
+			// phone
 			startActivity(intent);
-			// }
 		}
 	}
 
