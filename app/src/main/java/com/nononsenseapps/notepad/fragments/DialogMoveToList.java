@@ -41,9 +41,10 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentDialogMovetolistBinding;
 
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
+
+import java.util.concurrent.Executors;
 
 /**
  * When you long-click a note, you can press a button on the actionbar to move it
@@ -154,16 +155,16 @@ public class DialogMoveToList extends DialogFragment {
 				});
 	}
 
-	@Background
 	void moveItems(final long toListId, final long[] taskIds) {
+		Executors.newSingleThreadExecutor().execute(() -> {
+			final ContentValues val = new ContentValues();
+			val.put(Task.Columns.DBLIST, toListId);
 
-		final ContentValues val = new ContentValues();
-		val.put(Task.Columns.DBLIST, toListId);
+			// where _ID in (1, 2, 3)
+			final String whereId = Task.Columns._ID + " IN (" + DAO.arrayToCommaString(taskIds) + ")";
 
-		// where _ID in (1, 2, 3)
-		final String whereId = Task.Columns._ID + " IN (" + DAO.arrayToCommaString(taskIds) + ")";
-
-		getActivity().getContentResolver().update(Task.URI, val, whereId, null);
+			getActivity().getContentResolver().update(Task.URI, val, whereId, null);
+		});
 	}
 
 	@Click(resName = "dialog_no")

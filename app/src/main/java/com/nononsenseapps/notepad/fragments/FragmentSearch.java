@@ -47,14 +47,11 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.databinding.FragmentSearchBinding;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.androidannotations.annotations.EFragment;
-
 /**
  * This is used only in the "Archive" view, for deleted notes.
  * For the search widget of the "main" view, see
  * {@link TaskListViewPagerFragment#onCreateOptionsMenu}
  */
-@EFragment()
 public class FragmentSearch extends Fragment {
 
 	public final static String QUERY = "query";
@@ -90,8 +87,8 @@ public class FragmentSearch extends Fragment {
 		mBinding = null;
 	}
 
-	public static FragmentSearch_ getInstance(final String initialQuery) {
-		FragmentSearch_ f = new FragmentSearch_();
+	public static FragmentSearch getInstance(final String initialQuery) {
+		FragmentSearch f = new FragmentSearch();
 		Bundle args = new Bundle();
 		args.putString(QUERY, initialQuery);
 		f.setArguments(args);

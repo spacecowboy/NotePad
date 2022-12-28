@@ -72,9 +72,6 @@ import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EFragment;
-
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -82,7 +79,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-@EFragment()
 public class TaskListFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	// Must be less than -1
@@ -131,8 +127,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		mBinding = null;
 	}
 
-	public static TaskListFragment_ getInstance(final long listId) {
-		TaskListFragment_ f = new TaskListFragment_();
+	public static TaskListFragment getInstance(final long listId) {
+		TaskListFragment f = new TaskListFragment();
 		Bundle args = new Bundle();
 		args.putLong(LIST_ID, listId);
 		f.setArguments(args);
@@ -544,7 +540,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
 				@Override
-				@Background
 				public void onPasswordConfirmed() {
 					for (final Task t : tasks.values()) {
 						try {
@@ -556,16 +551,18 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 					String msg;
 					try {
-						msg = getResources()
-								.getQuantityString(R.plurals.notedeleted_msg, tasks.size(), tasks.size());
-
+						msg = getResources().getQuantityString(R.plurals.notedeleted_msg,
+								tasks.size(), tasks.size());
 					} catch (Exception e) {
 						// Protect against faulty translations
 						msg = getResources().getString(R.string.deleted);
 					}
 
 					// TODO should use a Snackbar instead of Toasts
-					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
+					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG)
+					// .setAction(R.string.undo, listener)
+					// .setCallback(dismissCallback)
+					// .show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
 					if (mMode != null) mMode.finish();

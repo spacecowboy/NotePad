@@ -67,7 +67,7 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 
-import org.androidannotations.annotations.AfterViews;
+
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
@@ -279,6 +279,12 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setListeners();
+	}
+
+	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		mBinding = null;
@@ -364,7 +370,6 @@ public class TaskDetailFragment extends Fragment {
 		return true;
 	}
 
-	@AfterViews
 	void setListeners() {
 		if (dontLoad) {
 			return;

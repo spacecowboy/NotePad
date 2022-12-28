@@ -58,12 +58,9 @@ import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListene
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.ViewsHelper;
 
-import org.androidannotations.annotations.EFragment;
-
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain one on startup
  */
-@EFragment()
 public class TaskListViewPagerFragment extends Fragment implements
 		EditListDialogListener, ListOpener {
 
@@ -106,7 +103,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	public static TaskListViewPagerFragment getInstance(final long startListId) {
-		TaskListViewPagerFragment_ f = new TaskListViewPagerFragment_();
+		TaskListViewPagerFragment f = new TaskListViewPagerFragment();
 		Bundle args = new Bundle();
 		args.putLong(START_LIST_ID, startListId);
 		f.setArguments(args);
@@ -452,7 +449,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
 			// if (id < 0) return null;
-			return TaskListFragment_.getInstance(id);
+			return TaskListFragment.getInstance(id);
 		}
 
 		@Override

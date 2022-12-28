@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.preference.PreferenceManager;
@@ -42,11 +43,12 @@ import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.androidannotations.annotations.Background;
+
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
 import java.util.HashSet;
+import java.util.concurrent.Executors;
 
 @EFragment()
 public class FragmentSearchDeleted extends FragmentSearch {
@@ -90,36 +92,40 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				return result;
 			}
 
-			@Background
+			@WorkerThread
 			void deleteSelected(final ActionMode mode) {
-				String whereCondition = Task.Columns._ID + " IN ("
-						+ DAO.arrayToCommaString(getIdArray()) + ")";
-				getActivity()
-						.getContentResolver()
-						.delete(Task.URI_DELETED_QUERY, whereCondition, null);
-				selectedItems.clear();
-				mode.finish();
+				Executors.newSingleThreadExecutor().execute(() -> {
+					String whereCondition = Task.Columns._ID + " IN ("
+							+ DAO.arrayToCommaString(getIdArray()) + ")";
+					getActivity()
+							.getContentResolver()
+							.delete(Task.URI_DELETED_QUERY, whereCondition, null);
+					selectedItems.clear();
+					mode.finish();
+				});
 			}
 
-			@Background
+			@WorkerThread
 			void restoreSelected(final ActionMode mode, final long listId) {
-				for (final Long id : selectedItems) {
-					final int pos = getPosOfId(id);
-					if (pos > -1) {
-						final Cursor c = (Cursor) mBinding.list.getItemAtPosition(pos);
+				Executors.newSingleThreadExecutor().execute(() -> {
+					for (final Long id : selectedItems) {
+						final int pos = getPosOfId(id);
+						if (pos > -1) {
+							final Cursor c = (Cursor) mBinding.list.getItemAtPosition(pos);
 
-						// restore task
-						final Task t = new Task();
-						t.dblist = listId;
-						t.title = c.getString(1);
-						t.note = c.getString(2);
-						t.completed = c.isNull(3) ? null : c.getLong(3);
-						t.due = c.isNull(4) ? null : c.getLong(4);
-						t.save(getActivity());
+							// restore task
+							final Task t = new Task();
+							t.dblist = listId;
+							t.title = c.getString(1);
+							t.note = c.getString(2);
+							t.completed = c.isNull(3) ? null : c.getLong(3);
+							t.due = c.isNull(4) ? null : c.getLong(4);
+							t.save(getActivity());
+						}
 					}
-				}
-				notifySuccess();
-				deleteSelected(mode);
+					notifySuccess();
+					deleteSelected(mode);
+				});
 			}
 
 			int getPosOfId(final long id) {
