@@ -246,8 +246,7 @@ public class TaskDetailFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		// store a reference to the input method service
-		inputManager = (InputMethodManager) getContext()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		inputManager = getContext().getSystemService(InputMethodManager.class);
 	}
 
 	/**
@@ -583,7 +582,7 @@ public class TaskDetailFragment extends Fragment {
 
 	// Call to update the share intent
 	private void setShareIntent(final String text) {
-		if (mShareActionProvider != null && mBinding.taskText != null) {
+		if (mShareActionProvider != null) {
 			int titleEnd = text.indexOf("\n");
 			if (titleEnd < 0) {
 				titleEnd = text.length();
@@ -675,12 +674,12 @@ public class TaskDetailFragment extends Fragment {
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.menu_timemachine).setEnabled(
-				mTask != null && mTask._id > 0 && !isLocked());
+		menu.findItem(R.id.menu_timemachine)
+				.setEnabled(mTask != null && mTask._id > 0 && !isLocked());
 		menu.findItem(R.id.menu_lock)
 				.setVisible(mTask != null && !mTask.locked);
-		menu.findItem(R.id.menu_unlock).setVisible(
-				mTask != null && mTask.locked);
+		menu.findItem(R.id.menu_unlock)
+				.setVisible(mTask != null && mTask.locked);
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 
 		if (getActivity() instanceof MenuStateController) {
@@ -707,15 +706,11 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		if (requestCode == 1) {
-			onTimeTravelResult(resultCode, data);
+			if (resultCode == Activity.RESULT_OK) {
+				onTimeTravel(data);
+			}
 		}
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	void onTimeTravelResult(int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK) {
-			onTimeTravel(data);
-		}
 	}
 
 	private void deleteAndClose() {
@@ -807,7 +802,7 @@ public class TaskDetailFragment extends Fragment {
 		// Set locked again
 		mLocked = true;
 		// If task is actually locked, remove text
-		if (isLocked() && mTask != null && mBinding.taskText != null) {
+		if (isLocked() && mTask != null) {
 			mBinding.taskText.setText(mTask.title);
 		}
 
@@ -886,13 +881,10 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	public void onTimeTravel(Intent data) {
-		if (mBinding.taskText != null) {
-			mBinding.taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-		}
+		String restoredText = data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY);
+		mBinding.taskText.setText(restoredText);
 		// Need to set here also for password to work
-		if (mTask != null) {
-			mTask.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-		}
+		if (mTask != null) mTask.setText(restoredText);
 	}
 
 	/**
@@ -900,9 +892,7 @@ public class TaskDetailFragment extends Fragment {
 	 * in a popup, also setting the callback and desired starting time through the
 	 * given parameters. An alternative is
 	 * {@link com.google.android.material.timepicker.MaterialTimePicker}, which is 99%
-	 * identical, but it requires an app theme with parent="Theme.MaterialComponents",
-	 * which does not work in our app, due to the auto-generated code of the annotations
-	 * library
+	 * identical, but it requires an app theme with parent="Theme.MaterialComponents"
 	 */
 	public TimePickerDialog getTimePickerDialog(Calendar localTime,
 												TimePickerDialog.OnTimeSetListener listener) {
