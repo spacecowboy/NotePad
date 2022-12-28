@@ -386,7 +386,7 @@ public class ActivityMain extends AppCompatActivity
 		syncStatusReceiver = new SyncStatusMonitor();
 
 		// First load, then don't add to backstack
-		shouldAddToBackStack = false;
+		// shouldAddToBackStack = false; // TODO remove variable
 
 		// To know if we should animate exits
 		if (getIntent() != null && getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
@@ -450,16 +450,22 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			// Reset intent so we get proper fragment handling when the stack pops
-			if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-				setIntent(new Intent(this, ActivityMain.class));
-
-				// TODO bug! going back from a note detail page crashes the app, also the drawer
-			}
+	public void onBackPressed() {
+		if (mBinding.drawerLayout.isDrawerOpen(mBinding.leftDrawer.leftDrawer)) {
+			// close the drawer on the left if it's open
+			mBinding.drawerLayout.closeDrawer(mBinding.leftDrawer.leftDrawer);
+			return;
 		}
-		return super.onKeyDown(keyCode, event);
+
+		// Reset intent so we get proper fragment handling when the stack pops
+		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+			// if you remove this, it shows the wrong icons in the actionbar
+			// when you navigate back from TaskDetailView
+			setIntent(new Intent(this, ActivityMain.class));
+			// TODO bug! going back from a note detail page crashes the app, only the 1° time
+		}
+
+		super.onBackPressed();
 	}
 
 	@Override
@@ -480,7 +486,7 @@ public class ActivityMain extends AppCompatActivity
 		super.onNewIntent(intent);
 
 		setIntent(intent);
-		this.runOnUiThread(this::loadFragments);
+		loadFragments();
 		// Just to be sure it gets done
 		// Clear notification if present
 		NotificationHelper.clearNotification(this, intent);
@@ -651,7 +657,6 @@ public class ActivityMain extends AppCompatActivity
 		transaction.replace(R.id.fragment1, left, leftTag);
 
 
-
 		// Commit transaction
 		// Allow state loss as workaround for bug
 		// https://code.google.com/p/android/issues/detail?id=19917
@@ -756,7 +761,7 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	protected void loadContent() {
 		loadLeftDrawer();
-		this.runOnUiThread(this::loadFragments);
+		loadFragments();
 
 		if (!showingEditor || mBinding.fragment2 != null) {
 			showcaseDrawer();
@@ -1091,8 +1096,7 @@ public class ActivityMain extends AppCompatActivity
 					.replace(R.id.fragment2, TaskDetailFragment.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			mBinding.taskHint.setVisibility(View.GONE);
-		}
-		else {
+		} else {
 			// phone
 			startActivity(intent);
 		}
@@ -1111,6 +1115,7 @@ public class ActivityMain extends AppCompatActivity
 				.setData(Task.URI)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
+
 		if (mBinding.fragment2 != null) {
 			// Set intent to preserve state when rotating
 			setIntent(intent);

@@ -290,10 +290,10 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (mTaskListsAdapter != null && mBinding.pager != null) {
-			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem()));
-			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state: "
-					+ mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem()));
+		if (mTaskListsAdapter != null) {
+			long id = mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem());
+			outState.putLong(START_LIST_ID, id);
+			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state, id=" + id);
 		}
 	}
 
