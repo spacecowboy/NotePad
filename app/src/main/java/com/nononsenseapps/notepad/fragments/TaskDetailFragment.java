@@ -164,7 +164,7 @@ public class TaskDetailFragment extends Fragment {
 		public void onLoaderReset(@NonNull Loader<Cursor> arg0) {}
 	};
 
-	InputMethodManager inputManager;
+
 
 	// Id of task to open
 	public static final String ARG_ITEM_ID = "item_id";
@@ -244,9 +244,6 @@ public class TaskDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		restoreSavedInstanceState_(savedInstanceState);
 		super.onCreate(savedInstanceState);
-
-		// store a reference to the input method service
-		inputManager = getContext().getSystemService(InputMethodManager.class);
 	}
 
 	/**
@@ -335,7 +332,8 @@ public class TaskDetailFragment extends Fragment {
 			// Only show keyboard for new/empty notes,
 			// but not if the showcaseview is showing
 			mBinding.taskText.requestFocus();
-			inputManager.showSoftInput(mBinding.taskText, InputMethodManager.SHOW_IMPLICIT);
+			InputMethodManager inMan = getContext().getSystemService(InputMethodManager.class);
+			inMan.showSoftInput(mBinding.taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 

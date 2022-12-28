@@ -456,10 +456,7 @@ public class ActivityMain extends AppCompatActivity
 			if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
 				setIntent(new Intent(this, ActivityMain.class));
 
-				// TODO soulzione ?
-				MenuItem x = (MenuItem) findViewById(android.R.id.home);
-
-				onOptionsItemSelected(x);
+				// TODO bug! going back from a note detail page crashes the app, also the drawer
 			}
 		}
 		return super.onKeyDown(keyCode, event);
@@ -628,7 +625,7 @@ public class ActivityMain extends AppCompatActivity
 				// Need to pop the entire stack and then load
 			}
 			if (shouldAddToBackStack) {
-				transaction.addToBackStack(null);
+				transaction.addToBackStack(null); // !!
 			}
 
 			setHomeAsDrawer(false);
