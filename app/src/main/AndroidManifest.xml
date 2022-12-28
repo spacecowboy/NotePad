@@ -306,7 +306,7 @@
 
 		<!-- Time Machine -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivityTaskHistory_"
+			android:name="com.nononsenseapps.notepad.ActivityTaskHistory"
 			android:label="@string/timemachine"/>
 
 		<!-- Service for migrating from donate app -->

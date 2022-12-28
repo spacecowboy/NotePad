@@ -61,7 +61,6 @@ import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
-import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
@@ -649,7 +648,7 @@ public class TaskDetailFragment extends Fragment {
 			return true;
 		} else if (itemId == R.id.menu_timemachine) {
 			if (mTask != null && mTask._id > 0) {
-				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
+				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
 				startActivityForResult(timeIntent, 1);
 				// ActivityTaskHistory.start(getActivity(), mTask._id);
