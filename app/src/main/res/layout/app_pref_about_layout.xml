@@ -129,15 +129,6 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
-			android:text="AndroidAnnotations (&#169;) the AndroidAnnotations project"
-			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:autoLink="all"
-			android:fontFamily="sans-serif-light"
-			android:paddingTop="4dp"
 			android:text="Retrofit (&#169;) Square, Inc."
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
