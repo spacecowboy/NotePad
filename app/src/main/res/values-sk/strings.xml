@@ -14,15 +14,13 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Poznámky</string>
+  --><resources>
+    <string name="app_name_short">Poznámky</string>
     <string name="title_create">Nová poznámka</string>
     <string name="timemachine">Časostroj </string>
     <string name="time">Čas</string>
     <string name="done">Hotovo</string>
     <string name="saved">Uložené</string>
-    <string name="distance">Vzdialenosť</string>
     <string name="near">Blízko</string>
     <string name="menu_save_and_add">Uložiť a pridať</string>
     <string name="menu_delete">Vymazať</string>
@@ -91,7 +89,6 @@
     <string name="showcase_drawer_msg">Dlhé podržanie pre úpravu alebo vymazanie</string>
     <string name="showcase_timemachine_title">Uložiť svoje poznámky</string>
     <string name="showcase_timemachine_msg">Zmeny sú vždy ukladané. Použite časostroj pre vrátenie zmien.</string>
-    <string name="donate_to_unlock">Prispieť a odomknúť</string>
     <string name="premiums_unlocked_and_thanks">Prémiové funkcie odomknuté. Vďaka za vašu podporu!</string>
     <string name="move">Presunúť</string>
     <string name="move_to">Presunúť do</string>
@@ -116,7 +113,6 @@
     <string name="about">O aplikácii</string>
     <string name="sync_failed">Synchronizácia zlyhala</string>
     <string name="sync_login_failed">Prihlásenie zlyhalo, nepodarilo sa pripojiť k Google Task</string>
-    <string name="changelog_full_title">Zmeny v aplikácii</string>
     <string name="changelog_title">Čo je nové?</string>
     <string name="completed">Hotové</string>
     <string name="date_header_overdue">Po deadline</string>
@@ -134,16 +130,14 @@
     <string name="item_max_height">Maximálna výška poznámok/úloh</string>
     <string name="long_date_format">Dlhý formát dátumu </string>
     <string name="short_date_format">Krátky formát dátumu</string>
-    <string name="rows">Riadky</string>
     <string name="select_date">Vybrať dátum</string>
     <string name="localedefault">Predvolená pozícia</string>
-    <string name="donate">Prispieť</string>
     <string name="donate_thanks">Vďaka za Vašu podporu!</string>
     <string name="hide_header">Skryť celú hlavičku</string>
     <string name="transparency">Priehľadnosť</string>
     <string name="notes_shortcut">Skratka pre poznámky</string>
     <string name="shortcut_help1">Ak je označené, skratka vytvorí novú poznámku vo vybranom zozname a otvorí editor. Ak nieje označené, skratka otvorí vybraný zoznam.</string>
-    <string name="loading_widget">Načítam widget&#8230;</string>
+    <string name="loading_widget">Načítam widget…</string>
     <string name="default_list">Predvolený zoznam</string>
     <string name="please_type_before_reminder">Napíšte text pred nastavením pripomienky</string>
     <string name="notecopied_one">Skopírovaná %d poznámka</string>
@@ -158,7 +152,6 @@
     <string name="sync_on_change_info">Naplánovať synchronizáciu krátko po zmene poznámky</string>
     <string name="sync_on_start">Synchronizovať aplikáciu po štarte.</string>
     <string name="sync_on_start_info">Najčastejšie sa bude synchronizovať každých 5 minút</string>
-    <string name="sync_full_force">Nabudúce vynútiť plnú synchronizáciu </string>
     <string name="sync_full_force_info">Označte toto iba ak si myslíte, že synchronizácia zabudla na nejaké veci</string>
     <string name="snooze">Odložiť</string>
     <string name="silent">Ticho</string>

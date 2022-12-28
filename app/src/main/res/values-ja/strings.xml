@@ -14,14 +14,12 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="title_create">新しいノート</string>
     <string name="timemachine">タイムマシン</string>
     <string name="time">時間</string>
     <string name="done">完了</string>
     <string name="saved">保存済み</string>
-    <string name="distance">半径</string>
     <string name="near">近くに</string>
     <string name="menu_save_and_add">デリート</string>
     <string name="menu_delete">削除</string>
@@ -92,7 +90,6 @@
     <string name="showcase_drawer_msg">長押しで編集または削除</string>
     <string name="showcase_timemachine_title">ノートを保存</string>
     <string name="showcase_timemachine_msg">変更は常に保存されます。タイムマシン機能を利用すると以前の版を復元することができます。</string>
-    <string name="donate_to_unlock">寄付して解除</string>
     <string name="premiums_unlocked_and_thanks">プレミアム機能が解除されました。ご支援感謝します！</string>
     <string name="move">移動</string>
     <string name="move_to">...へ移動</string>
@@ -117,7 +114,6 @@
     <string name="about">このアプリについて</string>
     <string name="sync_failed">同期失敗</string>
     <string name="sync_login_failed">ログイン失敗。Google Tasksに接続できませんでした。</string>
-    <string name="changelog_full_title">更新履歴</string>
     <string name="changelog_title">最新情報</string>
     <string name="completed">完了</string>
     <string name="date_header_overdue">期限切れ</string>
@@ -135,16 +131,14 @@
     <string name="item_max_height">ノート/タスクの最大高さ</string>
     <string name="long_date_format">詳細日付書式</string>
     <string name="short_date_format">短縮日付書式</string>
-    <string name="rows">行</string>
     <string name="select_date">日時を選択</string>
     <string name="localedefault">端末の設定を使用する</string>
-    <string name="donate">寄付</string>
     <string name="donate_thanks">ご支援感謝します！</string>
     <string name="hide_header">ヘッダを表示しない</string>
     <string name="transparency">透明度</string>
     <string name="notes_shortcut">Notesショートカット</string>
     <string name="shortcut_help1">チェックすると、ショートカットタップ時に選択したリストに新規ノートを作成し、エディタを開きます。チェックを外すと、ショートカットタップ時に選択したリストを開きます。</string>
-    <string name="loading_widget">ウィジェットを読み込み中&#8230;</string>
+    <string name="loading_widget">ウィジェットを読み込み中…</string>
     <string name="default_list">デフォルトリスト</string>
     <string name="please_type_before_reminder">リマインダーを設定する前にテキストを入力してください</string>
     <string name="notecopied_one">ノートをコピーしました</string>
@@ -159,7 +153,6 @@
     <string name="sync_on_change_info">ノートが変更されるとすぐに同期されます</string>
     <string name="sync_on_start">アプリ起動時に同期</string>
     <string name="sync_on_start_info">アプリが復帰したときではなく、起動時に同期されます</string>
-    <string name="sync_full_force">強制的に全て同期</string>
     <string name="sync_full_force_info">ノート等の同期がおかしい場合のみチェックをONにしてください</string>
     <string name="snooze">スヌーズ</string>
     <string name="silent">サイレント</string>
@@ -171,7 +164,6 @@
     <string name="notification_prio_low">低：隠す、縮小</string>
     <string name="priority">優先度</string>
     <string name="notifications">通知</string>
-
     <string name="tasks">タスク</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">表示するタスクを限定</string>
     <string name="dashclock_show_overdue_tasks">期限切れタスクを表示</string>

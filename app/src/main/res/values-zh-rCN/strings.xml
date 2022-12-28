@@ -21,7 +21,6 @@
     <string name="time">时间</string>
     <string name="done">完成</string>
     <string name="saved">已保存</string>
-    <string name="distance">距离</string>
     <string name="menu_save_and_add">保存并打开一个新便签</string>
     <string name="menu_delete">删除</string>
     <string name="menu_deletelist">删除列表</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">长按列表名编辑或删除</string>
     <string name="showcase_timemachine_title">保存便签</string>
     <string name="showcase_timemachine_msg">任何更改都会立即保存下来。请使用时光机功能以恢复前一个版本。</string>
-    <string name="donate_to_unlock">捐赠后解锁此功能</string>
     <string name="premiums_unlocked_and_thanks">高级功能已解锁。感谢您的支持！</string>
     <string name="move">移动</string>
     <string name="move_to">移动到</string>
@@ -118,7 +116,6 @@
     <string name="about">关于</string>
     <string name="sync_failed">同步失败</string>
     <string name="sync_login_failed">无法登录以使用 Google Tasks</string>
-    <string name="changelog_full_title">更新日志</string>
     <string name="changelog_title">最近更新</string>
     <string name="completed">已完成</string>
     <string name="date_header_overdue">已过期</string>
@@ -139,10 +136,8 @@
     <string name="item_max_height">便签/任务的最大高度</string>
     <string name="long_date_format">长日期格式</string>
     <string name="short_date_format">短日期格式</string>
-    <string name="rows">行</string>
     <string name="select_date">选择日期</string>
     <string name="localedefault">使用所在地区的默认值</string>
-    <string name="donate">捐赠</string>
     <string name="donate_thanks">感谢您的支持！♥</string>
     <string name="hide_header">隐藏整个小部件标题行</string>
     <string name="transparency">透明度</string>
@@ -163,7 +158,6 @@
     <string name="sync_on_change_info">在更改便签后立刻同步</string>
     <string name="sync_on_start">应用启动时同步</string>
     <string name="sync_on_start_info">将同步限制为每 5 分钟一次</string>
-    <string name="sync_full_force">下次进行完整同步</string>
     <string name="sync_full_force_info">仅在某些项目缺失时勾选。</string>
     <string name="snooze">打盹</string>
     <string name="silent">静音</string>

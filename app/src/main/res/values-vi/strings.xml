@@ -21,7 +21,6 @@
     <string name="time">Thời gian</string>
     <string name="done">Đã xong</string>
     <string name="saved">Đã lưư</string>
-    <string name="distance">Khoảng cách</string>
     <string name="near">Gần</string>
     <string name="menu_save_and_add">Lưu và thêm ghi chú</string>
     <string name="menu_delete">Xoá</string>
@@ -94,7 +93,6 @@
     <string name="showcase_drawer_msg">Nhấn giữ để sửa hoặc xoá</string>
     <string name="showcase_timemachine_title">Lưu các ghi chú</string>
     <string name="showcase_timemachine_msg">Các thay đổi luôn luôn được lưu lại. Bạn có thể dùng máy thời gian để khôi phục phiên bản cũ.</string>
-    <string name="donate_to_unlock">Ủng hộ cho tác giả để mở khoá</string>
     <string name="premiums_unlocked_and_thanks">Đã mở các chức năng nâng cao. Cảm ơn sự giúp đỡ của bạn!</string>
     <string name="move">Di chuyển</string>
     <string name="move_to">Di chuyển tới</string>
@@ -119,7 +117,6 @@
     <string name="about">Giới thiệu</string>
     <string name="sync_failed">Đồng bộ hoá thất bại</string>
     <string name="sync_login_failed">Không thể đăng nhập vào Google Task</string>
-    <string name="changelog_full_title">Thay đổi gần đây</string>
     <string name="changelog_title">Có gì mới?</string>
     <string name="completed">Đã xong</string>
     <string name="date_header_overdue">Quá hạn</string>
@@ -140,10 +137,8 @@
     <string name="item_max_height">Số hàng chữ tối đa của ghi chú / nhiệm vụ</string>
     <string name="long_date_format">Kiểu ngày đầy đủ</string>
     <string name="short_date_format">Kiểu ngày rút gọn</string>
-    <string name="rows">hàng</string>
     <string name="select_date">Chọn ngày</string>
     <string name="localedefault">Ngôn ngữ mặc định</string>
-    <string name="donate">Ủng hộ tác giả</string>
     <string name="donate_thanks">Cảm ơn sự giúp đỡ của bạn!</string>
     <string name="hide_header">Ẩn toàn bộ tiêu đề widget</string>
     <string name="transparency">Độ trong suốt</string>
@@ -164,7 +159,6 @@
     <string name="sync_on_change_info">Đồng bộ ngay sau khi sửa ghi chú</string>
     <string name="sync_on_start">Đồng bộ khi chạy ứng dụng</string>
     <string name="sync_on_start_info">Giới hạn tối thiểu là 5 phút</string>
-    <string name="sync_full_force">Đồng bộ toàn bộ vào lần tiếp theo</string>
     <string name="sync_full_force_info">Chọn tuỳ chọn này nếu bạn thấy thiếu một số ghi chú.</string>
     <string name="snooze">Hoãn</string>
     <string name="silent">Im lặng</string>

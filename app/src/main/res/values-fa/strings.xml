@@ -14,16 +14,13 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">یادداشت ها</string>
     <string name="title_create">یادداشت جدید</string>
     <string name="timemachine">ماشین زمان</string>
     <string name="time">زمان</string>
     <string name="done">حله</string>
     <string name="saved">ذخیره است خیالت راحت</string>
-    <string name="distance">فاصله</string>
-
     <string name="near">نزدیک</string>
     <string name="menu_save_and_add">ذخیره یادداشت بعدهم اضافه یادداشت جدید</string>
     <string name="menu_delete">پاک کن</string>
@@ -54,7 +51,6 @@
     <string name="sort_list_manual">ترتیب دستی</string>
     <string name="search_description">یادداشت ها و کارها</string>
     <string name="archive">آرشیو</string>
-
     <string name="restore">برگردان</string>
     <string name="restore_to">برگردان به</string>
     <string name="search_hint">جستجو</string>
@@ -103,5 +99,4 @@
     <string name="dashclock_header_shown">اسم لیست به صورت بولد نشان داده می شه</string>
     <string name="dashclock_first_task_shown">عنوان کار اول به صورت بولد نشان داده می شه</string>
     <string name="dashclock_display_header">اسم لیست رو نشان بده </string>
-
 </resources>

@@ -21,7 +21,6 @@
     <string name="time">Hora</string>
     <string name="done">Hecho</string>
     <string name="saved">Guardado</string>
-    <string name="distance">Distancia</string>
     <string name="near">Cerca</string>
     <string name="menu_save_and_add">Guardar y añadir nota</string>
     <string name="menu_delete">Eliminar</string>
@@ -91,7 +90,6 @@
     <string name="showcase_drawer_msg">Mantener presionado para editar o eliminar</string>
     <string name="showcase_timemachine_title">Salva tus notas</string>
     <string name="showcase_timemachine_msg">Los cambios siempre se guardan. Use la máquina del tiempo para restaurar una versión anterior.</string>
-    <string name="donate_to_unlock">Dona para desbloquear</string>
     <string name="premiums_unlocked_and_thanks">Opciones premium desbloqueadas. ¡Gracias por tu apoyo!</string>
     <string name="move">Mover</string>
     <string name="move_to">Mover a</string>
@@ -116,7 +114,6 @@
     <string name="about">Créditos</string>
     <string name="sync_failed">Error de sincronización</string>
     <string name="sync_login_failed">Error en el inicio de sesión, no se ha podido conectar a Google Tasks</string>
-    <string name="changelog_full_title">Registro de cambios</string>
     <string name="changelog_title">Nuevo</string>
     <string name="completed">Completada</string>
     <string name="date_header_overdue">Pasadas</string>
@@ -137,10 +134,8 @@
     <string name="item_max_height">Altura máxima de notas/tareas</string>
     <string name="long_date_format">Formato de fecha largo</string>
     <string name="short_date_format">Formato de fecha corto</string>
-    <string name="rows">filas</string>
     <string name="select_date">Seleccionar fecha</string>
     <string name="localedefault">Localización por defecto</string>
-    <string name="donate">Donar</string>
     <string name="donate_thanks">¡Gracias por tu apoyo!</string>
     <string name="hide_header">Ocultar Encabezado de Widget</string>
     <string name="transparency">Transparencia</string>
@@ -161,7 +156,6 @@
     <string name="sync_on_change_info">Programa una sincronización poco depués de que una nota ha cambiado</string>
     <string name="sync_on_start">Sincroniza al inicio de la app</string>
     <string name="sync_on_start_info">Se activará con inicios limpios, no al resumir</string>
-    <string name="sync_full_force">Forzar sincronización completa la próxima vez</string>
     <string name="sync_full_force_info">Active esto solo si cree que la sincronización pierde algunos elementos.</string>
     <string name="snooze">Silenciar</string>
     <string name="silent">Silencioso</string>

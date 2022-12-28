@@ -72,7 +72,6 @@
     <string name="clear_password">Apagar password</string>
     <string name="password_info">Definir uma password vai exigir que digite a mesmapara mostrar todas as notas bloqueadas. Esta só vai proteger o campo da nota ficando aindadesprotegido o título e data. Não existe qualquer encriptação da nota para que esta possaser vista no Google Mail/Calendário. Se esquecer a password, sincronize com o Google eem seguida, reinstale a aplicação.</string>
     <string name="about">Sobre</string>
-    <string name="changelog_title">O que há de novo? </string>
     <string name="completed">Concluído </string>
     <string name="date_header_today">Hoje </string>
     <string name="date_header_tomorrow">Amanhã </string>
@@ -91,12 +90,10 @@
     <string name="standard">Padrão</string>
     <string name="notification_prio_high">Alta: No topo, expandida</string>
     <string name="dashclock_show_overdue_tasks">Mostrar tarefas atrasadas</string>
-    <string name="distance">Distância</string>
     <string name="timemachine">Linha do tempo</string>
     <string name="time">Horário</string>
     <string name="done">Pronto</string>
     <string name="saved">Salvo</string>
-    <string name="near">Perto</string>
     <string name="menu_save_and_add">Gravar e abrir nova nota</string>
     <string name="add_item">Adicionar item</string>
     <string name="delete_question">Apagar\?</string>
@@ -137,9 +134,7 @@
     <string name="dashclock_display_header">Mostrar cabeçalho</string>
     <string name="sort_list_due">Data limite</string>
     <string name="item_max_height">Altura máxima das notas/tarefas</string>
-    <string name="rows">linhas</string>
     <string name="localedefault">Localização padrão</string>
-    <string name="donate">Faça uma doação</string>
     <string name="sync_on_start">Sincronização na inicialização do app</string>
     <string name="snooze">Adiar o lembrete</string>
     <string name="silent">Silêncio</string>

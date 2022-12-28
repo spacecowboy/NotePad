@@ -14,13 +14,11 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="title_create">Nouvelle note</string>
     <string name="time">Heure</string>
     <string name="done">Fait</string>
     <string name="saved">Sauvegardé</string>
-    <string name="near">Près</string>
     <string name="menu_save_and_add">Sauvegarder et créer une nouvelle note</string>
     <string name="menu_delete">Supprimer</string>
     <string name="menu_deletelist">Supprimer la liste</string>
@@ -90,7 +88,6 @@
     <string name="showcase_drawer_msg">Appui long pour éditer ou supprimer</string>
     <string name="showcase_timemachine_title">Sauvegarder vos notes</string>
     <string name="showcase_timemachine_msg">Les changements sont toujours sauvegardés. Utiliser la time machine pour restaurer une version précédente.</string>
-    <string name="donate_to_unlock">Donner pour déverrouiller</string>
     <string name="premiums_unlocked_and_thanks">Fonctions avancées déverrouillée. Merci pour votre soutien!</string>
     <string name="move">Déplacer</string>
     <string name="move_to">Déplacer vers</string>
@@ -115,7 +112,6 @@
     <string name="about">À propos</string>
     <string name="sync_failed">La synchronisation a échouée</string>
     <string name="sync_login_failed">La connexion à Google Tâches a échouée</string>
-    <string name="changelog_full_title">Journal des modifications</string>
     <string name="changelog_title">Quoi de neuf</string>
     <string name="completed">Complété</string>
     <string name="date_header_overdue">En retard</string>
@@ -136,10 +132,8 @@
     <string name="item_max_height">Hauteur maximale des notes/tâches</string>
     <string name="long_date_format">Format de date longue</string>
     <string name="short_date_format">Format de date courte</string>
-    <string name="rows">Ligne</string>
     <string name="select_date">Date sélectionnée</string>
     <string name="localedefault">Paramètres régionaux par défaut</string>
-    <string name="donate">Donner</string>
     <string name="donate_thanks">Merci pour votre soutien!</string>
     <string name="hide_header">Masquer l\'en-tête du widget</string>
     <string name="transparency">Opacité</string>
@@ -160,7 +154,6 @@
     <string name="sync_on_change_info">Planifie une synchronisation peu de temps après la mise à jour d\'une note</string>
     <string name="sync_on_start">Synchronisation au démarrage</string>
     <string name="sync_on_start_info">Se synchronisera toutes les 5 minutes</string>
-    <string name="sync_full_force">Forcer la synchronisation</string>
     <string name="sync_full_force_info">Cocher seulement si la synchronisation semble incomplète.</string>
     <string name="snooze">Répéter</string>
     <string name="silent">Silence</string>
@@ -171,7 +164,6 @@
     <string name="notification_prio_high">Haute: Au-dessus, élargie</string>
     <string name="notification_prio_low">Basse: Masquée, minimisée</string>
     <string name="priority">Priorité</string>
-
     <string name="tasks">Tâches</string>
     <string name="all_tasks">Toutes les tâches</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restreindre les tâches à une liste spécifique</string>
