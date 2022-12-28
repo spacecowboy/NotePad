@@ -28,12 +28,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -64,6 +62,7 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.ActivityMainBinding;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
@@ -81,13 +80,10 @@ import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.ui.ShowcaseHelper;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
-import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -110,31 +106,8 @@ public class ActivityMain extends AppCompatActivity
 	public static final String LISTPAGERTAG = "listpagerfragment";
 	private static final String SHOWCASED_MAIN = "showcased_main_window";
 	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
+
 	protected boolean reverseAnimation = false;
-
-	@ViewById(resName = "leftDrawer")
-	ListView leftDrawer;
-
-	@ViewById(resName = "drawerLayout")
-	DrawerLayout drawerLayout;
-
-	@ViewById(resName = "fragment1")
-	View fragment1;
-
-	// Only present on tablets
-	@ViewById(resName = "fragment2")
-	View fragment2;
-
-	// Shown on tablets on start up. Hide on selection
-	@ViewById(resName = "taskHint")
-	View taskHint;
-
-	@SystemService
-	LayoutInflater layoutInflater;
-
-	@SystemService
-	InputMethodManager inputManager;
-
 	boolean mAnimateExit = false;
 
 	/**
@@ -166,13 +139,16 @@ public class ActivityMain extends AppCompatActivity
 	// TODO should we add a FAB ? it's ~useless
 	// private FloatingActionButton mFab;
 
+	/**
+	 * for both {@link R.layout#activity_main}
+	 */
+	private ActivityMainBinding mBinding;
+
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-		if (mDrawerToggle != null) {
-			mDrawerToggle.syncState();
-		}
+		if (mDrawerToggle != null) mDrawerToggle.syncState();
 	}
 
 	@Override
@@ -204,6 +180,7 @@ public class ActivityMain extends AppCompatActivity
 			if (showingEditor) {
 				// Only true in portrait mode
 				final View focusView = ActivityMain.this.getCurrentFocus();
+				InputMethodManager inputManager = this.getSystemService(InputMethodManager.class);
 				if (inputManager != null && focusView != null) {
 					inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
 							InputMethodManager.HIDE_NOT_ALWAYS);
@@ -330,9 +307,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		// And then close drawer
-		if (drawerLayout != null && leftDrawer != null) {
-			drawerLayout.closeDrawer(leftDrawer);
-		}
+		mBinding.drawerLayout.closeDrawer(mBinding.leftDrawer.leftDrawer);
 	}
 
 	private void handleSyncRequest() {
@@ -398,9 +373,7 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		if (mDrawerToggle != null) {
-			mDrawerToggle.onConfigurationChanged(newConfig);
-		}
+		if (mDrawerToggle != null) mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
@@ -408,7 +381,11 @@ public class ActivityMain extends AppCompatActivity
 		// Must do this before super.onCreate
 		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
+
 		super.onCreate(b);
+		mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
+		loadContent();
 
 		syncStatusReceiver = new SyncStatusMonitor();
 
@@ -470,7 +447,7 @@ public class ActivityMain extends AppCompatActivity
 	public void onDestroy() {
 		// this should avoid crashes due to its resources being called
 		// when the activity is closing (?)
-		leftDrawer.setAdapter(null);
+		mBinding.leftDrawer.leftDrawer.setAdapter(null);
 
 		super.onDestroy();
 		OrgSyncService.stop(this);
@@ -583,7 +560,7 @@ public class ActivityMain extends AppCompatActivity
 
 		if (this.state != null) {
 			this.state = null;
-			if (showingEditor && fragment2 != null) {
+			if (showingEditor && mBinding.fragment2 != null) {
 				// Should only be true in portrait
 				showingEditor = false;
 			}
@@ -600,10 +577,10 @@ public class ActivityMain extends AppCompatActivity
 				left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
 				listOpener = (ListOpener) left;
 
-				if (left != null && fragment2 == null) {
+				if (left != null && mBinding.fragment2 == null) {
 					// Done
 					return;
-				} else if (left != null && fragment2 != null) {
+				} else if (left != null) {
 					right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
 				}
 
@@ -632,14 +609,12 @@ public class ActivityMain extends AppCompatActivity
 		 * If it contains a noteId, load an editor. If also tablet, load the
 		 * lists.
 		 */
-		if (fragment2 != null) {
-			if (right == null) {
-				if (getNoteId(intent) > 0) {
-					right = TaskDetailFragment_.getInstance(getNoteId(intent));
-				} else if (isNoteIntent(intent)) {
-					right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
-							TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
-				}
+		if (mBinding.fragment2 != null) {
+			if (getNoteId(intent) > 0) {
+				right = TaskDetailFragment_.getInstance(getNoteId(intent));
+			} else if (isNoteIntent(intent)) {
+				right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+						TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
 			}
 		} else if (isNoteIntent(intent)) {
 			showingEditor = true;
@@ -668,9 +643,9 @@ public class ActivityMain extends AppCompatActivity
 		/*
 		 * Other case, is a list id or a tablet
 		 */
-		if (!isNoteIntent(intent) || fragment2 != null) {
+		if (!isNoteIntent(intent) || mBinding.fragment2 != null) {
 			// If we're no longer in the editor, reset the action bar
-			if (fragment2 == null) {
+			if (mBinding.fragment2 == null) {
 				setHomeAsDrawer(true);
 			}
 			// TODO
@@ -682,9 +657,9 @@ public class ActivityMain extends AppCompatActivity
 			listOpener = (ListOpener) left;
 		}
 
-		if (fragment2 != null && right != null) {
+		if (mBinding.fragment2 != null && right != null) {
 			transaction.replace(R.id.fragment2, right, DETAILTAG);
-			taskHint.setVisibility(View.GONE);
+			mBinding.taskHint.setVisibility(View.GONE);
 		}
 		transaction.replace(R.id.fragment1, left, leftTag);
 
@@ -791,12 +766,11 @@ public class ActivityMain extends AppCompatActivity
 	/**
 	 * Loads the appropriate fragments depending on state and intent.
 	 */
-	@AfterViews
 	protected void loadContent() {
 		loadLeftDrawer();
 		loadFragments();
 
-		if (!showingEditor || fragment2 != null) {
+		if (!showingEditor || mBinding.fragment2 != null) {
 			showcaseDrawer();
 		}
 	}
@@ -813,7 +787,7 @@ public class ActivityMain extends AppCompatActivity
 		if (mDrawerToggle == null) {
 			// ActionBarDrawerToggle ties together the the proper interactions
 			// between the navigation drawer and the action bar app icon.
-			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+			mDrawerToggle = new ActionBarDrawerToggle(this, mBinding.drawerLayout,
 					R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
 				/**
@@ -852,7 +826,7 @@ public class ActivityMain extends AppCompatActivity
 			};
 
 			// Set the drawer toggle as the DrawerListener
-			drawerLayout.setDrawerListener(mDrawerToggle);
+			mBinding.drawerLayout.addDrawerListener(mDrawerToggle);
 		}
 
 		ActionBar supActBar = getSupportActionBar();
@@ -914,9 +888,9 @@ public class ActivityMain extends AppCompatActivity
 		// Load count of tasks in each one
 		NnnLogger.debug(ActivityMain.class, TaskList.CREATE_COUNT_VIEW);
 
-		leftDrawer.setAdapter(adapter);
+		mBinding.leftDrawer.leftDrawer.setAdapter(adapter);
 		// Set click handler
-		leftDrawer.setOnItemClickListener((arg0, v, pos, id) -> {
+		mBinding.leftDrawer.leftDrawer.setOnItemClickListener((arg0, v, pos, id) -> {
 			if (id < -1) {
 				// Set preference which type was chosen
 				PreferenceManager
@@ -928,7 +902,7 @@ public class ActivityMain extends AppCompatActivity
 			openList(id);
 		});
 
-		leftDrawer.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
+		mBinding.leftDrawer.leftDrawer.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
 			// Open dialog to edit list
 			if (id > 0) {
 				DialogEditList_ dialog = DialogEditList_.getInstance(id);
@@ -1060,7 +1034,6 @@ public class ActivityMain extends AppCompatActivity
 				.restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
 	}
 
-
 	/**
 	 * On first load, show some functionality hints
 	 */
@@ -1120,7 +1093,7 @@ public class ActivityMain extends AppCompatActivity
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		// User clicked a task in the list
 		// tablet
-		if (fragment2 != null) {
+		if (mBinding.fragment2 != null) {
 			// Set the intent here also so rotations open the same item
 			setIntent(intent);
 			getSupportFragmentManager().beginTransaction()
@@ -1128,7 +1101,7 @@ public class ActivityMain extends AppCompatActivity
 							R.anim.slide_out_bottom).replace(R.id.fragment2,
 							TaskDetailFragment_.getInstance(taskUri))
 					.commitAllowingStateLoss();
-			taskHint.setVisibility(View.GONE);
+			mBinding.taskHint.setVisibility(View.GONE);
 		}
 		// phone
 		else {
@@ -1163,7 +1136,7 @@ public class ActivityMain extends AppCompatActivity
 				.setData(Task.URI)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
-		if (fragment2 != null) {
+		if (mBinding.fragment2 != null) {
 			// Set intent to preserve state when rotating
 			setIntent(intent);
 			// Replace editor fragment
@@ -1172,7 +1145,7 @@ public class ActivityMain extends AppCompatActivity
 					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
 					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
 					.commitAllowingStateLoss();
-			taskHint.setVisibility(View.GONE);
+			mBinding.taskHint.setVisibility(View.GONE);
 		} else {
 			// Open an activity
 			startActivity(intent);
@@ -1181,15 +1154,15 @@ public class ActivityMain extends AppCompatActivity
 
 	@Override
 	public void closeFragment(final Fragment fragment) {
-		if (fragment2 != null) {
+		if (mBinding.fragment2 != null) {
 			getSupportFragmentManager()
 					.beginTransaction()
 					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
 					.remove(fragment)
 					.commitAllowingStateLoss();
-			taskHint.setAlpha(0f);
-			taskHint.setVisibility(View.VISIBLE);
-			taskHint.animate().alpha(1f).setStartDelay(500);
+			mBinding.taskHint.setAlpha(0f);
+			mBinding.taskHint.setVisibility(View.VISIBLE);
+			mBinding.taskHint.animate().alpha(1f).setStartDelay(500);
 		} else {
 			// Phone case, simulate back button
 			// finish();
