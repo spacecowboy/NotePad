@@ -20,16 +20,16 @@ package com.nononsenseapps.notepad.fragments;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -39,16 +39,8 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentDialogEditlistBinding;
 
-import org.androidannotations.annotations.AfterTextChange;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.UiThread.Propagation;
-import org.androidannotations.annotations.ViewById;
-
-@EFragment(R.layout.fragment_dialog_editlist)
 public class DialogEditList extends DialogFragment {
 
 	public interface EditListDialogListener {
@@ -57,36 +49,56 @@ public class DialogEditList extends DialogFragment {
 
 	static final String LIST_ID = "list_id";
 
-	@ViewById(resName = "sortSpinner")
-	Spinner sortSpinner;
-
-	@ViewById(resName = "modeSpinner")
-	Spinner modeSpinner;
-
-	@ViewById(resName = "titleField")
-	EditText titleField;
-
-	@ViewById(resName = "defaultListBox")
-	CheckBox defaultListBox;
-
-	@ViewById(resName = "deleteButton")
-	TextView deleteButton;
-
-	@ViewById(resName = "dialog_yes")
-	Button okButton;
-
-	@ViewById(resName = "dialog_no")
-	Button cancelButton;
-
 	private TaskList mTaskList;
 
 	private EditListDialogListener listener;
 
 	/**
+	 * for {@link R.layout#fragment_dialog_editlist}
+	 */
+	private FragmentDialogEditlistBinding mBinding;
+
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentDialogEditlistBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setup();
+		mBinding.titleField.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// allow to press OK if there is a title
+				mBinding.buttons.dialogYes.setEnabled(mBinding.titleField.length() > 0);
+			}
+		});
+		mBinding.deleteButton.setOnClickListener(v -> deleteClicked());
+		mBinding.buttons.dialogNo.setOnClickListener(v -> dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v -> okClicked());
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
+
+	/**
 	 * Use to create new list
 	 */
-	public static DialogEditList_ getInstance() {
-		DialogEditList_ dialog = new DialogEditList_();
+	public static DialogEditList getInstance() {
+		DialogEditList dialog = new DialogEditList();
 		dialog.setArguments(new Bundle());
 		return dialog;
 	}
@@ -94,8 +106,8 @@ public class DialogEditList extends DialogFragment {
 	/**
 	 * To edit an exising list
 	 */
-	public static DialogEditList_ getInstance(final long listid) {
-		DialogEditList_ dialog = new DialogEditList_();
+	public static DialogEditList getInstance(final long listid) {
+		DialogEditList dialog = new DialogEditList();
 		Bundle args = new Bundle();
 		args.putLong(LIST_ID, listid);
 		dialog.setArguments(args);
@@ -108,20 +120,19 @@ public class DialogEditList extends DialogFragment {
 		this.listener = listener;
 	}
 
-	@AfterViews
 	void setup() {
 		// New item hides delete button and disables OK initially
 		if (getArguments().getLong(LIST_ID, -1) < 1) {
-			deleteButton.setVisibility(View.GONE);
-			okButton.setEnabled(false);
+			mBinding.deleteButton.setVisibility(View.GONE);
+			mBinding.buttons.dialogYes.setEnabled(false);
 		}
 
-		modeSpinner.setAdapter(new ArrayAdapter<>(
+		mBinding.modeSpinner.setAdapter(new ArrayAdapter<>(
 				getActivity(),
 				R.layout.spinner_item,
 				getActivity().getResources().getStringArray(R.array.show_list_as)));
 
-		sortSpinner.setAdapter(new ArrayAdapter<>(
+		mBinding.sortSpinner.setAdapter(new ArrayAdapter<>(
 				getActivity(),
 				R.layout.spinner_item,
 				getActivity().getResources().getStringArray(R.array.sort_list_by)));
@@ -144,7 +155,7 @@ public class DialogEditList extends DialogFragment {
 						public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 							if (c.moveToFirst()) {
 								mTaskList = new TaskList(c);
-								fillViews();
+								DialogEditList.this.getActivity().runOnUiThread(() -> fillViews());
 							}
 							// Don't need it anymore
 							LoaderManager.getInstance(DialogEditList.this).destroyLoader(0);
@@ -159,9 +170,9 @@ public class DialogEditList extends DialogFragment {
 		}
 	}
 
-	@UiThread(propagation = Propagation.REUSE)
+	@UiThread
 	void fillViews() {
-		titleField.setText(mTaskList.title);
+		mBinding.titleField.setText(mTaskList.title);
 		selectSortKey();
 		selectListTypeKey();
 
@@ -170,38 +181,27 @@ public class DialogEditList extends DialogFragment {
 				.getDefaultSharedPreferences(getActivity())
 				.getString(getString(R.string.pref_defaultlist), "-1"));
 		if (mTaskList._id > 0 && defList == mTaskList._id) {
-			defaultListBox.setChecked(true);
+			mBinding.defaultListBox.setChecked(true);
 		}
 	}
 
-	@AfterTextChange(resName = "titleField")
-	void titleChanged(Editable text, TextView v) {
-		okButton.setEnabled(text.length() > 0);
-	}
 
-	@Click(resName = "deleteButton")
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
 			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, this::dismiss);
 		}
 	}
 
-	@Click(resName = "dialog_no")
-	void cancelClicked() {
-		dismiss();
-	}
-
-	@Click(resName = "dialog_yes")
 	void okClicked() {
 		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
 
-		mTaskList.title = titleField.getText().toString();
+		mTaskList.title = mBinding.titleField.getText().toString();
 		mTaskList.sorting = getSortValue();
 		mTaskList.listtype = getListTypeValue();
 
 		mTaskList.save(getActivity());
 
-		if (mTaskList._id > 0 && defaultListBox.isChecked()) {
+		if (mTaskList._id > 0 && mBinding.defaultListBox.isChecked()) {
 			PreferenceManager
 					.getDefaultSharedPreferences(getActivity())
 					.edit()
@@ -241,8 +241,8 @@ public class DialogEditList extends DialogFragment {
 
 	String getSortValue() {
 		String result = null;
-		if (sortSpinner != null) {
-			final String key = (String) sortSpinner.getSelectedItem();
+		if (mBinding.sortSpinner != null) {
+			final String key = (String) mBinding.sortSpinner.getSelectedItem();
 			if (key.equals(getString(R.string.sort_list_alphabetical))) {
 				result = getString(R.string.const_alphabetic);
 			} else if (key.equals(getString(R.string.sort_list_due))) {
@@ -260,25 +260,25 @@ public class DialogEditList extends DialogFragment {
 	}
 
 	void selectSortKey() {
-		if (sortSpinner != null && mTaskList != null) {
+		if (mBinding.sortSpinner != null && mTaskList != null) {
 			if (mTaskList.sorting == null) {
-				sortSpinner.setSelection(0);
+				mBinding.sortSpinner.setSelection(0);
 			} else if (mTaskList.sorting.equals(getString(R.string.const_alphabetic))) {
-				sortSpinner.setSelection(1);
+				mBinding.sortSpinner.setSelection(1);
 			} else if (mTaskList.sorting.equals(getString(R.string.const_modified))) {
-				sortSpinner.setSelection(2);
+				mBinding.sortSpinner.setSelection(2);
 			} else if (mTaskList.sorting.equals(getString(R.string.const_duedate))) {
-				sortSpinner.setSelection(3);
+				mBinding.sortSpinner.setSelection(3);
 			} else if (mTaskList.sorting.equals(getString(R.string.const_possubsort))) {
-				sortSpinner.setSelection(4);
+				mBinding.sortSpinner.setSelection(4);
 			}
 		}
 	}
 
 	String getListTypeValue() {
 		String result = null;
-		if (modeSpinner != null) {
-			final String key = (String) modeSpinner.getSelectedItem();
+		if (mBinding.modeSpinner != null) {
+			final String key = (String) mBinding.modeSpinner.getSelectedItem();
 			if (key.equals(getString(R.string.show_items_as_notes))) {
 				result = getString(R.string.const_listtype_notes);
 			} else if (key.equals(getString(R.string.show_items_as_tasks))) {
@@ -292,13 +292,13 @@ public class DialogEditList extends DialogFragment {
 	}
 
 	void selectListTypeKey() {
-		if (modeSpinner != null && mTaskList != null) {
+		if (mBinding.modeSpinner != null && mTaskList != null) {
 			if (mTaskList.listtype == null) {
-				modeSpinner.setSelection(0);
+				mBinding.modeSpinner.setSelection(0);
 			} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_tasks))) {
-				modeSpinner.setSelection(1);
+				mBinding.modeSpinner.setSelection(1);
 			} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_notes))) {
-				modeSpinner.setSelection(2);
+				mBinding.modeSpinner.setSelection(2);
 			}
 		}
 	}
