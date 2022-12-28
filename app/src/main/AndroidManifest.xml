@@ -227,7 +227,7 @@
 		</activity>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.ShortcutConfig_"
+			android:name="com.nononsenseapps.notepad.ShortcutConfig"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
 			android:theme="@style/ThemeNnnDayNightDialog">
