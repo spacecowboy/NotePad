@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 
 import org.junit.Rule;
@@ -19,8 +19,8 @@ public class FragmentTaskListsTest {
 	// the replacement, ActivityScenarioRule does not work
 	@SuppressWarnings("deprecation")
 	@Rule
-	public final ActivityTestRule<ActivityMain_> mActivityRule
-			= new ActivityTestRule<>(ActivityMain_.class, false);
+	public final ActivityTestRule<ActivityMain> mActivityRule
+			= new ActivityTestRule<>(ActivityMain.class, false);
 
 	@Test
 	public void testSanity() {

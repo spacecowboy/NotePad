@@ -89,7 +89,7 @@
 
 		<!-- Main Activity -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivityMain_"
+			android:name="com.nononsenseapps.notepad.ActivityMain"
 			android:exported="true"
 			android:label="@string/app_name_short"
 			android:theme="@style/ThemeNnnLight"
@@ -171,11 +171,11 @@
 			android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
 			android:exported="true"
 			android:label="@string/menu_preferences"
-			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
+			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain"
 			android:theme="@style/ThemeBaseDark">
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
-				android:value="com.nononsenseapps.notepad.ActivityMain_"/>
+				android:value="com.nononsenseapps.notepad.ActivityMain"/>
 
 			<intent-filter>
 				<category android:name="android.intent.category.PREFERENCE"/>

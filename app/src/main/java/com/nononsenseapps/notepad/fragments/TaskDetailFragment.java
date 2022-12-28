@@ -59,7 +59,7 @@ import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
@@ -799,7 +799,7 @@ public class TaskDetailFragment extends Fragment {
 
 		final Intent intent = new Intent()
 				.setAction(Intent.ACTION_EDIT)
-				.setClass(getActivity(), ActivityMain_.class)
+				.setClass(getActivity(), ActivityMain.class)
 				.setData(mTask.getUri())
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, mTask.dblist);
 

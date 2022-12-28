@@ -17,7 +17,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.database.DatabaseHandler;
 
 import org.junit.After;
@@ -39,8 +39,8 @@ public class BaseTestClass {
 	 */
 	@SuppressWarnings("deprecation")
 	@Rule
-	public final IntentsTestRule<ActivityMain_> mActRule =
-			new IntentsTestRule<>(ActivityMain_.class);
+	public final IntentsTestRule<ActivityMain> mActRule =
+			new IntentsTestRule<>(ActivityMain.class);
 
 	/**
 	 * API 33 requires permission for notifications, older APIs crash if you run this

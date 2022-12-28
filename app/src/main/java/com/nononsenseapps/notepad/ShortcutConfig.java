@@ -54,7 +54,7 @@ public class ShortcutConfig extends AppCompatActivity {
 			shortcutTitle = ShortcutConfig.this
 					.getString(R.string.title_create);
 
-			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
+			intent.setClass(ShortcutConfig.this, ActivityMain.class)
 					.setData(Task.URI)
 					.setAction(Intent.ACTION_INSERT)
 					.putExtra(Task.Columns.DBLIST, mBinding.listSpinner.getSelectedItemId());
@@ -67,7 +67,7 @@ public class ShortcutConfig extends AppCompatActivity {
 			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, ""
 					+ mBinding.listSpinner.getSelectedItem());
 
-			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
+			intent.setClass(ShortcutConfig.this, ActivityMain.class)
 					.setAction(Intent.ACTION_VIEW)
 					.setData(TaskList.getUri(mBinding.listSpinner.getSelectedItemId()));
 		}

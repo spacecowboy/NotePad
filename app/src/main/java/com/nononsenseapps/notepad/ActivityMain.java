@@ -35,6 +35,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.UiThread;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -80,21 +81,13 @@ import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.ui.ShowcaseHelper;
 
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.UiThread.Propagation;
-
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
 
 /**
- * This is extended by {@link ActivityMain_}. It was renamed to ActivityList
- * in release 6.0.0 beta, it has to do with getting rid of the annotations
- * library that generates {@link ActivityMain_}
+ * It was renamed to ActivityList in release 6.0.0 beta
  */
-@EActivity(R.layout.activity_main)
 public class ActivityMain extends AppCompatActivity
 		implements OnFragmentInteractionListener, OnSyncStartStopListener,
 		MenuStateController, OnSharedPreferenceChangeListener {
@@ -111,10 +104,8 @@ public class ActivityMain extends AppCompatActivity
 	boolean mAnimateExit = false;
 
 	/**
-	 * Changes depending on what we're showing since
-	 * the started activity can receive new intents
+	 * Changes depending on what we're showing since the started activity can receive new intents
 	 */
-	@InstanceState
 	boolean showingEditor = false;
 
 	boolean isDrawerClosed = true;
@@ -155,8 +146,24 @@ public class ActivityMain extends AppCompatActivity
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-
 		return true;
+	}
+
+	@Override
+	public void onSaveInstanceState(@NonNull Bundle bundle_) {
+		super.onSaveInstanceState(bundle_);
+		bundle_.putBoolean("showingEditor", showingEditor);
+	}
+
+	/**
+	 * called when you rotate the screen, for example. With this, the {@link ActivityMain} can
+	 * remember if the task detail view was showing before. Better than 
+	 * {@link AppCompatActivity#onRestoreInstanceState(Bundle)} because this runs before
+	 * {@link #onCreate(Bundle)}, and it's important.
+	 */
+	private void restoreSavedInstanceState_(Bundle savedInstanceState) {
+		if (savedInstanceState == null) return;
+		showingEditor = savedInstanceState.getBoolean("showingEditor");
 	}
 
 	@Override
@@ -192,7 +199,7 @@ public class ActivityMain extends AppCompatActivity
 
 				final Intent intent = new Intent()
 						.setAction(Intent.ACTION_VIEW)
-						.setClass(ActivityMain.this, ActivityMain_.class);
+						.setClass(ActivityMain.this, ActivityMain.class);
 				if (listId > 0) {
 					intent.setData(TaskList.getUri(listId));
 				}
@@ -287,7 +294,7 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	void openList(final long id) {
 		// Open list
-		Intent i = new Intent(ActivityMain.this, ActivityMain_.class)
+		Intent i = new Intent(ActivityMain.this, ActivityMain.class)
 				.setAction(Intent.ACTION_VIEW)
 				.setData(TaskList.getUri(id))
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -381,7 +388,7 @@ public class ActivityMain extends AppCompatActivity
 		// Must do this before super.onCreate
 		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
-
+		restoreSavedInstanceState_(b);
 		super.onCreate(b);
 		mBinding = ActivityMainBinding.inflate(getLayoutInflater());
 		setContentView(mBinding.getRoot());
@@ -459,7 +466,7 @@ public class ActivityMain extends AppCompatActivity
 			// Reset intent so we get proper fragment handling when the stack
 			// pops
 			if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-				setIntent(new Intent(this, ActivityMain_.class));
+				setIntent(new Intent(this, ActivityMain.class));
 			}
 		}
 		return super.onKeyDown(keyCode, event);
@@ -483,7 +490,7 @@ public class ActivityMain extends AppCompatActivity
 		super.onNewIntent(intent);
 
 		setIntent(intent);
-		loadFragments();
+		this.runOnUiThread(this::loadFragments);
 		// Just to be sure it gets done
 		// Clear notification if present
 		NotificationHelper.clearNotification(this, intent);
@@ -521,8 +528,9 @@ public class ActivityMain extends AppCompatActivity
 		startActivity(intent);
 	}
 
-	@UiThread
 	void migrateDonateUser() {
+		// TODO the donate version is very very old. delete this
+
 		// migrate user
 		if (!DonateMigrator.hasImported(this)) {
 			final DialogConfirmBase dialog = new DialogConfirmBase() {
@@ -547,8 +555,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
-
-	@UiThread(propagation = Propagation.REUSE)
+	@UiThread
 	void loadFragments() {
 		final Intent intent = getIntent();
 
@@ -768,7 +775,7 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	protected void loadContent() {
 		loadLeftDrawer();
-		loadFragments();
+		this.runOnUiThread(this::loadFragments);
 
 		if (!showingEditor || mBinding.fragment2 != null) {
 			showcaseDrawer();
@@ -1087,7 +1094,7 @@ public class ActivityMain extends AppCompatActivity
 	public void onFragmentInteraction(final Uri taskUri, final long listId, final View origin) {
 		final Intent intent = new Intent()
 				.setAction(Intent.ACTION_EDIT)
-				.setClass(this, ActivityMain_.class)
+				.setClass(this, ActivityMain.class)
 				.setData(taskUri)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
@@ -1132,7 +1139,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 		final Intent intent = new Intent()
 				.setAction(Intent.ACTION_INSERT)
-				.setClass(this, ActivityMain_.class)
+				.setClass(this, ActivityMain.class)
 				.setData(Task.URI)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
@@ -1172,7 +1179,7 @@ public class ActivityMain extends AppCompatActivity
 
 	private void simulateBack() {
 		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-			setIntent(new Intent(this, ActivityMain_.class));
+			setIntent(new Intent(this, ActivityMain.class));
 		}
 
 		if (!getSupportFragmentManager().popBackStackImmediate()) {
@@ -1240,11 +1247,10 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
-	@UiThread
 	@Override
 	public void onSyncStartStop(final boolean isOngoing) {
 		// Notify PullToRefreshAttacher of the refresh state
-		setRefreshOfAllSwipeLayoutsTo(isOngoing);
+		this.runOnUiThread(() -> setRefreshOfAllSwipeLayoutsTo(isOngoing));
 	}
 
 	public interface ListOpener {

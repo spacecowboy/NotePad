@@ -78,7 +78,7 @@ public class ActivitySearch extends AppCompatActivity {
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			mQuery = intent.getStringExtra(SearchManager.QUERY);
 		} else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-			intent.setClass(getApplicationContext(), ActivityMain_.class);
+			intent.setClass(getApplicationContext(), ActivityMain.class);
 			startActivity(intent);
 			finish();
 		}

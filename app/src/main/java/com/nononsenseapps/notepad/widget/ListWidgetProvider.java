@@ -30,7 +30,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -189,7 +189,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		 * the extras will be ignored otherwise.
 		 */
 		if (isKeyguard) {
-			final Intent itemIntent = new Intent(context, ActivityMain_.class);
+			final Intent itemIntent = new Intent(context, ActivityMain.class);
 			itemIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 			PendingIntent onClickPendingIntent = getThePendingIntentForActivity(itemIntent, context);
@@ -210,7 +210,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		final Intent appIntent = new Intent();
 		appIntent
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-				.setClass(context, ActivityMain_.class)
+				.setClass(context, ActivityMain.class)
 				.setAction(Intent.ACTION_VIEW)
 				.setData(TaskList.getUri(listId));
 		PendingIntent openAppPendingIntent = getThePendingIntentForActivity(appIntent, context);
@@ -228,7 +228,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		final Intent createIntent = new Intent();
 		createIntent
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-				.setClass(context, ActivityMain_.class)
+				.setClass(context, ActivityMain.class)
 				// Append a dummy path so we don't override this intent on 2nd, 3rd, etc, widgets.
 				.setAction(Intent.ACTION_INSERT)
 				.setData(Uri.withAppendedPath(Task.URI, "/widget/" + appWidgetId + "/-1"))
