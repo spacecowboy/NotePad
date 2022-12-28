@@ -311,7 +311,7 @@
 
 		<!-- Service for migrating from donate app -->
 		<service
-			android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
+			android:name="com.nononsenseapps.notepad.legacy.DonateMigrator"
 			android:enabled="true"
 			android:exported="false"/>
 

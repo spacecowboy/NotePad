@@ -155,7 +155,7 @@ public class ActivityMain extends AppCompatActivity
 
 	/**
 	 * called when you rotate the screen, for example. With this, the {@link ActivityMain} can
-	 * remember if the task detail view was showing before. Better than 
+	 * remember if the task detail view was showing before. Better than
 	 * {@link AppCompatActivity#onRestoreInstanceState(Bundle)} because this runs before
 	 * {@link #onCreate(Bundle)}, and it's important.
 	 */
@@ -210,7 +210,7 @@ public class ActivityMain extends AppCompatActivity
 				}
 
 				reverseAnimation = true;
-				Log.d("nononsenseapps fragment", "starting activity");
+				NnnLogger.debug(ActivityMain.class, "starting activity from android.R.id.home");
 
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
@@ -250,35 +250,26 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	/**
-	 * Returns a list id from an intent if it contains one, either as part of
-	 * its URI or as an extra
-	 * <p/>
-	 * Returns -1 if no id was contained, this includes insert actions
+	 * @return a list id from an intent if it contains one, either as part of
+	 * its URI or as an extra. Returns -1 if no id was contained, this includes insert actions
 	 */
-	long getListId(final Intent intent) {
+	static long getListId(final Intent intent) {
 		long retval = -1;
-		if (intent != null &&
-				intent.getData() != null &&
+		if (intent != null && intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
 						Intent.ACTION_VIEW.equals(intent.getAction()) ||
 						Intent.ACTION_INSERT.equals(intent.getAction()))) {
-			if ((intent.getData().getPath()
-					.startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
-					intent.getData().getPath()
-							.startsWith(NotePad.Lists.PATH_LISTS) ||
-					intent.getData().getPath()
-							.startsWith(TaskList.URI.getPath()))) {
+			if ((intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
+					intent.getData().getPath().startsWith(NotePad.Lists.PATH_LISTS) ||
+					intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
 				try {
 					retval = Long.parseLong(intent.getData().getLastPathSegment());
 				} catch (NumberFormatException ignored) {
 					// retval remains = -1
 				}
-			} else if (-1 != intent
-					.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
-				retval = intent.getLongExtra(
-						LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-			} else if (-1 != intent
-					.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
+			} else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
+				retval = intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
+			} else if (-1 != intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
 				retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
 			} else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
 				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
@@ -460,11 +451,15 @@ public class ActivityMain extends AppCompatActivity
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			// Reset intent so we get proper fragment handling when the stack
-			// pops
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			// Reset intent so we get proper fragment handling when the stack pops
 			if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
 				setIntent(new Intent(this, ActivityMain.class));
+
+				// TODO soulzione ?
+				MenuItem x = (MenuItem) findViewById(android.R.id.home);
+
+				onOptionsItemSelected(x);
 			}
 		}
 		return super.onKeyDown(keyCode, event);
@@ -596,23 +591,17 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		// Load stuff
-		final FragmentTransaction transaction =
-				getSupportFragmentManager().beginTransaction();
+		final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		if (reverseAnimation) {
 			reverseAnimation = false;
-			transaction.setCustomAnimations(R.anim.slide_in_bottom,
-					R.anim.slide_out_top, R.anim.slide_in_top,
-					R.anim.slide_out_bottom);
+			transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top,
+					R.anim.slide_in_top, R.anim.slide_out_bottom);
 		} else {
-			transaction.setCustomAnimations(R.anim.slide_in_top,
-					R.anim.slide_out_bottom, R.anim.slide_in_bottom,
-					R.anim.slide_out_top);
+			transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom,
+					R.anim.slide_in_bottom, R.anim.slide_out_top);
 		}
 
-		/*
-		 * If it contains a noteId, load an editor. If also tablet, load the
-		 * lists.
-		 */
+		// If it contains a noteId, load an editor. If also tablet, load the lists
 		if (mBinding.fragment2 != null) {
 			if (getNoteId(intent) > 0) {
 				right = TaskDetailFragment.getInstance(getNoteId(intent));
@@ -644,9 +633,8 @@ public class ActivityMain extends AppCompatActivity
 
 			setHomeAsDrawer(false);
 		}
-		/*
-		 * Other case, is a list id or a tablet
-		 */
+
+		// Other case, is a list id or a tablet
 		if (!isNoteIntent(intent) || mBinding.fragment2 != null) {
 			// If we're no longer in the editor, reset the action bar
 			if (mBinding.fragment2 == null) {
@@ -681,7 +669,7 @@ public class ActivityMain extends AppCompatActivity
 	 * <p/>
 	 * Returns -1 if no id was contained, this includes insert actions
 	 */
-	long getNoteId(@NonNull final Intent intent) {
+	static long getNoteId(@NonNull final Intent intent) {
 		long retval = -1;
 		if (intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
@@ -708,7 +696,7 @@ public class ActivityMain extends AppCompatActivity
 	 * If it is a Google Now intent, will ignore the subject which is
 	 * "Note to self"
 	 */
-	String getNoteShareText(final Intent intent) {
+	static String getNoteShareText(final Intent intent) {
 		if (intent == null || intent.getExtras() == null) {
 			return "";
 		}
@@ -743,13 +731,12 @@ public class ActivityMain extends AppCompatActivity
 	 * Returns true the intent URI targets a note. Either an edit/view or
 	 * insert.
 	 */
-	boolean isNoteIntent(final Intent intent) {
+	static boolean isNoteIntent(final Intent intent) {
 		if (intent == null) {
 			return false;
 		}
 		if (Intent.ACTION_SEND.equals(intent.getAction()) ||
-				"com.google.android.gm.action.AUTO_SEND"
-						.equals(intent.getAction())) {
+				"com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
 			return true;
 		}
 
@@ -1096,6 +1083,7 @@ public class ActivityMain extends AppCompatActivity
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		// User clicked a task in the list
+
 		// tablet
 		if (mBinding.fragment2 != null) {
 			// Set the intent here also so rotations open the same item
