@@ -35,16 +35,12 @@ import com.nononsenseapps.notepad.databinding.FragmentDialogPasswordBinding;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-
 /**
  * Full copy of {@link DialogPassword}, but extending native fragment class
  * {@link android.app.DialogFragment} instead.
  * It is called when the user changes the existing password.
  * It asks to input the old password.
  */
-@EFragment()
 public class DialogPasswordV11 extends DialogFragment {
 
 	// TODO DialogPassword.java is better. Try to put the functions of this dialog back
@@ -71,17 +67,18 @@ public class DialogPasswordV11 extends DialogFragment {
 	}
 
 	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v->confirm());
+	}
+
+	@Override
 	public void onDestroyView() {
 		super.onDestroyView();
 		mBinding = null;
 	}
 
-	@Click(resName = "dialog_no")
-	void cancel() {
-		dismiss();
-	}
-
-	@Click(resName = "dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());

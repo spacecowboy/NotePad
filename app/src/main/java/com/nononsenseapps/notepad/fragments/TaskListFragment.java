@@ -626,7 +626,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						}
 					}
 					if (locked) {
-						DialogPassword_ delpf = new DialogPassword_();
+						DialogPassword delpf = new DialogPassword();
 						delpf.setListener(pListener);
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					} else {

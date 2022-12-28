@@ -34,10 +34,6 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.databinding.FragmentDialogPasswordBinding;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-
-@EFragment()
 public class DialogPassword extends DialogFragment {
 
 	PasswordConfirmedListener listener = null;
@@ -76,6 +72,8 @@ public class DialogPassword extends DialogFragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
 		showField();
+		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v->confirm());
 	}
 
 	@Override
@@ -95,12 +93,6 @@ public class DialogPassword extends DialogFragment {
 		}
 	}
 
-	@Click(resName = "dialog_no")
-	void cancel() {
-		dismiss();
-	}
-
-	@Click(resName = "dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());

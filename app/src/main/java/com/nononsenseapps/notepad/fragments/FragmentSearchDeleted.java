@@ -21,6 +21,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +35,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.annotation.WorkerThread;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
@@ -43,14 +46,10 @@ import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-
 import java.util.HashSet;
 import java.util.concurrent.Executors;
 
-@EFragment()
+
 public class FragmentSearchDeleted extends FragmentSearch {
 
 	@Override
@@ -146,9 +145,13 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				return position;
 			}
 
+
+			/** Show a {@link Toast} in a thread-safe way */
 			@UiThread
 			void notifySuccess() {
-				Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
+				new Handler(Looper.getMainLooper())
+						.post(() -> Toast.makeText(getActivity(), R.string.saved,
+								Toast.LENGTH_SHORT).show());
 			}
 
 			@Override

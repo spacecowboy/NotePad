@@ -32,7 +32,7 @@ import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
+import com.nononsenseapps.notepad.fragments.DialogPasswordV11;
 
 public class PasswordPrefs extends Fragment {
 
@@ -123,7 +123,7 @@ public class PasswordPrefs extends Fragment {
 	}
 
 	private void showPasswordDialog(final String newPassword) {
-		final DialogPasswordV11_ pd = new DialogPasswordV11_();
+		final DialogPasswordV11 pd = new DialogPasswordV11();
 		pd.setListener(() -> {
 			PreferenceManager
 					.getDefaultSharedPreferences(getActivity()).edit()

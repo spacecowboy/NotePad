@@ -37,10 +37,6 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentDialogRestoreBinding;
 
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-
-@EFragment()
 public class DialogRestore extends DialogFragment {
 
 	public interface OnListSelectedListener {
@@ -66,6 +62,8 @@ public class DialogRestore extends DialogFragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
 		setup();
+		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v->okClicked());
 	}
 
 	@Override
@@ -77,8 +75,8 @@ public class DialogRestore extends DialogFragment {
 	/**
 	 * Use to create new list
 	 */
-	public static DialogRestore_ getInstance() {
-		DialogRestore_ dialog = new DialogRestore_();
+	public static DialogRestore getInstance() {
+		DialogRestore dialog = new DialogRestore();
 		dialog.setArguments(new Bundle());
 		return dialog;
 	}
@@ -127,12 +125,6 @@ public class DialogRestore extends DialogFragment {
 				});
 	}
 
-	@Click(resName = "dialog_no")
-	void cancelClicked() {
-		dismiss();
-	}
-
-	@Click(resName = "dialog_yes")
 	void okClicked() {
 		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
 

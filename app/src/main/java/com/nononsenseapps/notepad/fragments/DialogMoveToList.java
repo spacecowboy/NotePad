@@ -41,8 +41,6 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentDialogMovetolistBinding;
 
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
 
 import java.util.concurrent.Executors;
 
@@ -50,7 +48,6 @@ import java.util.concurrent.Executors;
  * When you long-click a note, you can press a button on the actionbar to move it
  * to anoter list. Then, this popup shows up to let the user choose the destination
  */
-@EFragment()
 public class DialogMoveToList extends DialogFragment {
 
 	static final String TASK_IDS = "task_ids";
@@ -76,6 +73,8 @@ public class DialogMoveToList extends DialogFragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
 		setup();
+		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v->okClicked());
 	}
 
 	@Override
@@ -94,7 +93,7 @@ public class DialogMoveToList extends DialogFragment {
 	}
 
 	public static DialogMoveToList getInstance(final long... taskIds) {
-		DialogMoveToList dialog = new DialogMoveToList_();
+		DialogMoveToList dialog = new DialogMoveToList();
 		Bundle args = new Bundle();
 		args.putLongArray(TASK_IDS, taskIds);
 		dialog.setArguments(args);
@@ -167,12 +166,6 @@ public class DialogMoveToList extends DialogFragment {
 		});
 	}
 
-	@Click(resName = "dialog_no")
-	void cancelClicked() {
-		dismiss();
-	}
-
-	@Click(resName = "dialog_yes")
 	void okClicked() {
 		// move items
 		if (mBinding.listView.getCheckedItemPosition() == AdapterView.INVALID_POSITION) {

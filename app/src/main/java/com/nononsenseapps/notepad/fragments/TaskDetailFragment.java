@@ -536,7 +536,7 @@ public class TaskDetailFragment extends Fragment {
 		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
 		if (isLocked()) {
 			mBinding.taskText.setText(mTask.title);
-			DialogPassword_ pflock = new DialogPassword_();
+			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				mLocked = false;
 				fillUIFromTask();
@@ -644,7 +644,7 @@ public class TaskDetailFragment extends Fragment {
 		} else if (itemId == R.id.menu_delete) {
 			if (mTask != null) {
 				if (mTask.locked) {
-					DialogPassword_ delpf = new DialogPassword_();
+					DialogPassword delpf = new DialogPassword();
 					delpf.setListener(this::deleteAndClose);
 					delpf.show(getFragmentManager(), "delete_verify");
 				} else {
@@ -653,7 +653,7 @@ public class TaskDetailFragment extends Fragment {
 			}
 			return true;
 		} else if (itemId == R.id.menu_lock) {
-			DialogPassword_ pflock = new DialogPassword_();
+			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				if (mTask != null) {
 					mLocked = true;
@@ -667,7 +667,7 @@ public class TaskDetailFragment extends Fragment {
 			pflock.show(getFragmentManager(), "lock_verify");
 			return true;
 		} else if (itemId == R.id.menu_unlock) {
-			DialogPassword_ pf = new DialogPassword_();
+			DialogPassword pf = new DialogPassword();
 			pf.setListener(() -> {
 				if (mTask != null) {
 					mTask.locked = false;
