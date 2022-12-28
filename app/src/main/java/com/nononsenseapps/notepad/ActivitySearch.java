@@ -27,15 +27,18 @@ import androidx.fragment.app.Fragment;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
+import com.nononsenseapps.notepad.databinding.FullscreenFragmentBinding;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
 
-@EActivity(R.layout.fullscreen_fragment)
 public class ActivitySearch extends AppCompatActivity {
 
 	protected String mQuery = "";
+
+	/**
+	 * for {@link R.layout#fullscreen_fragment}
+	 */
+	private FullscreenFragmentBinding mBinding;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +46,9 @@ public class ActivitySearch extends AppCompatActivity {
 		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(savedInstanceState);
+		mBinding = FullscreenFragmentBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
+		loadContent();
 
 		getSupportActionBar().setDisplayShowTitleEnabled(true);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -57,7 +63,6 @@ public class ActivitySearch extends AppCompatActivity {
 		return FragmentSearch.getInstance(mQuery);
 	}
 
-	@AfterViews
 	void loadContent() {
 		getSupportFragmentManager()
 				.beginTransaction()
