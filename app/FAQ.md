@@ -35,4 +35,11 @@ to trust it.
 
 **Q: Why are the files saved there?**
 
-A: Newer Android versions limit what we can do when working with files. See #454
+A: Newer Android versions limit what we can do when working with files. See https://github.com/spacecowboy/NotePad/issues/454
+
+**Q: I opened a pull request or an issue before 2022. Why did you close it?**
+
+A: The project was restarted in 2022, and many things changed. Plans for a minimal 
+6.0.0 version were dropped, and the current 7.0.0 version inherits directly from 5.7.1, which
+was last released in 2015. Many things changed in those 7 years, so we will take care of new
+issues and pull requests as they appear. Apologies for the inconvenience.
