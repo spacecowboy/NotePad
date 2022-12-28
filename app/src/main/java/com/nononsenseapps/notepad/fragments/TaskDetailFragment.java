@@ -43,6 +43,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
@@ -67,13 +68,10 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 
-
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.UiThread.Propagation;
+
 
 import java.util.Calendar;
 
@@ -282,6 +280,9 @@ public class TaskDetailFragment extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
 		setListeners();
+		mBinding.dueDateBox.setOnClickListener(v -> onDateClick());
+		mBinding.notificationAdd.setOnClickListener(v -> onAddReminder());
+		mBinding.dueCancelButton.setOnClickListener(v -> onDueRemoveClick());
 	}
 
 	@Override
@@ -406,7 +407,6 @@ public class TaskDetailFragment extends Fragment {
 		});
 	}
 
-	@Click(resName = "dueDateBox")
 	void onDateClick() {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask != null && mTask.due != null) {
@@ -473,7 +473,6 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
-	@Click(resName = "dueCancelButton")
 	void onDueRemoveClick() {
 		if (!isLocked()) {
 			if (mTask != null) {
@@ -483,7 +482,6 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
-	@Click(resName = "notificationAdd")
 	void onAddReminder() {
 		if (mTask != null && !isLocked()) {
 			// IF no id, have to save first
@@ -526,36 +524,33 @@ public class TaskDetailFragment extends Fragment {
 		return false;
 	}
 
-	@UiThread(propagation = Propagation.ENQUEUE)
+	@UiThread
 	void fillUIFromTask() {
-		if (mBinding.taskText == null || mBinding.taskCompleted == null) {
-			// it gets triggered ONLY in espresso tests!
-			NnnLogger.error(TaskDetailFragment.class, "taskText or taskCompleted is null");
-			return;
-		}
-		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
-		if (isLocked()) {
-			mBinding.taskText.setText(mTask.title);
-			DialogPassword pflock = new DialogPassword();
-			pflock.setListener(() -> {
-				mLocked = false;
-				fillUIFromTask();
+		this.getActivity().runOnUiThread(() -> {
+			NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
+			if (isLocked()) {
+				mBinding.taskText.setText(mTask.title);
+				DialogPassword pflock = new DialogPassword();
+				pflock.setListener(() -> {
+					mLocked = false;
+					fillUIFromTask();
+				});
+				pflock.show(getFragmentManager(), "read_verify");
+			} else {
+				mBinding.taskText.setText(mTask.getText());
+			}
+			setDueText();
+			mBinding.taskCompleted.setChecked(mTask.completed != null);
+			mBinding.taskCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+				if (isChecked)
+					mTask.completed = Calendar.getInstance().getTimeInMillis();
+				else
+					mTask.completed = null;
 			});
-			pflock.show(getFragmentManager(), "read_verify");
-		} else {
-			mBinding.taskText.setText(mTask.getText());
-		}
-		setDueText();
-		mBinding.taskCompleted.setChecked(mTask.completed != null);
-		mBinding.taskCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			if (isChecked)
-				mTask.completed = Calendar.getInstance().getTimeInMillis();
-			else
-				mTask.completed = null;
-		});
 
-		// Lock fields
-		setFieldStatus();
+			// Lock fields
+			setFieldStatus();
+		});
 	}
 
 	/**
@@ -853,21 +848,21 @@ public class TaskDetailFragment extends Fragment {
 	/**
 	 * Inserts a notification item in the UI
 	 */
-	@UiThread(propagation = Propagation.REUSE)
+	@UiThread
 	void addNotification(final Notification not) {
-		if (getActivity() == null) return;
+		this.getActivity().runOnUiThread(() -> {
+			View nv = LayoutInflater
+					.from(getActivity())
+					.inflate(R.layout.notification_view, null);
 
-		View nv = LayoutInflater
-				.from(getActivity())
-				.inflate(R.layout.notification_view, null);
+			// So we can update the view later
+			not.view = nv;
 
-		// So we can update the view later
-		not.view = nv;
+			// Setup all the listeners, etc...
+			NotificationItemHelper.setup(this, mBinding.notificationList, nv, not, mTask);
 
-		// Setup all the listeners, etc...
-		NotificationItemHelper.setup(this, mBinding.notificationList, nv, not, mTask);
-
-		mBinding.notificationList.addView(nv);
+			mBinding.notificationList.addView(nv);
+		});
 	}
 
 	@Override
