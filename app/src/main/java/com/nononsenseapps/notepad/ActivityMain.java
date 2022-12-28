@@ -67,12 +67,10 @@ import com.nononsenseapps.notepad.databinding.ActivityMainBinding;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -617,9 +615,9 @@ public class ActivityMain extends AppCompatActivity
 		 */
 		if (mBinding.fragment2 != null) {
 			if (getNoteId(intent) > 0) {
-				right = TaskDetailFragment_.getInstance(getNoteId(intent));
+				right = TaskDetailFragment.getInstance(getNoteId(intent));
 			} else if (isNoteIntent(intent)) {
-				right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+				right = TaskDetailFragment.getInstance(getNoteShareText(intent),
 						TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
 			}
 		} else if (isNoteIntent(intent)) {
@@ -627,11 +625,11 @@ public class ActivityMain extends AppCompatActivity
 			listOpener = null;
 			leftTag = DETAILTAG;
 			if (getNoteId(intent) > 0) {
-				left = TaskDetailFragment_.getInstance(getNoteId(intent));
+				left = TaskDetailFragment.getInstance(getNoteId(intent));
 			} else {
 				// Get a share text (null safe)
 				// In a list (if specified, or default otherwise)
-				left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+				left = TaskDetailFragment.getInstance(getNoteShareText(intent),
 						TaskListViewPagerFragment
 								.getARealList(this, getListId(intent))
 				);
@@ -1105,7 +1103,7 @@ public class ActivityMain extends AppCompatActivity
 			getSupportFragmentManager().beginTransaction()
 					.setCustomAnimations(R.anim.slide_in_top,
 							R.anim.slide_out_bottom).replace(R.id.fragment2,
-							TaskDetailFragment_.getInstance(taskUri))
+							TaskDetailFragment.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			mBinding.taskHint.setVisibility(View.GONE);
 		}
@@ -1149,7 +1147,7 @@ public class ActivityMain extends AppCompatActivity
 			getSupportFragmentManager()
 					.beginTransaction()
 					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
-					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
+					.replace(R.id.fragment2, TaskDetailFragment.getInstance(text, listId), DETAILTAG)
 					.commitAllowingStateLoss();
 			mBinding.taskHint.setVisibility(View.GONE);
 		} else {

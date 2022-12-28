@@ -68,17 +68,11 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
-
-
 import java.util.Calendar;
 
 /**
  * A fragment representing a single Note detail screen.
  */
-@EFragment
 public class TaskDetailFragment extends Fragment {
 
 	public static final int LOADER_EDITOR_TASK = 3001;
@@ -181,10 +175,7 @@ public class TaskDetailFragment extends Fragment {
 	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
 
 	// To override intent values with
-	@InstanceState
 	long stateId = -1;
-
-	@InstanceState
 	long stateListId = -1;
 
 	// Dao version of the object this fragment represents
@@ -212,17 +203,17 @@ public class TaskDetailFragment extends Fragment {
 	 * Performs no error checking. Only calls other getter with the last segment
 	 * parsed as long
 	 */
-	public static TaskDetailFragment_ getInstance(final Uri itemUri) {
+	public static TaskDetailFragment getInstance(final Uri itemUri) {
 		return getInstance(Long.parseLong(itemUri.getLastPathSegment()));
 	}
 
 	/**
 	 * Use to open an existing task
 	 */
-	public static TaskDetailFragment_ getInstance(final long itemId) {
+	public static TaskDetailFragment getInstance(final long itemId) {
 		Bundle arguments = new Bundle();
 		arguments.putLong(ARG_ITEM_ID, itemId);
-		TaskDetailFragment_ fragment = new TaskDetailFragment_();
+		TaskDetailFragment fragment = new TaskDetailFragment();
 		fragment.setArguments(arguments);
 		return fragment;
 	}
@@ -230,11 +221,11 @@ public class TaskDetailFragment extends Fragment {
 	/**
 	 * Use to create a new task
 	 */
-	public static TaskDetailFragment_ getInstance(String text, final long listId) {
+	public static TaskDetailFragment getInstance(String text, final long listId) {
 		Bundle arguments = new Bundle();
 		arguments.putString(ARG_ITEM_CONTENT, text);
 		arguments.putLong(ARG_ITEM_LIST_ID, listId);
-		TaskDetailFragment_ fragment = new TaskDetailFragment_();
+		TaskDetailFragment fragment = new TaskDetailFragment();
 		fragment.setArguments(arguments);
 		return fragment;
 	}
@@ -251,6 +242,7 @@ public class TaskDetailFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		restoreSavedInstanceState_(savedInstanceState);
 		super.onCreate(savedInstanceState);
 
 		// store a reference to the input method service
@@ -712,7 +704,14 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
-	@OnActivityResult(1)
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		if (requestCode == 1) {
+			onTimeTravelResult(resultCode, data);
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
 	void onTimeTravelResult(int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
 			onTimeTravel(data);
@@ -841,8 +840,16 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	@Override
-	public void onSaveInstanceState(@NonNull final Bundle state) {
-		super.onSaveInstanceState(state);
+	public void onSaveInstanceState(@NonNull final Bundle bundle_) {
+		super.onSaveInstanceState(bundle_);
+		bundle_.putLong("stateId", stateId);
+		bundle_.putLong("stateListId", stateListId);
+	}
+
+	private void restoreSavedInstanceState_(Bundle savedInstanceState) {
+		if (savedInstanceState == null) return;
+		stateId = savedInstanceState.getLong("stateId");
+		stateListId = savedInstanceState.getLong("stateListId");
 	}
 
 	/**
