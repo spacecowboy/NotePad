@@ -14,8 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
+  --><resources>
     <string name="app_name_short">Notas</string>
     <string name="title_create">Nova nota</string>
     <string name="menu_delete">Eliminar</string>
@@ -81,4 +80,74 @@
     <string name="date_header_none">Sem data</string>
     <!-- settings string keys -->
     <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+    <string name="sync_failed">Sincronização falhou</string>
+    <string name="date_header_completed">Completado</string>
+    <string name="hide_date">Esconder o prazo</string>
+    <string name="hide_header">Esconder todo o cabeçalho do widget</string>
+    <string name="transparency">Transparência</string>
+    <string name="notes_shortcut">Atalho para notas</string>
+    <string name="vibrate">Vibrar</string>
+    <string name="reminders">Lembretes</string>
+    <string name="standard">Padrão</string>
+    <string name="notification_prio_high">Alta: No topo, expandida</string>
+    <string name="dashclock_show_overdue_tasks">Mostrar tarefas atrasadas</string>
+    <string name="distance">Distância</string>
+    <string name="timemachine">Linha do tempo</string>
+    <string name="time">Horário</string>
+    <string name="done">Pronto</string>
+    <string name="saved">Salvo</string>
+    <string name="near">Perto</string>
+    <string name="menu_save_and_add">Gravar e abrir nova nota</string>
+    <string name="add_item">Adicionar item</string>
+    <string name="delete_question">Apagar\?</string>
+    <string name="delete_items_message">Apagar estes itens\?</string>
+    <string name="show_items_as_notes">Mostrar itens como notas</string>
+    <string name="delete_item_message">Apagar este item\?</string>
+    <string name="default_style">Estilo padrão</string>
+    <string name="show_items_as_tasks">Mostrar itens como tarefas</string>
+    <string name="search_description">Notas e tarefas</string>
+    <string name="archive">Arquivar</string>
+    <string name="restore">Restaurar</string>
+    <string name="restore_to">Restaurar para</string>
+    <string name="settings_summary_theme_classic">Clássico</string>
+    <string name="repeat">Repetir</string>
+    <string name="once">Uma vez</string>
+    <string name="import_data_question">Importar dados\?</string>
+    <string name="import_error">Algo deu errado: %s</string>
+    <string name="password">Palavra-passe</string>
+    <string name="date_header_overdue">Atrasado</string>
+    <string name="please_select_note">Por favor, selecione ou crie uma nota</string>
+    <string name="hide_checkbox">Esconder checkbox</string>
+    <string name="please_create_note">Por favor, crie uma nota</string>
+    <string name="loading_widget">Carregando widget…</string>
+    <string name="default_list">Lista padrão</string>
+    <string name="notedeleted_other">%d notas apagadas</string>
+    <string name="selected_other">%d notas selecionadas</string>
+    <string name="background_sync">Sincronização em segundo plano</string>
+    <string name="background_sync_info">Sincroniza de hora em hora</string>
+    <string name="sync_on_change">Sincronizar após modificações</string>
+    <string name="sync_on_change_info">Sincronizar imediatamente depois que a nota foi modificada</string>
+    <string name="notifications">Notificações</string>
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restringir tarefas a uma lista específica</string>
+    <string name="dashclock_pref_header_general">Geral</string>
+    <string name="dashclock_tomorrow">Amanhã</string>
+    <string name="dashclock_next7">Próximos 7 dias</string>
+    <string name="dashclock_anytime">A qualquer hora</string>
+    <string name="dashclock_show_only_the_next_task">Mostrar somente a próxima tarefa</string>
+    <string name="dashclock_display_header">Mostrar cabeçalho</string>
+    <string name="sort_list_due">Data limite</string>
+    <string name="item_max_height">Altura máxima das notas/tarefas</string>
+    <string name="rows">linhas</string>
+    <string name="localedefault">Localização padrão</string>
+    <string name="donate">Faça uma doação</string>
+    <string name="sync_on_start">Sincronização na inicialização do app</string>
+    <string name="snooze">Adiar o lembrete</string>
+    <string name="silent">Silêncio</string>
+    <string name="sound">Som</string>
+    <string name="notification_prio_low">Baixa: Escondida, minimizada</string>
+    <string name="priority">Prioridade</string>
+    <string name="dashclock_due_upper_limit_title">Limitar a tarefas que vencem mais antes</string>
+    <string name="dashclock_today">Hoje</string>
+    <string name="dashclock_title_activity_tasks_settings">Configurações</string>
+    <string name="notecopied_other">%d notas copiadas</string>
 </resources>
