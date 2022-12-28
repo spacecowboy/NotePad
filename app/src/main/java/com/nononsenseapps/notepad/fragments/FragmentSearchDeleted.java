@@ -31,6 +31,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.preference.PreferenceManager;
@@ -40,20 +42,24 @@ import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
 import java.util.HashSet;
 
-@EFragment(R.layout.fragment_search)
+@EFragment()
 public class FragmentSearchDeleted extends FragmentSearch {
 
-	@AfterViews
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		setSelection();
+	}
+
 	void setSelection() {
-		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+		mBinding.list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		mBinding.list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
 			final HashSet<Long> selectedItems = new HashSet<>();
 
@@ -100,7 +106,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				for (final Long id : selectedItems) {
 					final int pos = getPosOfId(id);
 					if (pos > -1) {
-						final Cursor c = (Cursor) list.getItemAtPosition(pos);
+						final Cursor c = (Cursor) mBinding.list.getItemAtPosition(pos);
 
 						// restore task
 						final Task t = new Task();
@@ -117,11 +123,11 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			}
 
 			int getPosOfId(final long id) {
-				int length = list.getCount();
+				int length = mBinding.list.getCount();
 				int position;
 				boolean found = false;
 				for (position = 0; position < length; position++) {
-					if (id == list.getItemIdAtPosition(position)) {
+					if (id == mBinding.list.getItemIdAtPosition(position)) {
 						found = true;
 						break;
 					}
@@ -193,7 +199,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 	@Override
 	protected OnItemClickListener getOnItemClickListener() {
-		return (arg0, origin, pos, id) -> list.setItemChecked(pos, true);
+		return (arg0, origin, pos, id) -> mBinding.list.setItemChecked(pos, true);
 	}
 
 	@Override
@@ -241,7 +247,8 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 					// TODO yes, completed note appear in dark gray in the archive view. I didn't
 					//  know this. Make a TapTargetView to explain this to users. It could target
-					//  the search icon, it doesn't matter. Just put it in onResume() or somewhere reasonable
+					//  the search icon, it doesn't matter. Just put it in onResume() or somewhere
+					//  reasonable
 
 					((TitleNoteTextView) view).setTextTitle(noteTitle);
 					return true;

@@ -20,12 +20,14 @@ package com.nononsenseapps.notepad.fragments;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager;
@@ -37,36 +39,49 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentDialogMovetolistBinding;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
 
 /**
  * When you long-click a note, you can press a button on the actionbar to move it
  * to anoter list. Then, this popup shows up to let the user choose the destination
  */
-@EFragment(R.layout.fragment_dialog_movetolist)
+@EFragment()
 public class DialogMoveToList extends DialogFragment {
 
 	static final String TASK_IDS = "task_ids";
-
-	@ViewById(resName = "listView")
-	ListView listView;
-
-	@ViewById(resName = "dialog_yes")
-	Button okButton;
-
-	@ViewById(resName = "dialog_no")
-	Button cancelButton;
 
 	private TaskList mTaskList;
 
 	private long[] taskIds = null;
 
-	// private EditListDialogListener listener;
+	/**
+	 * for {@link R.layout#fragment_dialog_movetolist}
+	 */
+	private FragmentDialogMovetolistBinding mBinding;
+
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentDialogMovetolistBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setup();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
 
 	public static DialogMoveToList getInstance(final Long... tasks) {
 		long[] taskIds = new long[tasks.length];
@@ -87,7 +102,6 @@ public class DialogMoveToList extends DialogFragment {
 
 	public DialogMoveToList() {}
 
-	@AfterViews
 	void setup() {
 		if (!getArguments().containsKey(TASK_IDS)) {
 			dismiss();
@@ -101,7 +115,7 @@ public class DialogMoveToList extends DialogFragment {
 		getDialog().setTitle(R.string.move_to);
 
 		// Must select item first
-		okButton.setEnabled(false);
+		mBinding.buttons.dialogYes.setEnabled(false);
 
 		// Adapter for list titles and ids
 		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(
@@ -109,9 +123,10 @@ public class DialogMoveToList extends DialogFragment {
 				null, new String[] { TaskList.Columns.TITLE },
 				new int[] { android.R.id.text1 }, 0);
 		// Set it to the view
-		listView.setAdapter(adapter);
+		mBinding.listView.setAdapter(adapter);
 
-		listView.setOnItemClickListener((arg0, arg1, pos, id) -> okButton.setEnabled(true));
+		mBinding.listView.setOnItemClickListener(
+				(arg0, arg1, pos, id) -> mBinding.buttons.dialogYes.setEnabled(true));
 
 		// Load content
 		LoaderManager.getInstance(this).restartLoader(0, null,
@@ -159,12 +174,12 @@ public class DialogMoveToList extends DialogFragment {
 	@Click(resName = "dialog_yes")
 	void okClicked() {
 		// move items
-		if (listView.getCheckedItemPosition() == AdapterView.INVALID_POSITION) {
+		if (mBinding.listView.getCheckedItemPosition() == AdapterView.INVALID_POSITION) {
 			return;
 		}
 
-		final Cursor c = (Cursor) listView.getItemAtPosition(listView
-				.getCheckedItemPosition());
+		final Cursor c = (Cursor) mBinding.listView
+				.getItemAtPosition(mBinding.listView.getCheckedItemPosition());
 		if (c != null) {
 			final long targetListId = c.getLong(0);
 			final String targetListTitle = c.getString(1);

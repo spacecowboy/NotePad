@@ -23,13 +23,15 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
@@ -42,36 +44,51 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.databinding.FragmentSearchBinding;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
 
 /**
  * This is used only in the "Archive" view, for deleted notes.
  * For the search widget of the "main" view, see
  * {@link TaskListViewPagerFragment#onCreateOptionsMenu}
  */
-@EFragment(R.layout.fragment_search)
+@EFragment()
 public class FragmentSearch extends Fragment {
 
 	public final static String QUERY = "query";
-
-	@SystemService
-	protected
-	SearchManager searchManager;
-
-	@ViewById(resName = "list")
-	protected
-	ListView list;
 
 	protected SimpleCursorAdapter mAdapter;
 
 	protected LoaderCallbacks<Cursor> mCallback;
 
 	protected String mQuery = "";
+
+	/**
+	 * for {@link R.layout#fragment_search}
+	 */
+	protected FragmentSearchBinding mBinding;
+
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentSearchBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setupAdapter();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
 
 	public static FragmentSearch_ getInstance(final String initialQuery) {
 		FragmentSearch_ f = new FragmentSearch_();
@@ -105,8 +122,8 @@ public class FragmentSearch extends Fragment {
 				.findItem(R.id.menu_search)
 				.getActionView();
 		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager
-				.getSearchableInfo(getActivity().getComponentName()));
+		SearchManager sMan = this.getActivity().getSystemService(SearchManager.class);
+		searchView.setSearchableInfo(sMan.getSearchableInfo(getActivity().getComponentName()));
 		searchView.setIconifiedByDefault(false); // Do not iconify the widget;
 		// expand it by default
 		searchView.setQueryRefinementEnabled(true);
@@ -132,15 +149,15 @@ public class FragmentSearch extends Fragment {
 		searchView.setQuery(mQuery, false);
 	}
 
-	@AfterViews
+
 	void setupAdapter() {
 		mAdapter = getAdapter();
 
 		mAdapter.setViewBinder(getViewBinder());
 
 		// Set adapter
-		list.setAdapter(mAdapter);
-		list.setOnItemClickListener(getOnItemClickListener());
+		mBinding.list.setAdapter(mAdapter);
+		mBinding.list.setOnItemClickListener(getOnItemClickListener());
 
 		// Start loading data
 		mCallback = new LoaderCallbacks<>() {

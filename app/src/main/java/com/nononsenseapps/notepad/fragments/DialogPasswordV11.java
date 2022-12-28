@@ -23,20 +23,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.databinding.FragmentDialogPasswordBinding;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
 
 /**
  * Full copy of {@link DialogPassword}, but extending native fragment class
@@ -44,18 +44,11 @@ import org.androidannotations.annotations.ViewById;
  * It is called when the user changes the existing password.
  * It asks to input the old password.
  */
-@EFragment(R.layout.fragment_dialog_password)
+@EFragment()
 public class DialogPasswordV11 extends DialogFragment {
 
-	// TODO DialogPassword.java is better. Try to put the functions of this dialog back into that file, then delete this file
-
-	@ViewById(resName = "passwordField")
-	EditText passwordField;
-
-	@ViewById(resName = "dialog_yes")
-	View dialog_yes;
-	@ViewById(resName = "dialog_no")
-	View dialog_no;
+	// TODO DialogPassword.java is better. Try to put the functions of this dialog back
+	//  into that file, then delete this file
 
 	PasswordConfirmedListener listener = null;
 
@@ -63,12 +56,24 @@ public class DialogPasswordV11 extends DialogFragment {
 		this.listener = listener;
 	}
 
+	/**
+	 * for {@link R.layout#fragment_dialog_password}
+	 */
+	private FragmentDialogPasswordBinding mBinding;
+
+	@Nullable
 	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-							 Bundle savInstState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savInstState) {
 		getDialog().setTitle(R.string.password_required);
-		// Let annotations deal with it
-		return null;
+		mBinding = FragmentDialogPasswordBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
 	}
 
 	@Click(resName = "dialog_no")
@@ -82,7 +87,7 @@ public class DialogPasswordV11 extends DialogFragment {
 				.getDefaultSharedPreferences(getActivity());
 		String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
 				"");
-		String enteredPassword = passwordField.getText().toString();
+		String enteredPassword = mBinding.passwordField.getText().toString();
 
 		// We want to return true or false, user has entered correct
 		// password
@@ -97,7 +102,7 @@ public class DialogPasswordV11 extends DialogFragment {
 			dismiss();
 		} else {
 			Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-			passwordField.startAnimation(shake);
+			mBinding.passwordField.startAnimation(shake);
 			Toast.makeText(getActivity(), getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();
 		}

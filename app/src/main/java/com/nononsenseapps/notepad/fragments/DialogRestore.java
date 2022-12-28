@@ -19,11 +19,13 @@ package com.nononsenseapps.notepad.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.Spinner;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager;
@@ -33,29 +35,44 @@ import androidx.loader.content.Loader;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentDialogRestoreBinding;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
 
-@EFragment(R.layout.fragment_dialog_restore)
+@EFragment()
 public class DialogRestore extends DialogFragment {
 
 	public interface OnListSelectedListener {
 		void onListSelected(long listId);
 	}
 
-	@ViewById(resName = "listSpinner")
-	Spinner listSpinner;
-
-	@ViewById(resName = "dialog_yes")
-	Button okButton;
-
-	@ViewById(resName = "dialog_no")
-	Button cancelButton;
-
 	private OnListSelectedListener listener;
+
+	/**
+	 * for {@link R.layout#fragment_dialog_restore}
+	 */
+	private FragmentDialogRestoreBinding mBinding;
+
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentDialogRestoreBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setup();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
 
 	/**
 	 * Use to create new list
@@ -66,15 +83,13 @@ public class DialogRestore extends DialogFragment {
 		return dialog;
 	}
 
-	public DialogRestore() {
-
-	}
+	public DialogRestore() {}
 
 	public void setListener(final OnListSelectedListener listener) {
 		this.listener = listener;
 	}
 
-	@AfterViews
+
 	void setup() {
 		getDialog().setTitle(R.string.restore_to);
 
@@ -84,7 +99,7 @@ public class DialogRestore extends DialogFragment {
 						new String[] { TaskList.Columns.TITLE },
 						new int[] { R.id.textViewSpinnerItem }, 0);
 
-		listSpinner.setAdapter(adapter);
+		mBinding.listSpinner.setAdapter(adapter);
 
 		LoaderManager.getInstance(this).restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
@@ -123,7 +138,7 @@ public class DialogRestore extends DialogFragment {
 
 		// TODO do something
 		if (listener != null) {
-			listener.onListSelected(listSpinner.getSelectedItemId());
+			listener.onListSelected(mBinding.listSpinner.getSelectedItemId());
 		}
 
 		this.dismiss();

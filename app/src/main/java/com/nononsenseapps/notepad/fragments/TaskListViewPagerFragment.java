@@ -25,6 +25,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -44,7 +46,6 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
-import androidx.viewpager.widget.ViewPager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain;
@@ -52,30 +53,21 @@ import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentTasklistViewpagerBinding;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.ViewsHelper;
 
-import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
 
 /**
- * Displays many listfragments across a viewpager. Supports selecting a certain
- * one on startup.
+ * Displays many listfragments across a viewpager. Supports selecting a certain one on startup
  */
-@EFragment(R.layout.fragment_tasklist_viewpager)
+@EFragment()
 public class TaskListViewPagerFragment extends Fragment implements
 		EditListDialogListener, ListOpener {
 
 	public static final String START_LIST_ID = "start_list_id";
-
-	@ViewById(resName = "pager")
-	ViewPager pager;
-
-	@SystemService
-	SearchManager searchManager;
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	SimpleCursorAdapter mTaskListsAdapter;
@@ -83,6 +75,31 @@ public class TaskListViewPagerFragment extends Fragment implements
 	// boolean firstLoad = true;
 
 	private long mListIdToSelect = -1;
+
+	/**
+	 * for {@link R.layout#fragment_tasklist_viewpager}
+	 */
+	private FragmentTasklistViewpagerBinding mBinding;
+
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentTasklistViewpagerBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setAdapter();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
 
 	public static TaskListViewPagerFragment getInstance() {
 		return getInstance(-1);
@@ -152,7 +169,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 					pos = -1;
 				}
 				if (pos >= 0) {
-					pager.setCurrentItem(pos);
+					mBinding.pager.setCurrentItem(pos);
 					mListIdToSelect = -1;
 				}
 			}
@@ -167,12 +184,11 @@ public class TaskListViewPagerFragment extends Fragment implements
 		LoaderManager.getInstance(this).restartLoader(0, null, loaderCallbacks);
 	}
 
-	@AfterViews
 	void setAdapter() {
 		// Set space between fragments
-		pager.setPageMargin(ViewsHelper.convertDip2Pixels(getActivity(), 16));
+		mBinding.pager.setPageMargin(ViewsHelper.convertDip2Pixels(getActivity(), 16));
 		// Set adapters
-		pager.setAdapter(mSectionsPagerAdapter);
+		mBinding.pager.setAdapter(mSectionsPagerAdapter);
 
 	}
 
@@ -190,8 +206,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 				.findItem(R.id.menu_search)
 				.getActionView();
 		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager
-				.getSearchableInfo(getActivity().getComponentName()));
+		SearchManager sMan = this.getActivity().getSystemService(SearchManager.class);
+		searchView.setSearchableInfo(sMan.getSearchableInfo(getActivity().getComponentName()));
 		// expand the searchview by default when the user clicks on the icon
 		searchView.setIconifiedByDefault(false);
 		searchView.setQueryRefinementEnabled(true);
@@ -268,7 +284,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 				pos = mSectionsPagerAdapter.getItemPosition(id);
 
 			if (pos > -1) {
-				pager.setCurrentItem(pos, true);
+				mBinding.pager.setCurrentItem(pos, true);
 				mListIdToSelect = -1;
 			}
 		}
@@ -277,10 +293,10 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (mTaskListsAdapter != null && pager != null) {
-			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+		if (mTaskListsAdapter != null && mBinding.pager != null) {
+			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem()));
 			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state: "
-					+ mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+					+ mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem()));
 		}
 	}
 
