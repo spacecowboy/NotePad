@@ -21,7 +21,6 @@
     <string name="time">Waktu</string>
     <string name="done">Selesai</string>
     <string name="saved">Disimpan</string>
-    <string name="distance">Jarak</string>
     <string name="near">Dekat</string>
     <string name="menu_save_and_add">Simpan dan tambahkan catatan</string>
     <string name="menu_delete">Hapus</string>
@@ -94,7 +93,6 @@
     <string name="showcase_drawer_msg">Tekan lama untuk mengedit atau menghapus</string>
     <string name="showcase_timemachine_title">Simpan catatan Anda</string>
     <string name="showcase_timemachine_msg">Perubahan selalu disimpan. Gunakan mesin waktu untuk mengembalikan versi sebelumnya.</string>
-    <string name="donate_to_unlock">Donasi untuk membuka kunci</string>
     <string name="premiums_unlocked_and_thanks">Fitur premium tidak terkunci. Terima kasih atas dukungan Anda!</string>
     <string name="move">Pindah</string>
     <string name="move_to">Pindah ke</string>
@@ -119,7 +117,6 @@
     <string name="about">Tentang</string>
     <string name="sync_failed">Snkronisasi gagal</string>
     <string name="sync_login_failed">Login gagal, tidak dapat terhubung ke Google Tasks</string>
-    <string name="changelog_full_title">Ubah log</string>
     <string name="changelog_title">Apa yang baru</string>
     <string name="completed">Selesai</string>
     <string name="date_header_overdue">Terlambat</string>
@@ -140,10 +137,8 @@
     <string name="item_max_height">Tinggi maksimal catatan / tugas</string>
     <string name="long_date_format">Format tanggal yang panjang</string>
     <string name="short_date_format">Format tanggal pendek</string>
-    <string name="rows">baris</string>
     <string name="select_date">Pilih tanggal</string>
     <string name="localedefault">Lokal standar</string>
-    <string name="donate">Menyumbangkan</string>
     <string name="donate_thanks">Terima kasih atas dukungan Anda!</string>
     <!-- settings string keys -->
     <string name="hide_header">Sembunyikan seluruh header pada widget</string>
@@ -165,7 +160,6 @@
     <string name="sync_on_change_info">Jadwalkan sinkronisasi sebentar setelah catatan berubah</string>
     <string name="sync_on_start">Menyinkronisasi pada saat aplikasi mulai</string>
     <string name="sync_on_start_info">Hanya akan memicu pada mulai pertama, tidak saat melanjutkan</string>
-    <string name="sync_full_force">Paksa untuk sinkronisasi penuh lain kali</string>
     <string name="sync_full_force_info">Hanya memeriksa ini jika Anda percaya sinkronisasi kehilangan beberapa item.</string>
     <string name="snooze">Tidur sebentar</string>
     <string name="silent">Diam</string>

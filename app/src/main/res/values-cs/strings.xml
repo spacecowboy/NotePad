@@ -21,7 +21,6 @@
     <string name="time">Čas</string>
     <string name="done">Dokončeno</string>
     <string name="saved">Uloženo</string>
-    <string name="distance">Vzdálenost</string>
     <string name="near">V blízskosti</string>
     <string name="menu_save_and_add">Uložit a přidat poznámku</string>
     <string name="menu_delete">Odstranit</string>
@@ -94,7 +93,6 @@
     <string name="showcase_drawer_msg">Dlouhým stiskem upravovat nebo odstranit</string>
     <string name="showcase_timemachine_title">Uložit své poznámky</string>
     <string name="showcase_timemachine_msg">Změny jsou pokaždé uloženy. Použít stroj času pro obnovení předchozí verze.</string>
-    <string name="donate_to_unlock">Přispět pro odemčení</string>
     <string name="premiums_unlocked_and_thanks">Prémiové možnosti odemčeny. Děkujeme za podporu!</string>
     <string name="move">Přesunout</string>
     <string name="move_to">Přesunout do</string>
@@ -119,7 +117,6 @@
     <string name="about">O aplikaci</string>
     <string name="sync_failed">Synchronizace selhala</string>
     <string name="sync_login_failed">Přihlášení se nezdařilo, nelze se spojit s Google Tasks</string>
-    <string name="changelog_full_title">Seznam změn</string>
     <string name="changelog_title">Co je nového</string>
     <string name="completed">Hotovo</string>
     <string name="date_header_overdue">Po termínu</string>
@@ -140,10 +137,8 @@
     <string name="item_max_height">Maximální výška poznámek/úkolů</string>
     <string name="long_date_format">Dlouhý formát data</string>
     <string name="short_date_format">Krátký formát data</string>
-    <string name="rows">řádky</string>
     <string name="select_date">Vybrat datum</string>
     <string name="localedefault">Místní nastavení</string>
-    <string name="donate">Podpořit</string>
     <string name="donate_thanks">Děkujeme za vaši podporu!</string>
     <string name="hide_header">Skrýt celou hlavičku widgetu</string>
     <string name="transparency">Průhlednost</string>
@@ -164,7 +159,6 @@
     <string name="sync_on_change_info">Naplánuje synchronizaci krátce poté, co se poznámka změní</string>
     <string name="sync_on_start">Synchronizovat při spuštění aplikace</string>
     <string name="sync_on_start_info">Bude synchronizovat nejčastěji každých 5 minut</string>
-    <string name="sync_full_force">Příště vynutit plnou synchronizaci</string>
     <string name="sync_full_force_info">Zaškrtnout pouze pokud se domíváte, že v synchronizaci chybí některé položky.</string>
     <string name="snooze">Odložit</string>
     <string name="silent">Tichý</string>

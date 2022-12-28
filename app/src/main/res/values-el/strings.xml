@@ -21,7 +21,6 @@
     <string name="time">Ώρα</string>
     <string name="done">Έγινε</string>
     <string name="saved">Αποθηκεύτηκε</string>
-    <string name="distance">Απόσταση</string>
     <string name="near">Κοντά </string>
     <string name="menu_save_and_add">Αποθήκευση και άνοιγμα νέας σημείωσης</string>
     <string name="menu_delete">Διαγραφή</string>
@@ -94,7 +93,6 @@
     <string name="showcase_drawer_msg">Παρατεταμένο πάτημα για επεξεργασία ή διαγραφή</string>
     <string name="showcase_timemachine_title">Αποθηκεύστε τις σημειώσεις σας</string>
     <string name="showcase_timemachine_msg">Οι αλλαγές αποθηκεύονται πάντα. Χρησιμοποιήστε τη χρονομηχανή για να επαναφέρετε μια προηγούμενη έκδοση.</string>
-    <string name="donate_to_unlock">Κάντε δωρεά για να ξεκλειδώσετε</string>
     <string name="premiums_unlocked_and_thanks">Τα Premium χαρακτηριστικά ξεκλειδώθηκαν. Σας ευχαριστούμε για την υποστήριξή σας!</string>
     <string name="move">Μετακίνηση</string>
     <string name="move_to">Μετακίνηση σε</string>
@@ -119,7 +117,6 @@
     <string name="about">Σχετικά με την εφαρμογή</string>
     <string name="sync_failed">Αποτυχία συγχρονισμού</string>
     <string name="sync_login_failed">Σύνδεση απέτυχε, δεν μπορούσε να συνδεθεί με το Google Tasks</string>
-    <string name="changelog_full_title">Λίστα αλλαγών</string>
     <string name="changelog_title">Τί νέο υπάρχει</string>
     <string name="completed">Ολοκληρωμένο</string>
     <string name="date_header_overdue">Εκπρόθεσμα</string>
@@ -140,10 +137,8 @@
     <string name="item_max_height">Μέγιστο ύψος των σημειώσεων/εργασιών</string>
     <string name="long_date_format">Μορφή πλήρους ημερομηνίας</string>
     <string name="short_date_format">Μορφή σύντομης ημερομηνίας</string>
-    <string name="rows">σειρές</string>
     <string name="select_date">Επιλέξτε ημερομηνία</string>
     <string name="localedefault">Προεπιλεγμένη γλώσσα</string>
-    <string name="donate">Δωρήστε</string>
     <string name="donate_thanks">Ευχαριστούμε για την υποστήριξη!</string>
     <!-- settings string keys -->
     <string name="hide_header">Απόκρυψη όλης της επικεφαλίδας widget</string>
@@ -165,7 +160,6 @@
     <string name="sync_on_change_info">Διενεργεί ένα συγχρονισμό αμέσως μετά από την τροποποίηση μιας σημείωσης</string>
     <string name="sync_on_start">Συγχρονισμός κατά την έναρξη της εφαρμογής</string>
     <string name="sync_on_start_info">Θα συγχρονίζεται το πολύ κάθε 5 λεπτά</string>
-    <string name="sync_full_force">Επιβολή πλήρους συγχρονισμού την επόμενη φορά</string>
     <string name="sync_full_force_info">Επιλέγξτε αυτό μόνον εάν πιστεύετε ότι ο συγχρονισμός παρέλειψε κάποια στοιχεία.</string>
     <string name="snooze">Αναβολή</string>
     <string name="silent">Αθόρυβο</string>

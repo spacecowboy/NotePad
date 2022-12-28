@@ -21,7 +21,6 @@
     <string name="time">Uhrzeit</string>
     <string name="done">Fertig</string>
     <string name="saved">Gespeichert</string>
-    <string name="distance">Entfernung</string>
     <string name="near">In der Nähe</string>
     <string name="menu_save_and_add">Speichern und neue Notiz öffnen</string>
     <string name="menu_delete">Löschen</string>
@@ -96,7 +95,6 @@
     <string name="showcase_drawer_msg">Drücke lange auf einen Listennamen, um ihn zu bearbeiten oder zu löschen</string>
     <string name="showcase_timemachine_title">Alle Änderungen werden gespeichert</string>
     <string name="showcase_timemachine_msg">Beim Bearbeiten einer Notiz werden alle Änderungen gespeichert. Um Notizen auf einen vorherigen Stand zu bringen, kannst Du die Time Machine benutzen.</string>
-    <string name="donate_to_unlock">Spenden zum Entsperren</string>
     <string name="premiums_unlocked_and_thanks">Premium Funktionen freigeschaltet. Vielen Dank für deine Unterstützung!</string>
     <string name="move">Verschieben</string>
     <string name="move_to">Verschieben nach</string>
@@ -121,7 +119,6 @@
     <string name="about">Infos</string>
     <string name="sync_failed">Synchronisation fehlgeschlagen</string>
     <string name="sync_login_failed">Konnte mich nicht anmelden, um Google Tasks zu verwenden</string>
-    <string name="changelog_full_title">Änderungsprotokoll</string>
     <string name="changelog_title">Was ist neu?</string>
     <string name="completed">Erledigt</string>
     <string name="date_header_overdue">Überfällig</string>
@@ -142,10 +139,8 @@
     <string name="item_max_height">Maximale Höhe</string>
     <string name="long_date_format">Langes Datumsformat</string>
     <string name="short_date_format">Kurzes Datumsformat</string>
-    <string name="rows">Reihen</string>
     <string name="select_date">Datum wählen</string>
     <string name="localedefault">Systemsprache</string>
-    <string name="donate">Spenden</string>
     <string name="donate_thanks">Vielen Dank für Ihre Unterstützung ♥</string>
     <string name="hide_header">Widget-Kopfzeile ausblenden</string>
     <string name="transparency">Transparenz</string>
@@ -166,7 +161,6 @@
     <string name="sync_on_change_info">Synchronisiert, kurz nachdem eine Notiz geändert wurde.</string>
     <string name="sync_on_start">Beim App-Start synchronisieren</string>
     <string name="sync_on_start_info">Begrenzt die Synchronisierung auf einmal alle 5 Minuten</string>
-    <string name="sync_full_force">Nächste vollständige Synchronisierung</string>
     <string name="sync_full_force_info">Verwende dies, wenn einige Elemente fehlen.</string>
     <string name="snooze">Schlummern</string>
     <string name="silent">Lautlos</string>
@@ -230,9 +224,7 @@
     <string name="account">Konto</string>
     <string name="notification_channel_name">Erinnerungen für Notizen</string>
     <string name="feature_is_WIP">Diese Funktion ist noch in Arbeit</string>
-    <string name="special_thanks">Besonderer Dank</string>
     <string name="notification_channel_settings">Einstellungen des Benachrichtigungskanals</string>
-    <string name="license">Lizenz</string>
     <string name="delete_completed_tasks_question">Alle abgeschlossenen Aufgaben löschen\?</string>
     <string name="for_older_devices">Für ältere Android-Geräte</string>
     <string name="app_about_license">Lizenziert GPLv3+, https://www.gnu.org/licenses.</string>
@@ -246,13 +238,10 @@
     <string name="msg_enable_notifications">Gehe zu Einstellungen -&gt; Benachrichtigungen, um Benachrichtigungen zu aktivieren</string>
     <string name="dashclock_due_upper_limit_title">Begrenzung auf spätestens fällige Aufgaben</string>
     <string name="bigger_titles_summary">Die erste Zeile ist der Titel</string>
-    <string name="legacy">Altlast</string>
     <string name="current_password">Aktuelles Passwort</string>
     <string name="sorting">Sortierung</string>
-    <string name="sd_card_touch_hint">Zum Wechseln des Verzeichnisses berühren</string>
     <string name="new_password">Neues Passwort</string>
     <string name="undo">Rückgängig</string>
-    <string name="changelog">Änderungsprotokoll</string>
     <string name="permission_denied">Kann nicht fortfahren: Du hast die Berechtigung verweigert</string>
     <string name="allow_exact_reminders">Exakte Erinnerungen erlauben</string>
     <string name="open_channel_settings_description">Öffne eine Seite, um die Benachrichtigungseinstellungen für diese App zu bearbeiten. Diese Einstellungen haben Vorrang vor allen anderen Einstellungen</string>
@@ -262,7 +251,6 @@
     <string name="disable_battery_optimizations">Akku-Optimierungen ausschalten</string>
     <string name="bigger_titles">Größere Titel</string>
     <string name="use_exact_alarms">Exakte Alarme verwenden</string>
-    <string name="default_location">Standard-Speicherort</string>
     <string name="battery_optimizations_active">Akku-Optimierungen ein</string>
     <string name="battery_optimizations_inactive">Akku-Optimierungen aus</string>
     <string name="overwritten_in_newer_systems">Kann durch bestimmte Einstellungen des Benachrichtigungskanals rückgängig gemacht werden</string>

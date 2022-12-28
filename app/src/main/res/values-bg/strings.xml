@@ -14,15 +14,13 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-<resources>
-	<string name="app_name_short">Бележки</string>
+  --><resources>
+    <string name="app_name_short">Бележки</string>
     <string name="title_create">Нова бележка</string>
     <string name="timemachine">Машина на времето</string>
     <string name="time">Време</string>
     <string name="done">Готово</string>
     <string name="saved">Запазено</string>
-    <string name="distance">Разстояние</string>
     <string name="near">Близо</string>
     <string name="menu_save_and_add">Запазване и отваряне на нова бележка</string>
     <string name="menu_delete">Изтриване</string>
@@ -95,7 +93,6 @@
     <string name="showcase_drawer_msg">Задръжте, за да редактирате или изтриете</string>
     <string name="showcase_timemachine_title">Запазва всичко</string>
     <string name="showcase_timemachine_msg">Вашите промени са винаги запазени при изход. Използвайте машината на времето, за да върнете предишна версия на бележка.</string>
-    <string name="donate_to_unlock">Дарете, за да отключите</string>
     <string name="premiums_unlocked_and_thanks">Премиум функциите са отключени. Благодарим ви за подкрепата!</string>
     <string name="move">Преместване</string>
     <string name="move_to">Преместване в</string>
@@ -120,7 +117,6 @@
     <string name="about">За приложението</string>
     <string name="sync_failed">Синхронизирането не успя</string>
     <string name="sync_login_failed">Влизането се провали, не може да се свърже с Google Задачи</string>
-    <string name="changelog_full_title">Списък с промените</string>
     <string name="changelog_title">Какво е новото</string>
     <string name="completed">Изпълнена</string>
     <string name="date_header_overdue">Закъсняла</string>
@@ -140,10 +136,8 @@
     <string name="item_max_height">Максимална височина</string>
     <string name="long_date_format">Дълъг формат на датата</string>
     <string name="short_date_format">Кратък формат на датата</string>
-    <string name="rows">реда</string>
     <string name="select_date">Изберете дата</string>
     <string name="localedefault">По подразбиране за локала</string>
-    <string name="donate">Дарете</string>
     <string name="donate_thanks">Благодарим ви за подкрепата!</string>
     <string name="hide_header">Скрий целия хедър</string>
     <string name="transparency">Прозрачност</string>
@@ -164,7 +158,6 @@
     <string name="sync_on_change_info">Насрочва синхронизация малко след промяна на бележка</string>
     <string name="sync_on_start">Синхр. при стартиране</string>
     <string name="sync_on_start_info">Ще се задейства само при ново стартиране, а не при възобновяване</string>
-    <string name="sync_full_force">Принудително пълно синхр. следващия път</string>
     <string name="sync_full_force_info">Изберете това, само ако смятате, че синхронизирането е пропуснало някои елементи.</string>
     <string name="snooze">Отлагане</string>
     <string name="silent">Безшумно</string>
