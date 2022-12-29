@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -98,7 +97,11 @@ public class ActivityMain extends AppCompatActivity
 	private static final String SHOWCASED_MAIN = "showcased_main_window";
 	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
 
-	protected boolean reverseAnimation = false;
+	/**
+	 * Which slide animations the {@link TaskDetailFragment} should use for enter and exit
+	 */
+	boolean mReverseAnimation = false;
+
 	boolean mAnimateExit = false;
 
 	/**
@@ -118,9 +121,6 @@ public class ActivityMain extends AppCompatActivity
 	 * Helper component that ties the action bar to the navigation drawer.
 	 */
 	private ActionBarDrawerToggle mDrawerToggle;
-
-	// Only not if opening note directly
-	private boolean shouldAddToBackStack = true;
 
 	private Bundle state;
 	private boolean shouldRestart = false;
@@ -209,8 +209,9 @@ public class ActivityMain extends AppCompatActivity
 					// Need to pop the entire stack and then load
 				}
 
-				reverseAnimation = true;
-				NnnLogger.debug(ActivityMain.class, "starting activity from android.R.id.home");
+				mReverseAnimation = true;
+				NnnLogger.debug(ActivityMain.class,
+						"starting activity from android.R.id.home");
 
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
@@ -293,7 +294,7 @@ public class ActivityMain extends AppCompatActivity
 			while (getSupportFragmentManager().popBackStackImmediate()) {
 				// Need to pop the entire stack and then load
 			}
-			reverseAnimation = true;
+			mReverseAnimation = true;
 			startActivity(i);
 		} else {
 			// If not popped, then send the call to the fragment
@@ -462,7 +463,6 @@ public class ActivityMain extends AppCompatActivity
 			// if you remove this, it shows the wrong icons in the actionbar
 			// when you navigate back from TaskDetailView
 			setIntent(new Intent(this, ActivityMain.class));
-			// TODO bug! going back from a note detail page crashes the app, only the 1° time
 		}
 
 		super.onBackPressed();
@@ -487,8 +487,7 @@ public class ActivityMain extends AppCompatActivity
 
 		setIntent(intent);
 		loadFragments();
-		// Just to be sure it gets done
-		// Clear notification if present
+		// Just to be sure it gets done. Clear notification if present
 		NotificationHelper.clearNotification(this, intent);
 	}
 
@@ -595,8 +594,8 @@ public class ActivityMain extends AppCompatActivity
 
 		// Load stuff
 		final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		if (reverseAnimation) {
-			reverseAnimation = false;
+		if (mReverseAnimation) {
+			mReverseAnimation = false;
 			transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top,
 					R.anim.slide_in_top, R.anim.slide_out_bottom);
 		} else {
@@ -628,10 +627,7 @@ public class ActivityMain extends AppCompatActivity
 			while (getSupportFragmentManager().popBackStackImmediate()) {
 				// Need to pop the entire stack and then load
 			}
-			if (shouldAddToBackStack) {
-				transaction.addToBackStack(null); // TODO is this the problem
-			}
-
+			transaction.addToBackStack(null);
 			setHomeAsDrawer(false);
 		}
 
@@ -644,8 +640,7 @@ public class ActivityMain extends AppCompatActivity
 			// TODO
 			showingEditor = false;
 
-			left = TaskListViewPagerFragment
-					.getInstance(getListIdToShow(intent));
+			left = TaskListViewPagerFragment.getInstance(getListIdToShow(intent));
 			leftTag = LISTPAGERTAG;
 			listOpener = (ListOpener) left;
 		}
@@ -656,13 +651,9 @@ public class ActivityMain extends AppCompatActivity
 		}
 		transaction.replace(R.id.fragment1, left, leftTag);
 
-
-		// Commit transaction
-		// Allow state loss as workaround for bug
+		// Commit transaction. Allow state loss as workaround for bug
 		// https://code.google.com/p/android/issues/detail?id=19917
 		transaction.commitAllowingStateLoss();
-		// Next go, always add
-		shouldAddToBackStack = true;
 	}
 
 	/**

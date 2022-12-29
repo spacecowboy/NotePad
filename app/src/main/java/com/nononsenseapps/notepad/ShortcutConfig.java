@@ -59,6 +59,7 @@ public class ShortcutConfig extends AppCompatActivity {
 					.setAction(Intent.ACTION_INSERT)
 					.putExtra(Task.Columns.DBLIST, mBinding.listSpinner.getSelectedItemId());
 		} else {
+			// this shortcut widget shows a list of notes
 			final Cursor c = (Cursor) mBinding.listSpinner.getSelectedItem();
 
 			if (c != null && !c.isClosed() && !c.isAfterLast()) {

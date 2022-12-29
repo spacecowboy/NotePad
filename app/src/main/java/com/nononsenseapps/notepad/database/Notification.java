@@ -420,8 +420,9 @@ public class Notification extends DAO {
 	 * Delete or reschedule a specific notification.
 	 */
 	public static void deleteOrReschedule(final Context context, final Uri uri) {
-		final Cursor c = context.getContentResolver().query(uri, Columns.FIELDS, null,
-				null, null);
+		final Cursor c = context
+				.getContentResolver()
+				.query(uri, Columns.FIELDS, null, null, null);
 
 		while (c.moveToNext()) {
 			Notification n = new Notification(c);
