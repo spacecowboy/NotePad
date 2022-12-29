@@ -102,9 +102,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@ViewById(resName = "list")
 	DragSortListView listView;
 
-	@SystemService
-	LayoutInflater layoutInflater;
-
 	SimpleSectionsAdapter mAdapter;
 	private long mListId = -1;
 	private OnFragmentInteractionListener mListener;
@@ -867,9 +864,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				final LayoutInflater inflater = LayoutInflater.from(this.context);
-				convertView = inflater.inflate(getViewLayout(position), parent,
-						false);
+				convertView = LayoutInflater
+						.from(this.context)
+						.inflate(getViewLayout(position), parent, false);
 				if (itemType == getItemViewType(position)) {
 					setPrefsOnView(convertView.findViewById(android.R.id.text1));
 				}

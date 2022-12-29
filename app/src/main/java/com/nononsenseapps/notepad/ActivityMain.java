@@ -721,8 +721,7 @@ public class ActivityMain extends AppCompatActivity
 		StringBuilder retval = new StringBuilder();
 		// possible title
 		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) &&
-				!"com.google.android.gm.action.AUTO_SEND"
-						.equals(intent.getAction())) {
+				!"com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
 			retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
 		}
 		// possible note
@@ -1102,8 +1101,9 @@ public class ActivityMain extends AppCompatActivity
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		// User clicked a task in the list
-		// tablet
 		if (fragment2 != null) {
+			// tablet
+
 			// Set the intent here also so rotations open the same item
 			setIntent(intent);
 			getSupportFragmentManager()
@@ -1112,22 +1112,8 @@ public class ActivityMain extends AppCompatActivity
 					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
-		}
-		// phone
-		else {
-
-			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-			// && origin != null) {
-			// Log.d("nononsenseapps animation", "Animating");
-			// //intent.putExtra(ANIMATEEXIT, true);
-			// startActivity(
-			// intent,
-			// ActivityOptions.makeCustomAnimation(this,
-			// R.anim.activity_slide_in_left,
-			// R.anim.activity_slide_out_left).toBundle());
-
-			// }
-			// else {
+		} else {
+			// phone
 			startActivity(intent);
 		}
 	}

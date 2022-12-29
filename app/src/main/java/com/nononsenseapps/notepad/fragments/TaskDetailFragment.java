@@ -347,7 +347,7 @@ public class TaskDetailFragment extends Fragment {
 			// Only show keyboard for new/empty notes,
 			// but not if the showcaseview is showing
 			taskText.requestFocus();
-			InputMethodManager imm = this.getActivity().getSystemService(InputMethodManager.class);
+			InputMethodManager imm = getContext().getSystemService(InputMethodManager.class);
 			imm.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
@@ -890,13 +890,11 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	public void onTimeTravel(Intent data) {
-		if (taskText != null) {
-			taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-		}
+		String restoredText = data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY);
+		if (taskText != null) taskText.setText(restoredText);
+
 		// Need to set here also for password to work
-		if (mTask != null) {
-			mTask.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-		}
+		if (mTask != null) mTask.setText(restoredText);
 	}
 
 	/**
