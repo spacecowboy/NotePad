@@ -137,7 +137,7 @@
 
 		<!-- Search activity -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivitySearch_"
+			android:name="com.nononsenseapps.notepad.ActivitySearch"
 			android:exported="true"
 			android:label="@string/search_hint"
 			android:launchMode="singleTop"
@@ -153,7 +153,7 @@
 
 		<!-- Deleted tasks activity -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivitySearchDeleted_"
+			android:name="com.nononsenseapps.notepad.ActivitySearchDeleted"
 			android:exported="true"
 			android:label="@string/archive"
 			android:launchMode="singleTop"
@@ -227,7 +227,7 @@
 		</activity>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.ShortcutConfig_"
+			android:name="com.nononsenseapps.notepad.ShortcutConfig"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
 			android:theme="@style/ThemeNnnDayNightDialog">
@@ -306,12 +306,12 @@
 
 		<!-- Time Machine -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivityTaskHistory_"
+			android:name="com.nononsenseapps.notepad.ActivityTaskHistory"
 			android:label="@string/timemachine"/>
 
 		<!-- Service for migrating from donate app -->
 		<service
-			android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
+			android:name="com.nononsenseapps.notepad.legacy.DonateMigrator"
 			android:enabled="true"
 			android:exported="false"/>
 

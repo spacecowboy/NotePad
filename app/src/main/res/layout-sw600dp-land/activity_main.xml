@@ -42,6 +42,7 @@
 			android:layout_marginRight="4dp"
 			android:layout_weight="@integer/leftFragmentWeight"/>
 
+		<!-- Only present on tablets -->
 		<FrameLayout
 			android:id="@+id/fragment2"
 			android:layout_width="0dp"
@@ -49,6 +50,7 @@
 			android:layout_marginLeft="4dp"
 			android:layout_weight="@integer/rightFragmentWeight">
 
+			<!-- Shown on tablets on start up. Hide on selection -->
 			<TextView
 				android:id="@+id/taskHint"
 				android:layout_width="wrap_content"
