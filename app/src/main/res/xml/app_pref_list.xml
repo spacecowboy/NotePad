@@ -50,8 +50,8 @@
 		android:summary="Selected option should be here"
 		android:title="@string/default_style"/>
 
-	<!-- Depends on listtype in code -->
-	<CheckBoxPreference
+	<!-- Depends on listtype in code. See ListPrefs.java -->
+	<SwitchPreference
 		android:defaultValue="false"
 		app:singleLineTitle="false"
 		android:key="@string/pref_hidecheckboxes"
@@ -59,7 +59,9 @@
 		android:summaryOn="@string/hide_checkbox_summary_on"
 		android:title="@string/hide_checkbox"/>
 
-	<PreferenceCategory android:title="@string/text">
+	<PreferenceCategory
+		android:title="@string/text">
+
 		<SwitchPreference
 			android:defaultValue="true"
 			android:key="@string/pref_list_links"
@@ -97,6 +99,7 @@
 			android:key="@string/pref_list_body_fontfamily"
 			android:summary="Selected option should be here"
 			android:title="@string/body_font"/>
+
 	</PreferenceCategory>
 
 </PreferenceScreen>
