@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -24,44 +23,49 @@ import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.ui.TitleNoteTextView;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.SeekBarProgressChange;
-import org.androidannotations.annotations.ViewById;
+import com.nononsenseapps.notepad.databinding.ActivityTaskHistoryBinding;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-@EActivity(R.layout.activity_task_history)
 public class ActivityTaskHistory extends AppCompatActivity {
+
 	public static final String RESULT_TEXT_KEY = "task_text_key";
 	private long mTaskID;
 	private boolean loaded = false;
 	private Cursor mCursor;
 
-	@ViewById(resName = "seekBar")
-	SeekBar seekBar;
-
-	@ViewById(resName = "taskText")
-	TitleNoteTextView taskText;
-
-	@ViewById(resName = "timestamp")
-	TextView timestamp;
-
 	private SimpleDateFormat timeFormatter;
 	private SimpleDateFormat dbTimeParser;
 
-	@SuppressLint("SimpleDateFormat")
+	/**
+	 * for {@link R.layout#activity_task_history}
+	 */
+	private ActivityTaskHistoryBinding mBinding;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Must do this before super.onCreate
 		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(savedInstanceState);
+
+		mBinding = ActivityTaskHistoryBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
+		mBinding.seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				onSeekBarChanged(progress);
+			}
+
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
+
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {}
+		});
 
 		// Intent must contain a task id
 		if (getIntent() == null || getIntent().getLongExtra(Task.Columns._ID, -1) < 1) {
@@ -76,10 +80,11 @@ public class ActivityTaskHistory extends AppCompatActivity {
 		// Default datetime format in sqlite. Set to UTC timezone
 		dbTimeParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		dbTimeParser.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+		loadActionBarLayout();
 	}
 
-	@AfterViews
-	void loadLayout() {
+	void loadActionBarLayout() {
 		// Prepare for failure
 		setResult(RESULT_CANCELED, new Intent());
 		// Inflate a "Done/Discard" custom action bar view.
@@ -92,17 +97,16 @@ public class ActivityTaskHistory extends AppCompatActivity {
 				.findViewById(R.id.actionbar_done)
 				.setOnClickListener(v -> {
 					// "Done"
+					String txt = mBinding.taskText.getText().toString();
 					final Intent returnIntent = new Intent();
-					returnIntent.putExtra(RESULT_TEXT_KEY, taskText.getText().toString());
+					returnIntent.putExtra(RESULT_TEXT_KEY, txt);
 					setResult(RESULT_OK, returnIntent);
 					finish();
 				});
 		customActionBarView
 				.findViewById(R.id.actionbar_discard)
-				.setOnClickListener(v -> {
-					// "Cancel result already set"
-					finish();
-				});
+				// "Cancel result already set"
+				.setOnClickListener(v -> finish());
 
 		// Show the custom action bar view and hide the normal Home icon and title.
 		getSupportActionBar()
@@ -134,7 +138,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 						mCursor = c;
 						setSeekBarProperties();
 						if (!loaded) {
-							seekBar.setProgress(c.getCount() - 1);
+							mBinding.seekBar.setProgress(c.getCount() - 1);
 							loaded = true;
 						}
 					}
@@ -147,17 +151,16 @@ public class ActivityTaskHistory extends AppCompatActivity {
 				});
 	}
 
-	@SeekBarProgressChange(resName = "seekBar")
 	void onSeekBarChanged(int progress) {
 		if (mCursor == null) return;
 
 		if (progress < mCursor.getCount()) {
 			mCursor.moveToPosition(progress);
-			taskText.setTextTitle(mCursor.getString(1));
-			taskText.setTextRest(mCursor.getString(2));
+			mBinding.taskText.setTextTitle(mCursor.getString(1));
+			mBinding.taskText.setTextRest(mCursor.getString(2));
 			try {
 				Date x = dbTimeParser.parse(mCursor.getString(3));
-				timestamp.setText(timeFormatter.format(x));
+				mBinding.timestamp.setText(timeFormatter.format(x));
 			} catch (ParseException e) {
 				Log.d("nononsenseapps time", e.getLocalizedMessage());
 			}
@@ -166,11 +169,11 @@ public class ActivityTaskHistory extends AppCompatActivity {
 
 	void setSeekBarProperties() {
 		if (mCursor == null) {
-			seekBar.setEnabled(false);
-			seekBar.setMax(0);
+			mBinding.seekBar.setEnabled(false);
+			mBinding.seekBar.setMax(0);
 		} else {
-			seekBar.setEnabled(true);
-			seekBar.setMax(mCursor.getCount() - 1);
+			mBinding.seekBar.setEnabled(true);
+			mBinding.seekBar.setMax(mCursor.getCount() - 1);
 		}
 	}
 

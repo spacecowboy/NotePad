@@ -21,6 +21,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +33,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
+import androidx.annotation.WorkerThread;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.preference.PreferenceManager;
@@ -40,20 +46,21 @@ import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-
 import java.util.HashSet;
+import java.util.concurrent.Executors;
 
-@EFragment(R.layout.fragment_search)
+
 public class FragmentSearchDeleted extends FragmentSearch {
 
-	@AfterViews
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		setSelection();
+	}
+
 	void setSelection() {
-		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+		mBinding.list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		mBinding.list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
 			final HashSet<Long> selectedItems = new HashSet<>();
 
@@ -84,44 +91,48 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				return result;
 			}
 
-			@Background
+			@WorkerThread
 			void deleteSelected(final ActionMode mode) {
-				String whereCondition = Task.Columns._ID + " IN ("
-						+ DAO.arrayToCommaString(getIdArray()) + ")";
-				getActivity()
-						.getContentResolver()
-						.delete(Task.URI_DELETED_QUERY, whereCondition, null);
-				selectedItems.clear();
-				mode.finish();
+				Executors.newSingleThreadExecutor().execute(() -> {
+					String whereCondition = Task.Columns._ID + " IN ("
+							+ DAO.arrayToCommaString(getIdArray()) + ")";
+					getActivity()
+							.getContentResolver()
+							.delete(Task.URI_DELETED_QUERY, whereCondition, null);
+					selectedItems.clear();
+					mode.finish();
+				});
 			}
 
-			@Background
+			@WorkerThread
 			void restoreSelected(final ActionMode mode, final long listId) {
-				for (final Long id : selectedItems) {
-					final int pos = getPosOfId(id);
-					if (pos > -1) {
-						final Cursor c = (Cursor) list.getItemAtPosition(pos);
+				Executors.newSingleThreadExecutor().execute(() -> {
+					for (final Long id : selectedItems) {
+						final int pos = getPosOfId(id);
+						if (pos > -1) {
+							final Cursor c = (Cursor) mBinding.list.getItemAtPosition(pos);
 
-						// restore task
-						final Task t = new Task();
-						t.dblist = listId;
-						t.title = c.getString(1);
-						t.note = c.getString(2);
-						t.completed = c.isNull(3) ? null : c.getLong(3);
-						t.due = c.isNull(4) ? null : c.getLong(4);
-						t.save(getActivity());
+							// restore task
+							final Task t = new Task();
+							t.dblist = listId;
+							t.title = c.getString(1);
+							t.note = c.getString(2);
+							t.completed = c.isNull(3) ? null : c.getLong(3);
+							t.due = c.isNull(4) ? null : c.getLong(4);
+							t.save(getActivity());
+						}
 					}
-				}
-				notifySuccess();
-				deleteSelected(mode);
+					notifySuccess();
+					deleteSelected(mode);
+				});
 			}
 
 			int getPosOfId(final long id) {
-				int length = list.getCount();
+				int length = mBinding.list.getCount();
 				int position;
 				boolean found = false;
 				for (position = 0; position < length; position++) {
-					if (id == list.getItemIdAtPosition(position)) {
+					if (id == mBinding.list.getItemIdAtPosition(position)) {
 						found = true;
 						break;
 					}
@@ -134,9 +145,13 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				return position;
 			}
 
+
+			/** Show a {@link Toast} in a thread-safe way */
 			@UiThread
 			void notifySuccess() {
-				Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
+				new Handler(Looper.getMainLooper())
+						.post(() -> Toast.makeText(getActivity(), R.string.saved,
+								Toast.LENGTH_SHORT).show());
 			}
 
 			@Override
@@ -193,7 +208,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 	@Override
 	protected OnItemClickListener getOnItemClickListener() {
-		return (arg0, origin, pos, id) -> list.setItemChecked(pos, true);
+		return (arg0, origin, pos, id) -> mBinding.list.setItemChecked(pos, true);
 	}
 
 	@Override
@@ -241,7 +256,8 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 					// TODO yes, completed note appear in dark gray in the archive view. I didn't
 					//  know this. Make a TapTargetView to explain this to users. It could target
-					//  the search icon, it doesn't matter. Just put it in onResume() or somewhere reasonable
+					//  the search icon, it doesn't matter. Just put it in onResume() or somewhere
+					//  reasonable
 
 					((TitleNoteTextView) view).setTextTitle(noteTitle);
 					return true;

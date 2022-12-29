@@ -102,9 +102,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@ViewById(resName = "list")
 	DragSortListView listView;
 
-	@SystemService
-	LayoutInflater layoutInflater;
-
 	SimpleSectionsAdapter mAdapter;
 	private long mListId = -1;
 	private OnFragmentInteractionListener mListener;
@@ -543,16 +540,19 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 					String msg;
 					try {
-						msg = getResources()
-								.getQuantityString(R.plurals.notedeleted_msg, tasks.size(), tasks.size());
-
+						msg = getResources().getQuantityString(R.plurals.notedeleted_msg,
+								tasks.size(), tasks.size());
 					} catch (Exception e) {
 						// Protect against faulty translations
 						msg = getResources().getString(R.string.deleted);
 					}
 
 					// TODO should use a Snackbar instead of Toasts
-					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
+					// Snackbar
+					//     .make(mFab, msg, Snackbar.LENGTH_LONG)
+					//     .setAction(R.string.undo, listener)
+					//     .setCallback(dismissCallback)
+					//     .show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
 					if (mMode != null) mMode.finish();
@@ -616,7 +616,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						}
 					}
 					if (locked) {
-						DialogPassword_ delpf = new DialogPassword_();
+						DialogPassword delpf = new DialogPassword();
 						delpf.setListener(pListener);
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					} else {
@@ -864,9 +864,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				final LayoutInflater inflater = LayoutInflater.from(this.context);
-				convertView = inflater.inflate(getViewLayout(position), parent,
-						false);
+				convertView = LayoutInflater
+						.from(this.context)
+						.inflate(getViewLayout(position), parent, false);
 				if (itemType == getItemViewType(position)) {
 					setPrefsOnView(convertView.findViewById(android.R.id.text1));
 				}

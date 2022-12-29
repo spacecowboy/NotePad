@@ -21,7 +21,6 @@ package com.nononsenseapps.notepad.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -30,7 +29,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +44,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.ShareActionProvider;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
@@ -57,11 +56,9 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
-import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
-import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
@@ -77,7 +74,6 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
@@ -201,8 +197,6 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById(resName = "editScrollView")
 	ScrollView editScrollView;
 
-	InputMethodManager inputManager;
-
 	// Id of task to open
 	public static final String ARG_ITEM_ID = "item_id";
 	// If no id is given, a string can be accepted as initial state
@@ -235,8 +229,7 @@ public class TaskDetailFragment extends Fragment {
 
 	/**
 	 * If in tablet and added, rotating to portrait actually recreats the
-	 * fragment even though it isn't visible. So if this is true, don't load
-	 * anything.
+	 * fragment even though it isn't visible. So if this is true, don't load anything.
 	 */
 	private boolean dontLoad = false;
 
@@ -284,10 +277,6 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		// store a reference to the input method service
-		inputManager = (InputMethodManager) getContext()
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
 	}
 
 	/**
@@ -358,7 +347,8 @@ public class TaskDetailFragment extends Fragment {
 			// Only show keyboard for new/empty notes,
 			// but not if the showcaseview is showing
 			taskText.requestFocus();
-			inputManager.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
+			InputMethodManager imm = getContext().getSystemService(InputMethodManager.class);
+			imm.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
@@ -551,7 +541,7 @@ public class TaskDetailFragment extends Fragment {
 		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
 		if (isLocked()) {
 			taskText.setText(mTask.title);
-			DialogPassword_ pflock = new DialogPassword_();
+			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				mLocked = false;
 				fillUIFromTask();
@@ -649,7 +639,7 @@ public class TaskDetailFragment extends Fragment {
 			return true;
 		} else if (itemId == R.id.menu_timemachine) {
 			if (mTask != null && mTask._id > 0) {
-				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
+				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
 				startActivityForResult(timeIntent, 1);
 				// ActivityTaskHistory.start(getActivity(), mTask._id);
@@ -658,7 +648,7 @@ public class TaskDetailFragment extends Fragment {
 		} else if (itemId == R.id.menu_delete) {
 			if (mTask != null) {
 				if (mTask.locked) {
-					DialogPassword_ delpf = new DialogPassword_();
+					DialogPassword delpf = new DialogPassword();
 					delpf.setListener(this::deleteAndClose);
 					delpf.show(getFragmentManager(), "delete_verify");
 				} else {
@@ -667,7 +657,7 @@ public class TaskDetailFragment extends Fragment {
 			}
 			return true;
 		} else if (itemId == R.id.menu_lock) {
-			DialogPassword_ pflock = new DialogPassword_();
+			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				if (mTask != null) {
 					mLocked = true;
@@ -681,7 +671,7 @@ public class TaskDetailFragment extends Fragment {
 			pflock.show(getFragmentManager(), "lock_verify");
 			return true;
 		} else if (itemId == R.id.menu_unlock) {
-			DialogPassword_ pf = new DialogPassword_();
+			DialogPassword pf = new DialogPassword();
 			pf.setListener(() -> {
 				if (mTask != null) {
 					mTask.locked = false;
@@ -702,12 +692,12 @@ public class TaskDetailFragment extends Fragment {
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		menu.findItem(R.id.menu_timemachine).setEnabled(
-				mTask != null && mTask._id > 0 && !isLocked());
+		menu.findItem(R.id.menu_timemachine)
+				.setEnabled(mTask != null && mTask._id > 0 && !isLocked());
 		menu.findItem(R.id.menu_lock)
 				.setVisible(mTask != null && !mTask.locked);
-		menu.findItem(R.id.menu_unlock).setVisible(
-				mTask != null && mTask.locked);
+		menu.findItem(R.id.menu_unlock)
+				.setVisible(mTask != null && mTask.locked);
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 
 		if (getActivity() instanceof MenuStateController) {
@@ -731,11 +721,15 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
-	@OnActivityResult(1)
-	void onTimeTravelResult(int resultCode, Intent data) {
-		if (resultCode == Activity.RESULT_OK) {
-			onTimeTravel(data);
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		if (requestCode == 1) {
+			// on time travel result
+			if (resultCode == Activity.RESULT_OK) {
+				onTimeTravel(data);
+			}
 		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void deleteAndClose() {
@@ -896,13 +890,11 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	public void onTimeTravel(Intent data) {
-		if (taskText != null) {
-			taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-		}
+		String restoredText = data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY);
+		if (taskText != null) taskText.setText(restoredText);
+
 		// Need to set here also for password to work
-		if (mTask != null) {
-			mTask.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-		}
+		if (mTask != null) mTask.setText(restoredText);
 	}
 
 	/**

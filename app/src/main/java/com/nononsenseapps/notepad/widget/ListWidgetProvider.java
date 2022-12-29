@@ -219,7 +219,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		final Intent configIntent = new Intent();
 		configIntent
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
-				.setClass(context, ListWidgetConfig_.class)
+				.setClass(context, ListWidgetConfig.class)
 				.setData(data)
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		PendingIntent openConfigPendingIntent = getThePendingIntentForActivity(configIntent, context);
