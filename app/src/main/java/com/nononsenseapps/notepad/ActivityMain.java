@@ -73,7 +73,6 @@ import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
-import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
@@ -553,7 +552,7 @@ public class ActivityMain extends AppCompatActivity
 				@Override
 				public void onOKClick() {
 					startService(new Intent(ActivityMain.this,
-							DonateMigrator_.class));
+							DonateMigrator.class));
 				}
 
 				@Override

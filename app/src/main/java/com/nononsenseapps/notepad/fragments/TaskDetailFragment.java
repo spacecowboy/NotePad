@@ -61,7 +61,6 @@ import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
-import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
@@ -551,7 +550,7 @@ public class TaskDetailFragment extends Fragment {
 		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
 		if (isLocked()) {
 			taskText.setText(mTask.title);
-			DialogPassword_ pflock = new DialogPassword_();
+			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				mLocked = false;
 				fillUIFromTask();
@@ -649,7 +648,7 @@ public class TaskDetailFragment extends Fragment {
 			return true;
 		} else if (itemId == R.id.menu_timemachine) {
 			if (mTask != null && mTask._id > 0) {
-				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
+				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
 				startActivityForResult(timeIntent, 1);
 				// ActivityTaskHistory.start(getActivity(), mTask._id);
@@ -658,7 +657,7 @@ public class TaskDetailFragment extends Fragment {
 		} else if (itemId == R.id.menu_delete) {
 			if (mTask != null) {
 				if (mTask.locked) {
-					DialogPassword_ delpf = new DialogPassword_();
+					DialogPassword delpf = new DialogPassword();
 					delpf.setListener(this::deleteAndClose);
 					delpf.show(getFragmentManager(), "delete_verify");
 				} else {
@@ -667,7 +666,7 @@ public class TaskDetailFragment extends Fragment {
 			}
 			return true;
 		} else if (itemId == R.id.menu_lock) {
-			DialogPassword_ pflock = new DialogPassword_();
+			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				if (mTask != null) {
 					mLocked = true;
@@ -681,7 +680,7 @@ public class TaskDetailFragment extends Fragment {
 			pflock.show(getFragmentManager(), "lock_verify");
 			return true;
 		} else if (itemId == R.id.menu_unlock) {
-			DialogPassword_ pf = new DialogPassword_();
+			DialogPassword pf = new DialogPassword();
 			pf.setListener(() -> {
 				if (mTask != null) {
 					mTask.locked = false;

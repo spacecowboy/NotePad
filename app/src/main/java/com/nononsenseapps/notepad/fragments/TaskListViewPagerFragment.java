@@ -49,7 +49,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
-import com.nononsenseapps.notepad.ActivitySearchDeleted_;
+
+import com.nononsenseapps.notepad.ActivitySearchDeleted;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
@@ -243,7 +244,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			return true;
 		} else if (itemId == R.id.menu_deletedtasks) {
 			startActivity(new Intent(getActivity(),
-					ActivitySearchDeleted_.class));
+					ActivitySearchDeleted.class));
 			return true;
 		} else {
 			return false;
