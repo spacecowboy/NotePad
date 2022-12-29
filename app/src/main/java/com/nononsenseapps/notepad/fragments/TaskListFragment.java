@@ -543,16 +543,19 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 					String msg;
 					try {
-						msg = getResources()
-								.getQuantityString(R.plurals.notedeleted_msg, tasks.size(), tasks.size());
-
+						msg = getResources().getQuantityString(R.plurals.notedeleted_msg,
+								tasks.size(), tasks.size());
 					} catch (Exception e) {
 						// Protect against faulty translations
 						msg = getResources().getString(R.string.deleted);
 					}
 
 					// TODO should use a Snackbar instead of Toasts
-					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
+					// Snackbar
+					//     .make(mFab, msg, Snackbar.LENGTH_LONG)
+					//     .setAction(R.string.undo, listener)
+					//     .setCallback(dismissCallback)
+					//     .show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
 					if (mMode != null) mMode.finish();

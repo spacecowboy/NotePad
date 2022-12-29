@@ -49,7 +49,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
-
 import com.nononsenseapps.notepad.ActivitySearchDeleted;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -63,8 +62,7 @@ import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.ViewById;
 
 /**
- * Displays many listfragments across a viewpager. Supports selecting a certain
- * one on startup.
+ * Displays many listfragments across a viewpager. Supports selecting a certain one on startup
  */
 @EFragment(R.layout.fragment_tasklist_viewpager)
 public class TaskListViewPagerFragment extends Fragment implements
@@ -74,9 +72,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@ViewById(resName = "pager")
 	ViewPager pager;
-
-	@SystemService
-	SearchManager searchManager;
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	SimpleCursorAdapter mTaskListsAdapter;
@@ -191,8 +186,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 				.findItem(R.id.menu_search)
 				.getActionView();
 		// Assumes current activity is the searchable activity
-		searchView.setSearchableInfo(searchManager
-				.getSearchableInfo(getActivity().getComponentName()));
+		SearchManager sMan = this.getActivity().getSystemService(SearchManager.class);
+		searchView.setSearchableInfo(sMan.getSearchableInfo(getActivity().getComponentName()));
 		// expand the searchview by default when the user clicks on the icon
 		searchView.setIconifiedByDefault(false);
 		searchView.setQueryRefinementEnabled(true);
@@ -243,8 +238,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			// getActivity().onSearchRequested();
 			return true;
 		} else if (itemId == R.id.menu_deletedtasks) {
-			startActivity(new Intent(getActivity(),
-					ActivitySearchDeleted.class));
+			startActivity(new Intent(getActivity(), ActivitySearchDeleted.class));
 			return true;
 		} else {
 			return false;
@@ -279,10 +273,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
+		// DO NOT DELETE! pager may actually be null, for example when you load
+		// the task history activity
 		if (mTaskListsAdapter != null && pager != null) {
-			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(pager.getCurrentItem()));
-			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state: "
-					+ mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+			long id = mTaskListsAdapter.getItemId(pager.getCurrentItem());
+			outState.putLong(START_LIST_ID, id);
+			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state, id=" + id);
 		}
 	}
 
