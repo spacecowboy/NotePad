@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-	android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
+	android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfig"
 	android:initialKeyguardLayout="@layout/widget_layout"
 	android:initialLayout="@layout/widget_layout"
 	android:minWidth="180dp"
