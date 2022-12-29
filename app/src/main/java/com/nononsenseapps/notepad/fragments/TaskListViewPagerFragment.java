@@ -290,7 +290,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (mTaskListsAdapter != null) {
+		// DO NOT DELETE! pager may actually be null, for example when you load the task history activity
+		if (mTaskListsAdapter != null && mBinding.pager != null) {
 			long id = mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem());
 			outState.putLong(START_LIST_ID, id);
 			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state, id=" + id);

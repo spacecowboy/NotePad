@@ -122,6 +122,9 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	private ActionBarDrawerToggle mDrawerToggle;
 
+	// Only not if opening note directly
+	private boolean shouldAddToBackStack = true;
+
 	private Bundle state;
 	private boolean shouldRestart = false;
 
@@ -144,6 +147,7 @@ public class ActivityMain extends AppCompatActivity
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_main, menu);
+
 		return true;
 	}
 
@@ -387,7 +391,7 @@ public class ActivityMain extends AppCompatActivity
 		syncStatusReceiver = new SyncStatusMonitor();
 
 		// First load, then don't add to backstack
-		// shouldAddToBackStack = false; // TODO remove variable
+		shouldAddToBackStack = false;
 
 		// To know if we should animate exits
 		if (getIntent() != null && getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
@@ -627,7 +631,9 @@ public class ActivityMain extends AppCompatActivity
 			while (getSupportFragmentManager().popBackStackImmediate()) {
 				// Need to pop the entire stack and then load
 			}
-			transaction.addToBackStack(null);
+			if (shouldAddToBackStack) {
+				transaction.addToBackStack(null);
+			}
 			setHomeAsDrawer(false);
 		}
 
@@ -654,6 +660,8 @@ public class ActivityMain extends AppCompatActivity
 		// Commit transaction. Allow state loss as workaround for bug
 		// https://code.google.com/p/android/issues/detail?id=19917
 		transaction.commitAllowingStateLoss();
+		// Next go, always add
+		shouldAddToBackStack = true;
 	}
 
 	/**
@@ -750,7 +758,7 @@ public class ActivityMain extends AppCompatActivity
 	/**
 	 * Loads the appropriate fragments depending on state and intent.
 	 */
-	protected void loadContent() {
+	void loadContent() {
 		loadLeftDrawer();
 		loadFragments();
 
