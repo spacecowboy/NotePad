@@ -103,7 +103,7 @@
 			android:paddingTop="16dp"
 			android:text="@string/libraries_used"
 			android:textAppearance="@style/TextAppearance.AppCompat.Large"
-			android:textColor="@color/accent"/>
+			android:textColor="?colorAccent"/>
 
 		<TextView
 			android:layout_width="fill_parent"
