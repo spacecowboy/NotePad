@@ -27,8 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,7 +107,7 @@ public class ActivityMain extends AppCompatActivity
 	public static final String LISTPAGERTAG = "listpagerfragment";
 	private static final String SHOWCASED_MAIN = "showcased_main_window";
 	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
-	protected boolean reverseAnimation = false;
+
 
 	@ViewById(resName = "leftDrawer")
 	ListView leftDrawer;
@@ -128,17 +126,15 @@ public class ActivityMain extends AppCompatActivity
 	@ViewById(resName = "taskHint")
 	View taskHint;
 
-	@SystemService
-	LayoutInflater layoutInflater;
-
-	@SystemService
-	InputMethodManager inputManager;
+	/**
+	 * Which slide animations the {@link TaskDetailFragment} should use for enter and exit
+	 */
+	boolean mReverseAnimation = false;
 
 	boolean mAnimateExit = false;
 
 	/**
-	 * Changes depending on what we're showing since
-	 * the started activity can receive new intents
+	 * Changes depending on what we're showing since the started activity can receive new intents
 	 */
 	@InstanceState
 	boolean showingEditor = false;
@@ -169,9 +165,7 @@ public class ActivityMain extends AppCompatActivity
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 		// Sync the toggle state after onRestoreInstanceState has occurred.
-		if (mDrawerToggle != null) {
-			mDrawerToggle.syncState();
-		}
+		if (mDrawerToggle != null) mDrawerToggle.syncState();
 	}
 
 	@Override
@@ -203,6 +197,7 @@ public class ActivityMain extends AppCompatActivity
 			if (showingEditor) {
 				// Only true in portrait mode
 				final View focusView = ActivityMain.this.getCurrentFocus();
+				InputMethodManager inputManager = this.getSystemService(InputMethodManager.class);
 				if (inputManager != null && focusView != null) {
 					inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
 							InputMethodManager.HIDE_NOT_ALWAYS);
@@ -226,8 +221,9 @@ public class ActivityMain extends AppCompatActivity
 					// Need to pop the entire stack and then load
 				}
 
-				reverseAnimation = true;
-				Log.d("nononsenseapps fragment", "starting activity");
+				mReverseAnimation = true;
+				NnnLogger.debug(ActivityMain.class,
+						"starting activity from android.R.id.home");
 
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
@@ -267,35 +263,26 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	/**
-	 * Returns a list id from an intent if it contains one, either as part of
-	 * its URI or as an extra
-	 * <p/>
-	 * Returns -1 if no id was contained, this includes insert actions
+	 * @return a list id from an intent if it contains one, either as part of
+	 * its URI or as an extra. Returns -1 if no id was contained, this includes insert actions
 	 */
-	long getListId(final Intent intent) {
+	static long getListId(final Intent intent) {
 		long retval = -1;
-		if (intent != null &&
-				intent.getData() != null &&
+		if (intent != null && intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
 						Intent.ACTION_VIEW.equals(intent.getAction()) ||
 						Intent.ACTION_INSERT.equals(intent.getAction()))) {
-			if ((intent.getData().getPath()
-					.startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
-					intent.getData().getPath()
-							.startsWith(NotePad.Lists.PATH_LISTS) ||
-					intent.getData().getPath()
-							.startsWith(TaskList.URI.getPath()))) {
+			if ((intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
+					intent.getData().getPath().startsWith(NotePad.Lists.PATH_LISTS) ||
+					intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
 				try {
 					retval = Long.parseLong(intent.getData().getLastPathSegment());
 				} catch (NumberFormatException ignored) {
 					// retval remains = -1
 				}
-			} else if (-1 != intent
-					.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
-				retval = intent.getLongExtra(
-						LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-			} else if (-1 != intent
-					.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
+			} else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
+				retval = intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
+			} else if (-1 != intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
 				retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
 			} else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
 				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
@@ -319,7 +306,7 @@ public class ActivityMain extends AppCompatActivity
 			while (getSupportFragmentManager().popBackStackImmediate()) {
 				// Need to pop the entire stack and then load
 			}
-			reverseAnimation = true;
+			mReverseAnimation = true;
 			startActivity(i);
 		} else {
 			// If not popped, then send the call to the fragment
@@ -397,9 +384,7 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
-		if (mDrawerToggle != null) {
-			mDrawerToggle.onConfigurationChanged(newConfig);
-		}
+		if (mDrawerToggle != null) mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	@Override
@@ -476,15 +461,21 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
-			// Reset intent so we get proper fragment handling when the stack
-			// pops
-			if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-				setIntent(new Intent(this, ActivityMain_.class));
-			}
+	public void onBackPressed() {
+		if (drawerLayout.isDrawerOpen(leftDrawer)) {
+			// close the drawer on the left if it's open
+			drawerLayout.closeDrawer(leftDrawer);
+			return;
 		}
-		return super.onKeyDown(keyCode, event);
+
+		// Reset intent so we get proper fragment handling when the stack pops
+		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+			// if you remove this, it shows the wrong icons in the actionbar
+			// when you navigate back from TaskDetailView
+			setIntent(new Intent(this, ActivityMain_.class));
+		}
+
+		super.onBackPressed();
 	}
 
 	@Override
@@ -506,8 +497,7 @@ public class ActivityMain extends AppCompatActivity
 
 		setIntent(intent);
 		loadFragments();
-		// Just to be sure it gets done
-		// Clear notification if present
+		// Just to be sure it gets done. Clear notification if present
 		NotificationHelper.clearNotification(this, intent);
 	}
 
@@ -545,14 +535,15 @@ public class ActivityMain extends AppCompatActivity
 
 	@UiThread
 	void migrateDonateUser() {
+		// TODO the donate version is very very old. delete this
+
 		// migrate user
 		if (!DonateMigrator.hasImported(this)) {
 			final DialogConfirmBase dialog = new DialogConfirmBase() {
 
 				@Override
 				public void onOKClick() {
-					startService(new Intent(ActivityMain.this,
-							DonateMigrator.class));
+					startService(new Intent(ActivityMain.this, DonateMigrator.class));
 				}
 
 				@Override
@@ -614,17 +605,14 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		// Load stuff
-		final FragmentTransaction transaction =
-				getSupportFragmentManager().beginTransaction();
-		if (reverseAnimation) {
-			reverseAnimation = false;
-			transaction.setCustomAnimations(R.anim.slide_in_bottom,
-					R.anim.slide_out_top, R.anim.slide_in_top,
-					R.anim.slide_out_bottom);
+		final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		if (mReverseAnimation) {
+			mReverseAnimation = false;
+			transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top,
+					R.anim.slide_in_top, R.anim.slide_out_bottom);
 		} else {
-			transaction.setCustomAnimations(R.anim.slide_in_top,
-					R.anim.slide_out_bottom, R.anim.slide_in_bottom,
-					R.anim.slide_out_top);
+			transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom,
+					R.anim.slide_in_bottom, R.anim.slide_out_top);
 		}
 
 		/*
@@ -661,7 +649,6 @@ public class ActivityMain extends AppCompatActivity
 			if (shouldAddToBackStack) {
 				transaction.addToBackStack(null);
 			}
-
 			setHomeAsDrawer(false);
 		}
 		/*
@@ -675,8 +662,7 @@ public class ActivityMain extends AppCompatActivity
 			// TODO
 			showingEditor = false;
 
-			left = TaskListViewPagerFragment
-					.getInstance(getListIdToShow(intent));
+			left = TaskListViewPagerFragment.getInstance(getListIdToShow(intent));
 			leftTag = LISTPAGERTAG;
 			listOpener = (ListOpener) left;
 		}
@@ -687,8 +673,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 		transaction.replace(R.id.fragment1, left, leftTag);
 
-		// Commit transaction
-		// Allow state loss as workaround for bug
+		// Commit transaction. Allow state loss as workaround for bug
 		// https://code.google.com/p/android/issues/detail?id=19917
 		transaction.commitAllowingStateLoss();
 		// Next go, always add
@@ -701,7 +686,7 @@ public class ActivityMain extends AppCompatActivity
 	 * <p/>
 	 * Returns -1 if no id was contained, this includes insert actions
 	 */
-	long getNoteId(@NonNull final Intent intent) {
+	static long getNoteId(@NonNull final Intent intent) {
 		long retval = -1;
 		if (intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
@@ -728,7 +713,7 @@ public class ActivityMain extends AppCompatActivity
 	 * If it is a Google Now intent, will ignore the subject which is
 	 * "Note to self"
 	 */
-	String getNoteShareText(final Intent intent) {
+	static String getNoteShareText(final Intent intent) {
 		if (intent == null || intent.getExtras() == null) {
 			return "";
 		}
@@ -763,7 +748,7 @@ public class ActivityMain extends AppCompatActivity
 	 * Returns true the intent URI targets a note. Either an edit/view or
 	 * insert.
 	 */
-	boolean isNoteIntent(final Intent intent) {
+	static boolean isNoteIntent(final Intent intent) {
 		if (intent == null) {
 			return false;
 		}
@@ -1059,7 +1044,6 @@ public class ActivityMain extends AppCompatActivity
 				.restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
 	}
 
-
 	/**
 	 * On first load, show some functionality hints
 	 */
@@ -1122,10 +1106,10 @@ public class ActivityMain extends AppCompatActivity
 		if (fragment2 != null) {
 			// Set the intent here also so rotations open the same item
 			setIntent(intent);
-			getSupportFragmentManager().beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top,
-							R.anim.slide_out_bottom).replace(R.id.fragment2,
-							TaskDetailFragment_.getInstance(taskUri))
+			getSupportFragmentManager()
+					.beginTransaction()
+					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
+					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		}
@@ -1145,7 +1129,6 @@ public class ActivityMain extends AppCompatActivity
 			// }
 			// else {
 			startActivity(intent);
-			// }
 		}
 	}
 
@@ -1266,11 +1249,10 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
-	@UiThread
 	@Override
 	public void onSyncStartStop(final boolean isOngoing) {
 		// Notify PullToRefreshAttacher of the refresh state
-		setRefreshOfAllSwipeLayoutsTo(isOngoing);
+		this.runOnUiThread(() -> setRefreshOfAllSwipeLayoutsTo(isOngoing));
 	}
 
 	public interface ListOpener {
