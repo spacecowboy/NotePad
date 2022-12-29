@@ -96,7 +96,7 @@
 			android:windowSoftInputMode="adjustResize">
 			<meta-data
 				android:name="android.app.default_searchable"
-				android:value="com.nononsenseapps.notepad.ActivitySearch_"/>
+				android:value="com.nononsenseapps.notepad.ActivitySearch"/>
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -218,7 +218,7 @@
 			android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
+			android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig"
 			android:exported="true"
 			android:theme="@style/ThemeWidgetConfig">
 			<intent-filter>

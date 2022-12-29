@@ -65,7 +65,7 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
-import com.nononsenseapps.notepad.fragments.DialogEditList_;
+import com.nononsenseapps.notepad.fragments.DialogEditList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
@@ -237,7 +237,7 @@ public class ActivityMain extends AppCompatActivity
 			return true;
 		} else if (itemId == R.id.drawer_menu_createlist) {
 			// Show fragment
-			DialogEditList_ dialog = DialogEditList_.getInstance();
+			DialogEditList dialog = DialogEditList.getInstance();
 			dialog.setListener(this::openList);
 			dialog.show(getSupportFragmentManager(), "fragment_create_list");
 			return true;
@@ -930,7 +930,7 @@ public class ActivityMain extends AppCompatActivity
 		leftDrawer.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
 			// Open dialog to edit list
 			if (id > 0) {
-				DialogEditList_ dialog = DialogEditList_.getInstance(id);
+				DialogEditList dialog = DialogEditList.getInstance(id);
 				dialog.show(getSupportFragmentManager(), "fragment_edit_list");
 				return true;
 			} else if (id < -1) {
