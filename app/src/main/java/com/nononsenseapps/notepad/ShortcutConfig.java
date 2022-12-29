@@ -10,38 +10,37 @@ import android.os.Bundle;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.ActivityShortcutConfigBinding;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
 
 /**
- * Shows a window to configure the app's smaller widget,
- * letting the user choose which note list will be opened
+ * Shows a window to configure the app's smaller widget, letting the user choose which note list
+ * will be opened
  */
-@EActivity(R.layout.activity_shortcut_config)
 public class ShortcutConfig extends AppCompatActivity {
 
-	@ViewById(resName = "createNoteSwitch")
-	SwitchCompat noteSwitch;
+	/**
+	 * for {@link R.layout#activity_shortcut_config}
+	 */
+	private ActivityShortcutConfigBinding mBinding;
 
-	@ViewById(resName = "listSpinner")
-	Spinner listSpinner;
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		mBinding = ActivityShortcutConfigBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
+		mBinding.ok.setOnClickListener(x -> onOK());
 
-	@AfterViews
-	protected void setup() {
 		// Default result is fail
 		setResult(RESULT_CANCELED);
-		setListEntries(listSpinner);
+		setListEntries(mBinding.listSpinner);
 	}
 
-	@Click(resName = "ok")
 	void onOK() {
 		final Intent shortcutIntent = new Intent();
 		// Set icon
@@ -51,26 +50,27 @@ public class ShortcutConfig extends AppCompatActivity {
 				iconResource);
 		String shortcutTitle = "";
 		final Intent intent = new Intent();
-		if (noteSwitch.isChecked()) {
+		if (mBinding.createNoteSwitch.isChecked()) {
 			shortcutTitle = ShortcutConfig.this
 					.getString(R.string.title_create);
 
 			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
 					.setData(Task.URI)
 					.setAction(Intent.ACTION_INSERT)
-					.putExtra(Task.Columns.DBLIST, listSpinner.getSelectedItemId());
+					.putExtra(Task.Columns.DBLIST, mBinding.listSpinner.getSelectedItemId());
 		} else {
-			final Cursor c = (Cursor) listSpinner.getSelectedItem();
+			// this shortcut widget shows a list of notes
+			final Cursor c = (Cursor) mBinding.listSpinner.getSelectedItem();
 
 			if (c != null && !c.isClosed() && !c.isAfterLast()) {
 				shortcutTitle = c.getString(1);
 			}
 			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, ""
-					+ listSpinner.getSelectedItem());
+					+ mBinding.listSpinner.getSelectedItem());
 
 			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
 					.setAction(Intent.ACTION_VIEW)
-					.setData(TaskList.getUri(listSpinner.getSelectedItemId()));
+					.setData(TaskList.getUri(mBinding.listSpinner.getSelectedItemId()));
 		}
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutTitle);
@@ -89,27 +89,26 @@ public class ShortcutConfig extends AppCompatActivity {
 
 		listSpinner.setAdapter(mSpinnerAdapter);
 
-		getLoaderManager().restartLoader(0, null,
-				new LoaderCallbacks<Cursor>() {
+		getLoaderManager().restartLoader(0, null, new LoaderCallbacks<Cursor>() {
 
-					@Override
-					public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-						return new CursorLoader(ShortcutConfig.this,
-								TaskList.URI, new String[] {
-								TaskList.Columns._ID,
-								TaskList.Columns.TITLE }, null, null,
-								TaskList.Columns.TITLE);
-					}
+			@Override
+			public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+				return new CursorLoader(ShortcutConfig.this,
+						TaskList.URI, new String[] {
+						TaskList.Columns._ID,
+						TaskList.Columns.TITLE }, null, null,
+						TaskList.Columns.TITLE);
+			}
 
-					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-						mSpinnerAdapter.swapCursor(c);
-					}
+			@Override
+			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+				mSpinnerAdapter.swapCursor(c);
+			}
 
-					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
-						mSpinnerAdapter.swapCursor(null);
-					}
-				});
+			@Override
+			public void onLoaderReset(Loader<Cursor> arg0) {
+				mSpinnerAdapter.swapCursor(null);
+			}
+		});
 	}
 }
