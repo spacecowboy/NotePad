@@ -25,6 +25,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -57,22 +59,19 @@ import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListene
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.ViewsHelper;
 
-import org.androidannotations.annotations.AfterViews;
+
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
+
+import java.util.Objects;
 
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain one on startup
  */
-@EFragment(R.layout.fragment_tasklist_viewpager)
+@EFragment
 public class TaskListViewPagerFragment extends Fragment implements
 		EditListDialogListener, ListOpener {
 
 	public static final String START_LIST_ID = "start_list_id";
-
-	@ViewById(resName = "pager")
-	ViewPager pager;
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	SimpleCursorAdapter mTaskListsAdapter;
@@ -84,10 +83,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 	/**
 	 * for {@link R.layout#fragment_tasklist_viewpager}
 	 */
-
 	private FragmentTasklistViewpagerBinding mBinding;
 
-	/*@Nullable
+	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
 							 @Nullable Bundle savedInstanceState) {
@@ -106,7 +104,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		super.onDestroyView();
 		mBinding = null;
 	}
-	*/
+
 	public static TaskListViewPagerFragment getInstance() {
 		return getInstance(-1);
 	}
@@ -175,7 +173,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 					pos = -1;
 				}
 				if (pos >= 0) {
-					pager.setCurrentItem(pos);
+					mBinding.pager.setCurrentItem(pos);
 					mListIdToSelect = -1;
 				}
 			}
@@ -190,12 +188,11 @@ public class TaskListViewPagerFragment extends Fragment implements
 		LoaderManager.getInstance(this).restartLoader(0, null, loaderCallbacks);
 	}
 
-	@AfterViews
 	void setAdapter() {
 		// Set space between fragments
-		pager.setPageMargin(ViewsHelper.convertDip2Pixels(getActivity(), 16));
+		mBinding.pager.setPageMargin(ViewsHelper.convertDip2Pixels(getActivity(), 16));
 		// Set adapters
-		pager.setAdapter(mSectionsPagerAdapter);
+		mBinding.pager.setAdapter(mSectionsPagerAdapter);
 
 	}
 
@@ -291,7 +288,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 				pos = mSectionsPagerAdapter.getItemPosition(id);
 
 			if (pos > -1) {
-				pager.setCurrentItem(pos, true);
+				mBinding.pager.setCurrentItem(pos, true);
 				mListIdToSelect = -1;
 			}
 		}
@@ -300,12 +297,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
-		// DO NOT DELETE! pager may actually be null, for example when you load
+		// pager is tagged @NonNull, but it may actually be null, for example when you load
 		// the task history activity
-		if (mTaskListsAdapter != null && pager != null) {
-			long id = mTaskListsAdapter.getItemId(pager.getCurrentItem());
+		if (mTaskListsAdapter != null && Objects.nonNull(mBinding.pager)) {
+			long id = mTaskListsAdapter.getItemId(mBinding.pager.getCurrentItem());
 			outState.putLong(START_LIST_ID, id);
-			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state, id=" + id);
+			NnnLogger.debug(TaskListViewPagerFragment.class, "Saved state, id=" + id);
 		}
 	}
 
