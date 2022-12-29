@@ -23,9 +23,10 @@ android {
     buildToolsVersion "33.0.1"
     namespace "com.nononsenseapps.notepad" // for R.*
 
-    // buildFeatures {
-    //     viewBinding true // TODO use this to (partially) replace android annotations
-    // }
+    buildFeatures {
+        // replaces part of the androidannotations library. See mBinding in java classes
+        viewBinding true
+    }
 
     lint {
         htmlReport false // TODO re-enable and fix all warnings reported in the html file
