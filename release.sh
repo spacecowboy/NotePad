@@ -13,7 +13,7 @@ TARGET="${1:-HEAD}"
 current_default="$(git describe --tags --abbrev=0 "${TARGET}")"
 
 
-echo >&2 -n "Current version is ${current_default}"
+echo >&2 -n "Current version  is ${current_default}"
 # read -r current_in
 
 next_default="$(grep "versionName" ./app/build.gradle | sed "s|\s*versionName \"\(.*\)\"|\\1|")"
