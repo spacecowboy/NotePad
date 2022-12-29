@@ -23,36 +23,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.databinding.FragmentDialogPasswordBinding;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.ViewById;
-
-@EFragment(R.layout.fragment_dialog_password)
 public class DialogPassword extends DialogFragment {
-
-	// TODO @ViewById() can be replaced with viewbindings. It's easy! See https://developer.android.com/topic/libraries/view-binding and try
-
-	@ViewById(resName = "passwordField")
-	EditText passwordField;
-
-	@ViewById(resName = "passwordVerificationField")
-	EditText passwordVerificationField;
-
-	@ViewById(resName = "dialog_yes")
-	View dialog_yes;
-	@ViewById(resName = "dialog_no")
-	View dialog_no;
 
 	PasswordConfirmedListener listener = null;
 
@@ -64,9 +46,15 @@ public class DialogPassword extends DialogFragment {
 		this.listener = listener;
 	}
 
+	/**
+	 * for {@link R.layout#fragment_dialog_password}
+	 */
+	private FragmentDialogPasswordBinding mBinding;
+
+	@Nullable
 	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD, "");
@@ -75,35 +63,43 @@ public class DialogPassword extends DialogFragment {
 		} else {
 			getDialog().setTitle(R.string.password_required);
 		}
-		// Let annotations deal with it
-		return null;
+
+		mBinding = FragmentDialogPasswordBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
 	}
 
-	@AfterViews
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		showField();
+		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v->confirm());
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
+
 	public void showField() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
-			passwordVerificationField.setVisibility(View.VISIBLE);
+			mBinding.passwordVerificationField.setVisibility(View.VISIBLE);
 		} else {
-			passwordVerificationField.setVisibility(View.GONE);
+			mBinding.passwordVerificationField.setVisibility(View.GONE);
 		}
 	}
 
-	@Click(resName = "dialog_no")
-	void cancel() {
-		dismiss();
-	}
-
-	@Click(resName = "dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
 				"");
-		final String enteredPassword = passwordField.getText().toString();
-		final String verifiedPassword = passwordVerificationField.getText().toString();
+		final String enteredPassword = mBinding.passwordField.getText().toString();
+		final String verifiedPassword = mBinding.passwordVerificationField.getText().toString();
 
 		if (currentPassword.isEmpty()) {
 			setPassword(enteredPassword, verifiedPassword);
@@ -122,7 +118,7 @@ public class DialogPassword extends DialogFragment {
 		} else {
 			Animation shake = AnimationUtils.loadAnimation(getActivity(),
 					R.anim.shake);
-			passwordField.startAnimation(shake);
+			mBinding.passwordField.startAnimation(shake);
 			Toast.makeText(getActivity(), getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();
 		}
@@ -140,7 +136,7 @@ public class DialogPassword extends DialogFragment {
 			dismiss();
 		} else {
 			Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-			passwordVerificationField.startAnimation(shake);
+			mBinding.passwordVerificationField.startAnimation(shake);
 			Toast.makeText(getActivity(), getText(R.string.passwords_dont_match),
 					Toast.LENGTH_SHORT).show();
 		}

@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,12 +39,8 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 import com.nononsenseapps.helpers.RFC3339Date;
 
-import org.androidannotations.annotations.EService;
-import org.androidannotations.annotations.UiThread;
-
 import java.util.HashMap;
 
-@EService
 public class DonateMigrator extends IntentService {
 
 	// TODO useless, remove
@@ -213,40 +211,46 @@ public class DonateMigrator extends IntentService {
 	}
 
 	/**
-	 * Tell the user how much was imported and ask if he wants to uninstall the
-	 * app now.
+	 * Tell the user how much was imported
 	 */
-	@UiThread
 	void reportCompleteStatus(final int noteCount, final int listCount) {
-		try {
-			Toast.makeText(this,
-					getString(R.string.imported_result, noteCount, listCount),
-					Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
-			// In case of bad translations
-		}
+		Handler handler = new Handler(Looper.getMainLooper());
+		handler.post(() -> {
+			try {
+				Toast.makeText(this,
+						getString(R.string.imported_result, noteCount, listCount),
+						Toast.LENGTH_LONG).show();
+			} catch (Exception e) {
+				// In case of bad translations
+			}
+		});
+
 	}
 
-	@UiThread
 	void reportFailure(final String errorMessage) {
-		try {
-			Log.d("nononsenseapps migrate", errorMessage);
-			Toast.makeText(this,
-					getString(R.string.import_error, errorMessage),
-					Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
-			// In case of bad translations
-		}
+		Handler handler = new Handler(Looper.getMainLooper());
+		handler.post(() -> {
+			try {
+				Log.d("nononsenseapps migrate", errorMessage);
+				Toast.makeText(this,
+						getString(R.string.import_error, errorMessage),
+						Toast.LENGTH_LONG).show();
+			} catch (Exception e) {
+				// In case of bad translations
+			}
+		});
 	}
 
-	@UiThread
 	void reportStarting() {
-		try {
-			Toast.makeText(this, getString(R.string.import_started),
-					Toast.LENGTH_SHORT).show();
-		} catch (Exception e) {
-			// In case of bad translations
-		}
+		Handler handler = new Handler(Looper.getMainLooper());
+		handler.post(() -> {
+			try {
+				Toast.makeText(this,
+						getString(R.string.import_started), Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				// In case of bad translations
+			}
+		});
 	}
 
 	void askIfUninstall() {
