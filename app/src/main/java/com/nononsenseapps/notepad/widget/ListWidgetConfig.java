@@ -331,9 +331,6 @@ public class ListWidgetConfig extends AppCompatActivity {
 		final View customActionBarView = inflater
 				.inflate(R.layout.actionbar_custom_view_done, null);
 
-		// TODO since we use view bindings, findViewById() is useless. replace it with mBinding.*
-		//  like you did for all activities and fragments. See ActivityTaskHistoryBinding.mBinding
-		//  for an example
 		customActionBarView.findViewById(R.id.actionbar_done)
 				.setOnClickListener(v -> {
 					// "Done"

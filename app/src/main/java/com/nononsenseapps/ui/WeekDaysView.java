@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.databinding.WeekdaysLayoutBinding;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
@@ -54,29 +55,34 @@ public class WeekDaysView extends LinearLayout implements OnCheckedChangeListene
 	GreyableToggleButton saturday;
 	GreyableToggleButton sunday;
 
+	/**
+	 * for {@link R.layout#weekdays_layout}
+	 */
+	WeekdaysLayoutBinding mBinding;
+
 	private onCheckedDaysChangeListener listener = null;
 	private Locale mLocale;
 
 	public WeekDaysView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		LayoutInflater mInflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater mInflater = context.getSystemService(LayoutInflater.class);
 		mInflater.inflate(R.layout.weekdays_layout, this, true);
+		// TODO use view bindings also here ?
+		// mBinding = WeekdaysLayoutBinding.inflate(mInflater, this, true);
 
 		// TO DO (useless): respect locale settings regarding first day of week
 
 		try {
 			mLocale = ActivityHelper.getUserLocale(context);
 
-			SimpleDateFormat dayFormat = TimeFormatter
-					.getLocalFormatterWeekdayShort(context);
+			SimpleDateFormat dayFormat = TimeFormatter.getLocalFormatterWeekdayShort(context);
 			// 2013-05-13 was a monday
 			GregorianCalendar gc = new GregorianCalendar(2013,
 					GregorianCalendar.MAY, 13);
 			final long base = gc.getTimeInMillis();
 			final long day = 24 * 60 * 60 * 1000;
 
-			monday = findViewById(R.id.day1);
+			monday = findViewById(R.id.day1); // mBinding.day1
 			initializeToggleButton(dayFormat.format(gc.getTime()), monday);
 
 			tuesday = findViewById(R.id.day2);

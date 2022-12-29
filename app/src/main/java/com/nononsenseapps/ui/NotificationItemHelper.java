@@ -23,10 +23,8 @@ import android.content.Context;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 
-import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
