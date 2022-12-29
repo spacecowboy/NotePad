@@ -64,6 +64,7 @@ import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentTaskDetailBinding;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.NotificationItemHelper;
@@ -276,8 +277,43 @@ public class TaskDetailFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		// restoreSavedInstanceState_(savedInstanceState);
 		super.onCreate(savedInstanceState);
 	}
+
+	/**
+	 * for {@link R.layout#fragment_task_detail}
+	 */
+	private FragmentTaskDetailBinding mBinding;
+
+	/* @Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		if (container == null) {
+			dontLoad = true;
+			return null;
+		}
+		setHasOptionsMenu(true);
+		mBinding = FragmentTaskDetailBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setListeners();
+		mBinding.dueDateBox.setOnClickListener(v -> onDateClick());
+		mBinding.notificationAdd.setOnClickListener(v -> onAddReminder());
+		mBinding.dueCancelButton.setOnClickListener(v -> onDueRemoveClick());
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
+	*/
 
 	/**
 	 * Must handle this manually because annotations do not return null if
@@ -582,7 +618,8 @@ public class TaskDetailFragment extends Fragment {
 		} else {
 			type = list.listtype;
 		}
-		taskSection.setVisibility(type.equals(getString(R.string.const_listtype_notes)) ? View.GONE : View.VISIBLE);
+		taskSection.setVisibility(
+				type.equals(getString(R.string.const_listtype_notes)) ? View.GONE : View.VISIBLE);
 	}
 
 	@Override
@@ -855,6 +892,18 @@ public class TaskDetailFragment extends Fragment {
 	public void onSaveInstanceState(@NonNull final Bundle state) {
 		super.onSaveInstanceState(state);
 	}
+	/*	@Override
+	public void onSaveInstanceState(@NonNull final Bundle bundle_) {
+		super.onSaveInstanceState(bundle_);
+		bundle_.putLong("stateId", stateId);
+		bundle_.putLong("stateListId", stateListId);
+	}
+
+	private void restoreSavedInstanceState_(Bundle savedInstanceState) {
+		if (savedInstanceState == null) return;
+		stateId = savedInstanceState.getLong("stateId");
+		stateListId = savedInstanceState.getLong("stateListId");
+	}*/
 
 	/**
 	 * Inserts a notification item in the UI

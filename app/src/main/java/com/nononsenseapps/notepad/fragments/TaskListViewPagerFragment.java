@@ -52,6 +52,7 @@ import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentTasklistViewpagerBinding;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.ViewsHelper;
@@ -80,6 +81,32 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	private long mListIdToSelect = -1;
 
+	/**
+	 * for {@link R.layout#fragment_tasklist_viewpager}
+	 */
+
+	private FragmentTasklistViewpagerBinding mBinding;
+
+	/*@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentTasklistViewpagerBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		setAdapter();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
+	*/
 	public static TaskListViewPagerFragment getInstance() {
 		return getInstance(-1);
 	}

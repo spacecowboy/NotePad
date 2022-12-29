@@ -64,6 +64,7 @@ import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.FragmentTaskListBinding;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
@@ -113,6 +114,32 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	private ActionMode mMode;
 	private boolean mDeleteWasUndone = false;
 
+	/**
+	 * for {@link R.layout#fragment_task_list}
+	 */
+	private FragmentTaskListBinding mBinding;
+
+	/*@Nullable
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = FragmentTaskListBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		loadList();
+		setupPullToRefresh();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
+		mBinding = null;
+	}
+	*/
 	public static TaskListFragment_ getInstance(final long listId) {
 		TaskListFragment_ f = new TaskListFragment_();
 		Bundle args = new Bundle();

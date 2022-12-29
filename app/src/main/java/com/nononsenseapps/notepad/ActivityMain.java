@@ -62,6 +62,7 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.databinding.ActivityMainBinding;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
@@ -161,6 +162,28 @@ public class ActivityMain extends AppCompatActivity
 	// TODO should we add a FAB ? it's ~useless
 	// private FloatingActionButton mFab;
 
+	/**
+	 * for both {@link R.layout#activity_main}
+	 */
+	private ActivityMainBinding mBinding;
+
+	/**
+	 * called when you rotate the screen, for example. With this, the {@link ActivityMain} can
+	 * remember if the task detail view was showing before. Better than
+	 * {@link AppCompatActivity#onRestoreInstanceState(Bundle)} because this runs before
+	 * {@link #onCreate(Bundle)}, and it's important.
+	 */
+	/*private void restoreSavedInstanceState_(Bundle savedInstanceState) {
+		if (savedInstanceState == null) return;
+		showingEditor = savedInstanceState.getBoolean("showingEditor");
+	}
+
+	@Override
+	public void onSaveInstanceState(@NonNull Bundle bundle_) {
+		super.onSaveInstanceState(bundle_);
+		bundle_.putBoolean("showingEditor", showingEditor);
+	}
+*/
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -393,6 +416,13 @@ public class ActivityMain extends AppCompatActivity
 		ThemeHelper.setTheme(this);
 		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(b);
+		/*
+		restoreSavedInstanceState_(b);
+		super.onCreate(b);
+		mBinding = ActivityMainBinding.inflate(getLayoutInflater());
+		setContentView(mBinding.getRoot());
+		loadContent();
+		 */
 
 		syncStatusReceiver = new SyncStatusMonitor();
 
@@ -615,10 +645,7 @@ public class ActivityMain extends AppCompatActivity
 					R.anim.slide_in_bottom, R.anim.slide_out_top);
 		}
 
-		/*
-		 * If it contains a noteId, load an editor. If also tablet, load the
-		 * lists.
-		 */
+		// If it contains a noteId, load an editor. If also tablet, load the lists
 		if (fragment2 != null) {
 			if (right == null) {
 				if (getNoteId(intent) > 0) {
