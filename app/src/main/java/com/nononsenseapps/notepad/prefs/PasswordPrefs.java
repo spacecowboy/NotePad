@@ -39,16 +39,7 @@ public class PasswordPrefs extends Fragment {
 
 	public static final String KEY_PASSWORD = "secretPassword";
 
-	private Context activity;
-
-
 	// TODO copy from DialogPasswordSettings.java and delete that file
-
-	@Override
-	public void onAttach(@NonNull Context activity) {
-		super.onAttach(activity);
-		this.activity = activity;
-	}
 
 	/**
 	 * for {@link R.layout#app_pref_password_layout}
@@ -57,9 +48,11 @@ public class PasswordPrefs extends Fragment {
 
 	@Nullable
 	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+	public View onCreateView(@NonNull LayoutInflater inflater,
+							 @Nullable ViewGroup container,
 							 @Nullable Bundle savedInstanceState) {
-		mBinding = AppPrefPasswordLayoutBinding.inflate(inflater, container, false);
+		mBinding = AppPrefPasswordLayoutBinding
+				.inflate(inflater, container, false);
 		return mBinding.getRoot();
 	}
 
@@ -71,46 +64,45 @@ public class PasswordPrefs extends Fragment {
 	}
 
 	private void applyPassword() {
-		if (mBinding.tempPassword1.getText().toString()
-				.equals(mBinding.tempPassword2.getText().toString())) {
+		String passw1 = mBinding.tempPassword1.getText().toString();
+		String passw2 = mBinding.tempPassword2.getText().toString();
+		if (passw1.equals(passw2)) {
 			// They are the same
 			SharedPreferences settings = PreferenceManager
-					.getDefaultSharedPreferences(activity);
+					.getDefaultSharedPreferences(this.getContext());
 			String currentPassword = settings.getString(KEY_PASSWORD, "");
 
 			if ("".equals(currentPassword)) {
-				// Save the password directly
+				// it's new => Save the password directly
 				settings.edit()
-						.putString(KEY_PASSWORD, mBinding.tempPassword1.getText().toString())
+						.putString(KEY_PASSWORD, passw1)
 						.commit();
-				Toast.makeText(activity, getText(R.string.password_set),
+				Toast.makeText(this.getContext(), getText(R.string.password_set),
 						Toast.LENGTH_SHORT).show();
 			} else {
 				// confirm with existing password first
-				showPasswordDialog(mBinding.tempPassword1.getText().toString());
+				showPasswordDialog(passw1);
 			}
-
 		} else {
 			// Show a toast so the user knows he did something wrong
-			Animation shake = AnimationUtils.loadAnimation(activity,
-					R.anim.shake);
+			Animation shake = AnimationUtils.loadAnimation(this.getContext(), R.anim.shake);
 			mBinding.tempPassword2.startAnimation(shake);
-			Toast.makeText(activity, getText(R.string.passwords_dont_match),
+			Toast.makeText(this.getContext(), getText(R.string.passwords_dont_match),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	private void clearPassword() {
 		SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(activity);
+				.getDefaultSharedPreferences(this.getContext());
 		String currentPassword = settings.getString(KEY_PASSWORD, "");
 
 		if ("".equals(currentPassword)) {
-			// Save the password directly
+			// Save the (empty) password directly
 			settings.edit()
 					.putString(KEY_PASSWORD, "")
 					.commit();
-			Toast.makeText(activity, getText(R.string.password_cleared),
+			Toast.makeText(this.getContext(), R.string.password_cleared,
 					Toast.LENGTH_SHORT).show();
 		} else {
 			// confirm with existing password first
@@ -122,13 +114,12 @@ public class PasswordPrefs extends Fragment {
 		final DialogPasswordV11 pd = new DialogPasswordV11();
 		pd.setListener(() -> {
 			PreferenceManager
-					.getDefaultSharedPreferences(getActivity()).edit()
+					.getDefaultSharedPreferences(this.getContext())
+					.edit()
 					.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
 					.commit();
 			Toast.makeText(getActivity(),
-					("".equals(newPassword))
-							? getText(R.string.password_cleared)
-							: getText(R.string.password_set),
+					"".equals(newPassword) ? R.string.password_cleared : R.string.password_set,
 					Toast.LENGTH_SHORT).show();
 		});
 		pd.show(getFragmentManager(), "pw-verify");
