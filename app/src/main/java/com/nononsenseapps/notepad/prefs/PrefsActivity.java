@@ -53,6 +53,9 @@ public class PrefsActivity extends AppCompatActivity implements
 		// Add the arrow to go back
 		if (getSupportActionBar() != null) {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			// the title updates when the user chooses a new language setting,
+			// but ONLY if we set it here
+			getSupportActionBar().setTitle(R.string.menu_preferences);
 		}
 
 		// inflates a layout with a fragmentcontainerview, which will
