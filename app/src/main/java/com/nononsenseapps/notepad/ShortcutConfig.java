@@ -3,15 +3,20 @@ package com.nononsenseapps.notepad;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Intent.ShortcutIconResource;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.AdaptiveIconDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -41,13 +46,30 @@ public class ShortcutConfig extends AppCompatActivity {
 		setListEntries(mBinding.listSpinner);
 	}
 
+	/**
+	 * @return a {@link Bitmap} representing the given {@link Drawable}. Supports also
+	 * {@link AdaptiveIconDrawable}, so you can build a bitmap of an adaptive icon
+	 */
+	@NonNull
+	private static Bitmap getBitmapFromDrawable(@NonNull Drawable drawable) {
+		final Bitmap bmp = Bitmap.createBitmap(
+				drawable.getIntrinsicWidth(),
+				drawable.getIntrinsicHeight(),
+				Bitmap.Config.ARGB_8888);
+		final Canvas canvas = new Canvas(bmp);
+		drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+		drawable.draw(canvas);
+		return bmp;
+	}
+
 	void onOK() {
 		final Intent shortcutIntent = new Intent();
-		// Set icon
-		final ShortcutIconResource iconResource = Intent.ShortcutIconResource
-				.fromContext(ShortcutConfig.this, R.drawable.app_icon);
-		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-				iconResource);
+		// Set the icon for the shortcut widget
+		Drawable iconDrawable = AppCompatResources.getDrawable(this, R.drawable.app_icon);
+		// we have to give it a bitmap, or else the icon does not appear in simple launcher
+		// https://github.com/SimpleMobileTools/Simple-Launcher
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON, getBitmapFromDrawable(iconDrawable));
+
 		String shortcutTitle = "";
 		final Intent intent = new Intent();
 		if (mBinding.createNoteSwitch.isChecked()) {
