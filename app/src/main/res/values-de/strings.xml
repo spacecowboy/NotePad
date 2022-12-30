@@ -21,7 +21,6 @@
     <string name="time">Uhrzeit</string>
     <string name="done">Fertig</string>
     <string name="saved">Gespeichert</string>
-    <string name="near">In der Nähe</string>
     <string name="menu_save_and_add">Speichern und neue Notiz öffnen</string>
     <string name="menu_delete">Löschen</string>
     <string name="menu_deletelist">Liste löschen</string>
@@ -95,7 +94,6 @@
     <string name="showcase_drawer_msg">Drücke lange auf einen Listennamen, um ihn zu bearbeiten oder zu löschen</string>
     <string name="showcase_timemachine_title">Alle Änderungen werden gespeichert</string>
     <string name="showcase_timemachine_msg">Beim Bearbeiten einer Notiz werden alle Änderungen gespeichert. Um Notizen auf einen vorherigen Stand zu bringen, kannst Du die Time Machine benutzen.</string>
-    <string name="premiums_unlocked_and_thanks">Premium Funktionen freigeschaltet. Vielen Dank für deine Unterstützung!</string>
     <string name="move">Verschieben</string>
     <string name="move_to">Verschieben nach</string>
     <string name="moved_x_to_list">%1$d nach %2$s verschoben</string>
@@ -119,7 +117,6 @@
     <string name="about">Infos</string>
     <string name="sync_failed">Synchronisation fehlgeschlagen</string>
     <string name="sync_login_failed">Konnte mich nicht anmelden, um Google Tasks zu verwenden</string>
-    <string name="changelog_title">Was ist neu?</string>
     <string name="completed">Erledigt</string>
     <string name="date_header_overdue">Überfällig</string>
     <string name="date_header_today">Heute</string>
@@ -141,7 +138,6 @@
     <string name="short_date_format">Kurzes Datumsformat</string>
     <string name="select_date">Datum wählen</string>
     <string name="localedefault">Systemsprache</string>
-    <string name="donate_thanks">Vielen Dank für Ihre Unterstützung ♥</string>
     <string name="hide_header">Widget-Kopfzeile ausblenden</string>
     <string name="transparency">Transparenz</string>
     <string name="notes_shortcut">Notizen Shortcut</string>
@@ -161,7 +157,6 @@
     <string name="sync_on_change_info">Synchronisiert, kurz nachdem eine Notiz geändert wurde.</string>
     <string name="sync_on_start">Beim App-Start synchronisieren</string>
     <string name="sync_on_start_info">Begrenzt die Synchronisierung auf einmal alle 5 Minuten</string>
-    <string name="sync_full_force_info">Verwende dies, wenn einige Elemente fehlen.</string>
     <string name="snooze">Schlummern</string>
     <string name="silent">Lautlos</string>
     <string name="sound">Ton</string>
@@ -238,9 +233,7 @@
     <string name="msg_enable_notifications">Gehe zu Einstellungen -&gt; Benachrichtigungen, um Benachrichtigungen zu aktivieren</string>
     <string name="dashclock_due_upper_limit_title">Begrenzung auf spätestens fällige Aufgaben</string>
     <string name="bigger_titles_summary">Die erste Zeile ist der Titel</string>
-    <string name="current_password">Aktuelles Passwort</string>
     <string name="sorting">Sortierung</string>
-    <string name="new_password">Neues Passwort</string>
     <string name="undo">Rückgängig</string>
     <string name="permission_denied">Kann nicht fortfahren: Du hast die Berechtigung verweigert</string>
     <string name="allow_exact_reminders">Exakte Erinnerungen erlauben</string>
@@ -256,10 +249,16 @@
     <string name="overwritten_in_newer_systems">Kann durch bestimmte Einstellungen des Benachrichtigungskanals rückgängig gemacht werden</string>
     <string name="allow_exact_reminders_summary">Öffne eine Seite, damit diese App zuverlässiger Erinnerungen senden kann. Wird erst seit Android 12 Snow Cone benötigt</string>
     <string name="msg_hibernation_already_off">Der Ruhezustand von Android ist bereits AUS, Du brauchst dies nicht</string>
-    <string name="directory_summary_msg">Aufgrund neuer Einschränkungen von Google werden die Dateien in %s gespeichert
-\nauf die Du weiterhin mit Deiner Dateimanager-App zugreifen kannst. Beachte, dass die Deinstallation der App auch diese Dateien löscht: Verwende bitte die Sicherungsfunktion, um Deine Notizen zu behalten</string>
+    <string name="directory_summary_msg">Dateien werden in %s gespeichert
+\nauf die Sie mit Ihrer Dateimanager-App zugreifen können. Bei der Deinstallation der App werden auch diese Dateien gelöscht: Erstellen Sie eine Sicherungskopie, um Ihre Notizen zu behalten</string>
     <string name="choose_backup_folder">Wähle einen Sicherungsordner aus</string>
     <string name="app_about_bugreports">Melde Fehler und Probleme unter https://github.com/spacecowboy/NotePad/issues</string>
     <string name="unavailable_chose_directory">Nicht verfügbar. Bitte wähle zuerst ein Verzeichnis aus</string>
     <string name="notifications_blocked">Benachrichtigungen sind nicht sichtbar, so dass Du die Erinnerungen nicht siehst. Tippe hier, suche die Kategorie \"Berechtigungen\" und aktiviere Benachrichtigungen für diese App</string>
+    <string name="navigation_drawer_close">Navigationsschublade schließen</string>
+    <string name="navigation_drawer_open">Navigationsschublade öffnen</string>
+    <string name="app_about_git_repo">Diese App ist freie Software mit Copyleft, erhältlich unter https://github.com/spacecowboy/NotePad</string>
+    <string name="changelog_online">Änderungsprotokoll (online)</string>
+    <string name="enable_sync_desc">Aktiviert die Synchronisierungsfunktionen und ermöglicht die Auswahl einer Synchronisierungsquelle. Sicherungen sind nicht betroffen</string>
+    <string name="enable_sync">Synchronisierung aktivieren</string>
 </resources>
