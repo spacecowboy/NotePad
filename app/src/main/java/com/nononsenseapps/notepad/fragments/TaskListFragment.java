@@ -43,7 +43,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -53,6 +52,7 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
@@ -72,8 +72,10 @@ import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.ViewById;
 
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
@@ -82,7 +84,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
-@EFragment
+@EFragment(R.layout.fragment_task_list)
 public class TaskListFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	// Must be less than -1
@@ -93,6 +95,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public static final int LIST_ID_WEEK = -5;
 
 	public static final String LIST_ID = "list_id";
+
+	/**
+	 * {@link android.R.id#list }
+	 */
+	@ViewById(resName = "list")
+	DragSortListView listView;
 
 	SimpleSectionsAdapter mAdapter;
 	private long mListId = -1;
@@ -110,7 +118,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	 */
 	private FragmentTaskListBinding mBinding;
 
-	@Nullable
+	/*@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
 							 @Nullable Bundle savedInstanceState) {
@@ -121,8 +129,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
-		setupPullToRefresh();
 		loadList();
+		setupPullToRefresh();
 	}
 
 	@Override
@@ -130,7 +138,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		super.onDestroyView();
 		mBinding = null;
 	}
-
+	*/
 	public static TaskListFragment_ getInstance(final long listId) {
 		TaskListFragment_ f = new TaskListFragment_();
 		Bundle args = new Bundle();
@@ -468,7 +476,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		return " AND " + whereWeek();
 	}
 
-
+	@AfterViews
 	void setupPullToRefresh() {
 		// every list gets its own instance of the swipetorefresh layout
 		var ptrL = (SwipeRefreshLayout) this.getView().findViewById(R.id.ptrLayout);
@@ -479,24 +487,24 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		((ActivityMain) getActivity()).addSwipeRefreshLayoutToList(ptrL);
 	}
 
-
+	@AfterViews
 	void loadList() {
-		mBinding.list.setAdapter(mAdapter);
+		listView.setAdapter(mAdapter);
 
-		mBinding.list.setOnItemClickListener((arg0, origin, pos, id) -> {
+		listView.setOnItemClickListener((arg0, origin, pos, id) -> {
 			if (mListener != null && id > 0) {
 				mListener.onFragmentInteraction(Task.getUri(id), mListId, origin);
 			}
 		});
 
-		mBinding.list.setOnItemLongClickListener((arg0, view, pos, id) -> {
-			mBinding.list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		listView.setOnItemLongClickListener((arg0, view, pos, id) -> {
+			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 			// Also select the item in question
-			mBinding.list.setItemChecked(pos, true);
+			listView.setItemChecked(pos, true);
 			return true;
 		});
 
-		mBinding.list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
 			final HashMap<Long, Task> tasks = new HashMap<>();
 
@@ -659,10 +667,10 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			}
 
 			@Override
-			public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
-												  boolean checked) {
+			public void onItemCheckedStateChanged(ActionMode mode,
+												  int position, long id, boolean checked) {
 				if (checked) {
-					tasks.put(id, new Task((Cursor) mBinding.list.getAdapter()
+					tasks.put(id, new Task((Cursor) listView.getAdapter()
 							.getItem(position)));
 				} else {
 					tasks.remove(id);

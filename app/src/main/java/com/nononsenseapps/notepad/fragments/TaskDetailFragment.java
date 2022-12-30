@@ -36,7 +36,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
@@ -57,6 +60,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -65,11 +69,15 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
+import com.nononsenseapps.ui.StyledEditText;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
+import org.androidannotations.annotations.ViewById;
 
 import java.util.Calendar;
 
@@ -168,6 +176,28 @@ public class TaskDetailFragment extends Fragment {
 		public void onLoaderReset(@NonNull Loader<Cursor> arg0) {}
 	};
 
+	@ViewById(resName = "taskText")
+	StyledEditText taskText;
+
+	@ViewById(resName = "taskCompleted")
+	CheckBox taskCompleted;
+
+	@ViewById(resName = "dueDateBox")
+	Button dueDateBox;
+
+	/**
+	 * holds a list of widgets, one for each reminder the user sets.
+	 * It is below the "due date" row
+	 */
+	@ViewById(resName = "notificationList")
+	LinearLayout notificationList;
+
+	@ViewById(resName = "taskSection")
+	View taskSection;
+
+	@ViewById(resName = "editScrollView")
+	ScrollView editScrollView;
+
 	// Id of task to open
 	public static final String ARG_ITEM_ID = "item_id";
 	// If no id is given, a string can be accepted as initial state
@@ -253,13 +283,10 @@ public class TaskDetailFragment extends Fragment {
 
 	/**
 	 * for {@link R.layout#fragment_task_detail}
-	 *
-	 * mBinding.notificationList holds a list of widgets, one for each reminder the user sets.
-	 * It is below the "due date" row
 	 */
 	private FragmentTaskDetailBinding mBinding;
 
-	@Nullable
+	/* @Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
 							 @Nullable Bundle savedInstanceState) {
@@ -285,6 +312,22 @@ public class TaskDetailFragment extends Fragment {
 	public void onDestroyView() {
 		super.onDestroyView();
 		mBinding = null;
+	}
+	*/
+
+	/**
+	 * Must handle this manually because annotations do not return null if
+	 * container is null
+	 */
+	@Override
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savInstState) {
+		if (container == null) {
+			dontLoad = true;
+			return null;
+		}
+		setHasOptionsMenu(true);
+		return inflater.inflate(layout.fragment_task_detail, container, false);
 	}
 
 	@Override
@@ -339,9 +382,9 @@ public class TaskDetailFragment extends Fragment {
 		if (!showcasing && openKb) {
 			// Only show keyboard for new/empty notes,
 			// but not if the showcaseview is showing
-			mBinding.taskText.requestFocus();
+			taskText.requestFocus();
 			InputMethodManager imm = getContext().getSystemService(InputMethodManager.class);
-			imm.showSoftInput(mBinding.taskText, InputMethodManager.SHOW_IMPLICIT);
+			imm.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
@@ -368,6 +411,7 @@ public class TaskDetailFragment extends Fragment {
 		return true;
 	}
 
+	@AfterViews
 	void setListeners() {
 		if (dontLoad) {
 			return;
@@ -377,20 +421,20 @@ public class TaskDetailFragment extends Fragment {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
-		mBinding.taskText.setTitleRelativeLarger(prefs.getBoolean(
+		taskText.setTitleRelativeLarger(prefs.getBoolean(
 				getString(R.string.pref_editor_biggertitles), true));
-		mBinding.taskText.setTitleFontFamily(Integer.parseInt(prefs.getString(
+		taskText.setTitleFontFamily(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_title_fontfamily), "2")));
-		mBinding.taskText.setTitleFontStyle(Integer.parseInt(prefs.getString(
+		taskText.setTitleFontStyle(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_title_fontstyle), "0")));
-		mBinding.taskText.setBodyFontFamily(Integer.parseInt(prefs.getString(
+		taskText.setBodyFontFamily(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_body_fontfamily), "0")));
-		mBinding.taskText.setLinkify(prefs.getBoolean(
+		taskText.setLinkify(prefs.getBoolean(
 				getString(R.string.pref_editor_links), true));
-		mBinding.taskText.setTheTextSize(Integer.parseInt(prefs.getString(
+		taskText.setTheTextSize(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_fontsize), "1")));
 
-		mBinding.taskText.addTextChangedListener(new TextWatcher() {
+		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
@@ -404,6 +448,7 @@ public class TaskDetailFragment extends Fragment {
 		});
 	}
 
+	@Click(resName = "dueDateBox")
 	void onDateClick() {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask != null && mTask.due != null) {
@@ -460,16 +505,16 @@ public class TaskDetailFragment extends Fragment {
 
 	private void setDueText() {
 		if (mTask.due == null) {
-			mBinding.dueDateBox.setText("");
+			dueDateBox.setText("");
 		} else {
 			// Due date
-			mBinding.dueDateBox.setText(
-					TimeFormatter.getLocalDateOnlyStringLong(getActivity(), mTask.due));
+			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(getActivity(), mTask.due));
 			// TODO if you want to let the user set a "due time" (as of now we have only
 			//  the due date) replace the function above with TimeFormatter.getLocalDateStringLong()
 		}
 	}
 
+	@Click(resName = "dueCancelButton")
 	void onDueRemoveClick() {
 		if (!isLocked()) {
 			if (mTask != null) {
@@ -479,6 +524,7 @@ public class TaskDetailFragment extends Fragment {
 		}
 	}
 
+	@Click(resName = "notificationAdd")
 	void onAddReminder() {
 		if (mTask != null && !isLocked()) {
 			// IF no id, have to save first
@@ -499,8 +545,9 @@ public class TaskDetailFragment extends Fragment {
 			addNotification(not);
 
 			// And scroll to bottom. takes 300ms for item to appear.
-			mBinding.editScrollView.postDelayed(() ->
-					mBinding.editScrollView.fullScroll(ScrollView.FOCUS_DOWN), 300);
+			editScrollView.postDelayed(
+					() -> editScrollView.fullScroll(ScrollView.FOCUS_DOWN),
+					300);
 		}
 	}
 
@@ -522,14 +569,14 @@ public class TaskDetailFragment extends Fragment {
 
 	@UiThread(propagation = Propagation.ENQUEUE)
 	void fillUIFromTask() {
-		if (mBinding.taskText == null || mBinding.taskCompleted == null) {
+		if (taskText == null || taskCompleted == null) {
 			// it gets triggered ONLY in espresso tests!
 			NnnLogger.error(TaskDetailFragment.class, "taskText or taskCompleted is null");
 			return;
 		}
 		NnnLogger.debug(TaskDetailFragment.class, "fillUI, activity: " + getActivity());
 		if (isLocked()) {
-			mBinding.taskText.setText(mTask.title);
+			taskText.setText(mTask.title);
 			DialogPassword pflock = new DialogPassword();
 			pflock.setListener(() -> {
 				mLocked = false;
@@ -537,11 +584,11 @@ public class TaskDetailFragment extends Fragment {
 			});
 			pflock.show(getFragmentManager(), "read_verify");
 		} else {
-			mBinding.taskText.setText(mTask.getText());
+			taskText.setText(mTask.getText());
 		}
 		setDueText();
-		mBinding.taskCompleted.setChecked(mTask.completed != null);
-		mBinding.taskCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+		taskCompleted.setChecked(mTask.completed != null);
+		taskCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
 			if (isChecked)
 				mTask.completed = Calendar.getInstance().getTimeInMillis();
 			else
@@ -557,9 +604,9 @@ public class TaskDetailFragment extends Fragment {
 	 */
 	void setFieldStatus() {
 		final boolean status = !isLocked();
-		mBinding.taskText.setEnabled(status);
-		mBinding.taskCompleted.setEnabled(status);
-		mBinding.dueDateBox.setEnabled(status);
+		taskText.setEnabled(status);
+		taskCompleted.setEnabled(status);
+		dueDateBox.setEnabled(status);
 	}
 
 	void hideTaskParts(final TaskList list) {
@@ -571,7 +618,7 @@ public class TaskDetailFragment extends Fragment {
 		} else {
 			type = list.listtype;
 		}
-		mBinding.taskSection.setVisibility(
+		taskSection.setVisibility(
 				type.equals(getString(R.string.const_listtype_notes)) ? View.GONE : View.VISIBLE);
 	}
 
@@ -590,7 +637,7 @@ public class TaskDetailFragment extends Fragment {
 
 	// Call to update the share intent
 	private void setShareIntent(final String text) {
-		if (mShareActionProvider != null && mBinding.taskText != null) {
+		if (mShareActionProvider != null && taskText != null) {
 			int titleEnd = text.indexOf("\n");
 			if (titleEnd < 0) {
 				titleEnd = text.length();
@@ -753,7 +800,7 @@ public class TaskDetailFragment extends Fragment {
 		}
 
 		// Needed for comparison
-		mTask.setText(mBinding.taskText.getText().toString());
+		mTask.setText(taskText.getText().toString());
 
 		// if new item, only save if something has been entered
 		if ((mTask._id > 0 && !mTask.equals(mTaskOrg)) || (mTask._id == -1 && isThereContent())) {
@@ -793,8 +840,8 @@ public class TaskDetailFragment extends Fragment {
 
 	boolean isThereContent() {
 		boolean result = false;
-		result |= mBinding.taskText.getText().length() > 0;
-		result |= mBinding.dueDateBox.getText().length() > 0;
+		result |= taskText.getText().length() > 0;
+		result |= dueDateBox.getText().length() > 0;
 		result |= (mTask.locked != mTaskOrg.locked);
 
 		return result;
@@ -811,15 +858,15 @@ public class TaskDetailFragment extends Fragment {
 		// Set locked again
 		mLocked = true;
 		// If task is actually locked, remove text
-		if (isLocked() && mTask != null && mBinding.taskText != null) {
-			mBinding.taskText.setText(mTask.title);
+		if (isLocked() && mTask != null && taskText != null) {
+			taskText.setText(mTask.title);
 		}
 
 		// TODO lazy fix for #412 --> instead you should stop onLoadFinished() when it
 		//  tries to load reminders that are already there
 		// remove all reminders from the list. Next time this Fragment is loaded,
 		// onLoadFinished() will add them back
-		mBinding.notificationList.removeAllViews();
+		notificationList.removeAllViews();
 	}
 
 	@Override
@@ -873,9 +920,9 @@ public class TaskDetailFragment extends Fragment {
 		not.view = nv;
 
 		// Setup all the listeners, etc...
-		NotificationItemHelper.setup(this, mBinding.notificationList, nv, not, mTask);
+		NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
-		mBinding.notificationList.addView(nv);
+		notificationList.addView(nv);
 	}
 
 	@Override
@@ -893,7 +940,7 @@ public class TaskDetailFragment extends Fragment {
 
 	public void onTimeTravel(Intent data) {
 		String restoredText = data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY);
-		if (mBinding.taskText != null) mBinding.taskText.setText(restoredText);
+		if (taskText != null) taskText.setText(restoredText);
 
 		// Need to set here also for password to work
 		if (mTask != null) mTask.setText(restoredText);
