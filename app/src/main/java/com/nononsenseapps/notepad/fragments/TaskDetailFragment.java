@@ -39,8 +39,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -184,6 +186,12 @@ public class TaskDetailFragment extends Fragment {
 
 	@ViewById(resName = "dueDateBox")
 	Button dueDateBox;
+
+	@ViewById(resName = "dueCancelButton")
+	ImageButton dueCancelButton;
+
+	@ViewById(resName = "notificationAdd")
+	TextView notificationAdd;
 
 	/**
 	 * holds a list of widgets, one for each reminder the user sets.
@@ -558,7 +566,7 @@ public class TaskDetailFragment extends Fragment {
 		if (getActivity() != null) {
 			boolean hasPassword = PreferencesHelper.isPasswordSet(getActivity());
 			NnnLogger.debug(TaskDetailFragment.class, "hasPassword = " + hasPassword);
-			// if (!hasPassword) return false; // TODO check and use these
+			// if (!hasPassword) return false; // TODO check and use these, if necessary
 		}
 
 		if (mTask != null) {
@@ -600,13 +608,20 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	/**
-	 * Set fields to enabled/disabled depending on lockstate
+	 * Set fields to enabled/disabled depending on wether the note is locked
 	 */
 	void setFieldStatus() {
 		final boolean status = !isLocked();
 		taskText.setEnabled(status);
 		taskCompleted.setEnabled(status);
 		dueDateBox.setEnabled(status);
+		dueCancelButton.setEnabled(status);
+		notificationAdd.setEnabled(status);
+		notificationList.setEnabled(status);
+
+		// by default it does not gray out the icons, and it's tricky to do it in code.
+		// It does not matter because we block the click callbacks
+		// in NotificationItemHelper.setup()
 	}
 
 	void hideTaskParts(final TaskList list) {

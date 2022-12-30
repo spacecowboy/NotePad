@@ -20,8 +20,7 @@ package com.nononsenseapps.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.nononsenseapps.helpers.ActivityHelper;
@@ -33,10 +32,19 @@ import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class WeekDaysView extends LinearLayout implements OnCheckedChangeListener {
+/**
+ * Show a row of 7 days, each can be toggled ON & OFF
+ */
+public class WeekDaysView extends LinearLayout {
 
 	public interface onCheckedDaysChangeListener {
-		void onChange(long checkedDays);
+		/**
+		 * react to these days being selected
+		 *
+		 * @return FALSE if the action was rejected, indicating that you have to put back the
+		 * day button in its former state, or TRUE if the action succeeded
+		 */
+		boolean onChange(long checkedDays);
 	}
 
 	public static final int mon = 0x1;
@@ -115,12 +123,11 @@ public class WeekDaysView extends LinearLayout implements OnCheckedChangeListene
 
 	}
 
-	void initializeToggleButton(final String text,
-								final GreyableToggleButton button) {
+	void initializeToggleButton(final String text, final GreyableToggleButton button) {
 		button.setText(text.toUpperCase(mLocale));
 		button.setTextOn(text.toUpperCase(mLocale));
 		button.setTextOff(text.toUpperCase(mLocale));
-		button.setOnCheckedChangeListener(this);
+		button.setOnClickListener(this::onDayButtonClicked);
 	}
 
 	public long getCheckedDays() {
@@ -147,15 +154,31 @@ public class WeekDaysView extends LinearLayout implements OnCheckedChangeListene
 		sunday.setChecked(0 < (checkedDays & sun));
 	}
 
-	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		if (listener != null) {
-			listener.onChange(getCheckedDays());
+	/**
+	 * Reacts to one of the 7 {@link GreyableToggleButton} being touched (== "toggled").
+	 * onCheckedChanged(CompoundButton, boolean) can't be used because it would call
+	 * {@link GreyableToggleButton#setChecked} in an infinite loop. Note that before
+	 * calling this, Android calls {@link GreyableToggleButton#setChecked}, so here we
+	 * can either confirm or undo the "checking" action.
+	 */
+	private void onDayButtonClicked(View v) {
+		if (listener == null) return;
+		boolean Ok = listener.onChange(getCheckedDays());
+		var btn = (GreyableToggleButton) v;
+		if (!Ok) {
+			// the listener returned false, to indicate that the operation
+			// was rejected => revert the toggle button to its former state.
+			// Don't worry: doing this does NOT touch the data of the note
+			// for the database.
+			btn.toggle();
 		}
 	}
 
-	public void setOnCheckedDaysChangedListener(
-			onCheckedDaysChangeListener listener) {
+	/**
+	 * set the function to call when one of the 7 buttons is clicked.
+	 * See {@link onCheckedDaysChangeListener}
+	 */
+	public void setOnCheckedDaysChangedListener(onCheckedDaysChangeListener listener) {
 		this.listener = listener;
 	}
 

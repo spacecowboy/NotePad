@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -104,17 +105,22 @@ public final class NotificationItemHelper {
 
 		// Remove button
 		notRemoveButton.setOnClickListener(v -> {
-			if (!fragment.isLocked()) {
-				// Remove row from UI
-				notificationList.removeView((View) v.getParent());
-				// Remove from database and renotify
-				not.delete(fragment.getActivity());
+			if (fragment.isLocked()) {
+				Toast.makeText(fragment.getContext(), R.string.canceled_note_locked,
+						Toast.LENGTH_SHORT).show();
+				return;
 			}
+			// Remove row from UI
+			notificationList.removeView((View) v.getParent());
+			// Remove from database and renotify
+			not.delete(fragment.getActivity());
 		});
 
 		// Date button
 		notDateButton.setOnClickListener(v -> {
 			if (fragment.isLocked()) {
+				Toast.makeText(fragment.getContext(), R.string.canceled_note_locked,
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
@@ -151,6 +157,8 @@ public final class NotificationItemHelper {
 		// Time button
 		notTimeButton.setOnClickListener(v -> {
 			if (fragment.isLocked()) {
+				Toast.makeText(fragment.getContext(), R.string.canceled_note_locked,
+						Toast.LENGTH_SHORT).show();
 				return;
 			}
 
@@ -174,11 +182,18 @@ public final class NotificationItemHelper {
 			timedialog.show();
 		});
 
+		// week days button strip
 		WeekDaysView days = nv.findViewById(R.id.weekdays);
 		days.setCheckedDays(not.repeats);
 		days.setOnCheckedDaysChangedListener(checkedDays -> {
+			if (fragment.isLocked()) {
+				Toast.makeText(fragment.getContext(), R.string.canceled_note_locked,
+						Toast.LENGTH_SHORT).show();
+				return false; // return the button to the previous state
+			}
 			not.repeats = checkedDays;
 			not.saveInBackground(fragment.getActivity(), true);
+			return true; // all ok, it can proceed
 		});
 	}
 }
