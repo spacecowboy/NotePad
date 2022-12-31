@@ -59,7 +59,6 @@ import com.nononsenseapps.ui.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.Objects;

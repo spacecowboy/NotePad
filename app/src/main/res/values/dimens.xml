@@ -18,7 +18,6 @@
 
 <resources>
 
-
 	<!-- Stuff -->
 	<dimen name="drag_grip_ridge_size">4dp</dimen>
 	<dimen name="drag_grip_ridge_gap">2dp</dimen>
@@ -29,7 +28,6 @@
 	<!-- List stuff -->
 	<dimen name="listMargins">0dp</dimen>
 	<dimen name="listMarginsPadded">8dp</dimen>
-
 
 	<!-- list item min size -->
 	<dimen name="list_item_min_size">48dp</dimen>

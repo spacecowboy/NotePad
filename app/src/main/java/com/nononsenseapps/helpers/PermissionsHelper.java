@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.helpers;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 

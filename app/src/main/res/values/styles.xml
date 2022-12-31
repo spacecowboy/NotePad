@@ -16,9 +16,7 @@
   -->
 
 <resources
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<style name="LeftDrawerStyleDark">
 		<item name="android:background">@color/googlenow_darkergrey</item>

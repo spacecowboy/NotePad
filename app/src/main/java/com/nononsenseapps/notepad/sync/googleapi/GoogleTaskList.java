@@ -20,9 +20,9 @@ package com.nononsenseapps.notepad.sync.googleapi;
 import android.database.Cursor;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.RFC3339Date;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.helpers.RFC3339Date;
 
 public class GoogleTaskList extends RemoteTaskList {
 

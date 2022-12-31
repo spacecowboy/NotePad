@@ -20,7 +20,6 @@ package com.nononsenseapps.notepad.sync.orgsync;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;

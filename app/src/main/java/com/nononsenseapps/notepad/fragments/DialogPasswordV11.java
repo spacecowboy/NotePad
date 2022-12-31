@@ -69,8 +69,8 @@ public class DialogPasswordV11 extends DialogFragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
-		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
-		mBinding.buttons.dialogYes.setOnClickListener(v->confirm());
+		mBinding.buttons.dialogNo.setOnClickListener(v -> dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v -> confirm());
 	}
 
 	@Override

@@ -41,7 +41,6 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentDialogMovetolistBinding;
 
-
 import java.util.concurrent.Executors;
 
 /**
@@ -73,8 +72,8 @@ public class DialogMoveToList extends DialogFragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
 		setup();
-		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
-		mBinding.buttons.dialogYes.setOnClickListener(v->okClicked());
+		mBinding.buttons.dialogNo.setOnClickListener(v -> dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v -> okClicked());
 	}
 
 	@Override

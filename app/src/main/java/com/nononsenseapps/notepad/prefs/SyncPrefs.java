@@ -32,7 +32,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -42,7 +41,6 @@ import androidx.preference.SwitchPreference;
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.FileHelper;
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.notepad.R;

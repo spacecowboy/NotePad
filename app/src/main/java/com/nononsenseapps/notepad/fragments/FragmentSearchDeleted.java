@@ -46,7 +46,6 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.ui.TitleNoteTextView;
 
 import java.util.HashSet;
-import java.util.concurrent.Executors;
 
 
 public class FragmentSearchDeleted extends FragmentSearch {

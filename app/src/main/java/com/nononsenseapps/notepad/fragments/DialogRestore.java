@@ -62,8 +62,8 @@ public class DialogRestore extends DialogFragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		// here you call methods with the old @AfterViews annotation
 		setup();
-		mBinding.buttons.dialogNo.setOnClickListener(v->dismiss());
-		mBinding.buttons.dialogYes.setOnClickListener(v->okClicked());
+		mBinding.buttons.dialogNo.setOnClickListener(v -> dismiss());
+		mBinding.buttons.dialogYes.setOnClickListener(v -> okClicked());
 	}
 
 	@Override

@@ -18,7 +18,6 @@
 <!-- background of a button of the 'week days' view -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-
 	<!-- TODO use android:background="?android:attr/selectableItemBackground" instead ?? -->
 	<item android:id="@android:id/background">
 		<selector>

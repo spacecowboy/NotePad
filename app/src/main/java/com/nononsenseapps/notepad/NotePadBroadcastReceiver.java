@@ -20,14 +20,12 @@ package com.nononsenseapps.notepad;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
-
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
 /**
  * Used by {@link ListWidgetProvider} to receive the signal

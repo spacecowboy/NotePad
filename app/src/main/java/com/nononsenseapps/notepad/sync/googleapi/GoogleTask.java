@@ -20,10 +20,10 @@ package com.nononsenseapps.notepad.sync.googleapi;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.nononsenseapps.helpers.RFC3339Date;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.helpers.RFC3339Date;
 
 public class GoogleTask extends RemoteTask {
 

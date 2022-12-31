@@ -17,5 +17,5 @@
 	      maybe "format-underline" ? -->
 
 	<path android:fillColor="?colorAccent"
-		android:pathData="M21,5M3,21V19H21V21H3Z" />
+		android:pathData="M21,5M3,21V19H21V21H3Z"/>
 </vector>

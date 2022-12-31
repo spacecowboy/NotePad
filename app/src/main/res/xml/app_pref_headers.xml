@@ -57,7 +57,7 @@
 		android:summary=""
 		android:title="@string/changelog_online">
 		<intent android:action="android.intent.action.VIEW"
-			android:data="https://github.com/spacecowboy/NotePad/releases" />
+			android:data="https://github.com/spacecowboy/NotePad/releases"/>
 	</Preference>
 	<Preference
 		android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"

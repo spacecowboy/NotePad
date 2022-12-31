@@ -24,13 +24,12 @@ import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.databinding.ActivityTaskHistoryBinding;
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
-
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 
 /**
  * shows a history of all the (saved) previous versions of a note.

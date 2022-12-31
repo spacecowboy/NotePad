@@ -19,7 +19,6 @@ package com.nononsenseapps.helpers;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;

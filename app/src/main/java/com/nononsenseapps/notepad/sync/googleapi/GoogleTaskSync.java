@@ -32,12 +32,10 @@ import androidx.preference.PreferenceManager;
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.helpers.RFC3339Date;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.helpers.PermissionsHelper;
-import com.nononsenseapps.helpers.SyncGtaskHelper;
-import com.nononsenseapps.helpers.RFC3339Date;
 
 import org.jetbrains.annotations.NotNull;
 

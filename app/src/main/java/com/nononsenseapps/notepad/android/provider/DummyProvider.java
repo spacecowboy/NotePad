@@ -167,7 +167,6 @@ public class DummyProvider extends ContentProvider {
 
 	/**
 	 * Sets the notifcation uri on the cursor.
-	 *
 	 */
 	protected void setNotificationUri(Cursor c, Uri uri) {
 		Context context = getContext();

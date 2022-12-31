@@ -142,9 +142,9 @@ public final class ProviderManager {
 			this.uriDetails = Uri.withAppendedPath(this.uriBase, "/details");
 			this.icon = providerInfo.getIconResource();
 			if (null != providerInfo.metaData) {
-                // Optional stuff like settingsActivity and capabilities
-                // String settingsActivity = providerInfo.metaData.getString("settingsActivity");
-            }
+				// Optional stuff like settingsActivity and capabilities
+				// String settingsActivity = providerInfo.metaData.getString("settingsActivity");
+			}
 		}
 
 		@NotNull

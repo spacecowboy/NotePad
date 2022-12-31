@@ -19,7 +19,6 @@ package com.nononsenseapps.helpers;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -33,7 +32,6 @@ import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 
 import java.util.Calendar;
 
