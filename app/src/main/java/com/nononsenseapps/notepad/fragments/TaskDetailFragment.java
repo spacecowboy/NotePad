@@ -26,8 +26,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,7 +46,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ShareCompat;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -80,11 +77,32 @@ import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
+import com.nononsenseapps.notepad.ActivityMain;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 
 import java.util.Calendar;
 
 /**
  * A fragment representing a single Note detail screen.
+ * Lifecycle (order of the functions):
+ * 1 - entering the fragment:
+ * 		...
+ * 2 - exiting the fragment:
+ * 		2.1 - going back to {@link ActivityMain}, pressing "+" or "undo":
+ * 			{@link #onPause()}
+ * 			{@link #onStop()}
+ * 			{@link #onDestroyView()}
+ * 			{@link #onDestroy()}
+ * 			{@link #onDetach()}
+ * 		2.2 - opening either {@link PrefsActivity} or {@link ActivityTaskHistory}:
+ *			{@link #onPause()}
+ * 			{@link #onStop()}
+ * 		2.3 - share a note, opening the chooser panel
+ * 			{@link #onPause()}
+ * 		2.3bis - then launch an activity to do something with the note being shared
+ * 			{@link #onStop()}
+ * 		2.4 launch a popup, either "delete" or "password lock"
+ * 			(none of those)
  */
 @EFragment
 public class TaskDetailFragment extends Fragment {
@@ -335,6 +353,21 @@ public class TaskDetailFragment extends Fragment {
 		}
 		setHasOptionsMenu(true); // needed, to have the actionbar menu (+, share, ...)
 		return inflater.inflate(layout.fragment_task_detail, container, false);
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+	}
+
+	@Override
+	public void onDestroyView() {
+		super.onDestroyView();
 	}
 
 	@Override
@@ -875,7 +908,7 @@ public class TaskDetailFragment extends Fragment {
 		//  tries to load reminders that are already there
 		// remove all reminders from the list. Next time this Fragment is loaded,
 		// onLoadFinished() will add them back
-		notificationList.removeAllViews();
+		// notificationList.removeAllViews();
 	}
 
 	@Override

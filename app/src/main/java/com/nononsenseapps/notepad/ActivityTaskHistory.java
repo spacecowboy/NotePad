@@ -30,6 +30,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
+
+/**
+ * shows a history of all the (saved) previous versions of a note.
+ * Open it from {@link TaskDetailFragment }
+ */
 public class ActivityTaskHistory extends AppCompatActivity {
 
 	public static final String RESULT_TEXT_KEY = "task_text_key";
