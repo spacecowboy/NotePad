@@ -356,21 +356,6 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	@Override
-	public void onStop() {
-		super.onStop();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
-	@Override
-	public void onDestroyView() {
-		super.onDestroyView();
-	}
-
-	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
@@ -903,12 +888,20 @@ public class TaskDetailFragment extends Fragment {
 		if (isLocked() && mTask != null && taskText != null) {
 			taskText.setText(mTask.title);
 		}
+	}
 
-		// TODO lazy fix for #412 --> instead you should stop onLoadFinished() when it
-		//  tries to load reminders that are already there
+	@Override
+	public void onStop() {
+		// Always call the superclass method first
+		super.onStop();
+
+		// TODO lazy fix for #412 -> instead, you should stop onLoadFinished()
+		//  when it tries to load reminders that are already there
+
 		// remove all reminders from the list. Next time this Fragment is loaded,
-		// onLoadFinished() will add them back
-		// notificationList.removeAllViews();
+		// onLoadFinished() will add them back. It MUST be here in onStop(). See
+		// the big comment on top of this file to understand why
+		notificationList.removeAllViews();
 	}
 
 	@Override
