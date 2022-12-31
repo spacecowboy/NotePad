@@ -145,4 +145,12 @@
     <string name="dashclock_today">Hoje</string>
     <string name="dashclock_title_activity_tasks_settings">Configurações</string>
     <string name="notecopied_other">%d notas copiadas</string>
+    <string name="delete_list_message">Apagar esta lista\?</string>
+    <string name="delete_completed_tasks_question">Apagar todas as tarefas concluídas\?</string>
+    <string name="lists">Listas</string>
+    <string name="always">Sempre</string>
+    <string name="sort_list_alphabetical">A-Z</string>
+    <string name="sort_list_updated">Última atualização</string>
+    <string name="sort_list_manual">Manual</string>
+    <string name="gtasks_sync_info">Nem todas as informações podem ser sincronizadas com o Google Tasks. Apenas notas, data de vencimento (não hora) e estado atual podem.</string>
 </resources>

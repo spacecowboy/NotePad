@@ -20,7 +20,6 @@
     <string name="time">時間</string>
     <string name="done">完了</string>
     <string name="saved">保存済み</string>
-    <string name="near">近くに</string>
     <string name="menu_save_and_add">デリート</string>
     <string name="menu_delete">削除</string>
     <string name="menu_deletelist">リストの削除</string>
@@ -90,7 +89,6 @@
     <string name="showcase_drawer_msg">長押しで編集または削除</string>
     <string name="showcase_timemachine_title">ノートを保存</string>
     <string name="showcase_timemachine_msg">変更は常に保存されます。タイムマシン機能を利用すると以前の版を復元することができます。</string>
-    <string name="premiums_unlocked_and_thanks">プレミアム機能が解除されました。ご支援感謝します！</string>
     <string name="move">移動</string>
     <string name="move_to">...へ移動</string>
     <string name="moved_x_to_list">%1$d を %2$s へ移動</string>
@@ -114,7 +112,6 @@
     <string name="about">このアプリについて</string>
     <string name="sync_failed">同期失敗</string>
     <string name="sync_login_failed">ログイン失敗。Google Tasksに接続できませんでした。</string>
-    <string name="changelog_title">最新情報</string>
     <string name="completed">完了</string>
     <string name="date_header_overdue">期限切れ</string>
     <string name="date_header_today">今日</string>
@@ -133,7 +130,6 @@
     <string name="short_date_format">短縮日付書式</string>
     <string name="select_date">日時を選択</string>
     <string name="localedefault">端末の設定を使用する</string>
-    <string name="donate_thanks">ご支援感謝します！</string>
     <string name="hide_header">ヘッダを表示しない</string>
     <string name="transparency">透明度</string>
     <string name="notes_shortcut">Notesショートカット</string>
@@ -153,7 +149,6 @@
     <string name="sync_on_change_info">ノートが変更されるとすぐに同期されます</string>
     <string name="sync_on_start">アプリ起動時に同期</string>
     <string name="sync_on_start_info">アプリが復帰したときではなく、起動時に同期されます</string>
-    <string name="sync_full_force_info">ノート等の同期がおかしい場合のみチェックをONにしてください</string>
     <string name="snooze">スヌーズ</string>
     <string name="silent">サイレント</string>
     <string name="sound">通知音</string>

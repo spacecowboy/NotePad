@@ -21,7 +21,6 @@
     <string name="time">Время</string>
     <string name="done">Готово</string>
     <string name="saved">Сохранено</string>
-    <string name="near">Около</string>
     <string name="menu_save_and_add">Записать и открыть новую заметку</string>
     <string name="menu_delete">Удалить</string>
     <string name="menu_deletelist">Удалить список</string>
@@ -84,7 +83,6 @@
     <string name="import_started">Импорт данных. Это может занять несколько секунд.</string>
     <string name="showcase_drawer_msg">Зажмите чтобы отредактировать или удалить</string>
     <string name="showcase_timemachine_title">Сохранить заметки</string>
-    <string name="premiums_unlocked_and_thanks">Премиум функции разблокированы. Спасибо за вашу поддержку!</string>
     <string name="move">Переместить</string>
     <string name="move_to">Переместить в</string>
     <string name="moved_x_to_list">Переместить %1$d в%2$s</string>
@@ -108,7 +106,6 @@
     <string name="about">О программе</string>
     <string name="sync_failed">Ошибка синхронизации</string>
     <string name="sync_login_failed">Авторизация не выполнена, не удалось подключиться к Google Tasks</string>
-    <string name="changelog_title">Что нового?</string>
     <string name="completed">Завершено</string>
     <string name="date_header_overdue">Сверх срока</string>
     <string name="date_header_today">Сегодня</string>
@@ -129,7 +126,6 @@
     <string name="short_date_format">Короткий формат даты</string>
     <string name="select_date">Выберите дату</string>
     <string name="localedefault">Язык по-умолчанию</string>
-    <string name="donate_thanks">Спасибо за Вашу поддержку!</string>
     <string name="hide_header">Скрыть весь заголовок виджета</string>
     <string name="transparency">Прозрачность</string>
     <string name="notes_shortcut">Ярлыки заметки</string>
@@ -149,7 +145,6 @@
     <string name="sync_on_change_info">Синхронизировать через некоторое время после изменения заметки</string>
     <string name="sync_on_start">Синхр. при запуске</string>
     <string name="sync_on_start_info">Синхронизировать при новом запуске, не при восстановлении из памяти</string>
-    <string name="sync_full_force_info">Отмечайте только если вы уверены, что отсутствуют какие-то заметки.</string>
     <string name="snooze">Вздремнуть</string>
     <string name="silent">Без звука</string>
     <string name="sound">Мелодия</string>

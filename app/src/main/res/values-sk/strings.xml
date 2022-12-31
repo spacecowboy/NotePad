@@ -21,7 +21,6 @@
     <string name="time">Čas</string>
     <string name="done">Hotovo</string>
     <string name="saved">Uložené</string>
-    <string name="near">Blízko</string>
     <string name="menu_save_and_add">Uložiť a pridať</string>
     <string name="menu_delete">Vymazať</string>
     <string name="menu_deletelist">Vymazať zoznam</string>
@@ -89,7 +88,6 @@
     <string name="showcase_drawer_msg">Dlhé podržanie pre úpravu alebo vymazanie</string>
     <string name="showcase_timemachine_title">Uložiť svoje poznámky</string>
     <string name="showcase_timemachine_msg">Zmeny sú vždy ukladané. Použite časostroj pre vrátenie zmien.</string>
-    <string name="premiums_unlocked_and_thanks">Prémiové funkcie odomknuté. Vďaka za vašu podporu!</string>
     <string name="move">Presunúť</string>
     <string name="move_to">Presunúť do</string>
     <string name="moved_x_to_list">Presunuté %1$d do %2$s</string>
@@ -113,7 +111,6 @@
     <string name="about">O aplikácii</string>
     <string name="sync_failed">Synchronizácia zlyhala</string>
     <string name="sync_login_failed">Prihlásenie zlyhalo, nepodarilo sa pripojiť k Google Task</string>
-    <string name="changelog_title">Čo je nové?</string>
     <string name="completed">Hotové</string>
     <string name="date_header_overdue">Po deadline</string>
     <string name="date_header_today">Dnes</string>
@@ -132,7 +129,6 @@
     <string name="short_date_format">Krátky formát dátumu</string>
     <string name="select_date">Vybrať dátum</string>
     <string name="localedefault">Predvolená pozícia</string>
-    <string name="donate_thanks">Vďaka za Vašu podporu!</string>
     <string name="hide_header">Skryť celú hlavičku</string>
     <string name="transparency">Priehľadnosť</string>
     <string name="notes_shortcut">Skratka pre poznámky</string>
@@ -152,7 +148,6 @@
     <string name="sync_on_change_info">Naplánovať synchronizáciu krátko po zmene poznámky</string>
     <string name="sync_on_start">Synchronizovať aplikáciu po štarte.</string>
     <string name="sync_on_start_info">Najčastejšie sa bude synchronizovať každých 5 minút</string>
-    <string name="sync_full_force_info">Označte toto iba ak si myslíte, že synchronizácia zabudla na nejaké veci</string>
     <string name="snooze">Odložiť</string>
     <string name="silent">Ticho</string>
     <string name="sound">Zvuk</string>

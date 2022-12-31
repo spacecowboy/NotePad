@@ -95,7 +95,6 @@
     <string name="directory">Mappe</string>
     <string name="cannot_write_to_directory">Kan ikke skrive til mappe</string>
     <string name="bigger_titles_summary">Navnet er første linje</string>
-    <string name="new_password">Nytt passord</string>
     <string name="sorting">Sortering</string>
     <string name="title_create">Nytt notat</string>
     <string name="timemachine">Tidsmaskin</string>
@@ -127,7 +126,6 @@
     <string name="deleted">Slettet</string>
     <string name="repeat">Gjenta</string>
     <string name="settings_list">Liste</string>
-    <string name="default_location">Forvalgt plassering</string>
     <string name="move_to">Flytt til</string>
     <string name="import_error">Noe gikk galt: %s</string>
     <string name="showcase_drawer_title">Håndter listene dine</string>
