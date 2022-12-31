@@ -41,8 +41,8 @@
     <string name="editor_note_hint">Nota</string>
     <string name="resolve_edit">Modifica nota</string>
     <string name="default_style">Stile predefinito</string>
-    <string name="show_items_as_tasks">Mostra elementi come attività completabili</string>
-    <string name="show_items_as_notes">Mostra elementi come note semplici</string>
+    <string name="show_items_as_tasks">attività completabili</string>
+    <string name="show_items_as_notes">note semplici</string>
     <string name="sort_list_default">Ordinamento predefinito</string>
     <string name="sort_list_alphabetical">Alfabetico</string>
     <string name="sort_list_due">Per data</string>
@@ -111,7 +111,7 @@
     <string name="confirm_new_password">Conferma la nuova password</string>
     <string name="apply">Applica</string>
     <string name="clear_password">Azzera password</string>
-    <string name="password_info">Puoi impostare una password per bloccare le note. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate. Nel caso ti dimenticassi la password, puoi usare un backup.</string>
+    <string name="password_info">Puoi impostare una password per bloccare le note. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate. Impostare una password vuota disabilita questa funzione. Nel caso ti dimenticassi la password, puoi usare un backup</string>
     <string name="about">Informazioni</string>
     <string name="sync_failed">Sincronizzazione non riuscita</string>
     <string name="sync_login_failed">Login non riuscito, non è possibile connettersi a Google Tasks</string>
@@ -256,5 +256,11 @@
     <string name="editor">Pagina di modifica</string>
     <string name="not_selected_yet">Non ancora selezionata</string>
     <string name="directory_summary_msg">Nuove restrizioni di Google costringono a salvare i file in %s
-\nche puoi vedere con la tua app per gestire i file. Nota che disinstallare l\'app eliminerà tutti questi file. Per tenerti le note, usa i backup</string>
+\nche puoi vedere con la tua app per gestire i file. Disinstallare l\'app eliminerà tutti questi file. Per tenerti le note, usa i backup</string>
+    <string name="enable_sync">Attiva la sincronizzazione</string>
+    <string name="enable_sync_desc">Abilita le funzioni di sincronizzazione e consente di scegliere una sorgente con cui sincronizzarsi. Non riguarda i backup</string>
+    <string name="changelog_online">Elenco modifiche (online)</string>
+    <string name="canceled_note_locked">Annullato: la nota è bloccata</string>
+    <string name="order_notes_by">Ordina le note per:</string>
+    <string name="show_elements_as">Mostra gli elementi come:</string>
 </resources>
