@@ -25,31 +25,42 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:background="?android:attr/selectableItemBackground"
 	android:orientation="horizontal">
 
-	<!-- shows list name -->
+	<!-- shows the list's name. Uses as many lines as the note-list needs,
+	or else the name is cut (on devices with bigger text size) -->
 	<TextView
 		android:drawablePadding="8dp"
 		android:id="@android:id/text1"
-		style="?attr/LeftDrawerListItemStyle"
+		android:background="?android:attr/selectableItemBackground"
 		android:layout_width="0dp"
+		android:paddingHorizontal="16dp"
 		android:layout_height="wrap_content"
 		android:layout_gravity="start|center_vertical"
 		android:layout_weight="1"
+		tools:text="note list name note list name note list name note list name "
 		android:fontFamily="sans-serif-light"
+		android:textColor="?android:attr/textColorPrimary"
+		android:textAppearance="?android:attr/textAppearanceLarge"
 		app:drawableLeftCompat="@drawable/folder_move_24dp"/>
 
 	<!-- Shows the number of notes in this list -->
 	<TextView
 		android:id="@android:id/text2"
-		style="?attr/LeftDrawerListItemSecondaryStyle"
+		android:paddingHorizontal="16dp"
+		android:background="?android:attr/selectableItemBackground"
+		android:textColor="?android:attr/textColorSecondary"
+		android:textAppearance="?android:attr/textAppearanceLarge"
 		android:layout_width="wrap_content"
 		android:layout_height="64dp"
+		android:gravity="center_vertical"
 		android:layout_gravity="end|center_vertical"
 		android:ellipsize="end"
 		android:fontFamily="sans-serif-light"
 		android:maxLines="1"
+		tools:text="12"
 		android:singleLine="true"/>
 
 	<!-- TODO here you should add a button which, once pressed, will show the popup to edit

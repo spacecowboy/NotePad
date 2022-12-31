@@ -82,7 +82,6 @@ import com.nononsenseapps.ui.ShowcaseHelper;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
@@ -911,7 +910,7 @@ public class ActivityMain extends AppCompatActivity
 
 		final ExtraTypesCursorAdapter adapter = new ExtraTypesCursorAdapter(
 				this,
-				R.layout.simple_light_list_item_2,
+				R.layout.simple_listitem,
 				null,
 				new String[] { TaskList.Columns.TITLE, TaskList.Columns.VIEW_COUNT },
 				new int[] { android.R.id.text1, android.R.id.text2 },

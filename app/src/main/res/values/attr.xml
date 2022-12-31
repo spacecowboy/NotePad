@@ -61,6 +61,4 @@
 	<attr name="ListDividerStyle" format="reference"/>
 	<attr name="ListMarginStyle" format="reference"/>
 	<attr name="LeftDrawerStyle" format="reference"/>
-	<attr name="LeftDrawerListItemStyle" format="reference"/>
-	<attr name="LeftDrawerListItemSecondaryStyle" format="reference"/>
 </resources>

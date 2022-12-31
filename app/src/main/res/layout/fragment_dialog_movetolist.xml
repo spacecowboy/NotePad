@@ -31,7 +31,7 @@
 		android:divider="?android:attr/listDivider"
 		android:dividerHeight="1px"
 		tools:ignore="PxUsage"
-		tools:listitem="@layout/simple_light_list_item_2"/>
+		tools:listitem="@layout/simple_listitem"/>
 
 	<include
 		android:id="@+id/buttons"
