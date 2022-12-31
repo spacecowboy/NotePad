@@ -56,6 +56,7 @@ import androidx.preference.PreferenceManager;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
@@ -66,6 +67,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentTaskDetailBinding;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 import com.nononsenseapps.ui.StyledEditText;
@@ -77,8 +79,6 @@ import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
 
 import java.util.Calendar;
 
@@ -86,23 +86,23 @@ import java.util.Calendar;
  * A fragment representing a single Note detail screen.
  * Lifecycle (order of the functions):
  * 1 - entering the fragment:
- * 		...
+ * ...
  * 2 - exiting the fragment:
- * 		2.1 - going back to {@link ActivityMain}, pressing "+" or "undo":
- * 			{@link #onPause()}
- * 			{@link #onStop()}
- * 			{@link #onDestroyView()}
- * 			{@link #onDestroy()}
- * 			{@link #onDetach()}
- * 		2.2 - opening either {@link PrefsActivity} or {@link ActivityTaskHistory}:
- *			{@link #onPause()}
- * 			{@link #onStop()}
- * 		2.3 - share a note, opening the chooser panel
- * 			{@link #onPause()}
- * 		2.3bis - then launch an activity to do something with the note being shared
- * 			{@link #onStop()}
- * 		2.4 launch a popup, either "delete" or "password lock"
- * 			(none of those)
+ * 2.1 - going back to {@link ActivityMain}, pressing "+" or "undo":
+ * {@link #onPause()}
+ * {@link #onStop()}
+ * {@link #onDestroyView()}
+ * {@link #onDestroy()}
+ * {@link #onDetach()}
+ * 2.2 - opening either {@link PrefsActivity} or {@link ActivityTaskHistory}:
+ * {@link #onPause()}
+ * {@link #onStop()}
+ * 2.3 - share a note, opening the chooser panel
+ * {@link #onPause()}
+ * 2.3bis - then launch an activity to do something with the note being shared
+ * {@link #onStop()}
+ * 2.4 launch a popup, either "delete" or "password lock"
+ * (none of those)
  */
 @EFragment
 public class TaskDetailFragment extends Fragment {
@@ -363,36 +363,41 @@ public class TaskDetailFragment extends Fragment {
 			return;
 		}
 
-		boolean openKb = false;
-
+		boolean shouldOpenKeyBoard = false;
 		final Bundle args = new Bundle();
-		if (getArguments().getLong(ARG_ITEM_ID, stateId) > 0) {
-			// Load data from database
-			args.putLong(ARG_ITEM_ID,
-					getArguments().getLong(ARG_ITEM_ID, stateId));
-			LoaderManager.getInstance(this).restartLoader(LOADER_EDITOR_TASK, args,
-					loaderCallbacks);
+		long argItemId = getArguments().getLong(ARG_ITEM_ID, stateId);
+		long argItemListId = getArguments().getLong(ARG_ITEM_LIST_ID, stateListId);
+
+		if (argItemId > 0) {
+			// existing note => Load data from database
+			args.putLong(ARG_ITEM_ID, argItemId);
+			LoaderManager
+					.getInstance(this)
+					.restartLoader(LOADER_EDITOR_TASK, args, loaderCallbacks);
 		} else {
-			// If not valid, find a valid list
-			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				getArguments().putLong(
-						ARG_ITEM_LIST_ID,
-						TaskListViewPagerFragment.getARealList(getActivity(),
-								-1));
+			// new note => create it
+
+			// If the given list is not valid, find a valid list
+			if (argItemListId < 1) {
+				getArguments().putLong(ARG_ITEM_LIST_ID,
+						TaskListViewPagerFragment.getARealList(getActivity(), -1));
+				// then update the variable
+				argItemListId = getArguments().getLong(ARG_ITEM_LIST_ID, stateListId);
 			}
-			// Fail if still not valid
-			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				Toast.makeText(getActivity(),
-						"Must specify a list id to create a note in!",
+			// Fail if the list is still not valid
+			if (argItemListId < 1) {
+				// simulate an exception
+				Toast.makeText(getActivity(), "Must specify a list id to create a note in!",
 						Toast.LENGTH_SHORT).show();
+				NnnLogger.error(TaskDetailFragment.class, "argItemListId < 1");
 				getActivity().finish();
 			}
-			args.putLong(ARG_ITEM_LIST_ID,
-					getArguments().getLong(ARG_ITEM_LIST_ID, stateListId));
-			LoaderManager.getInstance(this).restartLoader(LOADER_EDITOR_TASKLISTS, args,
-					loaderCallbacks);
+			args.putLong(ARG_ITEM_LIST_ID, argItemListId);
+			LoaderManager
+					.getInstance(this)
+					.restartLoader(LOADER_EDITOR_TASKLISTS, args, loaderCallbacks);
 
-			openKb = true;
+			shouldOpenKeyBoard = true;
 			mTaskOrg = new Task();
 			mTask = new Task();
 			mTask.dblist = getArguments().getLong(ARG_ITEM_LIST_ID);
@@ -404,7 +409,7 @@ public class TaskDetailFragment extends Fragment {
 		// showcase first time
 		final boolean showcasing = showcaseEditor();
 
-		if (!showcasing && openKb) {
+		if (!showcasing && shouldOpenKeyBoard) {
 			// Only show keyboard for new/empty notes,
 			// but not if the showcaseview is showing
 			taskText.requestFocus();
@@ -579,7 +584,15 @@ public class TaskDetailFragment extends Fragment {
 		return false;
 	}
 
-	@UiThread(propagation = Propagation.ENQUEUE)
+	/**
+	 * @implNote this method MUST be annotated with {@link UiThread.Propagation#REUSE}
+	 * and not simply {@link UiThread}, to ensure that this runs before
+	 * {@link #onPause()} when called from {@link #onActivityCreated}. This avoids
+	 * a bug that deletes the note when receiving shared text (a link from google
+	 * chrome, for example). The bug could be seen in API 23 (LineageOS 13) with
+	 * NoNonsenseNotes 7.1.0, for example.
+	 */
+	@UiThread(propagation = Propagation.REUSE)
 	void fillUIFromTask() {
 		if (taskText == null || taskCompleted == null) {
 			// it gets triggered ONLY in espresso tests!

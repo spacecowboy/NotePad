@@ -651,6 +651,7 @@ public class ActivityMain extends AppCompatActivity
 				if (getNoteId(intent) > 0) {
 					right = TaskDetailFragment_.getInstance(getNoteId(intent));
 				} else if (isNoteIntent(intent)) {
+					// some text was shared to this app
 					right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
 							TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
 				}
