@@ -47,7 +47,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.app.ShareCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
@@ -234,7 +234,6 @@ public class TaskDetailFragment extends Fragment {
 	private boolean mLocked = true;
 
 	private OnFragmentInteractionListener mListener;
-	private ShareActionProvider mShareActionProvider;
 
 	/**
 	 * If in tablet and added, rotating to portrait actually recreats the
@@ -334,7 +333,7 @@ public class TaskDetailFragment extends Fragment {
 			dontLoad = true;
 			return null;
 		}
-		setHasOptionsMenu(true);
+		setHasOptionsMenu(true); // needed, to have the actionbar menu (+, share, ...)
 		return inflater.inflate(layout.fragment_task_detail, container, false);
 	}
 
@@ -441,19 +440,6 @@ public class TaskDetailFragment extends Fragment {
 				getString(R.string.pref_editor_links), true));
 		taskText.setTheTextSize(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_fontsize), "1")));
-
-		taskText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				setShareIntent(s.toString());
-			}
-		});
 	}
 
 	@Click(resName = "dueDateBox")
@@ -640,36 +626,39 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasks_detail, menu);
-
-		// Locate MenuItem with ShareActionProvider
-		MenuItem item = menu.findItem(R.id.menu_share);
-		if (item != null) {
-			// Fetch and store ShareActionProvider
-			mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-			setShareIntent("");
-		}
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	// Call to update the share intent
-	private void setShareIntent(final String text) {
-		if (mShareActionProvider != null && taskText != null) {
-			int titleEnd = text.indexOf("\n");
-			if (titleEnd < 0) {
-				titleEnd = text.length();
-			}
-
-			// there is also ShareCompat.IntentBuilder, if you want...
-			Intent i = new Intent(Intent.ACTION_SEND)
-					.setType("text/plain")
-					.putExtra(Intent.EXTRA_TEXT, text)
-					.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
-			try {
-				mShareActionProvider.setShareIntent(i);
-			} catch (RuntimeException e) {
-				// Can crash when too many transactions overflow the buffer
-				NnnLogger.exception(e);
-			}
+	/**
+	 * @return an {@link Intent} that creates a panel to choose an app,
+	 * to share the note being edited in this {@link TaskDetailFragment},
+	 * or NULL if the note was not in a valid state
+	 */
+	@Nullable
+	private Intent getShareIntent() {
+		if (taskText == null || taskText.getText() == null) return null;
+		String text = taskText.getText().toString();
+		int titleEnd = text.indexOf("\n");
+		if (titleEnd < 0) {
+			titleEnd = text.length();
 		}
+		String noteTitle = text.substring(0, titleEnd);
+
+		/* useless alternative
+		Intent i = new Intent(Intent.ACTION_SEND)
+				.setType("text/plain")
+				.putExtra(Intent.EXTRA_TEXT, text)
+				.putExtra(Intent.EXTRA_SUBJECT, noteTitle)
+				.putExtra(Intent.EXTRA_TITLE, noteTitle);
+		var toReturn = Intent.createChooser(i, noteTitle); */
+
+		return new ShareCompat
+				.IntentBuilder(this.getContext())
+				.setType("text/plain")
+				.setText(text)
+				.setSubject(noteTitle) // for email apps
+				.setChooserTitle(noteTitle) // for the chooser panel
+				.createChooserIntent();
 	}
 
 	@Override
@@ -737,6 +726,11 @@ public class TaskDetailFragment extends Fragment {
 				}
 			});
 			pf.show(getFragmentManager(), "unlock_verify");
+			return true;
+		} else if (itemId == R.id.menu_share) {
+			// open the chooser panel to share the note text with an app
+			Intent si = getShareIntent();
+			if (si != null) this.startActivity(si);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -903,10 +897,6 @@ public class TaskDetailFragment extends Fragment {
 		mListener = null;
 	}
 
-	@Override
-	public void onSaveInstanceState(@NonNull final Bundle state) {
-		super.onSaveInstanceState(state);
-	}
 	/*	@Override
 	public void onSaveInstanceState(@NonNull final Bundle bundle_) {
 		super.onSaveInstanceState(bundle_);
