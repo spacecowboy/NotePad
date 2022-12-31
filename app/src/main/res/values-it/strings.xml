@@ -236,7 +236,6 @@
     <string name="account">Profilo</string>
     <string name="bigger_titles">Titolo più grande</string>
     <string name="bigger_titles_summary">Il titolo è la prima linea</string>
-    <string name="legacy">Storico</string>
     <string name="sorting">Ordine</string>
     <string name="undo">Annulla</string>
     <string name="import_data_msg">Importare le note dalla versione donazione \? Quando finisce, puoi anche disinstallarla.</string>
