@@ -43,7 +43,7 @@ fi
 read -r -p "Check consistency of languages list with values- folders? [y/N] " response
 if [[ "$response" =~ ^[yY]$ ]]
 then
-  ./gradlew :app:checkLanguages
+  ./gradlew :app:checkLanguages --quiet
 fi
 
 # changelog template. To add all the new commit messages, move this line inside the ""
