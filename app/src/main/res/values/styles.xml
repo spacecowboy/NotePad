@@ -23,7 +23,7 @@
 	<style name="LeftDrawerStyleDark">
 		<item name="android:background">@color/googlenow_darkergrey</item>
 		<item name="android:divider">?android:attr/listDivider</item>
-		<item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
+		<item name="android:dividerHeight">1px</item>
 	</style>
 
 	<style name="LeftDrawerStyleBlack" parent="@style/LeftDrawerStyleDark">
@@ -94,7 +94,7 @@
 
 	<style name="ListOnePxDividerStyle">
 		<item name="android:divider">?android:attr/dividerVertical</item>
-		<item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
+		<item name="android:dividerHeight">1px</item>
 	</style>
 
 	<!-- For DashClock Settings -->

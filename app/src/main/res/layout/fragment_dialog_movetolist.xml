@@ -30,7 +30,7 @@
 		android:choiceMode="singleChoice"
 		android:divider="?android:attr/listDivider"
 		android:dividerHeight="1px"
-		tools:ignore="PxUsage"
+
 		tools:listitem="@layout/simple_listitem"/>
 
 	<include
