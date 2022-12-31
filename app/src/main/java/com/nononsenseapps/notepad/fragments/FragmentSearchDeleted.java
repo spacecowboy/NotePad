@@ -36,7 +36,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
-import androidx.annotation.WorkerThread;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.preference.PreferenceManager;
@@ -91,40 +90,35 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				return result;
 			}
 
-			@WorkerThread
 			void deleteSelected(final ActionMode mode) {
-				Executors.newSingleThreadExecutor().execute(() -> {
-					String whereCondition = Task.Columns._ID + " IN ("
-							+ DAO.arrayToCommaString(getIdArray()) + ")";
-					getActivity()
-							.getContentResolver()
-							.delete(Task.URI_DELETED_QUERY, whereCondition, null);
-					selectedItems.clear();
-					mode.finish();
-				});
+				String whereCondition = Task.Columns._ID + " IN ("
+						+ DAO.arrayToCommaString(getIdArray()) + ")";
+				getActivity()
+						.getContentResolver()
+						.delete(Task.URI_DELETED_QUERY, whereCondition, null);
+				selectedItems.clear();
+				// mode.finish() touches the views, so it MUST run on the UI thread
+				FragmentSearchDeleted.this.getActivity().runOnUiThread(mode::finish);
 			}
 
-			@WorkerThread
 			void restoreSelected(final ActionMode mode, final long listId) {
-				Executors.newSingleThreadExecutor().execute(() -> {
-					for (final Long id : selectedItems) {
-						final int pos = getPosOfId(id);
-						if (pos > -1) {
-							final Cursor c = (Cursor) mBinding.list.getItemAtPosition(pos);
+				for (final Long id : selectedItems) {
+					final int pos = getPosOfId(id);
+					if (pos > -1) {
+						final Cursor c = (Cursor) mBinding.list.getItemAtPosition(pos);
 
-							// restore task
-							final Task t = new Task();
-							t.dblist = listId;
-							t.title = c.getString(1);
-							t.note = c.getString(2);
-							t.completed = c.isNull(3) ? null : c.getLong(3);
-							t.due = c.isNull(4) ? null : c.getLong(4);
-							t.save(getActivity());
-						}
+						// restore task
+						final Task t = new Task();
+						t.dblist = listId;
+						t.title = c.getString(1);
+						t.note = c.getString(2);
+						t.completed = c.isNull(3) ? null : c.getLong(3);
+						t.due = c.isNull(4) ? null : c.getLong(4);
+						t.save(getActivity());
 					}
-					notifySuccess();
-					deleteSelected(mode);
-				});
+				}
+				notifySuccess();
+				deleteSelected(mode);
 			}
 
 			int getPosOfId(final long id) {
@@ -144,7 +138,6 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				}
 				return position;
 			}
-
 
 			/** Show a {@link Toast} in a thread-safe way */
 			@UiThread

@@ -26,8 +26,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,14 +37,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.ShareActionProvider;
-import androidx.core.view.MenuItemCompat;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -57,6 +56,7 @@ import androidx.preference.PreferenceManager;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
@@ -67,6 +67,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentTaskDetailBinding;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.ShowcaseHelper;
 import com.nononsenseapps.ui.StyledEditText;
@@ -83,6 +84,25 @@ import java.util.Calendar;
 
 /**
  * A fragment representing a single Note detail screen.
+ * Lifecycle (order of the functions):
+ * 1 - entering the fragment:
+ * ...
+ * 2 - exiting the fragment:
+ * 2.1 - going back to {@link ActivityMain}, pressing "+" or "undo":
+ * {@link #onPause()}
+ * {@link #onStop()}
+ * {@link #onDestroyView()}
+ * {@link #onDestroy()}
+ * {@link #onDetach()}
+ * 2.2 - opening either {@link PrefsActivity} or {@link ActivityTaskHistory}:
+ * {@link #onPause()}
+ * {@link #onStop()}
+ * 2.3 - share a note, opening the chooser panel
+ * {@link #onPause()}
+ * 2.3bis - then launch an activity to do something with the note being shared
+ * {@link #onStop()}
+ * 2.4 launch a popup, either "delete" or "password lock"
+ * (none of those)
  */
 @EFragment
 public class TaskDetailFragment extends Fragment {
@@ -185,6 +205,12 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById(resName = "dueDateBox")
 	Button dueDateBox;
 
+	@ViewById(resName = "dueCancelButton")
+	ImageButton dueCancelButton;
+
+	@ViewById(resName = "notificationAdd")
+	TextView notificationAdd;
+
 	/**
 	 * holds a list of widgets, one for each reminder the user sets.
 	 * It is below the "due date" row
@@ -226,7 +252,6 @@ public class TaskDetailFragment extends Fragment {
 	private boolean mLocked = true;
 
 	private OnFragmentInteractionListener mListener;
-	private ShareActionProvider mShareActionProvider;
 
 	/**
 	 * If in tablet and added, rotating to portrait actually recreats the
@@ -326,7 +351,7 @@ public class TaskDetailFragment extends Fragment {
 			dontLoad = true;
 			return null;
 		}
-		setHasOptionsMenu(true);
+		setHasOptionsMenu(true); // needed, to have the actionbar menu (+, share, ...)
 		return inflater.inflate(layout.fragment_task_detail, container, false);
 	}
 
@@ -338,36 +363,41 @@ public class TaskDetailFragment extends Fragment {
 			return;
 		}
 
-		boolean openKb = false;
-
+		boolean shouldOpenKeyBoard = false;
 		final Bundle args = new Bundle();
-		if (getArguments().getLong(ARG_ITEM_ID, stateId) > 0) {
-			// Load data from database
-			args.putLong(ARG_ITEM_ID,
-					getArguments().getLong(ARG_ITEM_ID, stateId));
-			LoaderManager.getInstance(this).restartLoader(LOADER_EDITOR_TASK, args,
-					loaderCallbacks);
+		long argItemId = getArguments().getLong(ARG_ITEM_ID, stateId);
+		long argItemListId = getArguments().getLong(ARG_ITEM_LIST_ID, stateListId);
+
+		if (argItemId > 0) {
+			// existing note => Load data from database
+			args.putLong(ARG_ITEM_ID, argItemId);
+			LoaderManager
+					.getInstance(this)
+					.restartLoader(LOADER_EDITOR_TASK, args, loaderCallbacks);
 		} else {
-			// If not valid, find a valid list
-			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				getArguments().putLong(
-						ARG_ITEM_LIST_ID,
-						TaskListViewPagerFragment.getARealList(getActivity(),
-								-1));
+			// new note => create it
+
+			// If the given list is not valid, find a valid list
+			if (argItemListId < 1) {
+				getArguments().putLong(ARG_ITEM_LIST_ID,
+						TaskListViewPagerFragment.getARealList(getActivity(), -1));
+				// then update the variable
+				argItemListId = getArguments().getLong(ARG_ITEM_LIST_ID, stateListId);
 			}
-			// Fail if still not valid
-			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				Toast.makeText(getActivity(),
-						"Must specify a list id to create a note in!",
+			// Fail if the list is still not valid
+			if (argItemListId < 1) {
+				// simulate an exception
+				Toast.makeText(getActivity(), "Must specify a list id to create a note in!",
 						Toast.LENGTH_SHORT).show();
+				NnnLogger.error(TaskDetailFragment.class, "argItemListId < 1");
 				getActivity().finish();
 			}
-			args.putLong(ARG_ITEM_LIST_ID,
-					getArguments().getLong(ARG_ITEM_LIST_ID, stateListId));
-			LoaderManager.getInstance(this).restartLoader(LOADER_EDITOR_TASKLISTS, args,
-					loaderCallbacks);
+			args.putLong(ARG_ITEM_LIST_ID, argItemListId);
+			LoaderManager
+					.getInstance(this)
+					.restartLoader(LOADER_EDITOR_TASKLISTS, args, loaderCallbacks);
 
-			openKb = true;
+			shouldOpenKeyBoard = true;
 			mTaskOrg = new Task();
 			mTask = new Task();
 			mTask.dblist = getArguments().getLong(ARG_ITEM_LIST_ID);
@@ -379,7 +409,7 @@ public class TaskDetailFragment extends Fragment {
 		// showcase first time
 		final boolean showcasing = showcaseEditor();
 
-		if (!showcasing && openKb) {
+		if (!showcasing && shouldOpenKeyBoard) {
 			// Only show keyboard for new/empty notes,
 			// but not if the showcaseview is showing
 			taskText.requestFocus();
@@ -433,19 +463,6 @@ public class TaskDetailFragment extends Fragment {
 				getString(R.string.pref_editor_links), true));
 		taskText.setTheTextSize(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_fontsize), "1")));
-
-		taskText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-				setShareIntent(s.toString());
-			}
-		});
 	}
 
 	@Click(resName = "dueDateBox")
@@ -558,7 +575,7 @@ public class TaskDetailFragment extends Fragment {
 		if (getActivity() != null) {
 			boolean hasPassword = PreferencesHelper.isPasswordSet(getActivity());
 			NnnLogger.debug(TaskDetailFragment.class, "hasPassword = " + hasPassword);
-			// if (!hasPassword) return false; // TODO check and use these
+			// if (!hasPassword) return false; // TODO check and use these, if necessary
 		}
 
 		if (mTask != null) {
@@ -567,7 +584,15 @@ public class TaskDetailFragment extends Fragment {
 		return false;
 	}
 
-	@UiThread(propagation = Propagation.ENQUEUE)
+	/**
+	 * @implNote this method MUST be annotated with {@link UiThread.Propagation#REUSE}
+	 * and not simply {@link UiThread}, to ensure that this runs before
+	 * {@link #onPause()} when called from {@link #onActivityCreated}. This avoids
+	 * a bug that deletes the note when receiving shared text (a link from google
+	 * chrome, for example). The bug could be seen in API 23 (LineageOS 13) with
+	 * NoNonsenseNotes 7.1.0, for example.
+	 */
+	@UiThread(propagation = Propagation.REUSE)
 	void fillUIFromTask() {
 		if (taskText == null || taskCompleted == null) {
 			// it gets triggered ONLY in espresso tests!
@@ -600,13 +625,20 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	/**
-	 * Set fields to enabled/disabled depending on lockstate
+	 * Set fields to enabled/disabled depending on wether the note is locked
 	 */
 	void setFieldStatus() {
 		final boolean status = !isLocked();
 		taskText.setEnabled(status);
 		taskCompleted.setEnabled(status);
 		dueDateBox.setEnabled(status);
+		dueCancelButton.setEnabled(status);
+		notificationAdd.setEnabled(status);
+		notificationList.setEnabled(status);
+
+		// by default it does not gray out the icons, and it's tricky to do it in code.
+		// It does not matter because we block the click callbacks
+		// in NotificationItemHelper.setup()
 	}
 
 	void hideTaskParts(final TaskList list) {
@@ -625,36 +657,39 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasks_detail, menu);
-
-		// Locate MenuItem with ShareActionProvider
-		MenuItem item = menu.findItem(R.id.menu_share);
-		if (item != null) {
-			// Fetch and store ShareActionProvider
-			mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
-			setShareIntent("");
-		}
+		super.onCreateOptionsMenu(menu, inflater);
 	}
 
-	// Call to update the share intent
-	private void setShareIntent(final String text) {
-		if (mShareActionProvider != null && taskText != null) {
-			int titleEnd = text.indexOf("\n");
-			if (titleEnd < 0) {
-				titleEnd = text.length();
-			}
-
-			// there is also ShareCompat.IntentBuilder, if you want...
-			Intent i = new Intent(Intent.ACTION_SEND)
-					.setType("text/plain")
-					.putExtra(Intent.EXTRA_TEXT, text)
-					.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
-			try {
-				mShareActionProvider.setShareIntent(i);
-			} catch (RuntimeException e) {
-				// Can crash when too many transactions overflow the buffer
-				NnnLogger.exception(e);
-			}
+	/**
+	 * @return an {@link Intent} that creates a panel to choose an app,
+	 * to share the note being edited in this {@link TaskDetailFragment},
+	 * or NULL if the note was not in a valid state
+	 */
+	@Nullable
+	private Intent getShareIntent() {
+		if (taskText == null || taskText.getText() == null) return null;
+		String text = taskText.getText().toString();
+		int titleEnd = text.indexOf("\n");
+		if (titleEnd < 0) {
+			titleEnd = text.length();
 		}
+		String noteTitle = text.substring(0, titleEnd);
+
+		/* useless alternative
+		Intent i = new Intent(Intent.ACTION_SEND)
+				.setType("text/plain")
+				.putExtra(Intent.EXTRA_TEXT, text)
+				.putExtra(Intent.EXTRA_SUBJECT, noteTitle)
+				.putExtra(Intent.EXTRA_TITLE, noteTitle);
+		var toReturn = Intent.createChooser(i, noteTitle); */
+
+		return new ShareCompat
+				.IntentBuilder(this.getContext())
+				.setType("text/plain")
+				.setText(text)
+				.setSubject(noteTitle) // for email apps
+				.setChooserTitle(noteTitle) // for the chooser panel
+				.createChooserIntent();
 	}
 
 	@Override
@@ -722,6 +757,11 @@ public class TaskDetailFragment extends Fragment {
 				}
 			});
 			pf.show(getFragmentManager(), "unlock_verify");
+			return true;
+		} else if (itemId == R.id.menu_share) {
+			// open the chooser panel to share the note text with an app
+			Intent si = getShareIntent();
+			if (si != null) this.startActivity(si);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -861,11 +901,19 @@ public class TaskDetailFragment extends Fragment {
 		if (isLocked() && mTask != null && taskText != null) {
 			taskText.setText(mTask.title);
 		}
+	}
 
-		// TODO lazy fix for #412 --> instead you should stop onLoadFinished() when it
-		//  tries to load reminders that are already there
+	@Override
+	public void onStop() {
+		// Always call the superclass method first
+		super.onStop();
+
+		// TODO lazy fix for #412 -> instead, you should stop onLoadFinished()
+		//  when it tries to load reminders that are already there
+
 		// remove all reminders from the list. Next time this Fragment is loaded,
-		// onLoadFinished() will add them back
+		// onLoadFinished() will add them back. It MUST be here in onStop(). See
+		// the big comment on top of this file to understand why
 		notificationList.removeAllViews();
 	}
 
@@ -888,10 +936,6 @@ public class TaskDetailFragment extends Fragment {
 		mListener = null;
 	}
 
-	@Override
-	public void onSaveInstanceState(@NonNull final Bundle state) {
-		super.onSaveInstanceState(state);
-	}
 	/*	@Override
 	public void onSaveInstanceState(@NonNull final Bundle bundle_) {
 		super.onSaveInstanceState(bundle_);

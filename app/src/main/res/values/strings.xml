@@ -149,6 +149,9 @@
 	<string name="enable_sync">Enable synchronization</string>
 	<string name="enable_sync_desc">Enables synchronization features and allows to choose a sync source. Backups are not affected</string>
 	<string name="changelog_online">Changelog (online)</string>
+	<string name="canceled_note_locked">Canceled: the note is locked</string>
+	<string name="order_notes_by">Order notes by:</string>
+	<string name="show_elements_as">Show elements as:</string>
 
 	<!--
 		Use few if language need it. In English is the same.
@@ -201,7 +204,7 @@
 	<string name="confirm_new_password">Confirm new password</string>
 	<string name="apply">Apply</string>
 	<string name="clear_password">Clear password</string>
-	<string name="password_info">Any one note can be locked, limiting viewing and modifying it. It remains fully accessible on other devices.</string>
+	<string name="password_info">Any one note can be locked, limiting viewing and modifying it. It remains fully accessible on other devices. Setting an empty password disables all note locks</string>
 	<string name="about">About</string>
 	<string name="sync_failed">Sync failed</string>
 	<string name="sync_login_failed">Could not log in to use Google Tasks</string>

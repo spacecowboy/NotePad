@@ -65,6 +65,8 @@ public class GreyableToggleButton extends AppCompatToggleButton {
 		} else {
 			super.setTextColor(secondaryColor);
 		}
+		// note that the code that reacts to days being pressed in the reminder view is
+		// not here, it's in NotificationItemHelper.java and WeekDaysView.java
 	}
 
 }

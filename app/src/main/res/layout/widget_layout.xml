@@ -95,7 +95,7 @@
 			android:layout_height="match_parent"
 			android:divider="@null"
 			android:dividerHeight="1px"
-			tools:ignore="PxUsage"
+
 			tools:listitem="@layout/widgetlist_item"/>
 
 		<TextView

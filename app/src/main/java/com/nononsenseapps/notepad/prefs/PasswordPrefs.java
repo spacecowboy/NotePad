@@ -24,97 +24,85 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.databinding.AppPrefPasswordLayoutBinding;
 import com.nononsenseapps.notepad.fragments.DialogPasswordV11;
 
 public class PasswordPrefs extends Fragment {
 
 	public static final String KEY_PASSWORD = "secretPassword";
 
-	private Context activity;
-	private EditText password1;
-	private EditText password2;
-
 	// TODO copy from DialogPasswordSettings.java and delete that file
 
+	/**
+	 * for {@link R.layout#app_pref_password_layout}
+	 */
+	private AppPrefPasswordLayoutBinding mBinding;
+
+	@Nullable
 	@Override
-	public void onAttach(@NonNull Context activity) {
-		super.onAttach(activity);
-		this.activity = activity;
+	public View onCreateView(@NonNull LayoutInflater inflater,
+							 @Nullable ViewGroup container,
+							 @Nullable Bundle savedInstanceState) {
+		mBinding = AppPrefPasswordLayoutBinding
+				.inflate(inflater, container, false);
+		return mBinding.getRoot();
 	}
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		// Load the preferences from an XML resource
-		// addPreferencesFromResource(R.xml.app_pref_password);
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
-		View layout = inflater.inflate(R.layout.app_pref_password_layout,
-				container, false);
-
-		// Set click listeners for the button here
-		password1 = layout.findViewById(R.id.tempPassword1);
-		password2 = layout.findViewById(R.id.tempPassword2);
-
-		layout.findViewById(R.id.applyPassword).setOnClickListener(v -> applyPassword());
-		layout.findViewById(R.id.clearPassword).setOnClickListener(v -> clearPassword());
-
-		return layout;
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		// here you call methods with the old @AfterViews annotation
+		mBinding.applyPassword.setOnClickListener(v -> applyPassword());
+		mBinding.clearPassword.setOnClickListener(v -> clearPassword());
 	}
 
 	private void applyPassword() {
-		if (password1.getText().toString()
-				.equals(password2.getText().toString())) {
+		String passw1 = mBinding.tempPassword1.getText().toString();
+		String passw2 = mBinding.tempPassword2.getText().toString();
+		if (passw1.equals(passw2)) {
 			// They are the same
 			SharedPreferences settings = PreferenceManager
-					.getDefaultSharedPreferences(activity);
+					.getDefaultSharedPreferences(this.getContext());
 			String currentPassword = settings.getString(KEY_PASSWORD, "");
 
 			if ("".equals(currentPassword)) {
-				// Save the password directly
+				// it's new => Save the password directly
 				settings.edit()
-						.putString(KEY_PASSWORD, password1.getText().toString())
+						.putString(KEY_PASSWORD, passw1)
 						.commit();
-				Toast.makeText(activity, getText(R.string.password_set),
+				Toast.makeText(this.getContext(), getText(R.string.password_set),
 						Toast.LENGTH_SHORT).show();
 			} else {
 				// confirm with existing password first
-				showPasswordDialog(password1.getText().toString());
+				showPasswordDialog(passw1);
 			}
-
 		} else {
 			// Show a toast so the user knows he did something wrong
-			Animation shake = AnimationUtils.loadAnimation(activity,
-					R.anim.shake);
-			password2.startAnimation(shake);
-			Toast.makeText(activity, getText(R.string.passwords_dont_match),
+			Animation shake = AnimationUtils.loadAnimation(this.getContext(), R.anim.shake);
+			mBinding.tempPassword2.startAnimation(shake);
+			Toast.makeText(this.getContext(), getText(R.string.passwords_dont_match),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
 
 	private void clearPassword() {
 		SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(activity);
+				.getDefaultSharedPreferences(this.getContext());
 		String currentPassword = settings.getString(KEY_PASSWORD, "");
 
 		if ("".equals(currentPassword)) {
-			// Save the password directly
+			// Save the (empty) password directly
 			settings.edit()
 					.putString(KEY_PASSWORD, "")
 					.commit();
-			Toast.makeText(activity, getText(R.string.password_cleared),
+			Toast.makeText(this.getContext(), R.string.password_cleared,
 					Toast.LENGTH_SHORT).show();
 		} else {
 			// confirm with existing password first
@@ -126,13 +114,12 @@ public class PasswordPrefs extends Fragment {
 		final DialogPasswordV11 pd = new DialogPasswordV11();
 		pd.setListener(() -> {
 			PreferenceManager
-					.getDefaultSharedPreferences(getActivity()).edit()
+					.getDefaultSharedPreferences(this.getContext())
+					.edit()
 					.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
 					.commit();
 			Toast.makeText(getActivity(),
-					("".equals(newPassword))
-							? getText(R.string.password_cleared)
-							: getText(R.string.password_set),
+					"".equals(newPassword) ? R.string.password_cleared : R.string.password_set,
 					Toast.LENGTH_SHORT).show();
 		});
 		pd.show(getFragmentManager(), "pw-verify");

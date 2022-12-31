@@ -30,7 +30,7 @@
 		android:icon="@drawable/folder_move_24dp"
 		android:title="@string/move"
 		app:showAsAction="ifRoom"/>
-	<!-- android:actionProviderClass="android.widget.ShareActionProvider" -->
+
 	<item
 		android:id="@+id/menu_share"
 		android:icon="@drawable/ic_share_24dp"

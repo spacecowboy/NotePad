@@ -75,7 +75,6 @@ import com.nononsenseapps.ui.TitleNoteTextView;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.ViewById;
 
 import java.security.InvalidParameterException;

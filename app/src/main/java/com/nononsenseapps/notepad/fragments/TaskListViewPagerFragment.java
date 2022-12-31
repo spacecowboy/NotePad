@@ -62,6 +62,8 @@ import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.ViewById;
 
+import java.util.Objects;
+
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain one on startup
  */
@@ -84,7 +86,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 	/**
 	 * for {@link R.layout#fragment_tasklist_viewpager}
 	 */
-
 	private FragmentTasklistViewpagerBinding mBinding;
 
 	/*@Nullable
@@ -300,12 +301,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
-		// DO NOT DELETE! pager may actually be null, for example when you load
-		// the task history activity
-		if (mTaskListsAdapter != null && pager != null) {
+		// even if 'pager' is tagged @NonNull, but it may actually be null, for example when
+		// you load the task history activity
+		if (mTaskListsAdapter != null && Objects.nonNull(pager)) {
 			long id = mTaskListsAdapter.getItemId(pager.getCurrentItem());
 			outState.putLong(START_LIST_ID, id);
-			NnnLogger.debug(TaskListViewPagerFragment.class, "Save state, id=" + id);
+			NnnLogger.debug(TaskListViewPagerFragment.class, "Saved state, id=" + id);
 		}
 	}
 

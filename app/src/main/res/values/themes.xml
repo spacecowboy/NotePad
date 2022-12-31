@@ -31,7 +31,6 @@
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_dark</item>
 		<item name="viewpager_bg">@android:drawable/dark_header</item>
-
 		<item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
 		<item name="list_item_card_background">@drawable/card_dark</item>
 		<item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
@@ -40,9 +39,6 @@
 		<item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
 		<item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
-		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
-		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark
-		</item>
 		<!-- make all dialogs in the app use this dialog theme.
 		 I chose a dark theme consistent with the device's OS design. -->
 		<item name="alertDialogTheme">@android:style/Theme.DeviceDefault.Dialog</item>
@@ -51,10 +47,11 @@
 		<item name="android:dialogTheme">?alertDialogTheme</item>
 		<item name="android:datePickerDialogTheme">?alertDialogTheme</item>
 		<item name="android:timePickerDialogTheme">?alertDialogTheme</item>
-		<!-- white icons for dark themes. All 3 are needed -->
+		<!-- white icons for dark themes. All 4 are needed -->
 		<item name="iconTint">@color/white_alpha85</item>
-		<item name="android:drawableTint">@color/white_alpha85</item>
-		<item name="android:tint">@color/white_alpha85</item>
+		<item name="android:drawableTint">?iconTint</item>
+		<item name="android:tint">?iconTint</item>
+		<item name="drawableTint">?iconTint</item>
 		<!-- theme UI controls like checkboxes and text fields  -->
 		<item name="colorAccent">@color/accent</item>
 		<!-- Not setting colorPrimary & colorPrimaryDark because I don't need them -->
@@ -103,9 +100,6 @@
 		<item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
 		<item name="ListMarginStyle">@style/ListMarginStyleCard</item>
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
-		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
-		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight
-		</item>
 		<item name="colorAccent">@color/accent</item>
 		<!-- make all dialogs in the app use this dialog theme.
 		 I chose a LIGHT theme consistent with the device's OS design. -->
@@ -115,16 +109,17 @@
 		<item name="android:dialogTheme">?alertDialogTheme</item>
 		<item name="android:datePickerDialogTheme">?alertDialogTheme</item>
 		<item name="android:timePickerDialogTheme">?alertDialogTheme</item>
-		<!-- these 3 decide the color of every xml drawable icon (while this "light" theme
+		<!-- these 4 decide the color of every xml drawable icon (while this "light" theme
 		 is active). Use	?colorPrimary	 to inherit from android 13's
 		 user set dynamic primary color -->
 		<item name="iconTint">@color/black_alpha85</item>
-		<item name="android:drawableTint">@color/black_alpha85</item>
-		<item name="android:tint">@color/black_alpha85</item>
+		<item name="android:drawableTint">?iconTint</item>
+		<item name="android:tint">?iconTint</item>
+		<item name="drawableTint">?iconTint</item>
 	</style>
 
-	<!-- "classic" theme: shows a more condensed note list, with smaller separators, by design!
-	 	That aside, it's 99% similar to the light theme -->
+	<!-- "classic" theme: shows a more condensed note list, with smaller separators,
+	 	 by design! That aside, it's 99% similar to the light theme -->
 	<style name="ThemeNnnClassicLight" parent="@style/ThemeNnnLight">
 		<item name="TaskListItem">@style/TaskListItemLightClassic</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
