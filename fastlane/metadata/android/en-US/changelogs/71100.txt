@@ -1,0 +1,13 @@
+﻿NoNonsense Notes v7.1.1
+
+Highlights:
+- Translated using Weblate
+- added global sync preference, can prevent sync code from running at all
+- changed permissions
+- shortcut icon is now visibile in "simple launcher"
+- block editing note reminders when it's locked
+- fix bug showing an empty note when sharing a link
+
+Details:
+- small UI improvements
+- remove unused code
