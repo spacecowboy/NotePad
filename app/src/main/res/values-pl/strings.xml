@@ -21,7 +21,6 @@
     <string name="time">Czas</string>
     <string name="done">Gotowe</string>
     <string name="saved">Zapisane</string>
-    <string name="near">W pobliżu</string>
     <string name="menu_save_and_add">Nowa notatka</string>
     <string name="menu_delete">Usuń</string>
     <string name="menu_deletelist">Usuń listę</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">Przytrzymaj, aby edytować lub usunąć </string>
     <string name="showcase_timemachine_title">Zachowaj swoje notatki</string>
     <string name="showcase_timemachine_msg">Zmiany są zawsze zapisywane. Użyj kapsuły czasu, aby przywrócić poprzednie wersje. </string>
-    <string name="premiums_unlocked_and_thanks">Funkcje specjalne odblkowane. Dziękujemy za wsparcie!</string>
     <string name="move">Przenieś</string>
     <string name="move_to">Przenieś do</string>
     <string name="lock_note">Zablokuj notatkę</string>
@@ -116,7 +114,6 @@
     <string name="about">O programie</string>
     <string name="sync_failed">Synchronizacja nieudana</string>
     <string name="sync_login_failed">Logowanie nieudane, nie można połaczyć się z Google Tasks</string>
-    <string name="changelog_title">Co nowego</string>
     <string name="completed">Zakończono</string>
     <string name="date_header_overdue">Po terminie</string>
     <string name="date_header_today">Dzisiaj</string>
@@ -138,7 +135,6 @@
     <string name="short_date_format">Krótki format daty</string>
     <string name="select_date">Ustaw datę</string>
     <string name="localedefault">Domyślnie ustawienia regionalne</string>
-    <string name="donate_thanks">Dziękujemy za wsparcie!</string>
     <string name="hide_header">Ukryj nagłówek widżetu</string>
     <string name="transparency">Przeźroczystość</string>
     <string name="notes_shortcut">Skrót notatki</string>
@@ -158,7 +154,6 @@
     <string name="sync_on_change_info">Synchronizacja zaraz po zmianie notatki</string>
     <string name="sync_on_start">Synchronizuj przy starcie aplikacji </string>
     <string name="sync_on_start_info">Synchronizacja tylko przy świeżym starcie, nie przy wznawianiu</string>
-    <string name="sync_full_force_info">Zaznacz jeśli uważasz, że nie wszystkie pozycje są zsynchronizowane</string>
     <string name="snooze">Drzemka</string>
     <string name="silent">Cichy</string>
     <string name="sound">Dźwięk </string>

@@ -88,7 +88,6 @@
     <string name="showcase_drawer_msg">Appui long pour éditer ou supprimer</string>
     <string name="showcase_timemachine_title">Sauvegarder vos notes</string>
     <string name="showcase_timemachine_msg">Les changements sont toujours sauvegardés. Utiliser la time machine pour restaurer une version précédente.</string>
-    <string name="premiums_unlocked_and_thanks">Fonctions avancées déverrouillée. Merci pour votre soutien!</string>
     <string name="move">Déplacer</string>
     <string name="move_to">Déplacer vers</string>
     <string name="moved_x_to_list">%1$d déplacé vers %2$s</string>
@@ -112,7 +111,6 @@
     <string name="about">À propos</string>
     <string name="sync_failed">La synchronisation a échouée</string>
     <string name="sync_login_failed">La connexion à Google Tâches a échouée</string>
-    <string name="changelog_title">Quoi de neuf</string>
     <string name="completed">Complété</string>
     <string name="date_header_overdue">En retard</string>
     <string name="date_header_today">Aujourd\'hui</string>
@@ -134,7 +132,6 @@
     <string name="short_date_format">Format de date courte</string>
     <string name="select_date">Date sélectionnée</string>
     <string name="localedefault">Paramètres régionaux par défaut</string>
-    <string name="donate_thanks">Merci pour votre soutien!</string>
     <string name="hide_header">Masquer l\'en-tête du widget</string>
     <string name="transparency">Opacité</string>
     <string name="notes_shortcut">Raccourci</string>
@@ -154,7 +151,6 @@
     <string name="sync_on_change_info">Planifie une synchronisation peu de temps après la mise à jour d\'une note</string>
     <string name="sync_on_start">Synchronisation au démarrage</string>
     <string name="sync_on_start_info">Se synchronisera toutes les 5 minutes</string>
-    <string name="sync_full_force_info">Cocher seulement si la synchronisation semble incomplète.</string>
     <string name="snooze">Répéter</string>
     <string name="silent">Silence</string>
     <string name="sound">Sonnerie</string>

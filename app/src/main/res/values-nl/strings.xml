@@ -21,7 +21,6 @@
     <string name="time">Tijd</string>
     <string name="done">Klaar</string>
     <string name="saved">Opgeslagen</string>
-    <string name="near">Vlakbij</string>
     <string name="menu_save_and_add">Opslaan en open nieuwe notitie</string>
     <string name="menu_delete">Verwijderen</string>
     <string name="menu_deletelist">Verwijder lijst</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">Lang indrukken om te bewerken of te verwijderen</string>
     <string name="showcase_timemachine_title">Sla uw notities op</string>
     <string name="showcase_timemachine_msg">Veranderingen worden aldtijd opgeslagen. Gebruik de tijdmachine om naar een vorige versie terug te keren.</string>
-    <string name="premiums_unlocked_and_thanks">Premium functies ontgrendeld. Bedankt voor jou steun!</string>
     <string name="move">Verplaats</string>
     <string name="move_to">Verplaats naar</string>
     <string name="moved_x_to_list">%1$d naar %2$s verplaatst</string>
@@ -117,7 +115,6 @@
     <string name="about">Over</string>
     <string name="sync_failed">Synchronisatie mislukt</string>
     <string name="sync_login_failed">Inloggen mislukt, kon niet verbinden met Google Tasks</string>
-    <string name="changelog_title">Wat is er veranderd?</string>
     <string name="completed">Voltooid</string>
     <string name="date_header_overdue">Over tijd</string>
     <string name="date_header_today">Vandaag</string>
@@ -139,7 +136,6 @@
     <string name="short_date_format">Korte datumnotatie</string>
     <string name="select_date">Selecteer datum</string>
     <string name="localedefault">Standaard</string>
-    <string name="donate_thanks">Bedankt voor jou steun!</string>
     <string name="hide_header">Hele widget-kop verbergen</string>
     <string name="transparency">Transparantie</string>
     <string name="notes_shortcut">Notities snelkoppeling</string>
@@ -159,7 +155,6 @@
     <string name="sync_on_change_info">Synchroniseer kort nadat een notitie is gewijzigd</string>
     <string name="sync_on_start">Synchroniseer bij starten app</string>
     <string name="sync_on_start_info">Synchroniseert bij nieuwe start, niet bij hervatten app</string>
-    <string name="sync_full_force_info">Kies dit alleen als je denkt dat bij synchronisatie sommige items ontbreken.</string>
     <string name="snooze">Dutten</string>
     <string name="silent">Stil</string>
     <string name="sound">Geluid</string>

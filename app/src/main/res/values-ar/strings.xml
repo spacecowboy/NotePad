@@ -80,7 +80,6 @@
     <string name="about">حول</string>
     <string name="sync_failed">فشلت المزامنة</string>
     <string name="sync_login_failed">فشل الدخول، لايمكن الاتصال بـ Google Tasks</string>
-    <string name="changelog_title">مالجديد</string>
     <string name="completed">أكتمل</string>
     <string name="date_header_overdue">متأخر</string>
     <string name="date_header_today">اليوم</string>
@@ -113,7 +112,6 @@
     <string name="sync_on_change_info">عمل جدولة للمزامنة عاجلة بعد التغيير في الملاحظة</string>
     <string name="sync_on_start">مزامنة عند بدأ التطبيق</string>
     <string name="sync_on_start_info">سوف تبدأ المزامنة فقط عند بدء التطبيق وليس عند متابعة التطبيق</string>
-    <string name="sync_full_force_info">فقط قم بتحديد هذا اذا كنت واثق من ان بعض العناصر مفقودة</string>
     <string name="snooze">غفوة</string>
     <string name="silent">صامت</string>
     <string name="sound">صوت</string>

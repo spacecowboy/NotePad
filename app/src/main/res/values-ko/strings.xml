@@ -21,7 +21,6 @@
     <string name="time">시간</string>
     <string name="done">완료</string>
     <string name="saved">저장 완료</string>
-    <string name="near">근처</string>
     <string name="menu_save_and_add">저장하고 메모 추가</string>
     <string name="menu_delete">지우기</string>
     <string name="menu_deletelist">목록 지우기</string>
@@ -84,7 +83,6 @@
     <string name="about">정보</string>
     <string name="sync_failed">동기화 실패</string>
     <string name="sync_login_failed">로그인을 실패하여 Google Tasks에 연결할 수 없음</string>
-    <string name="changelog_title">새로운 기능</string>
     <string name="completed">완료됨</string>
     <string name="date_header_overdue">목표 날짜 지남</string>
     <string name="date_header_today">오늘</string>
@@ -115,7 +113,6 @@
     <string name="sync_on_change_info">노트를 고치고 나면 동기화 되도록 설정</string>
     <string name="sync_on_start">애플리케이션 시작할 때마다 동기화하기</string>
     <string name="sync_on_start_info">애플리케이션을 \'새로\' 시작할 때에만 동기화됨</string>
-    <string name="sync_full_force_info">몇몇 사항이 제대로 동기화되고 있지 않을 때에만 체크</string>
     <string name="silent">조용히</string>
     <string name="sound">소리</string>
     <string name="vibrate">진동</string>

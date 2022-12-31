@@ -21,7 +21,6 @@
     <string name="time">Aika</string>
     <string name="done">Valmis</string>
     <string name="saved">Tallennettu</string>
-    <string name="near">Lähellä</string>
     <string name="menu_save_and_add">Tallenna ja avaa uusi muistiinpano</string>
     <string name="menu_delete">Poista</string>
     <string name="menu_deletelist">Poista lista</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">Paina pitkään muokataksesi tai poistaaksesi</string>
     <string name="showcase_timemachine_title">Tallenna muistiinpanosi</string>
     <string name="showcase_timemachine_msg">Muutokset tallennetaan aina. Käytä aikakonetta palauttaaksesi aikaisemman version.</string>
-    <string name="premiums_unlocked_and_thanks">Lisäominaisuudet avattu. Kiitos tuestasi!</string>
     <string name="move">Siirrä</string>
     <string name="move_to">Siirrä sijaintiin</string>
     <string name="moved_x_to_list">Siirrettiin %1$d sijaintiin %2$s</string>
@@ -117,7 +115,6 @@
     <string name="about">Tietoja</string>
     <string name="sync_failed">Synkronointi epäonnistui</string>
     <string name="sync_login_failed">Sisäänkirjautuminen epäonnistui, ei voitu yhdistää Google Tasks:iin</string>
-    <string name="changelog_title">Uutta</string>
     <string name="completed">Valmis</string>
     <string name="date_header_overdue">Myöhässä</string>
     <string name="date_header_today">Tänään</string>
@@ -139,7 +136,6 @@
     <string name="short_date_format">Lyhyt päivämäärä</string>
     <string name="select_date">Valitse päivämäärä</string>
     <string name="localedefault">Oletus</string>
-    <string name="donate_thanks">Kiitos tuestasi!</string>
     <string name="hide_header">Piilota koko lisäohjelmatunniste</string>
     <string name="transparency">Läpinäkyvyys</string>
     <string name="notes_shortcut">Muistiinpanojen pikakuvake</string>
@@ -159,7 +155,6 @@
     <string name="sync_on_change_info">Synkronoi, kun muistiinpano on muuttunut</string>
     <string name="sync_on_start">Synkronoi sovelluksen käynnistyessä</string>
     <string name="sync_on_start_info">Synkronoi korkeintaan joka 5. minuutti</string>
-    <string name="sync_full_force_info">Valitse tämä vain silloin, kun epäilet, että synkronoinnista puuttuu kohteita.</string>
     <string name="snooze">Torkku</string>
     <string name="silent">Äänetön</string>
     <string name="sound">Ääni</string>

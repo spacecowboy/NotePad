@@ -21,7 +21,6 @@
     <string name="time">Tyd</string>
     <string name="done">Klaar</string>
     <string name="saved">Gestoor</string>
-    <string name="near">Naby</string>
     <string name="menu_save_and_add">Stoor en voeg nota by</string>
     <string name="menu_delete">Vee uit</string>
     <string name="menu_deletelist">Vee lys uit</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">Lang-raak om te redigeer of uit te vee</string>
     <string name="showcase_timemachine_title">Stoor jou notas</string>
     <string name="showcase_timemachine_msg">Alle veranderinge word gestoor. Gebruik die tydmasjien om vorige weergawes te herstel.</string>
-    <string name="premiums_unlocked_and_thanks">Premium eienskappe ontsluit. Baie dankie vir jou ondersteuning!</string>
     <string name="move">Verskuif</string>
     <string name="move_to">Verskuif na</string>
     <string name="moved_x_to_list">Het %1$d na %2$s verskuif</string>
@@ -117,7 +115,6 @@
     <string name="about">Omtrent</string>
     <string name="sync_failed">Sinkronisasie het gefaal</string>
     <string name="sync_login_failed">Intekening het gefaal, kon nie met Google Take skakel nie</string>
-    <string name="changelog_title">Wat\'s nuut</string>
     <string name="completed">Voltooid</string>
     <string name="date_header_overdue">Laat</string>
     <string name="date_header_today">Vandag</string>
@@ -138,7 +135,6 @@
     <string name="short_date_format">Kort datum-formaat</string>
     <string name="select_date">Kies datum</string>
     <string name="localedefault">Verstek omgewing</string>
-    <string name="donate_thanks">Baie dankie vir jou ondersteuning!</string>
     <string name="hide_header">Moenie die widget opskrif wys nie</string>
     <string name="transparency">Deurskynendheid</string>
     <string name="notes_shortcut">Notas kortpad</string>
@@ -158,7 +154,6 @@
     <string name="sync_on_change_info">Sinkroniseer binnekort indien \'n nota verander het</string>
     <string name="sync_on_start">Sinkroniseer wanneer die app oopmaak</string>
     <string name="sync_on_start_info">Sinkroniseer meestens een keer elke 5 minute</string>
-    <string name="sync_full_force_info">Kies hierdie alleenlik as dit lyk asof die sinkronisasie onvolledig was.</string>
     <string name="snooze">Dut nog \'n bietjie</string>
     <string name="silent">Stil</string>
     <string name="sound">Klank</string>

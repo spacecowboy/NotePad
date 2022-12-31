@@ -21,7 +21,6 @@
     <string name="time">Idő</string>
     <string name="done">Kész</string>
     <string name="saved">Mentve</string>
-    <string name="near">Közel</string>
     <string name="menu_save_and_add">Mentés és új létrehozása</string>
     <string name="menu_delete">Törlés</string>
     <string name="menu_deletelist">Lista törlése</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">Szerkesztéshez vagy törléshez nyomjon hosszan</string>
     <string name="showcase_timemachine_title">Mindent ment</string>
     <string name="showcase_timemachine_msg">Kilépéskor minden változás mentésre kerül. Használja az időgépet hogy visszaállítsa az előző verzióra.</string>
-    <string name="premiums_unlocked_and_thanks">Prémium funkciók feloldva. Köszönöm a támogatását.</string>
     <string name="move">Áthelyezés</string>
     <string name="move_to">Áthelyezés</string>
     <string name="moved_x_to_list">%1$d elem áthelyezve a következő listába: %2$s</string>
@@ -117,7 +115,6 @@
     <string name="about">Névjegy</string>
     <string name="sync_failed">Szinkronizálási hiba</string>
     <string name="sync_login_failed">Bejelentkezési hiba, nem lehetett csatlakozni a Google Feladatokhoz</string>
-    <string name="changelog_title">Újítások</string>
     <string name="completed">Kész</string>
     <string name="date_header_overdue">Lejárt</string>
     <string name="date_header_today">Ma</string>
@@ -139,7 +136,6 @@
     <string name="short_date_format">Rövid dátum formátum</string>
     <string name="select_date">Dátum</string>
     <string name="localedefault">Alapértelmezett</string>
-    <string name="donate_thanks">Köszönöm a támogatását</string>
     <string name="hide_header">Widget fejrész elrejtése</string>
     <string name="transparency">Átlátszóság</string>
     <string name="notes_shortcut">Jegyzetek parancsikon</string>
@@ -159,7 +155,6 @@
     <string name="sync_on_change_info">Jegyzet változása után nem sokkal szinkronizál</string>
     <string name="sync_on_start">Szinkronizálás alkalmazás indításakor</string>
     <string name="sync_on_start_info">Nagyjából 5 percenként szinkronizál</string>
-    <string name="sync_full_force_info">Csak akkor válassza ezt, ha úgy gondolja, hogy hiányzik néhány elem.</string>
     <string name="snooze">Szundi</string>
     <string name="silent">Csendes</string>
     <string name="sound">Hang</string>

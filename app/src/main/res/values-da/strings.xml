@@ -21,7 +21,6 @@
     <string name="time">Tid</string>
     <string name="done">Udført</string>
     <string name="saved">Gemt</string>
-    <string name="near">Nær</string>
     <string name="menu_save_and_add">Gem og åbn en ny note</string>
     <string name="menu_delete">Slet</string>
     <string name="menu_deletelist">Slet liste</string>
@@ -92,7 +91,6 @@
     <string name="showcase_drawer_msg">Langt tryk for at redigere eller slette</string>
     <string name="showcase_timemachine_title">Gemmer alt</string>
     <string name="showcase_timemachine_msg">Dine ændringer gemmes altid ved exit. Brug tidsmaskinen for at genskabe en note til en tidligere version.</string>
-    <string name="premiums_unlocked_and_thanks">Premium-funktioner låst op. Tak for din støtte!</string>
     <string name="move">Flyt</string>
     <string name="move_to">Flyt til</string>
     <string name="moved_x_to_list">%1$d flyttet til %2$s</string>
@@ -116,7 +114,6 @@
     <string name="about">Om</string>
     <string name="sync_failed">Synkornisering fejlet</string>
     <string name="sync_login_failed">Login fejlet, kunne ikke forbinde til Google Tasks</string>
-    <string name="changelog_title">Nyheder</string>
     <string name="completed">Udført</string>
     <string name="date_header_overdue">Forsinket</string>
     <string name="date_header_today">I dag</string>
@@ -138,7 +135,6 @@
     <string name="short_date_format">Kort dato format</string>
     <string name="select_date">Vælg dato</string>
     <string name="localedefault">Lokal standard</string>
-    <string name="donate_thanks">Tak for din support!</string>
     <string name="hide_header">Skjul hele widget headeren</string>
     <string name="transparency">Gennemsigtighed</string>
     <string name="notes_shortcut">Noter genvej</string>
@@ -158,7 +154,6 @@
     <string name="sync_on_change_info">Udløser en synkronisering kort efter en note har ændret</string>
     <string name="sync_on_start">Synkroniser ved app start</string>
     <string name="sync_on_start_info">Vil kun udløse på en frisk start, ikke ved genoptagelse</string>
-    <string name="sync_full_force_info">Marker kun dette felt, hvis du tror, ​​synkroniseringen mangler nogle elementer.</string>
     <string name="snooze">Udsæt</string>
     <string name="silent">Lydløs</string>
     <string name="sound">Lyd</string>

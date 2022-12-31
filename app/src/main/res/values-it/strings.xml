@@ -21,7 +21,6 @@
     <string name="time">Tempo</string>
     <string name="done">Fatto</string>
     <string name="saved">Salvata</string>
-    <string name="near">Vicino</string>
     <string name="menu_save_and_add">Salva e apre una nuova nota</string>
     <string name="menu_delete">Elimina</string>
     <string name="menu_deletelist">Elimina elenco</string>
@@ -85,7 +84,6 @@
     <string name="showcase_drawer_msg">Pressione lunga su un nome di lista per modificarla o eliminarla</string>
     <string name="showcase_timemachine_title">Salva le tue note</string>
     <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
-    <string name="premiums_unlocked_and_thanks">Funzioni premium sbloccate. Grazie per il tuo supporto!</string>
     <string name="notification_channel_name">Promemoria delle note</string>
     <string name="notification_channel_description">Mostra il contenuto della nota quando arriva il momento segnato nel promemoria</string>
     <string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>
@@ -117,7 +115,6 @@
     <string name="about">Informazioni</string>
     <string name="sync_failed">Sincronizzazione non riuscita</string>
     <string name="sync_login_failed">Login non riuscito, non è possibile connettersi a Google Tasks</string>
-    <string name="changelog_title">Novità</string>
     <string name="completed">Completata</string>
     <string name="date_header_overdue">Scadute</string>
     <string name="date_header_today">Oggi</string>
@@ -136,7 +133,6 @@
     <string name="short_date_format">Formato data compatta</string>
     <string name="select_date">Seleziona la data</string>
     <string name="localedefault">Predefinita del sistema</string>
-    <string name="donate_thanks">Grazie per il tuo supporto</string>
     <string name="hide_header">Nascondi intestazione widget</string>
     <string name="transparency">Trasparenza</string>
     <string name="notes_shortcut">Scorciatoia note</string>
@@ -156,7 +152,6 @@
     <string name="sync_on_change_info">Pianifica la sincronizzazione poco dopo la modifica della nota</string>
     <string name="sync_on_start">Sincronizza all\'avvio dell\'applicazione</string>
     <string name="sync_on_start_info">Avverrà solo all\'avvio iniziale, non ad ogni ripristino</string>
-    <string name="sync_full_force_info">Attivare solo se si ritiene che la sincronizzazione non sia completa.</string>
     <string name="silent">Silenzioso</string>
     <string name="sound">Suono</string>
     <string name="vibrate">Vibrazione</string>
@@ -241,7 +236,6 @@
     <string name="account">Profilo</string>
     <string name="bigger_titles">Titolo più grande</string>
     <string name="bigger_titles_summary">Il titolo è la prima linea</string>
-    <string name="new_password">Nuova password</string>
     <string name="legacy">Storico</string>
     <string name="sorting">Ordine</string>
     <string name="undo">Annulla</string>

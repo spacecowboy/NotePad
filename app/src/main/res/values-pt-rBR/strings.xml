@@ -102,7 +102,6 @@
     <string name="about">Sobre</string>
     <string name="sync_failed">Sincronização falhou</string>
     <string name="sync_login_failed">Login falhou, não foi possível se conectar  com o Google Tasks</string>
-    <string name="changelog_title">O que há de novo?</string>
     <string name="completed">Concluído </string>
     <string name="date_header_overdue">Atrasado</string>
     <string name="date_header_today">Hoje </string>
@@ -120,7 +119,6 @@
     <string name="long_date_format">Formato de data extendido</string>
     <string name="short_date_format">Formato de data compacto</string>
     <string name="localedefault">Localização padrão</string>
-    <string name="donate_thanks">Obrigado pela sua ajuda!</string>
     <string name="hide_header">Esconder todo o cabeçalho do widget</string>
     <string name="transparency">Transparência</string>
     <string name="notes_shortcut">Atalho para notas</string>
@@ -140,7 +138,6 @@
     <string name="sync_on_change_info">Sincronizar imediatamente depois que a nota foi modificada</string>
     <string name="sync_on_start">Sincronização na inicialização do app</string>
     <string name="sync_on_start_info">Irá sincronizar no máximo a cada 5 minutos</string>
-    <string name="sync_full_force_info">Apenas selecione se sentir falta de alguns itens</string>
     <string name="snooze">Adiar o lembrete</string>
     <string name="silent">Silêncio</string>
     <string name="sound">Som</string>

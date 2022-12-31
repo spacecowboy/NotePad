@@ -21,7 +21,6 @@
     <string name="time">Tid</string>
     <string name="done">Färdig</string>
     <string name="saved">Sparad</string>
-    <string name="near">Nära</string>
     <string name="menu_save_and_add">Spara och öppna ny</string>
     <string name="menu_delete">Ta bort</string>
     <string name="menu_deletelist">Ta bort listan</string>
@@ -93,7 +92,6 @@
     <string name="showcase_drawer_msg">Tryck och håll inne för att ändra eller ta bort</string>
     <string name="showcase_timemachine_title">Spara anteckningar</string>
     <string name="showcase_timemachine_msg">Dina ändringar sparas alltid. Använd tidsmaskinen för att återställa en äldre version.</string>
-    <string name="premiums_unlocked_and_thanks">Upplåst. Tack för ditt stöd!</string>
     <string name="move">Flytta</string>
     <string name="move_to">Flytta till</string>
     <string name="moved_x_to_list">Flyttade %1$d till %2$s</string>
@@ -117,7 +115,6 @@
     <string name="about">Om</string>
     <string name="sync_failed">Synk misslyckades</string>
     <string name="sync_login_failed">Inloggning misslyckades, kunde inte komma åt Google Tasks</string>
-    <string name="changelog_title">Nyheter</string>
     <string name="completed">Slutförd</string>
     <string name="date_header_overdue">Försenade</string>
     <string name="date_header_today">Idag</string>
@@ -139,7 +136,6 @@
     <string name="short_date_format">Kort datumformat</string>
     <string name="select_date">Välj datum</string>
     <string name="localedefault">Språkspecifikt</string>
-    <string name="donate_thanks">Tack för ditt stöd!</string>
     <string name="hide_header">Dölj titel</string>
     <string name="transparency">Transparens</string>
     <string name="notes_shortcut">Anteckningsgenväg</string>
@@ -159,7 +155,6 @@
     <string name="sync_on_change_info">Schemalägger en synk en kort tid efter att en anteckningar har ändrats</string>
     <string name="sync_on_start">Synka när appen startar</string>
     <string name="sync_on_start_info">Synkar som mest var femte minut</string>
-    <string name="sync_full_force_info">Markera denna endast om du tror att synken missar några anteckningar.</string>
     <string name="snooze">Snooza</string>
     <string name="silent">Tyst</string>
     <string name="sound">Ljud</string>
