@@ -9,15 +9,13 @@ set -u
 
 TARGET="${1:-HEAD}"
 
-
 current_default="$(git describe --tags --abbrev=0 "${TARGET}")"
 
-
-echo >&2 -n "Current version is ${current_default}"
+echo >&2 -n "Current version is ${current_default}, "
 # read -r current_in
 
 next_default="$(grep "versionName" ./app/build.gradle | sed "s|\s*versionName \"\(.*\)\"|\\1|")"
-echo >&2 -n "Next version [press 'enter' for ${next_default}]: "
+echo >&2 -n "next version [press 'enter' for ${next_default}]: "
 read -r next_in
 
 if [ -z "${next_in}" ]; then
@@ -49,7 +47,7 @@ then
 fi
 
 # changelog template. To add all the new commit messages, move this line inside the ""
-# $(git shortlog -w76,2,9 --format='* [%h] %s' ${current_in}..HEAD)
+
 CL="NoNonsense Notes v${NEXT_VERSION}
 
 Highlights:
@@ -57,6 +55,8 @@ Highlights:
 
 Details:
 -
+Write no more than 500 words. Include the following:
+$(git shortlog -w76,2,9 --format='* %s' "${current_default}"..HEAD)
 "
 
 tmpfile="$(mktemp)"
@@ -71,8 +71,10 @@ else
   nano "${tmpfile}"
 fi
 
+echo >&2 ""
 echo >&2 "Changelog for [${NEXT_VERSION}]:"
 cat >&2 "${tmpfile}"
+echo >&2
 
 read -r -p "Write changelog? [y/N] " response
 if [[ "$response" =~ ^[yY]$ ]]
