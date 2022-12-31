@@ -150,6 +150,8 @@
 	<string name="enable_sync_desc">Enables synchronization features and allows to choose a sync source. Backups are not affected</string>
 	<string name="changelog_online">Changelog (online)</string>
 	<string name="canceled_note_locked">Canceled: the note is locked</string>
+	<string name="order_notes_by">Order notes by:</string>
+	<string name="show_elements_as">Show elements as:</string>
 
 	<!--
 		Use few if language need it. In English is the same.

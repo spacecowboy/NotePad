@@ -46,18 +46,29 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:fontFamily="sans-serif"
-		android:minHeight="48dp"
+		android:layout_marginBottom="16dp"
 		android:text="@string/menu_setdefaultlist"
 		android:textAppearance="@android:style/TextAppearance.Medium"
 		android:textColor="?android:attr/textColorSecondary"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingHorizontal="16dp"
+		android:text="@string/order_notes_by"/>
 
 	<Spinner
 		android:id="@+id/sortSpinner"
 		android:layout_width="fill_parent"
 		android:layout_height="48dp"
 		android:spinnerMode="dropdown"
-
 		tools:listitem="@layout/spinner_item"/>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingHorizontal="16dp"
+		android:text="@string/show_elements_as"/>
 
 	<Spinner
 		android:id="@+id/modeSpinner"
@@ -78,8 +89,7 @@
 		android:drawablePadding="8dp"
 		android:fontFamily="sans-serif"
 		android:gravity="center_vertical"
-		android:paddingLeft="16dp"
-		android:paddingRight="20dp"
+		android:paddingHorizontal="16dp"
 		android:text="@string/menu_deletelist"
 		android:textAllCaps="true"
 		android:textAppearance="@android:style/TextAppearance.Medium"
