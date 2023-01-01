@@ -18,6 +18,10 @@ so that it's easier for the maintainers to keep up.
 
 When creating a new issue, please use the templates and provide enough information.
 
+## Translations
+
+use [weblate](https://hosted.weblate.org/engage/no-nonsense-notes/) to help us translate the app
+
 ## Testing
 
 We use AndroidX and Espresso for android tests.
@@ -36,7 +40,6 @@ so you may have to wait for a while before we answer.
 
 ## Coding conventions
 
-We basically use the default Android Studio settings, with some tweaks.
+We basically use the default Android Studio settings.
 Before contributing, please run the Reformat Code tool (CTRL+ALT+L) on the `java` and `res` folders.
-
-Write everything in english, except of course the translated string resources.
+Write your code in english.
