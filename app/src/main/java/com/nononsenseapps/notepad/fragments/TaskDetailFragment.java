@@ -607,7 +607,16 @@ public class TaskDetailFragment extends Fragment {
 				mLocked = false;
 				fillUIFromTask();
 			});
-			pflock.show(getFragmentManager(), "read_verify");
+			// show the password popup if needed
+			final String PASSW_TAG = "read_verify";
+			Fragment oldDiag = this.getParentFragmentManager().findFragmentByTag(PASSW_TAG);
+			if (oldDiag == null) {
+				// the password dialog is not among the active fragments
+				// => you have to launch it
+				pflock.show(getParentFragmentManager(), PASSW_TAG);
+			} else {
+				// there is already one visible => don't spam them, one is enough
+			}
 		} else {
 			taskText.setText(mTask.getText());
 		}
@@ -736,8 +745,7 @@ public class TaskDetailFragment extends Fragment {
 					mTask.locked = true;
 					mTask.save(getActivity());
 					fillUIFromTask();
-					Toast.makeText(getActivity(), R.string.locked,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.locked, Toast.LENGTH_SHORT).show();
 				}
 			});
 			pflock.show(getFragmentManager(), "lock_verify");
