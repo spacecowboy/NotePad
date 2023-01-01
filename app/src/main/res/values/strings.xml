@@ -204,7 +204,7 @@
 	<string name="confirm_new_password">Confirm new password</string>
 	<string name="apply">Apply</string>
 	<string name="clear_password">Clear password</string>
-	<string name="password_info">Any one note can be locked, limiting viewing and modifying it. It remains fully accessible on other devices. Setting an empty password disables all note locks</string>
+	<string name="password_info">Any one note can be locked, limiting viewing and modifying it. It remains fully accessible on other devices. If you forget it, you can clear it and set a new one</string>
 	<string name="about">About</string>
 	<string name="sync_failed">Sync failed</string>
 	<string name="sync_login_failed">Could not log in to use Google Tasks</string>
