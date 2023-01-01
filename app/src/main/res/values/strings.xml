@@ -47,8 +47,8 @@
 	<string name="editor_note_hint">Note</string>
 	<string name="resolve_edit">Edit note</string>
 	<string name="default_style">Default style</string>
-	<string name="show_items_as_tasks">Show items as tasks</string>
-	<string name="show_items_as_notes">Show items as notes</string>
+	<string name="show_items_as_tasks">checkable tasks</string>
+	<string name="show_items_as_notes">simple notes</string>
 	<string name="sort_list_default">Default sorting order</string>
 	<string name="sort_list_alphabetical">A-Z</string>
 	<string name="sort_list_due">Due date</string>
@@ -151,7 +151,7 @@
 	<string name="changelog_online">Changelog (online)</string>
 	<string name="canceled_note_locked">Canceled: the note is locked</string>
 	<string name="order_notes_by">Order notes by:</string>
-	<string name="show_elements_as">Show elements as:</string>
+	<string name="show_elements_as">Show items as:</string>
 
 	<!--
 		Use few if language need it. In English is the same.
