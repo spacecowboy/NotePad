@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 
 import com.nononsenseapps.helpers.ActivityHelper;
@@ -63,10 +64,13 @@ public class ActivitySearch extends AppCompatActivity {
 		return FragmentSearch.getInstance(mQuery);
 	}
 
+	/**
+	 * Shows the {@link FragmentSearch} with the results
+	 */
 	void loadContent() {
 		getSupportFragmentManager()
 				.beginTransaction()
-				.add(R.id.fragmentPlaceHolder, getFragment())
+				.replace(R.id.fragmentPlaceHolder, getFragment())
 				.commit();
 	}
 
@@ -81,11 +85,26 @@ public class ActivitySearch extends AppCompatActivity {
 		if (intent == null) return;
 
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			// as a result of voice search in the main activity
 			mQuery = intent.getStringExtra(SearchManager.QUERY);
+
+			var searchViewMenuItem = (SearchView) this.findViewById(R.id.menu_search);
+			if (searchViewMenuItem == null) {
+				// the search activity did not load yet (for example, a voice search is opening
+				// ActivitySearch from ActivityMain). In this case, you need to load the content
+				loadContent();
+			} else {
+				// there is a searchview in this activity. You MUST NOT re-create the fragment.
+				// Instead, update the query text, and the fragment will show the results
+				searchViewMenuItem.setQuery(mQuery, false);
+			}
 		} else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+			// when you click a note from the search suggestion in the main activity
 			intent.setClass(getApplicationContext(), ActivityMain_.class);
 			startActivity(intent);
 			finish();
+		} else if (intent.getAction() == null) {
+			// the archive view was launched from ActivityMain
 		}
 	}
 

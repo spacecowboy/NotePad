@@ -47,7 +47,6 @@ import com.nononsenseapps.ui.TitleNoteTextView;
 
 import java.util.HashSet;
 
-
 public class FragmentSearchDeleted extends FragmentSearch {
 
 	@Override
@@ -55,6 +54,16 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		super.onViewCreated(view, savedInstanceState);
 		setSelection();
 	}
+
+	public static FragmentSearchDeleted getInstance(final String initialQuery) {
+		FragmentSearchDeleted f = new FragmentSearchDeleted();
+		Bundle args = new Bundle();
+		args.putString(QUERY, initialQuery);
+		f.setArguments(args);
+		return f;
+	}
+
+	private FragmentSearchDeleted() {}
 
 	void setSelection() {
 		mBinding.list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -176,11 +185,6 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				}
 			}
 		});
-	}
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 	}
 
 	@Override

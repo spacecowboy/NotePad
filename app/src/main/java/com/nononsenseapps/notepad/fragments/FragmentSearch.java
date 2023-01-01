@@ -55,11 +55,8 @@ import com.nononsenseapps.ui.TitleNoteTextView;
 public class FragmentSearch extends Fragment {
 
 	public final static String QUERY = "query";
-
 	protected SimpleCursorAdapter mAdapter;
-
 	protected LoaderCallbacks<Cursor> mCallback;
-
 	protected String mQuery = "";
 
 	/**
@@ -146,10 +143,8 @@ public class FragmentSearch extends Fragment {
 		searchView.setQuery(mQuery, false);
 	}
 
-
 	void setupAdapter() {
 		mAdapter = getAdapter();
-
 		mAdapter.setViewBinder(getViewBinder());
 
 		// Set adapter
@@ -256,7 +251,6 @@ public class FragmentSearch extends Fragment {
 						((TitleNoteTextView) view).setSingleLine(false);
 						((TitleNoteTextView) view).setMaxLines(rowCount);
 					}
-
 					// Change color based on complete status
 					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
@@ -266,8 +260,7 @@ public class FragmentSearch extends Fragment {
 					// Note
 					// Only if task it not locked
 					if (c.getInt(9) != 1) {
-						((TitleNoteTextView) view).setTextRest(c
-								.getString(colIndex));
+						((TitleNoteTextView) view).setTextRest(c.getString(colIndex));
 					} else {
 						((TitleNoteTextView) view).setTextRest("");
 					}
