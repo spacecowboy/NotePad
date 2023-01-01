@@ -1,0 +1,17 @@
+Stà applicasion la xè open source e adata ale pì recenti versioni del Android. La gà:
+
+* el reojo Dashclock
+* e notifiche pai promemoria, che i se ripete anca su pai dì dea setimana
+* tante lingue, anca quea veneta
+* i widget pal menù principae
+* a pasword par blocare e note importanti
+* note che te pui movare tra e liste
+* note che te pui trascinare sù e zo
+* integrasion co l'Android Agenda Widget
+* a bàra par sèrcare
+* i coeori a tema ciaro o scuro, a seconda dei to gusti
+* backup par salvarse i dati importanti
+* sincronisasion sua memoria del teefono cui file .org
+
+Pàr migliorare sta app, o par contarme qualche to idea, vien trovarme su
+https://github.com/spacecowboy/NotePad
