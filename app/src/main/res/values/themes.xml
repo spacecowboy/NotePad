@@ -22,6 +22,9 @@
          colorPrimary colorOnPrimary colorPrimaryContainer colorOnPrimaryContainer
          colorError colorOnError colorErrorContainer colorOnErrorContainer
          colorOnBackground colorSurface colorOnSurface
+         Problems:
+         * alertdialogs don't show the buttons: they're white (Moto G5, Android 7.0)
+         * the default colors are shades of purple, which look horrible on older devices
 	 -->
 
 	<!-- a base theme used for the app & the widget. Things for the DARK theme can go here -->
