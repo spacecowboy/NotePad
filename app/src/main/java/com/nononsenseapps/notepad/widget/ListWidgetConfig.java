@@ -115,8 +115,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		Intent intent = getIntent();
 		if (intent != null && intent.getExtras() != null) {
-			appWidgetId = intent.getExtras().getInt(
-					AppWidgetManager.EXTRA_APPWIDGET_ID,
+			appWidgetId = intent.getExtras().getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 		} else {
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
@@ -160,39 +159,23 @@ public class ListWidgetConfig extends AppCompatActivity {
 				isHeader = c.getLong(0) == -1;
 				switch (colIndex) {
 					case 1:
+						// title
 						if (isHeader) {
 							sTemp = c.getString(1);
-
-							if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_overdue);
-							} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_today);
-							} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_tomorrow);
-							} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
-									|| Task.HEADER_KEY_PLUS3.equals(sTemp)
-									|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-								sTemp = weekdayFormatter.format(new Date(c
-										.getLong(4)));
-							} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_future);
-							} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_none);
-							} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_completed);
-							}
-
+							long dueDateMillis = c.getLong(4);
+							sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
+									weekdayFormatter, ListWidgetConfig.this);
 							((TextView) view).setText(sTemp);
 						} else {
-							((TextView) view).setText(TitleNoteTextView
-									.getStyledText(c.getString(1), c.getString(2),
-											1.0f, 1, 1));
+							((TextView) view).setText(TitleNoteTextView.getStyledText(
+									c.getString(1), c.getString(2),
+									1.0f, 1, 1));
 							final int rows = widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS);
 							((TextView) view).setMaxLines(Math.max(rows, 1));
 						}
 						// Set color
-						((TextView) view).setTextColor(widgetPrefs.getInt(
-								KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
+						((TextView) view).setTextColor(
+								widgetPrefs.getInt(KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
 						return true;
 					case 2:
 						// already done.
@@ -213,16 +196,16 @@ public class ListWidgetConfig extends AppCompatActivity {
 						return true;
 					case 4:
 						// Date
-						view.setVisibility(widgetPrefs.getBoolean(KEY_HIDDENDATE,
-								false) ? View.GONE : View.VISIBLE);
+						view.setVisibility(widgetPrefs.getBoolean(KEY_HIDDENDATE, false)
+								? View.GONE : View.VISIBLE);
 						if (c.isNull(colIndex)) {
 							((TextView) view).setText("");
 						} else {
-							((TextView) view).setText(dateFormatter
-									.format(new Date(c.getLong(colIndex))));
+							((TextView) view).setText(
+									dateFormatter.format(new Date(c.getLong(colIndex))));
 						}
-						((TextView) view).setTextColor(widgetPrefs.getInt(
-								KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
+						((TextView) view).setTextColor(
+								widgetPrefs.getInt(KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
 						return true;
 					default:
 						return false;
@@ -245,19 +228,16 @@ public class ListWidgetConfig extends AppCompatActivity {
 				} else {
 					final Uri targetUri;
 
-					final long listId = widgetPrefs.getLong(KEY_LIST,
-							ALL_LISTS_ID);
+					final long listId = widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID);
 					final String sortSpec;
-					final String sortType = widgetPrefs
-							.getString(KEY_SORT_TYPE,
-									getString(R.string.default_sorttype));
+					final String sortType = widgetPrefs.getString(KEY_SORT_TYPE,
+							getString(R.string.default_sorttype));
 
 					if (sortType.equals(getString(R.string.const_possubsort))
 							&& listId > 0) {
 						targetUri = Task.URI;
 						sortSpec = Task.Columns.LEFT;
-					} else if (sortType
-							.equals(getString(R.string.const_modified))) {
+					} else if (sortType.equals(getString(R.string.const_modified))) {
 						targetUri = Task.URI;
 						sortSpec = Task.Columns.UPDATED + " DESC";
 					}
@@ -331,28 +311,25 @@ public class ListWidgetConfig extends AppCompatActivity {
 		final View customActionBarView = inflater
 				.inflate(R.layout.actionbar_custom_view_done, null);
 
-		customActionBarView.findViewById(R.id.actionbar_done)
-				.setOnClickListener(v -> {
-					// "Done"
-					// // Set success
-					widgetPrefs.setPresent();
-					Intent resultValue = new Intent();
-					resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-					setResult(RESULT_OK, resultValue);
-					// Build/Update widget
-					AppWidgetManager appWidgetManager = AppWidgetManager
-							.getInstance(getApplicationContext());
-					// Log.d(TAG, "finishing WidgetId " + appWidgetId);
-					appWidgetManager.updateAppWidget(appWidgetId,
-							ListWidgetProvider.buildRemoteViews(
-									getApplicationContext(), appWidgetManager, appWidgetId,
-									widgetPrefs));
+		customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(v -> {
+			// "Done"
+			// // Set success
+			widgetPrefs.setPresent();
+			Intent resultValue = new Intent();
+			resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+			setResult(RESULT_OK, resultValue);
+			// Build/Update widget
+			AppWidgetManager appWidgetManager = AppWidgetManager
+					.getInstance(getApplicationContext());
+			// Log.d(TAG, "finishing WidgetId " + appWidgetId);
+			appWidgetManager.updateAppWidget(appWidgetId, ListWidgetProvider.buildRemoteViews(
+					getApplicationContext(), appWidgetManager, appWidgetId, widgetPrefs));
 
-					// Update list items
-					appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.notesList);
-					// Destroy activity
-					finish();
-				});
+			// Update list items
+			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.notesList);
+			// Destroy activity
+			finish();
+		});
 		// Show the custom action bar view and hide the normal Home icon and title.
 		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
 				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME |
@@ -363,10 +340,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 	void setupConfig() {
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
-		final String[] sortTypeValues = getResources().getStringArray(
-				R.array.sortingvalues_preference);
-		final String[] themeValues = getResources().getStringArray(
-				R.array.widget_themevalues_preference);
+		final String[] sortTypeValues = getResources()
+				.getStringArray(R.array.sortingvalues_preference);
+		final String[] themeValues = getResources()
+				.getStringArray(R.array.widget_themevalues_preference);
 
 		if (themeValues == null) {
 			NnnLogger.debug(ListWidgetConfig.class, "themevalues null");
@@ -376,52 +353,55 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 		}
 
-		mBinding.widgetConfWrapper.sortingSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-									   int pos, long id) {
-				widgetPrefs.putString(KEY_SORT_TYPE, sortTypeValues[pos]);
-				// Need to recreate loader for this
-				reloadTasks();
-			}
+		mBinding.widgetConfWrapper.sortingSpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+											   int pos, long id) {
+						widgetPrefs.putString(KEY_SORT_TYPE, sortTypeValues[pos]);
+						// Need to recreate loader for this
+						reloadTasks();
+					}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> parent) {}
-		});
+					@Override
+					public void onNothingSelected(AdapterView<?> parent) {}
+				});
 		mBinding.widgetConfWrapper.sortingSpinner.setSelection(getArrayPositionOf(
 				sortTypeValues,
 				widgetPrefs.getString(KEY_SORT_TYPE, getString(R.string.default_sorttype))));
 
-		mBinding.widgetConfWrapper.themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view,
-									   int pos, long id) {
-				final String theme = parent.getItemAtPosition(pos).toString();
-				final int mTheme;
-				final int primaryTextColor;
-				final int secondaryTextColor;
-				if (theme.equals(getString(R.string.settings_summary_theme_light))) {
-					mTheme = THEME_LIGHT;
-					primaryTextColor = ContextCompat
-							.getColor(ListWidgetConfig.this, android.R.color.primary_text_light);
-					secondaryTextColor = ContextCompat
-							.getColor(ListWidgetConfig.this, android.R.color.secondary_text_light);
-				} else {
-					mTheme = THEME_DARK;
-					primaryTextColor = ContextCompat
-							.getColor(ListWidgetConfig.this, android.R.color.primary_text_dark);
-					secondaryTextColor = ContextCompat
-							.getColor(ListWidgetConfig.this, android.R.color.secondary_text_dark);
-				}
-				widgetPrefs.putInt(KEY_THEME, mTheme);
-				widgetPrefs.putInt(KEY_TEXTPRIMARY, primaryTextColor);
-				widgetPrefs.putInt(KEY_TEXTSECONDARY, secondaryTextColor);
-				updateTheme(mTheme, widgetPrefs);
-			}
+		mBinding.widgetConfWrapper.themeSpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> parent, View view,
+											   int pos, long id) {
+						final String theme = parent.getItemAtPosition(pos).toString();
+						final int mTheme;
+						final int primaryTextColor;
+						final int secondaryTextColor;
+						if (theme.equals(getString(R.string.settings_summary_theme_light))) {
+							mTheme = THEME_LIGHT;
+							primaryTextColor = ContextCompat.getColor(ListWidgetConfig.this,
+									android.R.color.primary_text_light);
+							secondaryTextColor = ContextCompat.getColor(ListWidgetConfig.this,
+									android.R.color.secondary_text_light);
+						} else {
+							mTheme = THEME_DARK;
+							primaryTextColor = ContextCompat.getColor(ListWidgetConfig.this,
+									android.R.color.primary_text_dark);
+							secondaryTextColor = ContextCompat.getColor(ListWidgetConfig.this,
+									android.R.color.secondary_text_dark);
+						}
+						widgetPrefs.putInt(KEY_THEME, mTheme);
+						widgetPrefs.putInt(KEY_TEXTPRIMARY, primaryTextColor);
+						widgetPrefs.putInt(KEY_TEXTSECONDARY, secondaryTextColor);
+						updateTheme(mTheme, widgetPrefs);
+					}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {}
-		});
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {}
+				});
+
 		final String currentThemeString;
 		if (widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME) == THEME_LIGHT) {
 			currentThemeString = getString(R.string.settings_summary_theme_light);
@@ -431,43 +411,45 @@ public class ListWidgetConfig extends AppCompatActivity {
 		mBinding.widgetConfWrapper.themeSpinner.setSelection(getSpinnerPositionOf(
 				mBinding.widgetConfWrapper.themeSpinner.getAdapter(), currentThemeString));
 
-		mBinding.widgetConfWrapper.itemRowsSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		mBinding.widgetConfWrapper.itemRowsSeekBar
+				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar) {}
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {}
 
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-				// Plus one since seekbars start at zero
-				widgetPrefs.putInt(KEY_TITLEROWS, progress + 1);
-				// Only need to reload existing loader
-				if (mNotesAdapter != null) {
-					mNotesAdapter.notifyDataSetChanged();
-				}
-			}
-		});
-		mBinding.widgetConfWrapper.itemRowsSeekBar.setProgress(widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS) - 1);
+					@Override
+					public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+						// Plus one since seekbars start at zero
+						widgetPrefs.putInt(KEY_TITLEROWS, progress + 1);
+						// Only need to reload existing loader
+						if (mNotesAdapter != null) {
+							mNotesAdapter.notifyDataSetChanged();
+						}
+					}
+				});
+		mBinding.widgetConfWrapper.itemRowsSeekBar
+				.setProgress(widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS) - 1);
 
-		mBinding.widgetConfWrapper.transparencySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-			@Override
-			public void onStopTrackingTouch(SeekBar seekBar) {}
+		mBinding.widgetConfWrapper.transparencySeekBar
+				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar) {}
 
-			@Override
-			public void onStartTrackingTouch(SeekBar seekBar) {}
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {}
 
-			@Override
-			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+					@Override
+					public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+						final int color = getHomescreenBackgroundColor(progress,
+								widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE));
 
-				final int color = getHomescreenBackgroundColor(progress,
-						widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE));
-
-				widgetPrefs.putInt(KEY_SHADE_COLOR, color);
-				updateBG(color);
-			}
-		});
+						widgetPrefs.putInt(KEY_SHADE_COLOR, color);
+						updateBG(color);
+					}
+				});
 		// Set current item
 		int opacity = widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE);
 		// Isolate the alpha
@@ -477,28 +459,31 @@ public class ListWidgetConfig extends AppCompatActivity {
 		opacity = (100 * opacity) / 0xff;
 		mBinding.widgetConfWrapper.transparencySeekBar.setProgress(opacity);
 
-		mBinding.widgetConfWrapper.listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(AdapterView<?> adapter, View arg1, int pos, long id) {
-				widgetPrefs.putLong(KEY_LIST, id);
-				try {
-					widgetPrefs.putString(KEY_LIST_TITLE, ((Cursor) adapter
-							.getItemAtPosition(pos)).getString(1));
-				} catch (ClassCastException e) {
-					// Its the all lists item
-					widgetPrefs.putString(KEY_LIST_TITLE,
-							((String) adapter.getItemAtPosition(pos)));
-				}
+		mBinding.widgetConfWrapper.listSpinner
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+					@Override
+					public void onItemSelected(AdapterView<?> adapter, View arg1, int pos, long id) {
+						widgetPrefs.putLong(KEY_LIST, id);
+						try {
+							widgetPrefs.putString(KEY_LIST_TITLE, ((Cursor) adapter
+									.getItemAtPosition(pos)).getString(1));
+						} catch (ClassCastException e) {
+							// Its the all lists item
+							widgetPrefs.putString(KEY_LIST_TITLE,
+									((String) adapter.getItemAtPosition(pos)));
+						}
 
-				// Need to reload tasks
-				reloadTasks();
-				// And set title
-				mBinding.widgetPreviewWrapper.widgetPreview.titleButton.setText(widgetPrefs.getString(KEY_LIST_TITLE, ""));
-			}
+						// Need to reload tasks
+						reloadTasks();
+						// And set title
+						mBinding.widgetPreviewWrapper.widgetPreview.titleButton
+								.setText(widgetPrefs.getString(KEY_LIST_TITLE, ""));
+					}
 
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {}
-		});
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {}
+				});
+
 		mListAdapter = new ExtrasCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, null,
 				new String[] { TaskList.Columns.TITLE },
@@ -508,29 +493,35 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		mBinding.widgetConfWrapper.listSpinner.setAdapter(mListAdapter);
 
-		mBinding.widgetConfWrapper.transparentHeaderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			mBinding.widgetPreviewWrapper.widgetPreview.widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-			widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
-		});
+		mBinding.widgetConfWrapper.transparentHeaderCheckBox
+				.setOnCheckedChangeListener((buttonView, isChecked) -> {
+					mBinding.widgetPreviewWrapper.widgetPreview.widgetHeader
+							.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+					widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
+				});
 		mBinding.widgetConfWrapper.transparentHeaderCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER, false));
 
-		mBinding.widgetConfWrapper.hideCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
-			if (mNotesAdapter != null)
-				mNotesAdapter.notifyDataSetChanged();
-		});
-		mBinding.widgetConfWrapper.hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
+		mBinding.widgetConfWrapper.hideCheckBox
+				.setOnCheckedChangeListener((buttonView, isChecked) -> {
+					widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
+					if (mNotesAdapter != null)
+						mNotesAdapter.notifyDataSetChanged();
+				});
+		mBinding.widgetConfWrapper.hideCheckBox
+				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
 
-		mBinding.widgetConfWrapper.hideDateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
-			if (mNotesAdapter != null)
-				mNotesAdapter.notifyDataSetChanged();
-		});
-		mBinding.widgetConfWrapper.hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
+		mBinding.widgetConfWrapper.hideDateCheckBox
+				.setOnCheckedChangeListener((buttonView, isChecked) -> {
+					widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
+					if (mNotesAdapter != null)
+						mNotesAdapter.notifyDataSetChanged();
+				});
+		mBinding.widgetConfWrapper.hideDateCheckBox
+				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
 	}
 
-	private int getListPositionOf(final Adapter adapter, final long id) {
+	private static int getListPositionOf(final Adapter adapter, final long id) {
 		if (adapter == null || adapter.getCount() == 0) return 0;
 		int pos = 0;
 		for (int i = 0; i < adapter.getCount(); i++) {

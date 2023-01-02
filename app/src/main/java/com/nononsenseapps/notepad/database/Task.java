@@ -28,11 +28,19 @@ import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 
+import androidx.annotation.NonNull;
+
+import com.mobeta.android.dslv.DragSortListView;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -361,14 +369,17 @@ public class Task extends DAO {
 
 	/**
 	 * This is a view which returns the tasks in the specified list with headers
-	 * suitable for dates, if any tasks would be sorted under them. Provider
-	 * hardcodes the sort order for this.
+	 * suitable for dates, if any tasks would be sorted under them. Headers are used
+	 * in the {@link DragSortListView}.
+	 * Provider hardcodes the sort order for this.
 	 *
-	 * if listId is null, will return for all lists
+	 * @param listId if it is null, the function will return for all lists
 	 */
 	public static String CREATE_SECTIONED_DATE_VIEW(final String listId) {
-		final String sListId = listId == null ? " NOT NULL " : "'" + listId
-				+ "'";
+		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
+		// TODO this creates a SQLite view that the drag-sort-listview uses for the headers
+		//  when ordering tasks by date. add here the code for HEADER_KEY_NEXT_MONTH,
+		//  HEADER_KEY_NEXT_YEAR and so on
 		return "CREATE TEMP VIEW IF NOT EXISTS " +
 				getSECTION_DATE_VIEW_NAME(listId) +
 				// Tasks WITH dates NOT completed, secret 0
@@ -1156,5 +1167,55 @@ public class Task extends DAO {
 	@Override
 	public String getContentType() {
 		return CONTENT_TYPE;
+	}
+
+	/*
+	 * commodity functions added after 2022
+	 */
+
+	/**
+	 * @param input         The {@link String} received from the {@link Cursor} which, I think,
+	 *                      comes from the query on the view returned by
+	 *                      {@link #CREATE_SECTIONED_DATE_VIEW}
+	 * @param dueDateMillis the value of {@link Task.Columns#DUE} from the same {@link Cursor}
+	 *                      that gave you the "input" parameter
+	 * @param formatterObj  an object that specifies how days are shown. Usually it comes from
+	 *                      {@link TimeFormatter#getLocalFormatterWeekday}
+	 * @return the name to show on a header of the {@link DragSortListView} when the notes are
+	 * ordered by date. For example, "Tomorrow", or "Later", depending on when the note
+	 * is due.
+	 */
+	public static String getHeaderNameForListSortedByDate(String input, long dueDateMillis,
+														  @NonNull SimpleDateFormat formatterObj,
+														  @NonNull Context context) {
+		String sTemp;
+		if (Task.HEADER_KEY_OVERDUE.equals(input)) {
+			sTemp = context.getString(R.string.date_header_overdue);
+		} else if (Task.HEADER_KEY_TODAY.equals(input)) {
+			sTemp = context.getString(R.string.date_header_today);
+		} else if (Task.HEADER_KEY_PLUS1.equals(input)) {
+			sTemp = context.getString(R.string.date_header_tomorrow);
+		} else if (Task.HEADER_KEY_PLUS2.equals(input)
+				|| Task.HEADER_KEY_PLUS3.equals(input)
+				|| Task.HEADER_KEY_PLUS4.equals(input)) {
+			// TODO if you want to show text like "next month" in the
+			//  drag-sort-listview, you would add your code here.
+			//  As of now, it divides taks by next 2, 3 or 4 days, and "later"
+			//  for everything else. I think I'll add:
+			//  * HEADER_KEY_NEXT_WEEK or HEADER_KEY_PLUS7
+			//  * HEADER_KEY_NEXT_MONTH or HEADER_KEY_PLUS30
+			//  * HEADER_KEY_NEXT_YEAR or HEADER_KEY_PLUS365 !
+			sTemp = formatterObj.format(new Date(dueDateMillis));
+		} else if (Task.HEADER_KEY_LATER.equals(input)) {
+			sTemp = context.getString(R.string.date_header_future);
+		} else if (Task.HEADER_KEY_NODATE.equals(input)) {
+			sTemp = context.getString(R.string.date_header_none);
+		} else if (Task.HEADER_KEY_COMPLETE.equals(input)) {
+			sTemp = context.getString(R.string.date_header_completed);
+		} else {
+			// for compatibility with the old version, but i don't think it happens...
+			sTemp = input;
+		}
+		return sTemp;
 	}
 }

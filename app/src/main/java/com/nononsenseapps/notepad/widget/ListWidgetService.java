@@ -27,7 +27,6 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -38,8 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * This is the service that provides the factory to be bound to the collection
- * service.
+ * This is the service that provides the factory to be bound to the collection service
  */
 public class ListWidgetService extends RemoteViewsService {
 
@@ -49,12 +47,11 @@ public class ListWidgetService extends RemoteViewsService {
 	}
 
 	/**
-	 * This is the factory that will provide data to the collection widget.
+	 * This is the factory that will provide data to the collection widget
 	 */
 	static class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		final private Context mContext;
-
 		private Cursor mCursor;
 		final private int mAppWidgetId;
 		private SimpleDateFormat mDateFormatter = null;
@@ -88,7 +85,6 @@ public class ListWidgetService extends RemoteViewsService {
 		public RemoteViews getViewAt(int position) {
 			// Get widget settings
 			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
-
 			if (!widgetPrefs.isPresent()) {
 				return null;
 			}
@@ -113,56 +109,30 @@ public class ListWidgetService extends RemoteViewsService {
 
 			// TODO rest
 
-			// boolean isHeader = false;
-
 			if (weekdayFormatter == null) {
 				weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(mContext);
 			}
 
 			RemoteViews rv = null;
 			if (mCursor.moveToPosition(position)) {
-				// column names:
-				// "_id" "title" "note" "completed" "due" "updated" "lft" "rgt" "dblist" "locked"
-				if (mCursor.getLong(0) < 1) {
-					// TODO this branch NEVER gets called ??
-					NnnLogger.warning(ListWidgetService.class, "The code branch was ACTUALLY called!");
-
-					// Header
-					// if (mCursor.getViewType() == HeaderCursor.headerType) {
-					final int itemId = R.layout.widgetlist_header;
-					rv = new RemoteViews(mContext.getPackageName(), itemId);
+				// column names of this cursor are in Task.Columns.FIELDS
+				boolean isHeader = mCursor.getLong(0) < 1;
+				if (isHeader) {
+					rv = new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_header);
 					rv.setTextColor(android.R.id.text1, primaryTextColor);
 					rv.setBoolean(R.id.relativeLayout_of_the_widgetlist_header,
 							"setClickable", false);
 
 					String sTemp = mCursor.getString(1);
-					if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
-						sTemp = mContext
-								.getString(R.string.date_header_overdue);
-					} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
-						sTemp = mContext.getString(R.string.date_header_today);
-					} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
-						sTemp = mContext
-								.getString(R.string.date_header_tomorrow);
-					} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
-							|| Task.HEADER_KEY_PLUS3.equals(sTemp)
-							|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-						sTemp = weekdayFormatter.format(new Date(mCursor
-								.getLong(4)));
-					} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
-						sTemp = mContext.getString(R.string.date_header_future);
-					} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
-						sTemp = mContext.getString(R.string.date_header_none);
-					} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
-						sTemp = mContext
-								.getString(R.string.date_header_completed);
-					}
+					long dueDateMillis = mCursor.getLong(4);
+					sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
+							weekdayFormatter, mContext);
+
 					// Set text
 					rv.setTextViewText(android.R.id.text1, sTemp);
+					// TODO does not update, shows "loading..."
 				} else {
-					final int itemId = R.layout.widgetlist_item;
-
-					rv = new RemoteViews(mContext.getPackageName(), itemId);
+					rv = new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_item);
 
 					// Complete checkbox
 					final int visibleCheckBox;
@@ -234,7 +204,8 @@ public class ListWidgetService extends RemoteViewsService {
 					} else {
 						completeIntent
 								.setAction(ListWidgetProvider.COMPLETE_ACTION)
-								.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, mCursor.getLong(0));
+								.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
+										mCursor.getLong(0));
 					}
 					rv.setOnClickFillInIntent(R.id.completedCheckBoxDark, completeIntent);
 					rv.setOnClickFillInIntent(R.id.completedCheckBoxLight, completeIntent);
@@ -283,8 +254,7 @@ public class ListWidgetService extends RemoteViewsService {
 			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
 
 			final Uri targetUri;
-			final long listId = widgetPrefs.getLong(
-					ListWidgetConfig.KEY_LIST,
+			final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST,
 					ListWidgetConfig.ALL_LISTS_ID);
 			final String sortSpec;
 			final String sortType = widgetPrefs.getString(ListWidgetConfig.KEY_SORT_TYPE,
@@ -315,15 +285,15 @@ public class ListWidgetService extends RemoteViewsService {
 			String listWhere;
 			String[] listArg;
 			if (listId > 0) {
-				listWhere = Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED + " IS NULL";
+				listWhere = Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED
+						+ " IS NULL";
 				listArg = new String[] { Long.toString(listId) };
 			} else {
 				listWhere = Task.Columns.COMPLETED + " IS NULL";
 				listArg = null;
 			}
 
-			mCursor = mContext
-					.getContentResolver()
+			mCursor = mContext.getContentResolver()
 					.query(targetUri, Task.Columns.FIELDS, listWhere, listArg, sortSpec);
 
 			// Restore the identity - not sure if it's needed since we're going

@@ -214,39 +214,18 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
-				// Check for headers, they have invalid ids
+				// Check for headers: unlike notes, headers have invalid ids
 				isHeader = c.getLong(0) == -1;
 
 				switch (colIndex) {
 					// Matches order in Task.Columns.Fields
 					case 1:
 						// Title
-						sTemp = c.getString(colIndex);
+						sTemp = c.getString(1);
 						if (isHeader) {
-							if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_overdue);
-							} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_today);
-							} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_tomorrow);
-							} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
-									|| Task.HEADER_KEY_PLUS3.equals(sTemp)
-									|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-								// TODO if you want to show text like "next month" in the
-								//  drag-sort-listview, you would add your code here.
-								//  As of now, it divides taks by next 2, 3 or 4 days, and "later"
-								//  for everything else. I think I'll add:
-								//  * HEADER_KEY_NEXT_WEEK or HEADER_KEY_PLUS7
-								//  * HEADER_KEY_NEXT_MONTH or HEADER_KEY_PLUS30
-								//  * HEADER_KEY_NEXT_YEAR or HEADER_KEY_PLUS365
-								sTemp = weekdayFormatter.format(new Date(c.getLong(4)));
-							} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_future);
-							} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_none);
-							} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_completed);
-							}
+							long dueDateMillis = c.getLong(4);
+							sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
+									weekdayFormatter, TaskListFragment.this.getContext());
 						} else {
 							// Set height of text for non-headers
 							((TitleNoteTextView) view).setMaxLines(mRowCount);
