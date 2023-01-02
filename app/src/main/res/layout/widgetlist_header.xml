@@ -14,24 +14,25 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<RelativeLayout
+
+<!-- this shows a section title like "today" "tomorrow" or "later" for the big widget,
+when notes are ordered by due date. If you write this layout in an incompatible way (android
+widgets are picky about it), then an OS-provided view showing "Loading..." (or "Caricamento..."
+or whatever) will appear instead. This layout is similar to android.R.layout.simple_list_item_1,
+so you can use one of those in ListWidgetService.ListRemoteViewsFactory.getViewAt()
+but I think that having it here lets us create a prettier style.
+As of now it's aligned in the center, not on the left. That's just personal preference.
+ -->
+<TextView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:id="@+id/relativeLayout_of_the_widgetlist_header"
+	android:id="@android:id/text1"
+	android:layout_width="wrap_content"
 	android:layout_height="wrap_content"
-	tools:ignore="HardcodedText">
-
-	<TextView
-		android:id="@android:id/text1"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:fontFamily="sans-serif-light"
-		android:paddingLeft="16dip"
-		android:paddingTop="2dip"
-		android:paddingBottom="2dip"
-		android:singleLine="true"
-		android:text="TODAY"
-		android:textAppearance="@style/WidgetItemHeaderStyleDark"/>
-
-</RelativeLayout>
+	android:fontFamily="sans-serif-light"
+	android:paddingHorizontal="16dp"
+	android:paddingTop="8dp"
+	android:paddingBottom="4dp"
+	android:singleLine="true"
+	tools:text="TODAY"
+	android:textAppearance="@style/WidgetItemHeaderStyleDark"/>

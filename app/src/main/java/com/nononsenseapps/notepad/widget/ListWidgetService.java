@@ -120,8 +120,6 @@ public class ListWidgetService extends RemoteViewsService {
 				if (isHeader) {
 					rv = new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_header);
 					rv.setTextColor(android.R.id.text1, primaryTextColor);
-					rv.setBoolean(R.id.relativeLayout_of_the_widgetlist_header,
-							"setClickable", false);
 
 					String sTemp = mCursor.getString(1);
 					long dueDateMillis = mCursor.getLong(4);
@@ -130,7 +128,8 @@ public class ListWidgetService extends RemoteViewsService {
 
 					// Set text
 					rv.setTextViewText(android.R.id.text1, sTemp);
-					// TODO does not update, shows "loading..."
+					// if you don't see the update, but a "Loading..." message instead, you may
+					// have made a mistake (in the layout xml file) that the widget doesn't forgive
 				} else {
 					rv = new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_item);
 
@@ -217,7 +216,9 @@ public class ListWidgetService extends RemoteViewsService {
 
 		@Override
 		public RemoteViews getLoadingView() {
-			// We aren't going to return a default loading view in this sample
+			// We aren't going to return a custom loading view in this sample,
+			// so the OS will show some text like "Loading..." or "Caricamento..."
+			// depending on the system locale.
 			return null;
 		}
 
