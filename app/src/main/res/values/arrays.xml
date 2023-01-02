@@ -73,9 +73,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<item>@string/sort_list_manual</item>
 	</string-array>
 
+	<!-- options shown on the preferences pages. These ones define the date formats
+	  for the task detail page. New formats are added only to this array -->
 	<string-array name="dateformat_long_values">
 		<item>@string/dateformat_long_1</item>
 		<item>@string/dateformat_long_2</item>
+		<item>@string/dateformat_long_3</item>
+		<item>@string/dateformat_long_4</item>
 	</string-array>
 
 	<string-array name="dateformat_short_values">
@@ -83,6 +87,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 		<item>@string/dateformat_short_2</item>
 		<item>@string/dateformat_short_3</item>
 		<item>@string/dateformat_short_4</item>
+		<item>@string/dateformat_short_5</item>
+		<item>@string/dateformat_short_6</item>
+		<item>@string/dateformat_short_7</item>
 	</string-array>
 
 	<!-- <attr name="titleFontFamily" format="enum">

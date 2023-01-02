@@ -198,6 +198,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		 */
 
 		mAdapter.setViewBinder(new ViewBinder() {
+
+			/** Receives a {@link Date} and returns a string with the
+			 *  translated name of the week day */
 			final SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
@@ -229,8 +232,14 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
 									|| Task.HEADER_KEY_PLUS3.equals(sTemp)
 									|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-								sTemp = weekdayFormatter.format(new Date(c
-										.getLong(4)));
+								// TODO if you want to show text like "next month" in the
+								//  drag-sort-listview, you would add your code here.
+								//  As of now, it divides taks by next 2, 3 or 4 days, and "later"
+								//  for everything else. I think I'll add:
+								//  * HEADER_KEY_NEXT_WEEK or HEADER_KEY_PLUS7
+								//  * HEADER_KEY_NEXT_MONTH or HEADER_KEY_PLUS30
+								//  * HEADER_KEY_NEXT_YEAR or HEADER_KEY_PLUS365
+								sTemp = weekdayFormatter.format(new Date(c.getLong(4)));
 							} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
 								sTemp = getString(R.string.date_header_future);
 							} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
@@ -249,9 +258,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							// }
 
 							// Change color based on complete status
-							((TitleNoteTextView) view).useSecondaryColor(!c
-									.isNull(3));
-
+							((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 						}
 						((TitleNoteTextView) view).setTextTitle(sTemp);
 						return true;
@@ -261,8 +268,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							// Only if task it not locked
 							// or only one line
 							if (c.getInt(9) != 1 && mRowCount > 1) {
-								((TitleNoteTextView) view).setTextRest(c
-										.getString(colIndex));
+								((TitleNoteTextView) view).setTextRest(c.getString(colIndex));
 							} else {
 								((TitleNoteTextView) view).setTextRest("");
 							}
@@ -274,11 +280,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							((NoteCheckBox) view).setOnCheckedChangeListener(null);
 							((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
 							((NoteCheckBox) view).setNoteId(c.getLong(0));
-							((NoteCheckBox) view)
-									.setOnCheckedChangeListener(checkBoxListener);
+							((NoteCheckBox) view).setOnCheckedChangeListener(checkBoxListener);
 							if (mHideCheckbox
-									|| (mListType != null && mListType
-									.equals(notetype))) {
+									|| (mListType != null && mListType.equals(notetype))) {
 								view.setVisibility(View.GONE);
 							} else {
 								view.setVisibility(View.VISIBLE);
@@ -298,8 +302,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 									view.setVisibility(View.GONE);
 								} else {
 									view.setVisibility(View.VISIBLE);
-									((DateView) view).setTimeText(c
-											.getLong(colIndex));
+									((DateView) view).setTimeText(c.getLong(colIndex));
 								}
 							}
 						}

@@ -226,8 +226,8 @@
 	<string name="hide_checkbox_summary_off">Checkbox shown</string>
 	<string name="hide_date">Hide due date</string>
 	<string name="item_max_height">Max height of notes/tasks, in rows</string>
-	<string name="long_date_format">Long-date format</string>
-	<string name="short_date_format">Short-date format</string>
+	<string name="long_date_format">Long-date format, for the panel</string>
+	<string name="short_date_format">Short-date format, for the list</string>
 	<string name="select_date">Select date</string>
 	<string name="localedefault">Device default</string>
 

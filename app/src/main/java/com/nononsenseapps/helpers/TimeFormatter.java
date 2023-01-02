@@ -199,17 +199,14 @@ public final class TimeFormatter {
 	 * Good for performance critical situations, like lists
 	 */
 	public static SimpleDateFormat getLocalFormatterShort(final Context context) {
-		return getLocalFormatter(
-				context,
+		String userDateFormat = PreferenceManager
+				.getDefaultSharedPreferences(context)
+				.getString(context.getString(R.string.key_pref_dateformat_short),
+						context.getString(R.string.dateformat_short_1));
+		return getLocalFormatter(context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
-				withSuitableTime( // <-- notice this
-						context,
-						PreferenceManager
-								.getDefaultSharedPreferences(context)
-								.getString(
-										context.getString(R.string.key_pref_dateformat_short),
-										context.getString(R.string.dateformat_short_1))));
+				withSuitableTime(context, userDateFormat)); // <-- notice this
 	}
 
 	public static SimpleDateFormat getLocalFormatterShortDateOnly(final Context context) {
@@ -238,10 +235,8 @@ public final class TimeFormatter {
 	/**
 	 * Good for performance critical situations, like lists
 	 */
-	public static SimpleDateFormat getLocalFormatterWeekday(
-			final Context context) {
-		return getLocalFormatter(
-				context,
+	public static SimpleDateFormat getLocalFormatterWeekday(final Context context) {
+		return getLocalFormatter(context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
 				context.getString(R.string.dateformat_weekday));
