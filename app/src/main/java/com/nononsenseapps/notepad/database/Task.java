@@ -110,28 +110,26 @@ public class Task extends DAO {
 	public static final int SEARCHSUGGESTIONSCODE = 298;
 
 	public static void addMatcherUris(UriMatcher sURIMatcher) {
-		sURIMatcher
-				.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#",
-				BASEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#", BASEITEMCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ MOVEITEMLEFT + "/#", MOVEITEMLEFTCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ MOVEITEMRIGHT + "/#", MOVEITEMRIGHTCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + MOVEITEMLEFT + "/#", MOVEITEMLEFTCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + MOVEITEMRIGHT + "/#", MOVEITEMRIGHTCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ DELETEDQUERY, DELETEDQUERYCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ DELETEDQUERY + "/#", DELETEDITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + DELETEDQUERY, DELETEDQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + DELETEDQUERY + "/#", DELETEDITEMCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ SECTIONED_DATE_VIEW, SECTIONEDDATEQUERYCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ SECTIONED_DATE_VIEW + "/#", SECTIONEDDATEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + SECTIONED_DATE_VIEW, SECTIONEDDATEQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + SECTIONED_DATE_VIEW + "/#", SECTIONEDDATEITEMCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ HISTORY_TABLE_NAME, HISTORYQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + HISTORY_TABLE_NAME, HISTORYQUERYCODE);
 
 		// Legacy URIs
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
@@ -146,13 +144,11 @@ public class Task extends DAO {
 				LEGACYVISIBLEITEMCODE);
 
 		// Search URI
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, FTS3_TABLE_NAME,
-				SEARCHCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, FTS3_TABLE_NAME, SEARCHCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				SearchManager.SUGGEST_URI_PATH_QUERY, SEARCHSUGGESTIONSCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
-				SEARCHSUGGESTIONSCODE);
+				SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCHSUGGESTIONSCODE);
 
 	}
 

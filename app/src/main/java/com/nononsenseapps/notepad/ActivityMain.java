@@ -974,37 +974,25 @@ public class ActivityMain extends AppCompatActivity
 				// Normal lists
 				switch (id) {
 					case TaskListFragment.LIST_ID_OVERDUE:
-						return new CursorLoader(ActivityMain.this,
-								Task.URI, COUNTROWS, NOTCOMPLETED +
-								TaskListFragment
-										.andWhereOverdue(),
-								null, null
-						);
+						return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+								NOTCOMPLETED + TaskListFragment.andWhereOverdue(),
+								null, null);
 					case TaskListFragment.LIST_ID_TODAY:
-						return new CursorLoader(ActivityMain.this,
-								Task.URI, COUNTROWS, NOTCOMPLETED +
-								TaskListFragment
-										.andWhereToday(),
-								null, null
-						);
+						return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+								NOTCOMPLETED + TaskListFragment.andWhereToday(),
+								null, null);
 					case TaskListFragment.LIST_ID_WEEK:
-						return new CursorLoader(ActivityMain.this,
-								Task.URI, COUNTROWS, NOTCOMPLETED +
-								TaskListFragment
-										.andWhereWeek(),
-								null, null
-						);
+						return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+								NOTCOMPLETED + TaskListFragment.andWhereWeek(),
+								null, null);
 					case 0:
 					default:
-						return new CursorLoader(ActivityMain.this,
-								TaskList.URI_WITH_COUNT, new String[] {
-								TaskList.Columns._ID,
-								TaskList.Columns.TITLE,
+						return new CursorLoader(ActivityMain.this, TaskList.URI_WITH_COUNT,
+								new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE,
 								TaskList.Columns.VIEW_COUNT }, null,
 								null, getResources()
 								.getString(R.string.const_as_alphabetic,
-										TaskList.Columns.TITLE)
-						);
+										TaskList.Columns.TITLE));
 				}
 			}
 
@@ -1092,7 +1080,6 @@ public class ActivityMain extends AppCompatActivity
 		} else {
 			// whatever, the user won't see the showcase view
 		}
-
 		PreferenceManager
 				.getDefaultSharedPreferences(this)
 				.edit()

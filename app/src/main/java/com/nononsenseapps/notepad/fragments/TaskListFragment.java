@@ -344,42 +344,34 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				if (id == 0 /* LOADER_CURRENT_LIST */) {
-					return new CursorLoader(getActivity(),
-							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
-							null, null, null);
+					return new CursorLoader(getActivity(), TaskList.getUri(mListId),
+							TaskList.Columns.FIELDS, null, null, null);
 				}
-
 				// id != 0 => load stuff
 
 				// What sorting to use
 				Uri targetUri;
 				String sortSpec;
 				if (mListType == null) {
-					mListType = prefs.getString(
-							getString(R.string.pref_listtype),
+					mListType = prefs.getString(getString(R.string.pref_listtype),
 							getString(R.string.default_listtype));
 				}
-
 				if (mSortType == null) {
-					mSortType = prefs.getString(
-							getString(R.string.pref_sorttype),
+					mSortType = prefs.getString(getString(R.string.pref_sorttype),
 							getString(R.string.default_sorttype));
 				}
+				// analyze the note sorting type chosen by the user
 				if (mSortType.equals(getString(R.string.const_alphabetic))) {
 					targetUri = Task.URI;
-					sortSpec = getString(R.string.const_as_alphabetic,
-							Task.Columns.TITLE);
-				} else if (mSortType
-						.equals(getString(R.string.const_duedate))) {
+					sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
+				} else if (mSortType.equals(getString(R.string.const_duedate))) {
 					targetUri = Task.URI_SECTIONED_BY_DATE;
 					sortSpec = null;
-				} else if (mSortType
-						.equals(getString(R.string.const_modified))) {
+				} else if (mSortType.equals(getString(R.string.const_modified))) {
 					targetUri = Task.URI;
 					sortSpec = Task.Columns.UPDATED + " DESC";
-				}
-				// manual sorting
-				else {
+				} else {
+					// manual sorting
 					targetUri = Task.URI;
 					sortSpec = Task.Columns.LEFT;
 				}
@@ -403,6 +395,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							where += andWhereToday();
 							break;
 						case LIST_ID_WEEK:
+							// TODO "week" and "all" are not on the drawer menu. add them ?
 							where += andWhereWeek();
 							break;
 						case LIST_ID_ALL:
@@ -453,8 +446,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	}
 
 	public static String whereOverDue() {
-		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND "
-				+ Task.TODAY_START;
+		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND " + Task.TODAY_START;
 	}
 
 	public static String andWhereOverdue() {
@@ -629,8 +621,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							getString(R.string.app_name_short), getShareText()));
 					try {
 						Toast.makeText(getActivity(), getResources().getQuantityString(
-										R.plurals.notecopied_msg, tasks.size(),
-										tasks.size()),
+										R.plurals.notecopied_msg, tasks.size(), tasks.size()),
 								Toast.LENGTH_SHORT).show();
 					} catch (Exception e) {
 						// Protect against faulty translations
