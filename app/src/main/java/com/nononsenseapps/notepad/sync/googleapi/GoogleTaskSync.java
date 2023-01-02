@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.build.Config;
@@ -37,7 +38,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +55,7 @@ public class GoogleTaskSync {
 	 * Returns true if sync was successful, false otherwise
 	 */
 	public static boolean fullSync(final Context context,
-								   @NotNull final Account account,
+								   @NonNull final Account account,
 								   final Bundle extras,
 								   final String authority,
 								   final ContentProviderClient provider,
