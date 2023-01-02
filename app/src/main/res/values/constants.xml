@@ -99,9 +99,10 @@
 	<!-- Date formats. "localtime" is replaced at runtime with 12/24 hour clock.
 	 They're hardcoded and untranslatable because if translators make mistakes,
 	 the app will crash at runtime, and I won't check those strings on every pull request.
-	 In "Friday 12:59 AM, 27 april", you have:
+	 In "Friday 12:59 AM, 27 april 2023", you have:
 	  E = "Fri", MMM = "Apr", d = dd = "27", localtime = "12:59 AM",
-	  EEEE = "Friday", MMMM = "April", MM = 04
+	  EEEE = "Friday", MMMM = "April", MM = 04, yyyy = 2023, yy = 23,
+	  allowed:   `/(   forbidden:   O'
 	-->
 	<string name="dateformat_weekday">EEEE</string>
 	<!-- for the date in a reminder item in the task detail page -->
@@ -117,11 +118,14 @@
 	<string name="dateformat_short_5">d MMM</string>
 	<string name="dateformat_short_6">MM/dd (E)</string>
 	<string name="dateformat_short_7">MM/dd</string>
+	<string name="dateformat_short_8">E d MMM yyyy</string>
+	<string name="dateformat_short_9">E d MMM `yy</string>
 
 	<!-- long date formats, for the spinner in detailed view. Used in arrays.xml -->
 	<string name="dateformat_long_1">EEEE localtime, MMMM d</string>
 	<string name="dateformat_long_2">E localtime, MMM d</string>
 	<string name="dateformat_long_3">EEEE d MMMM</string>
 	<string name="dateformat_long_4">E d MMM</string>
+	<string name="dateformat_long_5">E, d MMM yyyy</string>
 
 </resources>
