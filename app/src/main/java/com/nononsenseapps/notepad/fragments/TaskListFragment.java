@@ -638,16 +638,16 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 					if (locked) {
 						DialogPassword delpf = new DialogPassword();
 						delpf.setListener(pListener);
-						delpf.show(getFragmentManager(), "multi_delete_verify");
+						delpf.show(getParentFragmentManager(), "multi_delete_verify");
 					} else {
-						DialogDeleteTask.showDialog(getFragmentManager(), -1,
+						DialogDeleteTask.showDialog(getParentFragmentManager(), -1,
 								pListener::onPasswordConfirmed);
 					}
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
 					DialogMoveToList.getInstance(
 									tasks.keySet().toArray(new Long[0]))
-							.show(getFragmentManager(), "move_to_list_dialog");
+							.show(getParentFragmentManager(), "move_to_list_dialog");
 					finish = true;
 				} else if (itemId == R.id.menu_share) {
 					startActivity(getShareIntent());
@@ -753,7 +753,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			return true;
 		} else if (itemId == R.id.menu_clearcompleted) {
 			if (mListId != -1) {
-				DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
+				DialogDeleteCompletedTasks
+						.showDialog(getParentFragmentManager(), mListId, null);
 			}
 			return true;
 		} else if (itemId == R.id.menu_sort_title) {

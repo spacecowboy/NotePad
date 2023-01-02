@@ -165,10 +165,10 @@ public class FragmentSearchDeleted extends FragmentSearch {
 							restoreSelected(mode, listId);
 						}
 					});
-					d.show(getFragmentManager(), "listselect");
+					d.show(getParentFragmentManager(), "listselect");
 					return true;
 				} else if (itemId == R.id.menu_delete) {
-					DialogDeleteTask.showDialog(getFragmentManager(), -1,
+					DialogDeleteTask.showDialog(getParentFragmentManager(), -1,
 							() -> deleteSelected(mode));
 					return true;
 				}

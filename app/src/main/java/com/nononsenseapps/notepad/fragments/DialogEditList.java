@@ -188,7 +188,7 @@ public class DialogEditList extends DialogFragment {
 
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
-			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, this::dismiss);
+			DialogDeleteList.showDialog(getParentFragmentManager(), mTaskList._id, this::dismiss);
 		}
 	}
 
