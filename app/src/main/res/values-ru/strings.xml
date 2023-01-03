@@ -169,4 +169,5 @@
     <string name="dashclock_will_show_as_many_as_possible">Будет показано так много, как возможно</string>
     <string name="dashclock_show_only_the_next_task">Показывать только следующую задачу</string>
     <string name="dashclock_display_header">Отображать заголовок</string>
+    <string name="delete_completed_tasks_question">Удалить все выполненные задачи\?</string>
 </resources>

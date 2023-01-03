@@ -113,7 +113,7 @@
     <string name="confirm_new_password">Neues Passwort bestätigen</string>
     <string name="apply">Übernehmen</string>
     <string name="clear_password">Passwort löschen</string>
-    <string name="password_info">Jede einzelne Notiz kann gesperrt werden, so dass sie nur eingeschränkt angezeigt und geändert werden kann. Sie bleibt auf anderen Geräten voll zugänglich.</string>
+    <string name="password_info">Jede einzelne Notiz kann gesperrt werden, sodass sie nur eingeschränkt angezeigt und geändert werden kann. Sie bleibt auf anderen Geräten voll zugänglich. Mit einem leeren Passwort werden alle Notizsperren deaktiviert.</string>
     <string name="about">Infos</string>
     <string name="sync_failed">Synchronisation fehlgeschlagen</string>
     <string name="sync_login_failed">Konnte mich nicht anmelden, um Google Tasks zu verwenden</string>
@@ -261,4 +261,7 @@
     <string name="changelog_online">Änderungsprotokoll (online)</string>
     <string name="enable_sync_desc">Aktiviert die Synchronisierungsfunktionen und ermöglicht die Auswahl einer Synchronisierungsquelle. Sicherungen sind nicht betroffen</string>
     <string name="enable_sync">Synchronisierung aktivieren</string>
+    <string name="show_elements_as">Elemente anzeigen als:</string>
+    <string name="canceled_note_locked">Abgebrochen: die Notiz ist gesperrt</string>
+    <string name="order_notes_by">Notizen anordnen nach:</string>
 </resources>
