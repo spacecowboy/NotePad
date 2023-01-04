@@ -28,11 +28,19 @@ import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 
+import androidx.annotation.NonNull;
+
+import com.mobeta.android.dslv.DragSortListView;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.InvalidParameterException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -62,9 +70,19 @@ public class Task extends DAO {
 	// Used in sectioned view date
 	static final String FAR_FUTURE = "strftime('%s','3999-01-01') * 1000";
 	public static final String OVERDUE = "strftime('%s', '1970-01-01') * 1000";
+
 	// Today should be from NOW...
 	public static final String TODAY_START = "strftime('%s','now', 'utc') * 1000";
 
+	/**
+	 * A constraint which is an unix time (in ms) representing midnight of the day that is
+	 * "offset" days after today. For example, Running {@code TODAY_PLUS(4)} on 04 jan 2023
+	 * will return a {@code strftime(...)} that SQLite will evaluate to "1673132400000", which
+	 * represents 00:00 of 8 jan 2023 in the user's local timezone
+	 *
+	 * @param offset in days
+	 * @return a SQL string that will eventually be evaluated to something like "1673132400000"
+	 */
 	public static String TODAY_PLUS(final int offset) {
 		return "strftime('%s','now','localtime','+" + offset
 				+ " days','start of day', 'utc') * 1000";
@@ -76,6 +94,9 @@ public class Task extends DAO {
 	public static final String HEADER_KEY_PLUS2 = "today+2";
 	public static final String HEADER_KEY_PLUS3 = "today+3";
 	public static final String HEADER_KEY_PLUS4 = "today+4";
+	public static final String HEADER_KEY_NEXT_MONTH = "next_month";
+	public static final String HEADER_KEY_NEXT_YEAR = "next_year";
+
 	public static final String HEADER_KEY_OVERDUE = "overdue";
 	public static final String HEADER_KEY_LATER = "later";
 	public static final String HEADER_KEY_NODATE = "nodate";
@@ -100,38 +121,38 @@ public class Task extends DAO {
 	public static final int HISTORYQUERYCODE = 213;
 	public static final int MOVEITEMLEFTCODE = 214;
 	public static final int MOVEITEMRIGHTCODE = 215;
+
 	// Legacy support, these also need to use legacy projections
 	public static final int LEGACYBASEURICODE = 221;
 	public static final int LEGACYBASEITEMCODE = 222;
 	public static final int LEGACYVISIBLEURICODE = 223;
 	public static final int LEGACYVISIBLEITEMCODE = 224;
+
 	// Search URI
 	public static final int SEARCHCODE = 299;
 	public static final int SEARCHSUGGESTIONSCODE = 298;
 
 	public static void addMatcherUris(UriMatcher sURIMatcher) {
-		sURIMatcher
-				.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#",
-				BASEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#", BASEITEMCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ MOVEITEMLEFT + "/#", MOVEITEMLEFTCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ MOVEITEMRIGHT + "/#", MOVEITEMRIGHTCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + MOVEITEMLEFT + "/#", MOVEITEMLEFTCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + MOVEITEMRIGHT + "/#", MOVEITEMRIGHTCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ DELETEDQUERY, DELETEDQUERYCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ DELETEDQUERY + "/#", DELETEDITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + DELETEDQUERY, DELETEDQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + DELETEDQUERY + "/#", DELETEDITEMCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ SECTIONED_DATE_VIEW, SECTIONEDDATEQUERYCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ SECTIONED_DATE_VIEW + "/#", SECTIONEDDATEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + SECTIONED_DATE_VIEW, SECTIONEDDATEQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + SECTIONED_DATE_VIEW + "/#", SECTIONEDDATEITEMCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ HISTORY_TABLE_NAME, HISTORYQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				TABLE_NAME + "/" + HISTORY_TABLE_NAME, HISTORYQUERYCODE);
 
 		// Legacy URIs
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
@@ -146,13 +167,11 @@ public class Task extends DAO {
 				LEGACYVISIBLEITEMCODE);
 
 		// Search URI
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, FTS3_TABLE_NAME,
-				SEARCHCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, FTS3_TABLE_NAME, SEARCHCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				SearchManager.SUGGEST_URI_PATH_QUERY, SEARCHSUGGESTIONSCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
-				SEARCHSUGGESTIONSCODE);
+				SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCHSUGGESTIONSCODE);
 
 	}
 
@@ -193,6 +212,10 @@ public class Task extends DAO {
 		return Uri.withAppendedPath(URI_WRITE_MOVEITEMRIGHT, Long.toString(_id));
 	}
 
+	/**
+	 * Contains each column of the SQLite table that contains {@link Task} objects,
+	 * and functions to return them as lists
+	 */
 	public static class Columns implements BaseColumns {
 
 		private Columns() {}
@@ -249,15 +272,17 @@ public class Task extends DAO {
 
 			// Each side's value should be unique in it's list
 			// Handled in trigger
-			// ).append(" UNIQUE(").append(Columns.LEFT).append(", ").append(Columns.DBLIST).append(")"
-			// ).append(" UNIQUE(").append(Columns.RIGHT).append(", ").append(Columns.DBLIST).append(")"
+			// + " UNIQUE(" + Columns.LEFT + ", " + Columns.DBLIST + ")"
+			// + " UNIQUE(" + Columns.RIGHT + ", " + Columns.DBLIST + ")"
 
 			// Foreign key for list
 			"FOREIGN KEY(" + Columns.DBLIST + ") REFERENCES " + TaskList.TABLE_NAME + "(" +
 			TaskList.Columns._ID + ") ON DELETE CASCADE" + ")";
 
-	// Delete table has no constraints. In fact, list values and positions
-	// should not even be thought of as valid.
+	/**
+	 * Delete table has no constraints. In fact, list values and positions should not even be
+	 * thought of as valid
+	 */
 	public static final String CREATE_DELETE_TABLE = "CREATE TABLE " +
 			DELETE_TABLE_NAME + "(" +
 			Columns._ID + " INTEGER PRIMARY KEY," +
@@ -270,7 +295,9 @@ public class Task extends DAO {
 			" TIMESTAMP NOT NULL DEFAULT current_timestamp" +
 			")";
 
-	// Every change to a note gets saved here
+	/**
+	 * Every change to a note gets saved here
+	 */
 	public static final String CREATE_HISTORY_TABLE = "CREATE TABLE " +
 			HISTORY_TABLE_NAME + "(" +
 			Columns._ID + " INTEGER PRIMARY KEY," +
@@ -285,8 +312,8 @@ public class Task extends DAO {
 
 	static final String HISTORY_TRIGGER_BODY = " INSERT INTO " + HISTORY_TABLE_NAME + " (" +
 			arrayToCommaString(Columns.HISTORY_COLUMNS) + ")" + " VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
-			");";
+			arrayToCommaString("new.",
+					new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) + ");";
 
 	public static final String HISTORY_UPDATE_TRIGGER_NAME = "trigger_update_" + HISTORY_TABLE_NAME;
 	public static final String CREATE_HISTORY_UPDATE_TRIGGER = "CREATE TRIGGER " +
@@ -308,333 +335,218 @@ public class Task extends DAO {
 			"CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON " + DELETE_TABLE_NAME +
 					" BEGIN " + " INSERT INTO " + FTS3_DELETE_TABLE_NAME + " (" +
 					arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) + ") VALUES (" +
-					arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
+					arrayToCommaString("new.",
+							new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
 					");" + " END;";
 
-	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
-			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
-			" ON " +
-			DELETE_TABLE_NAME +
-			" BEGIN " +
-			" UPDATE " +
-			FTS3_DELETE_TABLE_NAME +
-			" SET " +
-			Columns.TITLE + " = new." + Columns.TITLE +
-			"," + Columns.NOTE + " = new." +
-			Columns.NOTE + " WHERE " + Columns._ID +
-			" IS new." + Columns._ID + ";" + " END;";
-	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON " +
-			DELETE_TABLE_NAME + " BEGIN " +
-			" DELETE FROM " + FTS3_DELETE_TABLE_NAME +
-			" WHERE " + Columns._ID + " IS old." +
-			Columns._ID + ";" + " END;";
+	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER =
+			"CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
+					arrayToCommaString(Columns.TITLE, Columns.NOTE) +
+					" ON " +
+					DELETE_TABLE_NAME +
+					" BEGIN " +
+					" UPDATE " +
+					FTS3_DELETE_TABLE_NAME +
+					" SET " +
+					Columns.TITLE + " = new." + Columns.TITLE +
+					"," + Columns.NOTE + " = new." +
+					Columns.NOTE + " WHERE " + Columns._ID +
+					" IS new." + Columns._ID + ";" + " END;";
+
+	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER =
+			"CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON " +
+					DELETE_TABLE_NAME + " BEGIN " +
+					" DELETE FROM " + FTS3_DELETE_TABLE_NAME +
+					" WHERE " + Columns._ID + " IS old." +
+					Columns._ID + ";" + " END;";
 
 	// Search table
 	public static final String CREATE_FTS3_TABLE = "CREATE VIRTUAL TABLE "
 			+ FTS3_TABLE_NAME + " USING FTS3(" + Columns._ID + ", "
 			+ Columns.TITLE + ", " + Columns.NOTE + ");";
 
-	public static final String CREATE_FTS3_INSERT_TRIGGER = "CREATE TRIGGER task_fts3_insert AFTER INSERT ON " +
-			TABLE_NAME +
-			" BEGIN " +
-			" INSERT INTO " +
-			FTS3_TABLE_NAME +
-			" (" +
-			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
-			") VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE }) +
-			");" +
-			" END;";
+	public static final String CREATE_FTS3_INSERT_TRIGGER =
+			"CREATE TRIGGER task_fts3_insert AFTER INSERT ON " +
+					TABLE_NAME +
+					" BEGIN " +
+					" INSERT INTO " +
+					FTS3_TABLE_NAME +
+					" (" +
+					arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
+					") VALUES (" +
+					arrayToCommaString("new.", new String[] { Columns._ID,
+							Columns.TITLE, Columns.NOTE }) +
+					");" +
+					" END;";
 
-	public static final String CREATE_FTS3_UPDATE_TRIGGER = "CREATE TRIGGER task_fts3_update AFTER UPDATE OF " +
-			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
-			" ON " +
-			TABLE_NAME +
-			" BEGIN " + " UPDATE " + FTS3_TABLE_NAME +
-			" SET " + Columns.TITLE + " = new." +
-			Columns.TITLE + "," + Columns.NOTE +
-			" = new." + Columns.NOTE + " WHERE " +
-			Columns._ID + " IS new." + Columns._ID +
-			";" + " END;";
+	public static final String CREATE_FTS3_UPDATE_TRIGGER =
+			"CREATE TRIGGER task_fts3_update AFTER UPDATE OF " +
+					arrayToCommaString(Columns.TITLE, Columns.NOTE) + " ON " + TABLE_NAME +
+					" BEGIN " + " UPDATE " + FTS3_TABLE_NAME + " SET " + Columns.TITLE + " = new." +
+					Columns.TITLE + "," + Columns.NOTE + " = new." + Columns.NOTE + " WHERE " +
+					Columns._ID + " IS new." + Columns._ID + ";" + " END;";
 
-	public static final String CREATE_FTS3_DELETE_TRIGGER = "CREATE TRIGGER task_fts3_delete AFTER DELETE ON " +
-			TABLE_NAME + " BEGIN " + " DELETE FROM " +
-			FTS3_TABLE_NAME + " WHERE " + Columns._ID +
-			" IS old." + Columns._ID + ";" + " END;";
+	public static final String CREATE_FTS3_DELETE_TRIGGER =
+			"CREATE TRIGGER task_fts3_delete AFTER DELETE ON " + TABLE_NAME + " BEGIN " +
+					" DELETE FROM " + FTS3_TABLE_NAME + " WHERE " + Columns._ID + " IS old." +
+					Columns._ID + ";" + " END;";
 
 	/**
-	 * This is a view which returns the tasks in the specified list with headers
-	 * suitable for dates, if any tasks would be sorted under them. Provider
-	 * hardcodes the sort order for this.
+	 * This is a SQLite view which returns the tasks in the specified list with headers
+	 * suitable for dates, if any tasks would be sorted under them. Headers are used
+	 * in the {@link DragSortListView} when notes are ordered by date.
+	 * Provider hardcodes the sort order for this.
 	 *
-	 * if listId is null, will return for all lists
+	 * @param listId if it is null, the function will return (a query) for all lists
+	 * @return a SQL query to create this view
 	 */
 	public static String CREATE_SECTIONED_DATE_VIEW(final String listId) {
-		final String sListId = listId == null ? " NOT NULL " : "'" + listId
-				+ "'";
-		return "CREATE TEMP VIEW IF NOT EXISTS " +
-				getSECTION_DATE_VIEW_NAME(listId) +
+		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
+
+		String beginning = "CREATE TEMP VIEW IF NOT EXISTS " + getSECTION_DATE_VIEW_NAME(listId) +
 				// Tasks WITH dates NOT completed, secret 0
-				" AS SELECT " +
-				arrayToCommaString(Columns.FIELDS) +
-				",0" +
-				" AS " +
-				SECRET_TYPEID +
-				",1" +
-				" AS " +
-				SECRET_TYPEID2 +
-				" FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS null " +
-				" AND " +
-				Columns.DUE +
-				" IS NOT null " +
+				" AS SELECT " + arrayToCommaString(Columns.FIELDS) + ",0" + " AS " + SECRET_TYPEID +
+				",1" + " AS " + SECRET_TYPEID2 + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.COMPLETED + " IS null " + " AND " + Columns.DUE + " IS NOT null " +
 				" UNION ALL " +
 				// Tasks NO dates NOT completed, secret 1
-				" SELECT " +
-				arrayToCommaString(Columns.FIELDS) +
-				",1" +
-				" AS " +
-				SECRET_TYPEID +
-				",1" +
-				" AS " +
-				SECRET_TYPEID2 +
-				" FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS null " +
-				" AND " +
-				Columns.DUE +
-				" IS null " +
+				" SELECT " + arrayToCommaString(Columns.FIELDS) + ",1" + " AS " + SECRET_TYPEID +
+				",1" + " AS " + SECRET_TYPEID2 + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.COMPLETED + " IS null " + " AND " + Columns.DUE + " IS null " +
 				" UNION ALL " +
 				// Tasks completed, secret 2 + 1
-				" SELECT " +
-				arrayToCommaString(Columns.FIELDS) +
-				",3" +
-				" AS " +
-				SECRET_TYPEID +
-				",1" +
-				" AS " +
-				SECRET_TYPEID2 +
-				" FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NOT null " +
-				// TODAY
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_START, Columns.TITLE,
-						HEADER_KEY_TODAY, Columns.DBLIST, listId) +
+				" SELECT " + arrayToCommaString(Columns.FIELDS) + ",3" + " AS " + SECRET_TYPEID +
+				",1" + " AS " + SECRET_TYPEID2 + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.COMPLETED + " IS NOT null ";
+
+		String TODAY = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_START, Columns.TITLE, HEADER_KEY_TODAY, Columns.DBLIST, listId) +
 				",0,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_START +
-				" AND " +
-				TODAY_PLUS(1) +
-				") " +
-				// TOMORROW (Today + 1)
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(1), Columns.TITLE,
-						HEADER_KEY_PLUS1, Columns.DBLIST, listId) +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_START + " AND " + TODAY_PLUS(1) + ") ";
+
+		// TOMORROW = Today + 1
+		String PLUS_1 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(1), Columns.TITLE, HEADER_KEY_PLUS1, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(1) + " AND " + TODAY_PLUS(2) + ") ";
+
+		// Today + 2
+		String PLUS_2 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(2), Columns.TITLE, HEADER_KEY_PLUS2, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(2) + " AND " + TODAY_PLUS(3) + ") ";
+
+		// Today + 3
+		String PLUS_3 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(3), Columns.TITLE, HEADER_KEY_PLUS3, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(3) + " AND " + TODAY_PLUS(4) + ") ";
+
+		// in this function you can add the code to create more headers for when the
+		// notes list is sorted by due date, but I think these are enough already
+
+		// Today + 4
+		String PLUS_4 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(4), Columns.TITLE, HEADER_KEY_PLUS4, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(4) + " AND " + TODAY_PLUS(5) + ") ";
+
+		int daysUntilNextMonth = TimeFormatter.getHowManyDaysUntilFirstOfNextMonth();
+		// the next month will end in (...) days:
+		int toEndOfNextMonth = daysUntilNextMonth + TimeFormatter.getHowManyDaysInTheNextMonth();
+
+		// the goal of this is to add a "fake note" in the DATABASE view created by this function.
+		// This "fake note" will then show up in the drag-sort-listview (but not as an
+		// user-iteractable note, just a header) to show that the next month starts there.
+		// Any note after that is due after the next month begins
+		String nextMonth = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(daysUntilNextMonth), Columns.TITLE, HEADER_KEY_NEXT_MONTH,
+				Columns.DBLIST, listId) + ",0,0" +
+				// Only show header if there are tasks under it, so if there are task with a due
+				// time in the next month
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(daysUntilNextMonth) + " AND " + TODAY_PLUS(toEndOfNextMonth)
+				+ ") ";
+
+		int daysUntilNextYear = TimeFormatter.getHowManyDaysUntilFirstOfNextYear();
+		int toEndOfNextYear = daysUntilNextYear + TimeFormatter.getHowManyDaysInNextYear();
+
+		String nextYear = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(daysUntilNextYear), Columns.TITLE, HEADER_KEY_NEXT_YEAR,
+				Columns.DBLIST, listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(daysUntilNextYear) + " AND " + TODAY_PLUS(toEndOfNextYear)
+				+ ") ";
+
+		// Overdue (0)
+		String overdue = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, OVERDUE, Columns.TITLE, HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
 				",0,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(1) +
-				" AND " +
-				TODAY_PLUS(2) +
-				") " +
-				// Today + 2
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(2), Columns.TITLE,
-						HEADER_KEY_PLUS2, Columns.DBLIST, listId) +
-				",0,0" +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + OVERDUE + " AND " + TODAY_START + ") ";
+
+		// Later. As of now, later = "after the end of the next year"
+		String later = " UNION ALL " + " SELECT '-1'," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(toEndOfNextYear), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
+				listId) + ",0,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(2) +
-				" AND " +
-				TODAY_PLUS(3) +
-				") " +
-				// Today + 3
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(3), Columns.TITLE,
-						HEADER_KEY_PLUS3, Columns.DBLIST, listId) +
-				",0,0" +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" >= " + TODAY_PLUS(toEndOfNextYear) + ") ";
+
+		// No date
+		String noDate = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, "null", Columns.TITLE, HEADER_KEY_NODATE, Columns.DBLIST,
+				listId) + ",1,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(3) +
-				" AND " +
-				TODAY_PLUS(4) +
-				") " +
-				// Today + 4
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(4), Columns.TITLE,
-						HEADER_KEY_PLUS4, Columns.DBLIST, listId) +
-				",0,0" +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.DBLIST +
+				" IS " + sListId + " AND " + Columns.DUE + " IS null " + " AND " +
+				Columns.COMPLETED + " IS null " + ") ";
+
+		// Complete, overdue to catch all
+		// Set complete time to 1
+		String finalSql = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, OVERDUE, Columns.COMPLETED, "1", Columns.TITLE,
+				HEADER_KEY_COMPLETE, Columns.DBLIST, listId) + ",2,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(4) +
-				" AND " +
-				TODAY_PLUS(5) +
-				") " +
-				// Overdue (0)
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, OVERDUE, Columns.TITLE,
-						HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
-				",0,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				OVERDUE +
-				" AND " +
-				TODAY_START +
-				") " +
-				// Later
-				" UNION ALL " +
-				" SELECT '-1'," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(5), Columns.TITLE,
-						HEADER_KEY_LATER, Columns.DBLIST, listId) +
-				",0,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" >= " +
-				TODAY_PLUS(5) +
-				") " +
-				// No date
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, "null", Columns.TITLE, HEADER_KEY_NODATE,
-						Columns.DBLIST, listId) +
-				",1,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" IS null " +
-				" AND " +
-				Columns.COMPLETED +
-				" IS null " +
-				") " +
-				// Complete, overdue to catch all
-				// Set complete time to 1
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, OVERDUE, Columns.COMPLETED, "1",
-						Columns.TITLE, HEADER_KEY_COMPLETE, Columns.DBLIST,
-						listId) +
-				",2,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME +
-				" WHERE " + Columns.DBLIST + " IS " +
-				sListId + " AND " + Columns.COMPLETED +
-				" IS NOT null " + ") " +
-				";";
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.DBLIST +
+				" IS " + sListId + " AND " + Columns.COMPLETED + " IS NOT null " + ") " + ";";
+
+		return beginning + TODAY + PLUS_1 + PLUS_2 + PLUS_3 + PLUS_4 + nextMonth + nextYear +
+				overdue + later + noDate + finalSql;
 	}
 
+	/**
+	 * Fields of this note
+	 */
 	public String title = null;
 	public String note = null;
+
 	// All milliseconds since 1970-01-01 UTC
 	public Long completed = null;
 	public Long due = null;
 	public Long updated = null;
+
 	// converted from integer
 	public boolean locked = false;
 
@@ -643,9 +555,7 @@ public class Task extends DAO {
 	public Long right = null;
 	public Long dblist = null;
 
-	public Task() {
-
-	}
+	public Task() {}
 
 	/**
 	 * Resets id and position values
@@ -890,9 +800,10 @@ public class Task extends DAO {
 			return;
 		}
 
+		long thisInstant = Calendar.getInstance().getTimeInMillis();
 		final ContentValues values = new ContentValues();
-		values.put(Columns.COMPLETED, completed ? Calendar.getInstance().getTimeInMillis() : null);
-		values.put(Columns.UPDATED, Calendar.getInstance().getTimeInMillis());
+		values.put(Columns.COMPLETED, completed ? thisInstant : null);
+		values.put(Columns.UPDATED, thisInstant);
 
 		String idStrings = "(";
 		for (Long id : ids) {
@@ -946,7 +857,9 @@ public class Task extends DAO {
 	}
 
 	// Makes a gap in the list where the task is being inserted
-	private static final String BUMP_TO_RIGHT = " UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %3$s >= new.%3$s AND %4$s IS new.%4$s;";
+	private static final String BUMP_TO_RIGHT =
+			" UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %3$s >= new.%3$s AND %4$s IS new.%4$s;";
+
 	public static final String TRIGGER_PRE_INSERT = String.format(
 			"CREATE TRIGGER task_pre_insert BEFORE INSERT ON %s BEGIN ",
 			TABLE_NAME)
@@ -962,7 +875,8 @@ public class Task extends DAO {
 			+ " END;";
 
 	// Upgrades children and closes the gap made from the delete
-	private static final String BUMP_TO_LEFT = " UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
+	private static final String BUMP_TO_LEFT =
+			" UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
 
 	public static final String TRIGGER_POST_DELETE = String.format(
 			"CREATE TRIGGER task_post_delete AFTER DELETE ON %s BEGIN ",
@@ -1022,22 +936,16 @@ public class Task extends DAO {
 			" BEGIN " +
 			// Bump everything to the right, except the item itself (in same
 			// list)
-			String
-					.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
-							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns.DBLIST, Columns._ID) +
+			String.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
+					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns.DBLIST, Columns._ID) +
 
 			// Bump everything left in the old list, to the right of position
-			String
-					.format("UPDATE %1$s SET %2$s = %2$s - 2, %3$s = %3$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;",
-							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns.DBLIST) +
+			String.format("UPDATE %1$s SET %2$s = %2$s - 2, %3$s = %3$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;",
+					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns.DBLIST) +
 
 			// Set positions to 1 and 2 for item
-			String
-					.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
-							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns._ID) +
+			String.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
+					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns._ID) +
 			posUniqueConstraint("new", "Moving list, new positions not unique/ordered") +
 			posUniqueConstraint("old", "Moving list, old positions not unique/ordered") +
 			" END;";
@@ -1103,8 +1011,7 @@ public class Task extends DAO {
 						" ELSE 0 END " +
 						// And limit to the list in question
 						" WHERE %8$s IS %9$d;", TABLE_NAME,
-				Columns.LEFT, Columns.RIGHT, edgeCol, left, right, edgeVal, Columns.DBLIST,
-				dblist);
+				Columns.LEFT, Columns.RIGHT, edgeCol, left, right, edgeVal, Columns.DBLIST, dblist);
 	}
 
 	/*
@@ -1160,5 +1067,57 @@ public class Task extends DAO {
 	@Override
 	public String getContentType() {
 		return CONTENT_TYPE;
+	}
+
+	/*
+	 * commodity functions added after 2022
+	 */
+
+	/**
+	 * These headers are just indicative. If there is no task due in 3 days, "tomorrow" will
+	 * include all the current month, by design.
+	 *
+	 * @param input         The {@link String} received from the {@link Cursor} which, I think,
+	 *                      comes from the query on the view returned by
+	 *                      {@link #CREATE_SECTIONED_DATE_VIEW}
+	 * @param dueDateMillis the value of {@link Task.Columns#DUE} from the same {@link Cursor}
+	 *                      that gave you the "input" parameter
+	 * @param formatterObj  an object that specifies how days are shown. Usually it comes from
+	 *                      {@link TimeFormatter#getLocalFormatterWeekday}
+	 * @return the name to show on a header of the {@link DragSortListView} when the notes are
+	 * ordered by date. For example, "Tomorrow", or "Later", depending on when the note
+	 * is due.
+	 */
+	public static String getHeaderNameForListSortedByDate(String input, long dueDateMillis,
+														  @NonNull SimpleDateFormat formatterObj,
+														  @NonNull Context context) {
+		String sTemp;
+		if (Task.HEADER_KEY_OVERDUE.equals(input)) {
+			sTemp = context.getString(R.string.date_header_overdue);
+		} else if (Task.HEADER_KEY_TODAY.equals(input)) {
+			sTemp = context.getString(R.string.date_header_today);
+		} else if (Task.HEADER_KEY_PLUS1.equals(input)) {
+			sTemp = context.getString(R.string.date_header_tomorrow);
+		} else if (Task.HEADER_KEY_PLUS2.equals(input)
+				|| Task.HEADER_KEY_PLUS3.equals(input)
+				|| Task.HEADER_KEY_PLUS4.equals(input)) {
+			// if you want to show text like "next 15 days" in the drag-sort-listview, you would
+			// add your code in this class. For help, see where HEADER_KEY_PLUS4 is used
+			sTemp = formatterObj.format(new Date(dueDateMillis));
+		} else if (Task.HEADER_KEY_NEXT_MONTH.equals(input)) {
+			sTemp = context.getString(R.string.next_month);
+		} else if (Task.HEADER_KEY_NEXT_YEAR.equals(input)) {
+			sTemp = context.getString(R.string.next_year);
+		} else if (Task.HEADER_KEY_LATER.equals(input)) {
+			sTemp = context.getString(R.string.date_header_future);
+		} else if (Task.HEADER_KEY_NODATE.equals(input)) {
+			sTemp = context.getString(R.string.date_header_none);
+		} else if (Task.HEADER_KEY_COMPLETE.equals(input)) {
+			sTemp = context.getString(R.string.date_header_completed);
+		} else {
+			// for compatibility with the old version, but i don't think it happens...
+			sTemp = input;
+		}
+		return sTemp;
 	}
 }

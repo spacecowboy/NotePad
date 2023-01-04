@@ -121,6 +121,6 @@ public class PasswordPrefs extends Fragment {
 					"".equals(newPassword) ? R.string.password_cleared : R.string.password_set,
 					Toast.LENGTH_SHORT).show();
 		});
-		pd.show(getFragmentManager(), "pw-verify");
+		pd.show(getParentFragmentManager(), "pw-verify");
 	}
 }

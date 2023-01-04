@@ -83,6 +83,9 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 	@Override
 	public boolean onPreferenceTreeClick(Preference preference) {
 		final String key = preference.getKey();
+		// if the user clicks a title or a pref. without a key, don't do anything
+		if (key == null) return false;
+
 		final String ringtonePrefKey = getString(R.string.key_pref_ringtone);
 		final String allowExactRemindersKey = getString(R.string.key_pref_allow_exact_reminders);
 		final String ignoreBatteryOptimizationKey = getString(R.string.key_pref_ignore_battery_optimizations);

@@ -26,6 +26,6 @@ public class ActivitySearchDeleted extends ActivitySearch {
 
 	@Override
 	protected Fragment getFragment() {
-		return new FragmentSearchDeleted();
+		return FragmentSearchDeleted.getInstance(mQuery);
 	}
 }

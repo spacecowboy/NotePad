@@ -22,13 +22,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.databinding.AppPrefAboutLayoutBinding;
 
 public class AboutPrefs extends Fragment {
+
+	/**
+	 * for {@link R.layout#app_pref_about_layout}
+	 */
+	private AppPrefAboutLayoutBinding mBinding;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
-		return inflater.inflate(R.layout.app_pref_about_layout, container, false);
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savInstState) {
+		mBinding = AppPrefAboutLayoutBinding.inflate(inflater, container, false);
+		return mBinding.getRoot();
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		mBinding.appVersionRow.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
 	}
 }

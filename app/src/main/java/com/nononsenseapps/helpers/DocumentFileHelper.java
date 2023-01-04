@@ -6,13 +6,12 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.webkit.MimeTypeMap;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.provider.DocumentsContractCompat;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.nononsenseapps.notepad.prefs.BackupPrefs;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -43,8 +42,8 @@ public final class DocumentFileHelper {
 	 *
 	 * @return TRUE if it finished, FALSE if there was an error
 	 */
-	private static boolean doWithFileDescriptorFor(@NotNull DocumentFile target,
-												   @NotNull Context context,
+	private static boolean doWithFileDescriptorFor(@NonNull DocumentFile target,
+												   @NonNull Context context,
 												   Function<FileDescriptor, Boolean> function) {
 		try {
 			ParcelFileDescriptor pfd = context

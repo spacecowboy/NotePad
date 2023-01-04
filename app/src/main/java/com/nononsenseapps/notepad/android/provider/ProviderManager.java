@@ -24,7 +24,8 @@ import android.content.pm.ProviderInfo;
 import android.net.Uri;
 import android.os.Bundle;
 
-import org.jetbrains.annotations.NotNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +41,14 @@ public final class ProviderManager {
 
 	private final Context applicationContext;
 
-	public ProviderManager(@NotNull Context context) {
+	public ProviderManager(@NonNull Context context) {
 		this.applicationContext = context.getApplicationContext();
 	}
 
 	/**
 	 * @return a list of providers which are available for use/setup.
 	 */
-	@NotNull
+	@NonNull
 	public final List<Provider> getAvailableProviders() {
 		ArrayList<Provider> availableUris = new ArrayList<>();
 		PackageManager pm = this.applicationContext.getPackageManager();
@@ -74,7 +75,7 @@ public final class ProviderManager {
 	// First get all providers which do not require configuration
 	// Instead of wrapping code in multiple ifs
 	// TODO include providers which have been setup by user
-	@NotNull
+	@NonNull
 	public final ArrayList<Provider> getConfiguredProviders() {
 		var availableUris = new ArrayList<Provider>();
 		var pm = applicationContext.getPackageManager();
@@ -98,7 +99,7 @@ public final class ProviderManager {
 	 *                 *
 	 * @return true or false
 	 */
-	public final boolean providerHasValidMetadata(@NotNull Bundle metadata) {
+	public final boolean providerHasValidMetadata(@NonNull Bundle metadata) {
 		// Only one protocol level atm
 		var result = 1 == metadata.getInt(METADATA_PROTOCOL_VERSION, -1);
 
@@ -115,25 +116,25 @@ public final class ProviderManager {
 	 *                 *
 	 * @return true if provider is valid and specifies no required config
 	 */
-	public final boolean providerRequiresConfig(@NotNull Bundle metadata) {
+	public final boolean providerRequiresConfig(@NonNull Bundle metadata) {
 		return metadata.getBoolean(METADATA_REQUIRES_CONFIG, false);
 	}
 
 
 	public static final class Provider {
-		@NotNull
+		@NonNull
 		private final String authority;
-		@NotNull
+		@NonNull
 		private final Uri uriBase;
-		@NotNull
+		@NonNull
 		private final Uri uriList;
-		@NotNull
+		@NonNull
 		private final Uri uriDetails;
-		@NotNull
+		@NonNull
 		private final String label;
 		private final int icon;
 
-		public Provider(@NotNull PackageManager pm, @NotNull ProviderInfo providerInfo) {
+		public Provider(@NonNull PackageManager pm, @NonNull ProviderInfo providerInfo) {
 
 			this.label = providerInfo.loadLabel(pm).toString();
 			this.authority = providerInfo.authority;
@@ -147,27 +148,27 @@ public final class ProviderManager {
 			}
 		}
 
-		@NotNull
+		@NonNull
 		public final String getAuthority() {
 			return this.authority;
 		}
 
-		@NotNull
+		@NonNull
 		public final Uri getUriBase() {
 			return this.uriBase;
 		}
 
-		@NotNull
+		@NonNull
 		public final Uri getUriList() {
 			return this.uriList;
 		}
 
-		@NotNull
+		@NonNull
 		public final Uri getUriDetails() {
 			return this.uriDetails;
 		}
 
-		@NotNull
+		@NonNull
 		public final String getLabel() {
 			return this.label;
 		}

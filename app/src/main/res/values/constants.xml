@@ -97,30 +97,35 @@
 	<string name="dashclock_pref_none">None</string>
 
 	<!-- Date formats. "localtime" is replaced at runtime with 12/24 hour clock.
-	 Translators COULD change date formats according to their culture, but
-	 if they make mistakes the app will crash at runtime, and I won't check
-	 those strings on every pull request. -->
-	<string name="dateformat_micro">MMM d</string>
+	 They're hardcoded and untranslatable because if translators make mistakes,
+	 the app will crash at runtime, and I won't check those strings on every pull request.
+	 In "Friday 12:59 AM, 27 april 2023", you have:
+	  E = "Fri", MMM = "Apr", d = dd = "27", localtime = "12:59 AM",
+	  EEEE = "Friday", MMMM = "April", MM = 04, yyyy = 2023, yy = 23,
+	  allowed:   `/(   forbidden:   O'
+	-->
 	<string name="dateformat_weekday">EEEE</string>
+	<!-- for the date in a reminder item in the task detail page -->
+	<string name="dateformat_just_date">MMMM d</string>
+	<!-- for the big widget -->
+	<string name="dateformat_micro">MMM d</string>
+
+	<!-- short date formats, for the note item in the list. Used in arrays.xml -->
 	<string name="dateformat_short_1">E localtime, d MMM</string>
 	<string name="dateformat_short_2">E, d MMM</string>
 	<string name="dateformat_short_3">MMM d</string>
 	<string name="dateformat_short_4">E, localtime</string>
+	<string name="dateformat_short_5">d MMM</string>
+	<string name="dateformat_short_6">MM/dd (E)</string>
+	<string name="dateformat_short_7">MM/dd</string>
+	<string name="dateformat_short_8">E d MMM yyyy</string>
+	<string name="dateformat_short_9">E d MMM `yy</string>
+
+	<!-- long date formats, for the spinner in detailed view. Used in arrays.xml -->
 	<string name="dateformat_long_1">EEEE localtime, MMMM d</string>
 	<string name="dateformat_long_2">E localtime, MMM d</string>
-	<string name="dateformat_just_date">MMMM d</string>
-
-	<!-- potential alternatives -->
-	<!-- TODO instead of translations, add these dateformats,
-	      so that users from other countries have more choice,
-	      without having to translate these strings. See arrays.xml & java code -->
-	<string name="dateformat_just_date_2">d MMMM</string>
-	<string name="dateformat_long_3">EEEE d MMMM, localtime</string>
-	<string name="dateformat_long_4">E d MMM, localtime</string>
-	<string name="dateformat_micro_2">d MMM</string>
-	<string name="dateformat_micro_3">MM/dd</string>
-	<string name="dateformat_short_5">d MMM</string>
-	<string name="dateformat_short_6">MM/dd(E)</string>
-	<string name="dateformat_short_7">MM/dd</string>
+	<string name="dateformat_long_3">EEEE d MMMM</string>
+	<string name="dateformat_long_4">E d MMM</string>
+	<string name="dateformat_long_5">E, d MMM yyyy</string>
 
 </resources>

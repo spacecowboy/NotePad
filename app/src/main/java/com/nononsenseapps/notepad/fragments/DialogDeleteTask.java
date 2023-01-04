@@ -26,6 +26,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 
 public class DialogDeleteTask extends DialogConfirmBase {
+
 	static final String ID = "id";
 	static final String TAG = "deletetaskok";
 
@@ -52,10 +53,12 @@ public class DialogDeleteTask extends DialogConfirmBase {
 	@Override
 	public void onOKClick() {
 		if (getArguments().getLong(ID, -1) > 0) {
-			if (0 < getActivity().getContentResolver().delete(
-					Task.getUri(getArguments().getLong(ID, -1)), null, null)) {
-				Toast.makeText(getActivity(), R.string.deleted,
-						Toast.LENGTH_SHORT).show();
+			int rowsDeleted = getActivity()
+					.getContentResolver()
+					.delete(Task.getUri(getArguments().getLong(ID, -1)),
+							null, null);
+			if (0 < rowsDeleted) {
+				Toast.makeText(getActivity(), R.string.deleted, Toast.LENGTH_SHORT).show();
 			}
 		}
 		if (listener != null) {

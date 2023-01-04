@@ -64,14 +64,14 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 		mTool = new JSONBackup(getActivity());
 
 		findPreference(KEY_IMPORT).setOnPreferenceClickListener(pref -> {
-			DialogRestoreBackup.showDialog(getFragmentManager(),
+			DialogRestoreBackup.showDialog(getParentFragmentManager(),
 					// callback when confirmed:
 					() -> runBackupOrRestore(true));
 			return true;
 		});
 
 		findPreference(KEY_EXPORT).setOnPreferenceClickListener(pref -> {
-			DialogExportBackup.showDialog(getFragmentManager(),
+			DialogExportBackup.showDialog(getParentFragmentManager(),
 					() -> runBackupOrRestore(false));
 			return true;
 		});

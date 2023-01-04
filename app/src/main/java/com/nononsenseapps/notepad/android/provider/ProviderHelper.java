@@ -19,9 +19,10 @@ package com.nononsenseapps.notepad.android.provider;
 
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.jetbrains.annotations.NotNull;
+
 
 import java.util.Locale;
 import java.util.Objects;
@@ -48,7 +49,7 @@ public final class ProviderHelper {
 	 *                     *
 	 * @return the list uri: content://my.provider.authority/list/foo/bar
 	 */
-	public static Uri getListUri(@NotNull Uri base, @NotNull String relativePath) {
+	public static Uri getListUri(@NonNull Uri base, @NonNull String relativePath) {
 		return Uri.withAppendedPath(Uri.withAppendedPath(base, "list"),
 				relativePath);
 	}
@@ -62,8 +63,8 @@ public final class ProviderHelper {
 	 *                     *
 	 * @return the details uri: content://my.provider.authority/details/foo/bar
 	 */
-	@NotNull
-	public static Uri getDetailsUri(@NotNull Uri base, @NotNull String relativePath) {
+	@NonNull
+	public static Uri getDetailsUri(@NonNull Uri base, @NonNull String relativePath) {
 		return Uri.withAppendedPath(Uri.withAppendedPath(base, "details"),
 				relativePath);
 	}
@@ -75,7 +76,7 @@ public final class ProviderHelper {
 	 *            *
 	 * @return uri with only scheme and authority: content://my.provider.authority
 	 */
-	public static Uri getBase(@NotNull Uri uri) {
+	public static Uri getBase(@NonNull Uri uri) {
 		return Uri.parse(uri.getScheme() + "://" + uri.getAuthority());
 	}
 
@@ -86,13 +87,13 @@ public final class ProviderHelper {
 	 *            *
 	 * @return relative path without action part like /foo/bar
 	 */
-	@NotNull
-	public static String getRelativePath(@NotNull Uri uri) {
+	@NonNull
+	public static String getRelativePath(@NonNull Uri uri) {
 		return getRelativePath(uri.getPath());
 	}
 
-	@NotNull
-	public static String getRelativePath(@NotNull String path) {
+	@NonNull
+	public static String getRelativePath(@NonNull String path) {
 		var i = path.indexOf("/");
 		if (i == 0) {
 			return getRelativePath(path.substring(1));
@@ -108,8 +109,8 @@ public final class ProviderHelper {
 	 *             *
 	 * @return first part of path like foo
 	 */
-	@NotNull
-	public static String firstPart(@NotNull String path) {
+	@NonNull
+	public static String firstPart(@NonNull String path) {
 		var i = path.indexOf("/");
 		if (i == 0) {
 			return firstPart(path.substring(1));
@@ -129,8 +130,8 @@ public final class ProviderHelper {
 	 *             *
 	 * @return the bit after first like bar/baz (without starting slash)
 	 */
-	@NotNull
-	public static String restPart(@NotNull String path) {
+	@NonNull
+	public static String restPart(@NonNull String path) {
 		var i = path.indexOf("/");
 		if (i == 0) {
 			return restPart(path.substring(1));
@@ -141,7 +142,7 @@ public final class ProviderHelper {
 		}
 	}
 
-	public static int matchUri(@NotNull Uri uri) {
+	public static int matchUri(@NonNull Uri uri) {
 		return matchPath(uri.getPath());
 	}
 
@@ -195,8 +196,8 @@ public final class ProviderHelper {
 	 *              *
 	 * @return /foo/bar
 	 */
-	@NotNull
-	public static String join(@NotNull String path1, @NotNull String path2) {
+	@NonNull
+	public static String join(@NonNull String path1, @NonNull String path2) {
 		if (path1.endsWith("/")) {
 			if (path2.startsWith("/")) {
 				return path1 + path2.substring(1);

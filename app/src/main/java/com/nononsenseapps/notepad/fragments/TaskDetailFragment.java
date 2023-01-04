@@ -175,7 +175,9 @@ public class TaskDetailFragment extends Fragment {
 			} else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c != null && c.moveToNext()) {
 					// TODO this causes the "ghost reminder widgets" bug. See issue #412
-					//  a shitty fix is provided in onPause()
+					//  a shitty fix is provided in onStop(). The problem is that it runs
+					//  too many times, and it duplicates notification views. As of now it
+					//  happens only when locking a note from the menu
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
@@ -477,7 +479,7 @@ public class TaskDetailFragment extends Fragment {
 
 		//final DialogCalendar datePicker;
 		//datePicker.setListener(this);
-		//datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
+		//datePicker.show(getParentFragmentManager(), DATE_DIALOG_TAG);
 
 		// configure and show a popup with a date-picker calendar view
 		var dpDiag = new DatePickerDialog(
@@ -607,7 +609,16 @@ public class TaskDetailFragment extends Fragment {
 				mLocked = false;
 				fillUIFromTask();
 			});
-			pflock.show(getFragmentManager(), "read_verify");
+			// show the password popup if needed
+			final String PASSW_TAG = "read_verify";
+			Fragment oldDiag = this.getParentFragmentManager().findFragmentByTag(PASSW_TAG);
+			if (oldDiag == null) {
+				// the password dialog is not among the active fragments
+				// => you have to launch it
+				pflock.show(getParentFragmentManager(), PASSW_TAG);
+			} else {
+				// there is already one visible => don't spam them, one is enough
+			}
 		} else {
 			taskText.setText(mTask.getText());
 		}
@@ -722,7 +733,7 @@ public class TaskDetailFragment extends Fragment {
 				if (mTask.locked) {
 					DialogPassword delpf = new DialogPassword();
 					delpf.setListener(this::deleteAndClose);
-					delpf.show(getFragmentManager(), "delete_verify");
+					delpf.show(getParentFragmentManager(), "delete_verify");
 				} else {
 					deleteAndClose();
 				}
@@ -736,27 +747,24 @@ public class TaskDetailFragment extends Fragment {
 					mTask.locked = true;
 					mTask.save(getActivity());
 					fillUIFromTask();
-					Toast.makeText(getActivity(), R.string.locked,
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.locked, Toast.LENGTH_SHORT).show();
 				}
 			});
-			pflock.show(getFragmentManager(), "lock_verify");
+			pflock.show(getParentFragmentManager(), "lock_verify");
 			return true;
 		} else if (itemId == R.id.menu_unlock) {
 			DialogPassword pf = new DialogPassword();
 			pf.setListener(() -> {
 				if (mTask != null) {
 					mTask.locked = false;
-					Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT)
-							.show();
-
+					Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
 					if (mLocked) {
 						mLocked = false;
 						fillUIFromTask();
 					}
 				}
 			});
-			pf.show(getFragmentManager(), "unlock_verify");
+			pf.show(getParentFragmentManager(), "unlock_verify");
 			return true;
 		} else if (itemId == R.id.menu_share) {
 			// open the chooser panel to share the note text with an app
@@ -771,15 +779,12 @@ public class TaskDetailFragment extends Fragment {
 	public void onPrepareOptionsMenu(Menu menu) {
 		menu.findItem(R.id.menu_timemachine)
 				.setEnabled(mTask != null && mTask._id > 0 && !isLocked());
-		menu.findItem(R.id.menu_lock)
-				.setVisible(mTask != null && !mTask.locked);
-		menu.findItem(R.id.menu_unlock)
-				.setVisible(mTask != null && mTask.locked);
+		menu.findItem(R.id.menu_lock).setVisible(mTask != null && !mTask.locked);
+		menu.findItem(R.id.menu_unlock).setVisible(mTask != null && mTask.locked);
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 
 		if (getActivity() instanceof MenuStateController) {
-			final boolean visible = ((MenuStateController) getActivity())
-					.childItemsVisible();
+			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
 
 			menu.setGroupVisible(R.id.editor_menu_group, visible);
 			// Outside group to allow for action bar placement
@@ -811,7 +816,7 @@ public class TaskDetailFragment extends Fragment {
 
 	private void deleteAndClose() {
 		if (mTask != null && mTask._id > 0 && !isLocked()) {
-			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id, () -> {
+			DialogDeleteTask.showDialog(getParentFragmentManager(), mTask._id, () -> {
 				// Prevents save attempts
 				mTask = null;
 				// Request a close from activity
@@ -955,6 +960,9 @@ public class TaskDetailFragment extends Fragment {
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
 		if (getActivity() == null) return;
+
+		// TODO maybe here check if we already have this notification shown, if possible,
+		//  and then either refuse to add this or update the existing one
 
 		View nv = LayoutInflater
 				.from(getActivity())

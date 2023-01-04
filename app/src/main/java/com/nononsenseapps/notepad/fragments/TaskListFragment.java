@@ -198,6 +198,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		 */
 
 		mAdapter.setViewBinder(new ViewBinder() {
+
+			/** Receives a {@link Date} and returns a string with the
+			 *  translated name of the week day */
 			final SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
@@ -211,33 +214,18 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
-				// Check for headers, they have invalid ids
+				// Check for headers: unlike notes, headers have invalid ids
 				isHeader = c.getLong(0) == -1;
 
 				switch (colIndex) {
 					// Matches order in Task.Columns.Fields
 					case 1:
 						// Title
-						sTemp = c.getString(colIndex);
+						sTemp = c.getString(1);
 						if (isHeader) {
-							if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_overdue);
-							} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_today);
-							} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_tomorrow);
-							} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
-									|| Task.HEADER_KEY_PLUS3.equals(sTemp)
-									|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-								sTemp = weekdayFormatter.format(new Date(c
-										.getLong(4)));
-							} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_future);
-							} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_none);
-							} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
-								sTemp = getString(R.string.date_header_completed);
-							}
+							long dueDateMillis = c.getLong(4);
+							sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
+									weekdayFormatter, TaskListFragment.this.getContext());
 						} else {
 							// Set height of text for non-headers
 							((TitleNoteTextView) view).setMaxLines(mRowCount);
@@ -249,9 +237,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							// }
 
 							// Change color based on complete status
-							((TitleNoteTextView) view).useSecondaryColor(!c
-									.isNull(3));
-
+							((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 						}
 						((TitleNoteTextView) view).setTextTitle(sTemp);
 						return true;
@@ -261,8 +247,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							// Only if task it not locked
 							// or only one line
 							if (c.getInt(9) != 1 && mRowCount > 1) {
-								((TitleNoteTextView) view).setTextRest(c
-										.getString(colIndex));
+								((TitleNoteTextView) view).setTextRest(c.getString(colIndex));
 							} else {
 								((TitleNoteTextView) view).setTextRest("");
 							}
@@ -274,11 +259,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							((NoteCheckBox) view).setOnCheckedChangeListener(null);
 							((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
 							((NoteCheckBox) view).setNoteId(c.getLong(0));
-							((NoteCheckBox) view)
-									.setOnCheckedChangeListener(checkBoxListener);
+							((NoteCheckBox) view).setOnCheckedChangeListener(checkBoxListener);
 							if (mHideCheckbox
-									|| (mListType != null && mListType
-									.equals(notetype))) {
+									|| (mListType != null && mListType.equals(notetype))) {
 								view.setVisibility(View.GONE);
 							} else {
 								view.setVisibility(View.VISIBLE);
@@ -298,8 +281,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 									view.setVisibility(View.GONE);
 								} else {
 									view.setVisibility(View.VISIBLE);
-									((DateView) view).setTimeText(c
-											.getLong(colIndex));
+									((DateView) view).setTimeText(c.getLong(colIndex));
 								}
 							}
 						}
@@ -341,42 +323,34 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				if (id == 0 /* LOADER_CURRENT_LIST */) {
-					return new CursorLoader(getActivity(),
-							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
-							null, null, null);
+					return new CursorLoader(getActivity(), TaskList.getUri(mListId),
+							TaskList.Columns.FIELDS, null, null, null);
 				}
-
 				// id != 0 => load stuff
 
 				// What sorting to use
 				Uri targetUri;
 				String sortSpec;
 				if (mListType == null) {
-					mListType = prefs.getString(
-							getString(R.string.pref_listtype),
+					mListType = prefs.getString(getString(R.string.pref_listtype),
 							getString(R.string.default_listtype));
 				}
-
 				if (mSortType == null) {
-					mSortType = prefs.getString(
-							getString(R.string.pref_sorttype),
+					mSortType = prefs.getString(getString(R.string.pref_sorttype),
 							getString(R.string.default_sorttype));
 				}
+				// analyze the note sorting type chosen by the user
 				if (mSortType.equals(getString(R.string.const_alphabetic))) {
 					targetUri = Task.URI;
-					sortSpec = getString(R.string.const_as_alphabetic,
-							Task.Columns.TITLE);
-				} else if (mSortType
-						.equals(getString(R.string.const_duedate))) {
+					sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
+				} else if (mSortType.equals(getString(R.string.const_duedate))) {
 					targetUri = Task.URI_SECTIONED_BY_DATE;
 					sortSpec = null;
-				} else if (mSortType
-						.equals(getString(R.string.const_modified))) {
+				} else if (mSortType.equals(getString(R.string.const_modified))) {
 					targetUri = Task.URI;
 					sortSpec = Task.Columns.UPDATED + " DESC";
-				}
-				// manual sorting
-				else {
+				} else {
+					// manual sorting
 					targetUri = Task.URI;
 					sortSpec = Task.Columns.LEFT;
 				}
@@ -400,6 +374,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							where += andWhereToday();
 							break;
 						case LIST_ID_WEEK:
+							// TODO "week" and "all" are not on the drawer menu. add them ?
 							where += andWhereWeek();
 							break;
 						case LIST_ID_ALL:
@@ -450,8 +425,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	}
 
 	public static String whereOverDue() {
-		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND "
-				+ Task.TODAY_START;
+		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND " + Task.TODAY_START;
 	}
 
 	public static String andWhereOverdue() {
@@ -626,8 +600,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							getString(R.string.app_name_short), getShareText()));
 					try {
 						Toast.makeText(getActivity(), getResources().getQuantityString(
-										R.plurals.notecopied_msg, tasks.size(),
-										tasks.size()),
+										R.plurals.notecopied_msg, tasks.size(), tasks.size()),
 								Toast.LENGTH_SHORT).show();
 					} catch (Exception e) {
 						// Protect against faulty translations
@@ -644,16 +617,16 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 					if (locked) {
 						DialogPassword delpf = new DialogPassword();
 						delpf.setListener(pListener);
-						delpf.show(getFragmentManager(), "multi_delete_verify");
+						delpf.show(getParentFragmentManager(), "multi_delete_verify");
 					} else {
-						DialogDeleteTask.showDialog(getFragmentManager(), -1,
+						DialogDeleteTask.showDialog(getParentFragmentManager(), -1,
 								pListener::onPasswordConfirmed);
 					}
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
 					DialogMoveToList.getInstance(
 									tasks.keySet().toArray(new Long[0]))
-							.show(getFragmentManager(), "move_to_list_dialog");
+							.show(getParentFragmentManager(), "move_to_list_dialog");
 					finish = true;
 				} else if (itemId == R.id.menu_share) {
 					startActivity(getShareIntent());
@@ -759,7 +732,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			return true;
 		} else if (itemId == R.id.menu_clearcompleted) {
 			if (mListId != -1) {
-				DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
+				DialogDeleteCompletedTasks
+						.showDialog(getParentFragmentManager(), mListId, null);
 			}
 			return true;
 		} else if (itemId == R.id.menu_sort_title) {
