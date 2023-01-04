@@ -44,7 +44,7 @@
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
 		<!-- make all dialogs in the app use this dialog theme.
 		 I chose a dark theme consistent with the device's OS design. -->
-		<item name="alertDialogTheme">@android:style/Theme.DeviceDefault.Dialog</item>
+		<item name="alertDialogTheme">@style/ThemeNnnDialogDark</item>
 		<item name="android:alertDialogTheme">?alertDialogTheme</item>
 		<item name="dialogTheme">?alertDialogTheme</item>
 		<item name="android:dialogTheme">?alertDialogTheme</item>
@@ -106,7 +106,7 @@
 		<item name="colorAccent">@color/accent</item>
 		<!-- make all dialogs in the app use this dialog theme.
 		 I chose a LIGHT theme consistent with the device's OS design. -->
-		<item name="alertDialogTheme">@android:style/Theme.DeviceDefault.Light.Dialog</item>
+		<item name="alertDialogTheme">@style/ThemeNnnDialogLight</item>
 		<item name="android:alertDialogTheme">?alertDialogTheme</item>
 		<item name="dialogTheme">?alertDialogTheme</item>
 		<item name="android:dialogTheme">?alertDialogTheme</item>
@@ -140,9 +140,19 @@
 	</style>
 
 	<!-- Respects the user's day/night system setting and shows the activity as a dialog.
-	 For the shortcut widget configuration activity -->
+	 For the shortcut widget configuration activity. MUST inherit from AppCompat -->
 	<style name="ThemeNnnDayNightDialog" parent="@style/Theme.AppCompat.DayNight.Dialog">
 		<item name="colorAccent">@color/accent</item>
+	</style>
+
+	<style name="ThemeNnnDialogDark" parent="@android:style/Theme.DeviceDefault.Dialog">
+		<!-- TODO this overwrites the user-chosen color in android 13, so you should
+		 make a custom "themes.xml" file in values-v32 or values-v33 -->
+		<item name="android:colorAccent">@color/accent</item>
+	</style>
+
+	<style name="ThemeNnnDialogLight" parent="@android:style/Theme.DeviceDefault.Light.Dialog">
+		<item name="android:colorAccent">@color/accent</item>
 	</style>
 
 </resources>
