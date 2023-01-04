@@ -34,7 +34,7 @@
     <string name="menu_managelists">Administrar listas</string>
     <string name="add_item">Añadir elemento</string>
     <string name="delete_question">¿Eliminar?</string>
-    <string name="delete_items_message">¿Está seguro que desea eliminar estos elementos?</string>
+    <string name="delete_items_message">¿Está seguro de que desea eliminar estos elementos\?</string>
     <string name="delete_item_message">¿Está seguro que desea eliminar este artículo?</string>
     <string name="delete_list_message">¿Está seguro que desea eliminar esta lista?</string>
     <string name="editor_due_date_hint">Fecha</string>
