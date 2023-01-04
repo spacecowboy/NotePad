@@ -27,8 +27,8 @@
 
 	<integer name="default_editor_font_size">22</integer>
 
-	<string name="gtask_status_uncompleted">needsAction</string>
-	<string name="gtask_status_completed">completed</string>
+
+
 	<string name="complete_note_broadcast_intent">com.nononsenseapps.completenote</string>
 	<!-- For when they HAVE been completed, for AndroidAgendaWidget primarily -->
 	<string name="note_completed_broadcast_intent">com.nononsenseapps.notecompleted</string>

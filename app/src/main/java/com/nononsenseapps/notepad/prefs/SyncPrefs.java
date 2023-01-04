@@ -137,7 +137,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	/**
-	 * Called when the user has selected a Google account when pressing the enable Gtask
+	 * Called when the user has selected an account when pressing the enable sync
 	 * switch. User wants to select an account to sync with. If we get an approval,
 	 * activate sync and set periodicity also.
 	 */
