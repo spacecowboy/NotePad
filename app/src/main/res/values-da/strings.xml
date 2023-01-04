@@ -64,8 +64,6 @@
     <string name="preference_preview_text">Sådan vil teksten i editoren blive vist</string>
     <string name="settings_account_title">Vælg en konto</string>
     <string name="settings_account_summary">Klik for at ændre konto</string>
-    <string name="settings_sync_enable_title">Google Tasks synkronisering</string>
-    <string name="gtasks_sync_info">Ikke alle oplysninger kan blive synkroniseret med Google Tasks. Kun noter, forfaldsdato (ikke tidspunkt) og todo-status bliver synkroniseret.</string>
     <string name="settings_cat_syncing">Synkronisering</string>
     <string name="show_from_all_lists">Alle lister</string>
     <string name="lists">Lister</string>
@@ -204,7 +202,6 @@
     <string name="directory">Mappe</string>
     <string name="cannot_write_to_directory">Kan ikke skrive til mappe</string>
     <string name="no_sync_method_chosen">Du har ikke valgt en synkroniseringsmetode</string>
-    <string name="gtasks_not_working">Google Tasks (fungerer ikke)</string>
     <string name="choose_backup_folder">Vælg mappe for sikkerhedskopiering</string>
     <string name="use_exact_alarms">Eksakte alarmer</string>
     <string name="app_about_translations">Bistå oversættelsen på https://hosted.weblate.org/engage/no-nonsense-notes/</string>

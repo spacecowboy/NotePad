@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Така ще изглежда текстът в текстовия редактор</string>
     <string name="settings_account_title">Изберете профил</string>
     <string name="settings_account_summary">От тук изберете профил</string>
-    <string name="settings_sync_enable_title">Синхронизиране с Google Задачи</string>
-    <string name="gtasks_sync_info">Не цялата информация може да бъде синхронизирана с Google Задачи. Само бележки, дати (без час) и статус се синхронизират.</string>
     <string name="settings_cat_syncing">Синхронизация</string>
     <string name="show_from_all_lists">Всички списъци</string>
     <string name="lists">Списъци</string>

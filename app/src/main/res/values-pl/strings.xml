@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Tak będzie wyglądał tekst w edytorze</string>
     <string name="settings_account_title">Wybierz konto</string>
     <string name="settings_account_summary">Kliknij, aby zmienić konto</string>
-    <string name="settings_sync_enable_title">Synchronizacja z Google Tasks</string>
-    <string name="gtasks_sync_info">Nie wszystkie informacje mogą zostać zsynchronizowane. Wyłącznie notatki, terminy (bez czasu) oraz zadania.</string>
     <string name="settings_cat_syncing">Synchronizacja</string>
     <string name="show_from_all_lists">Wszystkie listy</string>
     <string name="lists">Listy</string>

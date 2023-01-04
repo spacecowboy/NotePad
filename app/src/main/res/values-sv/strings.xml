@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Så här kommer texten att se ut</string>
     <string name="settings_account_title">Välj ett konto</string>
     <string name="settings_account_summary">Tryck för att ändra konto</string>
-    <string name="settings_sync_enable_title">Google Tasks synk</string>
-    <string name="gtasks_sync_info">All information kan inte synkroniseras med Google Tasks. Endast anteckningar, förfallodatum (inte tid) och utfördstatus synkroniseras.</string>
     <string name="settings_cat_syncing">Synkronisering</string>
     <string name="show_from_all_lists">Alla listor</string>
     <string name="lists">Listor</string>

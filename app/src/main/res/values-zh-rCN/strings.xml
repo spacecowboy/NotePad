@@ -65,8 +65,6 @@
     <string name="preference_preview_text">这是编辑器文本的显示方式</string>
     <string name="settings_account_title">选择一个账户</string>
     <string name="settings_account_summary">点击切换账户</string>
-    <string name="settings_sync_enable_title">Google 工作表同步</string>
-    <string name="gtasks_sync_info">并非所有信息都可以与 Google 任务同步。仅笔记、到期日（不是时间）与待办状态可以同步。</string>
     <string name="settings_cat_syncing">同步</string>
     <string name="show_from_all_lists">所有列表</string>
     <string name="lists">列表</string>

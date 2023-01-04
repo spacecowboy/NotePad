@@ -61,8 +61,6 @@
     <string name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
     <string name="settings_account_title">Choisir un compte</string>
     <string name="settings_account_summary">Cliquer pour changer de compte</string>
-    <string name="settings_sync_enable_title">Sync. Google Tâches</string>
-    <string name="gtasks_sync_info">Les informations ne peuvent toutes être synchronisées avec Google Tâches. Seulement les notes, dates d\'échéance et les statuts sont synchronisés.</string>
     <string name="settings_cat_syncing">Synchronisation</string>
     <string name="show_from_all_lists">Toutes les listes</string>
     <string name="lists">Listes</string>

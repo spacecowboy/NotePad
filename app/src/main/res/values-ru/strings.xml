@@ -65,7 +65,6 @@
     <string name="preference_preview_text">Так будет выглядеть текст при редактировании</string>
     <string name="settings_account_title">Выберите учётную запись</string>
     <string name="settings_account_summary">Нажмите для смены учётной записи</string>
-    <string name="settings_sync_enable_title">Синхронизация Google Tasks</string>
     <string name="settings_cat_syncing">Синхронизация</string>
     <string name="show_from_all_lists">Все списки</string>
     <string name="lists">Списки</string>

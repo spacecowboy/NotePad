@@ -50,7 +50,6 @@
     <string name="preference_preview_text">هكذا سيبدو النص في المحرّر</string>
     <string name="settings_account_title">اختر حسابًا</string>
     <string name="settings_account_summary">انقر لتغيير الحساب</string>
-    <string name="settings_sync_enable_title">المزامنة مع مهام Google</string>
     <string name="settings_cat_syncing">المزامنة</string>
     <string name="show_from_all_lists">كل القوائم</string>
     <string name="deleted">حُذِفت</string>

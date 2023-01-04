@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Takhle bude vypadat písmo v editoru</string>
     <string name="settings_account_title">Zvolte účet</string>
     <string name="settings_account_summary">Zvolte účet pro synchronizaci</string>
-    <string name="settings_sync_enable_title">Synchronizovat s Google Úkoly</string>
-    <string name="gtasks_sync_info">Ne všechny informace lze synchronizovat s Google Tasks.  Jsou synchronizovány pouze poznámky, datum vypršení (ne čas) a stav úkolů.</string>
     <string name="settings_cat_syncing">Synchronizace</string>
     <string name="show_from_all_lists">Všechny seznamy</string>
     <string name="lists">Seznamy</string>

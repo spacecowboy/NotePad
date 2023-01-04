@@ -40,7 +40,6 @@
     <string name="settings_cat_appearance">Väljanägemine</string>
     <string name="settings_account_title">Vali konto</string>
     <string name="settings_account_summary">Kliki kontode vahetamiseks</string>
-    <string name="settings_sync_enable_title">Google Tasks sünk.</string>
     <string name="settings_cat_syncing">Sünkroniseerimine</string>
     <string name="show_from_all_lists">Kõik loendid</string>
     <string name="deleted">Kustutatud</string>

@@ -39,7 +39,6 @@
     <string name="preference_preview_text">כך הטקסט יופיע בעת עריכה.</string>
     <string name="settings_account_title">בחר חשבון</string>
     <string name="settings_account_summary">בחר להחלפת חשבון</string>
-    <string name="settings_sync_enable_title">סינכרון עם משימות Google</string>
     <string name="settings_cat_syncing">סינכרון</string>
     <string name="show_from_all_lists">כל הרשימות</string>
     <string name="deleted">נמחק</string>

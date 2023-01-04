@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Tältä editorin teksti näyttää</string>
     <string name="settings_account_title">Valitse käyttäjätili</string>
     <string name="settings_account_summary">Napauta vaihtaaksesi tiliä</string>
-    <string name="settings_sync_enable_title">Google Tasks -synkronointi</string>
-    <string name="gtasks_sync_info">Kaikkea tietoa ei voida synkronoida Google Tasks -palveluun: vain muistiinpanot, eräpäivämäärät (ei kellonaikoja) ja tehtävälistojen tilat synkronoidaan.</string>
     <string name="settings_cat_syncing">Synkronointi</string>
     <string name="show_from_all_lists">Kaikki listat</string>
     <string name="lists">Listat</string>

@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Así es como se verá el texto en el editor</string>
     <string name="settings_account_title">Seleccione una cuenta</string>
     <string name="settings_account_summary">Pulse para elegir la cuenta</string>
-    <string name="settings_sync_enable_title">Sincroniz. con Google Tasks</string>
-    <string name="gtasks_sync_info">No toda la información se puede sincronizar con Google Tasks. Sólo notas, fecha de vencimiento (excepto la hora) y estado de la tarea están sincronizados.</string>
     <string name="settings_cat_syncing">Sincronización</string>
     <string name="show_from_all_lists">Todas las listas</string>
     <string name="lists">Listas</string>

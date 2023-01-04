@@ -57,7 +57,7 @@
     <string name="settings_theme">Aktuelles Design</string>
     <string name="settings_theme_dialog">Design verwenden</string>
     <string name="settings_lang">Sprache</string>
-    <string name="settings_lang_dialog">Verschieben</string>
+
     <string name="settings_summary_theme_black">Schwarz</string>
     <string name="settings_summary_theme_dark">Dunkel</string>
     <string name="settings_summary_theme_light">Hell</string>
@@ -66,10 +66,7 @@
     <string name="preference_preview_text">So wird der Text im Editor dargestellt</string>
     <string name="settings_account_title">Account wählen</string>
     <string name="settings_account_summary">Account wechseln</string>
-    <string name="settings_sync_enable_title">mit Google Tasks sync.</string>
-    <string name="gtasks_sync_info">Nicht alle Informationen können mit Google Tasks synchronisiert werden. Nur Notizen, das Fälligkeitsdatum (nicht die Uhrzeit) und der Todo-Status werden synchronisiert.</string>
     <string name="settings_cat_syncing">Wird synchronisiert</string>
-    <string name="gtasks">Google Aufgaben</string>
     <string name="show_from_all_lists">Alle Listen</string>
     <string name="lists">Listen</string>
     <string name="deleted">Gelöscht</string>
@@ -224,7 +221,6 @@
     <string name="for_older_devices">Für ältere Android-Geräte</string>
     <string name="app_about_license">Lizenziert GPLv3+, https://www.gnu.org/licenses.</string>
     <string name="not_selected_yet">Noch nicht ausgewählt</string>
-    <string name="gtasks_not_working">Google Tasks (funktioniert nicht)</string>
     <string name="no_sync_method_chosen">Du hast keine Synchronisationsmethode ausgewählt</string>
     <string name="file_picker_not_available">Die Dateiauswahl ist nicht verfügbar</string>
     <string name="prefs_improved_reliability">Einstellungen zur Verbesserung der Zuverlässigkeit</string>

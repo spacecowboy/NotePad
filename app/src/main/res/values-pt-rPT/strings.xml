@@ -41,7 +41,6 @@
     <string name="preference_preview_text">É assim que o texto irá aparecer</string>
     <string name="settings_account_title">Selecione uma conta</string>
     <string name="settings_account_summary">Clique para alterar a conta</string>
-    <string name="settings_sync_enable_title">Google Tarefas</string>
     <string name="settings_cat_syncing">Sincronização</string>
     <string name="show_from_all_lists">Todas as listas</string>
     <string name="deleted">Apagado</string>
@@ -152,5 +151,4 @@
     <string name="sort_list_alphabetical">A-Z</string>
     <string name="sort_list_updated">Última atualização</string>
     <string name="sort_list_manual">Manual</string>
-    <string name="gtasks_sync_info">Nem todas as informações podem ser sincronizadas com o Google Tasks. Apenas notas, data de vencimento (não hora) e estado atual podem.</string>
 </resources>

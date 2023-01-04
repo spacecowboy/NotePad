@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Ini adalah bagaimana teks editor akan muncul</string>
     <string name="settings_account_title">Pilih Akun</string>
     <string name="settings_account_summary">Tekan untuk memilih akun</string>
-    <string name="settings_sync_enable_title">Sinkronisasi Google Tasks</string>
-    <string name="gtasks_sync_info">Tidak semua informasi dapat disinkronkan dengan Google Tasks. Hanya catatan, tanggal jatuh tempo (not time) dan todo-status yang disinkronkan.</string>
     <string name="settings_cat_syncing">Sinkronisasi</string>
     <string name="show_from_all_lists">Semua daftar</string>
     <string name="lists">Daftar</string>
