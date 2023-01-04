@@ -53,6 +53,16 @@
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
+			android:id="@+id/appVersionRow"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="8dp"
+			android:text="@string/version"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="8dp"

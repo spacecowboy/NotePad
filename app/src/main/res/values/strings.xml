@@ -152,6 +152,7 @@
 	<string name="canceled_note_locked">Canceled: the note is locked</string>
 	<string name="order_notes_by">Order notes by:</string>
 	<string name="show_elements_as">Show items as:</string>
+	<string name="version">Version: %s</string>
 
 	<!--
 		Use few if language need it. In English is the same.
