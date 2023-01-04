@@ -22,10 +22,6 @@ import android.app.backup.BackupDataInputStream;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.Context;
 
-import androidx.preference.PreferenceManager;
-
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-
 
 /**
  * Backs up the user's preferences

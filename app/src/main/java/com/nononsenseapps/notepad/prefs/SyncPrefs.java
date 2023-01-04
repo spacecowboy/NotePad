@@ -28,10 +28,8 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreference;
 
 import com.nononsenseapps.helpers.FileHelper;
 import com.nononsenseapps.helpers.NnnLogger;
