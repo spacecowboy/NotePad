@@ -1,17 +1,16 @@
-<RelativeLayout
+<LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:paddingTop="8dp"
+	android:orientation="vertical"
 	tools:context=".ShortcutConfig">
 
 	<TextView
 		android:id="@+id/textView1"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
-		android:layout_alignParentTop="true"
 		android:layout_marginLeft="16dp"
 		android:layout_marginTop="2dp"
 		android:layout_marginRight="16dp"
@@ -25,8 +24,6 @@
 		android:id="@+id/listSpinner"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/list_item_min_size"
-		android:layout_below="@id/textView1"
-		android:layout_alignParentLeft="true"
 		android:layout_marginLeft="16dp"
 		android:layout_marginTop="2dp"
 		android:layout_marginRight="16dp"
@@ -39,10 +36,8 @@
 		android:id="@+id/createNoteSwitch"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/list_item_min_size"
-		android:layout_below="@id/listSpinner"
-		android:layout_alignParentLeft="true"
 		android:layout_marginLeft="16dp"
-		android:layout_marginTop="2dp"
+		android:layout_marginTop="20dp"
 		android:layout_marginRight="16dp"
 		android:layout_marginBottom="2dp"
 		android:text="@string/title_create"
@@ -53,7 +48,6 @@
 		android:id="@+id/textView2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/createNoteSwitch"
 		android:layout_marginLeft="16dp"
 		android:layout_marginTop="2dp"
 		android:layout_marginRight="16dp"
@@ -62,19 +56,12 @@
 		android:text="@string/shortcut_help1"
 		android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-	<View
-		android:id="@+id/divider"
-		android:layout_width="match_parent"
-		android:layout_height="1dp"
-		android:layout_below="@+id/textView2"
-		android:background="?android:attr/dividerHorizontal"/>
-
 	<Button
 		android:id="@+id/ok"
-		style="?android:attr/buttonBarButtonStyle"
-		android:layout_width="match_parent"
+		android:layout_marginTop="30dp"
+		android:layout_width="wrap_content"
+		android:layout_gravity="center_horizontal"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/divider"
 		android:text="@android:string/ok"/>
 
-</RelativeLayout>
+</LinearLayout>

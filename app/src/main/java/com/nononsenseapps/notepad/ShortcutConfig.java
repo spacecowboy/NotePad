@@ -18,6 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 
+import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.ActivityShortcutConfigBinding;
@@ -36,6 +38,9 @@ public class ShortcutConfig extends AppCompatActivity {
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		// Must do this before super.onCreate
+		ThemeHelper.setTheme(this);
+		ActivityHelper.setSelectedLanguage(this);
 		super.onCreate(savedInstanceState);
 		mBinding = ActivityShortcutConfigBinding.inflate(getLayoutInflater());
 		setContentView(mBinding.getRoot());

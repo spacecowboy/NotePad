@@ -139,15 +139,9 @@
 		<item name="android:windowBackground">@android:color/transparent</item>
 	</style>
 
-	<!-- Respects the user's day/night system setting and shows the activity as a dialog.
-	 For the shortcut widget configuration activity. MUST inherit from AppCompat -->
-	<style name="ThemeNnnDayNightDialog" parent="@style/Theme.AppCompat.DayNight.Dialog">
-		<item name="colorAccent">@color/accent</item>
-	</style>
-
 	<style name="ThemeNnnDialogDark" parent="@android:style/Theme.DeviceDefault.Dialog">
 		<!-- TODO this overwrites the user-chosen color in android 13, so you should
-		 make a custom "themes.xml" file in values-v32 or values-v33 -->
+		      make a custom "themes.xml" file in values-v32 or values-v33 -->
 		<item name="android:colorAccent">@color/accent</item>
 	</style>
 
