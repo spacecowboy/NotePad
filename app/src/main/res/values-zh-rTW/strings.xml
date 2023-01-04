@@ -64,8 +64,6 @@
     <string name="preference_preview_text">我能吞下玻璃而不傷身體。</string>
     <string name="settings_account_title">選定一個帳戶</string>
     <string name="settings_account_summary">點擊切換帳戶</string>
-    <string name="settings_sync_enable_title">Google 工作表同步</string>
-    <string name="gtasks_sync_info">並非所有資料都可同步至 Google 工作表。只有便箋、過期日（不是時間）以及待辦狀態可以同步。</string>
     <string name="settings_cat_syncing">同步</string>
     <string name="show_from_all_lists">所有清單</string>
     <string name="deleted">已刪除</string>

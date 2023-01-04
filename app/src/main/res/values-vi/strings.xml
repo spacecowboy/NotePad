@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Chữ sẽ trông như thế này</string>
     <string name="settings_account_title">Chọn tài khoản</string>
     <string name="settings_account_summary">Chạm để đổi tài khoản</string>
-    <string name="settings_sync_enable_title">Đồng bộ Google Tasks</string>
-    <string name="gtasks_sync_info">Chỉ ghi chú, ngày chót (không tính giờ) và trạng thái hoàn thành mới được đồng bộ với Google Tasks.</string>
     <string name="settings_cat_syncing">Đồng bộ hoá</string>
     <string name="show_from_all_lists">Tất cả danh sách</string>
     <string name="lists">Danh sách</string>

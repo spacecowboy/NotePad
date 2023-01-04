@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Așa va fi afișat editorul</string>
     <string name="settings_account_title">Alege un cont</string>
     <string name="settings_account_summary">Clic pentru a schimba contul</string>
-    <string name="settings_sync_enable_title">Sincronizare Sarcini Google</string>
-    <string name="gtasks_sync_info">Nu toate informațiile poti fi sincronizate cu Google Tasks. Doar notițele, data scadenței (nu ora) și statutul-todo sunt sincronizate.</string>
     <string name="settings_cat_syncing">Sincronizare</string>
     <string name="show_from_all_lists">Toate listele</string>
     <string name="lists">Liste</string>

@@ -38,7 +38,6 @@
     <string name="settings_summary_theme_black">Svart</string>
     <string name="settings_summary_theme_dark">Mørk</string>
     <string name="preference_preview_text">Tekst i tekstbehandleren vil fremtre slik</string>
-    <string name="settings_sync_enable_title">Google Tasks-synkronisering</string>
     <string name="lists">Lister</string>
     <string name="once">Én gang</string>
     <string name="always">Alltid</string>
@@ -181,7 +180,6 @@
     <string name="dashclock_show_only_the_next_task">Vis kun neste gjøremål</string>
     <string name="normal">Normal</string>
     <string name="backup_export">Eksporter sikkerhetskopi</string>
-    <string name="gtasks_not_working">Google Tasks (fungerer ikke)</string>
     <string name="battery_optimizations_active">Batterioptimalisering påskrudd</string>
     <string name="notification_channel_settings">Innstillinger for merknadskanal</string>
     <string name="battery_optimizations_inactive">Batterioptimalisering avskrudd</string>
@@ -202,7 +200,6 @@
     <string name="item_max_height">Maks høyde for notater/gjøremål, i rader</string>
     <string name="hide_header">Skjul hele miniprogramsnavnet</string>
     <string name="hide_checkbox_summary_on">Skjuler avkryssningsboksen</string>
-    <string name="gtasks_sync_info">Ikke all info kan synkroniseres med Google Tasks; kun notater, fristdato (ikke tid) og gjøremålsstatus.</string>
     <string name="permission_read_desc">Lar programmet lese notatene dine og relaterte lister i No Nonsense Notes</string>
     <string name="notification_channel_description">Viser notatets innhold ved påminnelsestiden</string>
     <string name="use_exact_alarms">Nøyaktige alarmer</string>

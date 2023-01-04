@@ -49,7 +49,6 @@
     <string name="preference_preview_text">편집기 글꼴이 이렇게 보입니다</string>
     <string name="settings_account_title">계정 선택</string>
     <string name="settings_account_summary">계정 바꾸기</string>
-    <string name="settings_sync_enable_title">Google Task 동기화</string>
     <string name="settings_cat_syncing">동기화</string>
     <string name="show_from_all_lists">모든 목록</string>
     <string name="deleted">삭제됨</string>

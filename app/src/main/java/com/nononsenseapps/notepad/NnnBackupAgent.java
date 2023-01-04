@@ -22,10 +22,6 @@ import android.app.backup.BackupDataInputStream;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.Context;
 
-import androidx.preference.PreferenceManager;
-
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
 /**
  * Backs up the user's preferences
@@ -57,12 +53,13 @@ public class NnnBackupAgent extends BackupAgentHelper {
 		@Override
 		public void restoreEntity(BackupDataInputStream data) {
 			super.restoreEntity(data);
-			PreferenceManager
+			// TODO reflect on what to add/delete on the preferences, then write it here
+			/* PreferenceManager
 					.getDefaultSharedPreferences(mContext)
 					.edit()
 					.remove(GoogleTaskSync.PREFS_GTASK_LAST_SYNC_TIME)
 					.remove(SyncPrefs.KEY_LAST_SYNC)
-					.commit();
+					.commit(); */
 		}
 
 	}

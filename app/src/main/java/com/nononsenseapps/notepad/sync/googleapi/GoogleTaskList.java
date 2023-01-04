@@ -17,10 +17,6 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import android.database.Cursor;
-
-import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.helpers.RFC3339Date;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.TaskList;
 
@@ -28,20 +24,6 @@ public class GoogleTaskList extends RemoteTaskList {
 
 	public static final String SERVICENAME = "googletasks";
 	public String title = null;
-	public boolean remotelyDeleted = false;
-
-	/**
-	 * Intended for when default list is deleted. When that fails, redownload it and its contents
-	 */
-	public boolean redownload = false;
-
-	public GoogleTaskList(GoogleTasksAPI.TaskListResource taskListResource, String accountName) {
-		super();
-		this.service = SERVICENAME;
-		account = accountName;
-
-		updateFromTaskListResource(taskListResource);
-	}
 
 	public GoogleTaskList(final TaskList dbList, final String accountName) {
 		super();
@@ -51,46 +33,9 @@ public class GoogleTaskList extends RemoteTaskList {
 		this.service = SERVICENAME;
 	}
 
-	public GoogleTaskList(final String accountName) {
-		super();
-		this.account = accountName;
-		this.service = SERVICENAME;
-	}
-
-	public GoogleTaskList(final Cursor c) {
-		super(c);
-		this.service = SERVICENAME;
-	}
-
 	public GoogleTaskList(final Long dbid, final String remoteId, final Long updated, final String account) {
 		super(dbid, remoteId, updated, account);
 		this.service = SERVICENAME;
-	}
-
-	/**
-	 * Includes title and not id
-	 */
-	public GoogleTasksAPI.TaskListResource toTaskListResource() {
-		GoogleTasksAPI.TaskListResource taskListResource = new GoogleTasksAPI.TaskListResource();
-
-		taskListResource.title = title;
-
-		return taskListResource;
-	}
-
-	/**
-	 * Update all fields from the resource
-	 */
-	public void updateFromTaskListResource(GoogleTasksAPI.TaskListResource taskListResource) {
-		remoteId = taskListResource.id;
-		title = taskListResource.title;
-
-		try {
-			updated = RFC3339Date.parseRFC3339Date(taskListResource.updated).getTime();
-		} catch (Exception e) {
-			NnnLogger.exception(e);
-			updated = 0L;
-		}
 	}
 
 	/**

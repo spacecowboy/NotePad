@@ -16,84 +16,27 @@
 -->
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="app_preference_screen_sync">
-
-	<!--
-	everything google tasks was disabled. If you want to work on it:
-		* remove the   android:enabled="false" and app:isPreferenceVisible="false" from
-			the PreferenceCategory here below
-		* uncomment the lines AndroidManifest.xml related to the Gtasks permissions
-		* start testing & fixing bugs
-
-	TODO remove everything google tasks from the app if nobody comes out to work on it. See #426.
-	 -->
-
-	<PreferenceCategory
-		android:enabled="false"
-		android:key="pref_gtask_section_key"
-		android:persistent="false"
-		app:initialExpandedChildrenCount="0"
-		app:isPreferenceVisible="false"
-		android:title="@string/gtasks_not_working">
-
-		<SwitchPreference
-			android:defaultValue="false"
-			android:key="syncEnablePref"
-			android:summary="@string/gtasks_sync_info"
-			android:title="@string/settings_sync_enable_title"/>
-
-		<Preference
-			android:dependency="syncEnablePref"
-			android:key="accountPref"
-			android:summary=""
-			android:title="@string/settings_account_title"/>
-
-		<SwitchPreference
-			android:defaultValue="true"
-			android:dependency="syncEnablePref"
-			android:key="syncInBackground"
-			android:summary="@string/background_sync_info"
-			android:title="@string/background_sync"/>
-		<SwitchPreference
-			android:defaultValue="true"
-			android:dependency="syncEnablePref"
-			android:key="syncOnStart"
-			android:summary="@string/sync_on_start_info"
-			android:title="@string/sync_on_start"/>
-		<SwitchPreference
-			android:defaultValue="true"
-			android:dependency="syncEnablePref"
-			android:key="syncOnChange"
-			android:summary="@string/sync_on_change_info"
-			android:title="@string/sync_on_change"/>
-		<!-- <CheckBoxPreference
-			android:defaultValue="false"
-			android:dependency="syncEnablePref"
-			android:key="syncFull"
-			android:summary="@string/sync_full_force_info"
-			android:title="@string/sync_full_force" /> -->
-	</PreferenceCategory>
 
 	<!-- if ANY form of synchronization is enabled. Can disable every line of sync code,
 	 to make the app faster for those who won't use any form of synchronization  -->
 	<SwitchPreference
 		android:defaultValue="false"
-		android:key="@string/key_pref_sync_enabled_master"
 		android:icon="@drawable/ic_refresh_24dp"
+		android:key="@string/key_pref_sync_enabled_master"
 		android:summary="@string/enable_sync_desc"
 		android:title="@string/enable_sync"/>
 
 	<PreferenceCategory
-		android:key="pref_sdcard_section_key"
 		android:dependency="@string/key_pref_sync_enabled_master"
+		android:key="pref_sdcard_section_key"
 		android:persistent="false"
 		android:title="@string/sd_card">
 
 		<SwitchPreference
 			android:defaultValue="false"
-			android:key="pref_sync_sd_enabled"
 			android:icon="@drawable/ic_folder_24dp"
+			android:key="pref_sync_sd_enabled"
 			android:summary="@string/sd_card_summary"
 			android:title="@string/sd_card_sync"/>
 
@@ -110,10 +53,10 @@
 
 		<!-- Warn users that the org folder is hardcoded. See SyncPrefs.java -->
 		<Preference
-			android:title="@string/directory"
+			android:icon="@drawable/ic_info_24dp"
 			android:key="pref_sdcard_sync_info"
 			android:summary="Filled in SyncPrefs.java"
-			android:icon="@drawable/ic_info_24dp"/>
+			android:title="@string/directory"/>
 
 	</PreferenceCategory>
 

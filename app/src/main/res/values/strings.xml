@@ -76,10 +76,8 @@
 	<!-- TODO all strings related to google tasks will (should!) be deleted by summer 2023.
 	      Their translated versions will also have to be deleted -->
 
-	<string name="settings_sync_enable_title">Google Tasks sync</string>
-	<string name="gtasks_sync_info">Not all info can be synced with Google Tasks. Only notes, due date (not time) and todo-status is.</string>
 	<string name="settings_cat_syncing">Syncing</string>
-	<string name="gtasks" translatable="false">Google Tasks</string>
+
 	<string name="show_from_all_lists">All lists</string>
 	<string name="lists">Lists</string>
 	<string name="deleted">Deleted</string>
@@ -116,7 +114,7 @@
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
 	<string name="permission_denied">Can not proceed: you denied the permission</string>
 	<string name="no_sync_method_chosen">You did not choose a sync method</string>
-	<string name="gtasks_not_working">Google Tasks (does not work)</string>
+
 	<string name="file_picker_not_available">The file picker is not available</string>
 	<string name="choose_backup_folder">Choose a backup folder</string>
 	<string name="use_exact_alarms">Use exact alarms</string>

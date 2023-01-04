@@ -79,12 +79,9 @@ public final class UpdateNotifier {
 	 * @param uri optional uri
 	 */
 	private static void notifyChange(Context context, Uri uri) {
-		if (uri != null) {
-			context.getContentResolver().notifyChange(uri, null, false);
-			// SyncHelper.requestSyncIf(context, SyncHelper.ONCHANGE);
-			SyncGtaskHelper.requestSyncIf(context, SyncGtaskHelper.ONCHANGE);
-			context.getContentResolver().notifyChange(Notification.URI, null);
-		}
+		if (uri == null) return;
+		context.getContentResolver().notifyChange(uri, null, false);
+		context.getContentResolver().notifyChange(Notification.URI, null);
 	}
 
 	/**

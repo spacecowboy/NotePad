@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Így fog megjelenni a szöveg a szerkesztőben</string>
     <string name="settings_account_title">Válassz fiókot</string>
     <string name="settings_account_summary">Kattints a fiók váltásához</string>
-    <string name="settings_sync_enable_title">Google Feladatok szinkronizálása</string>
-    <string name="gtasks_sync_info">Nem minden információ szinkronizálható a Google Feladatokal. Csak a jegyzetek, a lejárati dátum (az időpont nem) és a teendő állapot.</string>
     <string name="settings_cat_syncing">Szinkronizálás</string>
     <string name="show_from_all_lists">Összes lista</string>
     <string name="lists">Listák</string>

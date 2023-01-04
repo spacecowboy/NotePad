@@ -29,6 +29,7 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -83,7 +84,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 
 		timeFormatter = TimeFormatter.getLocalFormatterLong(this);
 		// Default datetime format in sqlite. Set to UTC timezone
-		dbTimeParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dbTimeParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 		dbTimeParser.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 		loadActionBarLayout();

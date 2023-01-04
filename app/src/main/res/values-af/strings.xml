@@ -65,8 +65,6 @@
     <string name="preference_preview_text">Dit is hoe die ingevoerde teks sal vertoon</string>
     <string name="settings_account_title">Kies \'n rekening</string>
     <string name="settings_account_summary">Raak om van rekening te wissel</string>
-    <string name="settings_sync_enable_title">Sinkroniseer met Google Take</string>
-    <string name="gtasks_sync_info">Slegs notas, take, sperdatums en moet-doen status word gesinkroniseer (nie tydstip nie).</string>
     <string name="settings_cat_syncing">Sinkronisasie</string>
     <string name="show_from_all_lists">Alle lyste</string>
     <string name="lists">Lyste</string>

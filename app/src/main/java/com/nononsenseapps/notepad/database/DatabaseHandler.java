@@ -25,12 +25,9 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import androidx.preference.PreferenceManager;
-
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.RFC3339Date;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 
@@ -160,9 +157,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	public static Cursor getLegacyNotifications(final SQLiteDatabase legacyDB) {
-		return legacyDB.query(LegacyDBHelper.NotePad.Notifications.TABLE_NAME, new String[] {
-						"time", "permanent", "noteid" }, null, null, null, null,
-				null);
+		return legacyDB.query(LegacyDBHelper.NotePad.Notifications.TABLE_NAME,
+				new String[] { "time", "permanent", "noteid" }, null,
+				null, null, null, null);
 	}
 
 	private void initializedDB(final SQLiteDatabase db) throws SQLiteException {
@@ -192,9 +189,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				// handle gtask info
 				GoogleTaskList rl;
-				if (c.getString(2) != null && !c.getString(2).isEmpty() && c.getString(3) != null
+				if (c.getString(2) != null
+						&& !c.getString(2).isEmpty()
+						&& c.getString(3) != null
 						&& !c.getString(3).isEmpty()) {
-					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
+					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated,
+							c.getString(3));
 					rl.insert(context, db);
 				}
 			}
@@ -244,7 +244,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 					// gtask
 					GoogleTask gt;
-					if (!c.isNull(7) && !c.getString(7).isEmpty() && !c.isNull(8)
+					if (!c.isNull(7)
+							&& !c.getString(7).isEmpty()
+							&& !c.isNull(8)
 							&& !c.getString(8).isEmpty()) {
 						gt = new GoogleTask(t, c.getString(8));
 						gt.remoteId = c.getString(7);
@@ -263,7 +265,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				while (!c.isClosed() && c.moveToNext()) {
 					// Make sure id exists
 					if (taskIDMap.containsValue(c.getLong(2))) {
-						Notification n = new Notification(taskIDMap.get(c.getLong(2)));
+						var n = new Notification(taskIDMap.get(c.getLong(2)));
 						n.time = c.getLong(0);
 						// permanent was not supported at the time
 						// insert
@@ -283,22 +285,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// If no lists, insert a list and example note.
 
-		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null, null, null, null,
-				null);
+		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null,
+				null, null, null, null);
 
 		if (!c.isClosed() && c.getCount() > 0) {
 			// Done
 		} else {
-			var sPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-			if (sPrefs.contains(SyncPrefs.KEY_ACCOUNT)) {
-				// If preferences has sync enabled, don't create this list
-				// The backup agent has restored a reinstallation
-			} else {
-				// Create a list
-				final TaskList tl = new TaskList();
-				tl.title = context.getString(R.string.tasks);
-				tl.insert(context, db);
-			}
+			// Create a list
+			final TaskList tl = new TaskList();
+			tl.title = context.getString(R.string.tasks);
+			tl.insert(context, db);
 		}
 		c.close();
 		db.setTransactionSuccessful();

@@ -17,10 +17,7 @@
 
 package com.nononsenseapps.helpers;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -28,11 +25,8 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 public final class SyncStatusMonitor extends BroadcastReceiver {
@@ -57,17 +51,11 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 			return;
 		}
 
-		final String accountName = PreferenceManager
-				.getDefaultSharedPreferences(activity)
-				.getString(SyncPrefs.KEY_ACCOUNT, "");
-		Account account = null;
-		if (!accountName.isEmpty()) {
-			account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
-		}
+		// get the selected account and verify if it is valid
+		boolean isAccountValid = false;
 		// Sync state might have changed, make sure we're spinning when we should
 		try {
-			listener.onSyncStartStop(account != null
-					&& ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY));
+			listener.onSyncStartStop(isAccountValid);
 		} catch (Exception e) {
 			NnnLogger.debug(SyncStatusMonitor.class, e.getMessage());
 		}

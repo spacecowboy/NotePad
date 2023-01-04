@@ -50,8 +50,6 @@
     <string name="preference_preview_text">Dette er hvordan redaktørteksten vil se ut</string>
     <string name="settings_account_title">Velg en konto</string>
     <string name="settings_account_summary">Trykk for å bytte konto</string>
-    <string name="settings_sync_enable_title">Google Huskeliste-synkronisering</string>
-    <string name="gtasks_sync_info">Ikke all informasjon kan synkroniseres med Google Huskeliste. Kun notater, utløpsdato (ikke tid) og å gjøre-status blir synkronisert.</string>
     <string name="settings_cat_syncing">Synkronisering</string>
     <string name="show_from_all_lists">Alle lister</string>
     <string name="lists">Lister</string>

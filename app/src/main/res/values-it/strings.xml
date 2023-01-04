@@ -64,8 +64,6 @@
     <string name="preference_preview_text">Ecco come apparirà il testo nell\'editor</string>
     <string name="settings_account_title">Seleziona un account</string>
     <string name="settings_account_summary">Tocca per cambiare account</string>
-    <string name="settings_sync_enable_title">Sincronizza con Google Tasks</string>
-    <string name="gtasks_sync_info">Con Google Tasks si possono sincronizzare tutte le informazioni. Verranno sincronizzate solo le note, la data di scadenza (non l\'ora) e lo stato (da fare o fatta).</string>
     <string name="settings_cat_syncing">Sincronizzazione</string>
     <string name="show_from_all_lists">Tutti gli elenchi</string>
     <string name="deleted">Eliminata</string>
@@ -89,7 +87,6 @@
     <string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>
     <string name="permission_denied">Annullato: non hai dato il permesso</string>
     <string name="no_sync_method_chosen">Non hai attivato la sincronizzazione</string>
-    <string name="gtasks_not_working">Google Tasks (NON FUNZIONA)</string>
     <string name="file_picker_not_available">L\'app per gestire i file non è disponibile</string>
     <string name="choose_backup_folder">Scegli la cartella per i backup</string>
     <string name="move">Sposta</string>
