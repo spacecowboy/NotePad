@@ -275,4 +275,23 @@ public final class TimeFormatter {
 		long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(today, endOfMonth);
 		return (int) daysBetween + 1;
 	}
+
+	/**
+	 * @return same as {@link #getHowManyDaysInTheNextMonth()} but for the year
+	 */
+	public static int getHowManyDaysInNextYear() {
+		Calendar x = Calendar.getInstance();
+		x.add(Calendar.YEAR, 1);
+		return x.getActualMaximum(Calendar.DAY_OF_YEAR);
+	}
+
+	/**
+	 * @return same as {@link #getHowManyDaysUntilFirstOfNextMonth} but for the year
+	 */
+	public static int getHowManyDaysUntilFirstOfNextYear() {
+		LocalDate today = LocalDate.now();
+		LocalDate endOfYear = today.withDayOfYear(today.lengthOfYear());
+		long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(today, endOfYear);
+		return (int) daysBetween + 1;
+	}
 }

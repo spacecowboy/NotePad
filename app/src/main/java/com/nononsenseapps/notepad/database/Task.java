@@ -392,9 +392,9 @@ public class Task extends DAO {
 					Columns._ID + ";" + " END;";
 
 	/**
-	 * This is a view which returns the tasks in the specified list with headers
+	 * This is a SQLite view which returns the tasks in the specified list with headers
 	 * suitable for dates, if any tasks would be sorted under them. Headers are used
-	 * in the {@link DragSortListView}.
+	 * in the {@link DragSortListView} when notes are ordered by date.
 	 * Provider hardcodes the sort order for this.
 	 *
 	 * @param listId if it is null, the function will return (a query) for all lists
@@ -402,9 +402,7 @@ public class Task extends DAO {
 	 */
 	public static String CREATE_SECTIONED_DATE_VIEW(final String listId) {
 		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
-		// TODO this creates a SQLite view that the drag-sort-listview uses for the headers
-		//  when ordering tasks by date. add here the code for HEADER_KEY_NEXT_MONTH,
-		//  HEADER_KEY_NEXT_YEAR and so on
+
 		String beginning = "CREATE TEMP VIEW IF NOT EXISTS " + getSECTION_DATE_VIEW_NAME(listId) +
 				// Tasks WITH dates NOT completed, secret 0
 				" AS SELECT " + arrayToCommaString(Columns.FIELDS) + ",0" + " AS " + SECRET_TYPEID +
@@ -456,6 +454,9 @@ public class Task extends DAO {
 				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
 				" BETWEEN " + TODAY_PLUS(3) + " AND " + TODAY_PLUS(4) + ") ";
 
+		// in this function you can add the code to create more headers for when the
+		// notes list is sorted by due date, but I think these are enough already
+
 		// Today + 4
 		String PLUS_4 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 				Columns.DUE, TODAY_PLUS(4), Columns.TITLE, HEADER_KEY_PLUS4, Columns.DBLIST,
@@ -483,6 +484,18 @@ public class Task extends DAO {
 				" BETWEEN " + TODAY_PLUS(daysUntilNextMonth) + " AND " + TODAY_PLUS(toEndOfNextMonth)
 				+ ") ";
 
+		int daysUntilNextYear = TimeFormatter.getHowManyDaysUntilFirstOfNextYear();
+		int toEndOfNextYear = daysUntilNextYear + TimeFormatter.getHowManyDaysInNextYear();
+
+		String nextYear = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(daysUntilNextYear), Columns.TITLE, HEADER_KEY_NEXT_YEAR,
+				Columns.DBLIST, listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(daysUntilNextYear) + " AND " + TODAY_PLUS(toEndOfNextYear)
+				+ ") ";
+
 		// Overdue (0)
 		String overdue = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 				Columns.DUE, OVERDUE, Columns.TITLE, HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
@@ -492,14 +505,14 @@ public class Task extends DAO {
 				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
 				" BETWEEN " + OVERDUE + " AND " + TODAY_START + ") ";
 
-		// Later. As of now, later = "after the end of the next month"
+		// Later. As of now, later = "after the end of the next year"
 		String later = " UNION ALL " + " SELECT '-1'," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-				Columns.DUE, TODAY_PLUS(toEndOfNextMonth), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
+				Columns.DUE, TODAY_PLUS(toEndOfNextYear), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
 				listId) + ",0,0" +
 				// Only show header if there are tasks under it
 				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
 				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
-				" >= " + TODAY_PLUS(toEndOfNextMonth) + ") ";
+				" >= " + TODAY_PLUS(toEndOfNextYear) + ") ";
 
 		// No date
 		String noDate = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
@@ -519,8 +532,8 @@ public class Task extends DAO {
 				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.DBLIST +
 				" IS " + sListId + " AND " + Columns.COMPLETED + " IS NOT null " + ") " + ";";
 
-		return beginning + TODAY + PLUS_1 + PLUS_2 + PLUS_3 + PLUS_4 + nextMonth + overdue + later
-				+ noDate + finalSql;
+		return beginning + TODAY + PLUS_1 + PLUS_2 + PLUS_3 + PLUS_4 + nextMonth + nextYear +
+				overdue + later + noDate + finalSql;
 	}
 
 	/**
