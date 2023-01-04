@@ -18,14 +18,9 @@
 package com.nononsenseapps.notepad.prefs;
 
 import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -38,29 +33,15 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
-import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.FileHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
-import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-
-import java.io.IOException;
 
 public class SyncPrefs extends PreferenceFragmentCompat
 		implements OnSharedPreferenceChangeListener {
-
-	// TODO these 6 are useles. Maybe we can reuse them if we find a newer sync service
-	//  to replace google tasks
-	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
-	public static final String KEY_ACCOUNT = "accountPref";
-	public static final String KEY_FULLSYNC = "syncFull";
-	public static final String KEY_SYNC_ON_START = "syncOnStart";
-	public static final String KEY_SYNC_ON_CHANGE = "syncOnChange";
-	public static final String KEY_BACKGROUND_SYNC = "syncInBackground";
 
 	/**
 	 * Used for sync on start and on change
@@ -72,38 +53,6 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_SYNC_INFO = "pref_sdcard_sync_info";
 
-	private SwitchPreference prefSyncEnable;
-	private Preference prefAccount;
-
-	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
-		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
-			// user does not want sync features
-			return;
-		}
-
-		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
-
-		if (!accountName.isEmpty()) {
-			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
-			if (account != null) {
-				if (!backgroundSync) {
-					// Disable periodic syncing
-					ContentResolver.removePeriodicSync(account,
-							MyContentProvider.AUTHORITY, new Bundle());
-				} else {
-					// Convert from minutes to seconds
-					long pollFrequency = 3600;
-					// Set periodic syncing
-					ContentResolver.addPeriodicSync(account, MyContentProvider.AUTHORITY,
-							new Bundle(), pollFrequency);
-				}
-			} else {
-				// can't do anything: the user did not add a google account to the device
-			}
-		}
-	}
-
 	@Override
 	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 
@@ -114,21 +63,6 @@ public class SyncPrefs extends PreferenceFragmentCompat
 				.getDefaultSharedPreferences(this.getContext());
 		// Set up a listener whenever a key changes
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
-
-		// TODO this is useless, since all Google Tasks settings are disabled.
-		prefAccount = findPreference(KEY_ACCOUNT);
-		setAccountTitle(sharedPrefs);
-		prefAccount.setOnPreferenceClickListener(preference -> {
-			// TODO useless, remove
-			// Show dialog. All runtime permissions were automatically granted by the OS
-			showAccountDialog();
-			return true;
-		});
-
-		prefSyncEnable = findPreference(KEY_SYNC_ENABLE);
-		// Disable prefs if this is not correct build
-		String API_KEY = Config.getGtasksApiKey(getActivity());
-		prefSyncEnable.setEnabled(null != API_KEY && !API_KEY.contains(" "));
 
 		findPreference(KEY_SD_ENABLE).setOnPreferenceClickListener(p -> {
 			// if the ORG dir is inaccessible, disable SD sync
@@ -156,21 +90,6 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	}
 
 	/**
-	 * Shows a system popup to choose the google account to use for synchronizing notes.
-	 * If the user has no google accounts on the device, a prompt will open, asking to
-	 * add a new one
-	 */
-	private void showAccountDialog() {
-		// do we need to check for permissions ? (there's 3 in the manifest)
-		String hint = this.getString(R.string.select_account);
-		var allowedAccountTypes = new String[] { "com.google" };
-		Intent i = AccountManager.newChooseAccountIntent(null, null,
-				allowedAccountTypes, hint, null, null,
-				null);
-		startActivityForResult(i, PICK_ACCOUNT_CODE);
-	}
-
-	/**
 	 * Called when a shared preference is changed, added, or removed. This
 	 * may be called even if a preference is set to its existing value.
 	 * <p/>
@@ -191,16 +110,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			}
 
 			// => now we can safely continue
-			if (KEY_SYNC_ENABLE.equals(key)) {
-				// for google tasks only
-				toggleSync(prefs);
-			} else if (KEY_BACKGROUND_SYNC.equals(key)) {
-				setSyncInterval(this.getContext(), prefs);
-			} else if (KEY_ACCOUNT.equals(key)) {
-				NnnLogger.debug(SyncPrefs.class, "account");
-				prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
-				// prefAccount.setSummary(getString(R.string.settings_account_summary));
-			} else if (KEY_SD_ENABLE.equals(key)) {
+			if (KEY_SD_ENABLE.equals(key)) {
 				// Restart the sync service
 				OrgSyncService.stop(getActivity());
 			} else if (keySyncMaster.equals(key)) {
@@ -221,37 +131,11 @@ public class SyncPrefs extends PreferenceFragmentCompat
 		}
 		if (requestCode == PICK_ACCOUNT_CODE) {
 			// the user has confirmed with a valid account on the account picker
-			String chosenAccountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-			userChoseAnAccountWithName(chosenAccountName);
+			// String chosenAccountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+			// then make and call something like userChoseAnAccountWithName(chosenAccountName);
 		}
 
 		super.onActivityResult(requestCode, resultCode, data);
-	}
-
-	/**
-	 * Called when the user chooses one {@link Account} from the system popup
-	 */
-	private void userChoseAnAccountWithName(String chosenAccountName) {
-		Account[] allAccounts = AccountManager
-				.get(this.getContext())
-				.getAccountsByType("com.google");
-
-		for (var chosenAccount : allAccounts) {
-			if (!chosenAccount.name.equalsIgnoreCase(chosenAccountName)) continue;
-
-			// we got the 1° (and hopefully only) match: proceed
-			NnnLogger.debug(SyncPrefs.class, "step one");
-
-			// work continues in callback, method afterGettingAuthToken()
-			AccountManagerCallback<Bundle> callback =
-					(b) -> afterGettingAuthToken(b, chosenAccount);
-
-			// Request user's permission
-			GoogleTasksClient.getAuthTokenAsync(this.getActivity(), chosenAccount, callback);
-
-			// do that only for the 1° match
-			return;
-		}
 	}
 
 	/**
@@ -262,14 +146,9 @@ public class SyncPrefs extends PreferenceFragmentCompat
 	private void afterGettingAuthToken(AccountManagerFuture<Bundle> future, Account account) {
 		try {
 			NnnLogger.debug(SyncPrefs.class, "step two");
-			// If the user authorized your app to use the tasks API, a token is available
-			// TODO here it crashes because the app is not registered into some kind of console
-			String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
 
-			// Now we are authorized by the user.
-			NnnLogger.debug(SyncPrefs.class, "step two-b: " + token);
 
-			if (token != null && !token.isEmpty() && account != null) {
+			if (account != null) {
 
 				// Also mark enabled as true, as the dialog was shown from enable button
 				NnnLogger.debug(SyncPrefs.class, "step three: " + account.name);
@@ -278,8 +157,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 						.getDefaultSharedPreferences(this.getContext());
 				customSharedPreference
 						.edit()
-						.putString(SyncPrefs.KEY_ACCOUNT, account.name)
-						.putBoolean(KEY_SYNC_ENABLE, true)
+						.putString("pref_key_for_the_account", account.name)
+						.putBoolean("pref_to_enable_this_sync", true)
 						.commit();
 
 				// Set it syncable
@@ -287,14 +166,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 						.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
 				ContentResolver
 						.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
-				// Set sync frequency
-				SyncPrefs.setSyncInterval(this.getContext(), customSharedPreference);
-				// Set it syncable
-				SyncGtaskHelper.toggleSync(this.getContext(), customSharedPreference);
-				// And schedule an immediate sync
-				SyncGtaskHelper.requestSyncIf(this.getContext(), SyncGtaskHelper.MANUAL);
 			}
-		} catch (OperationCanceledException | AuthenticatorException | IOException e) {
+		} catch (Exception e) {
 			// OperationCanceledException:
 			// * if the request was canceled for any reason
 			// AuthenticatorException:
@@ -307,23 +180,8 @@ public class SyncPrefs extends PreferenceFragmentCompat
 			// * communicating with the authentication server
 			String errMsg = e.getClass().getSimpleName() + ": " + e.getMessage();
 			Toast.makeText(this.getContext(), errMsg, Toast.LENGTH_SHORT).show();
-			SyncGtaskHelper.disableSync(this.getContext());
+
 		}
 	}
 
-
-	private void toggleSync(SharedPreferences sharedPreferences) {
-		boolean enabled = SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
-		if (enabled) {
-			showAccountDialog();
-		} else {
-			// Synchronize view also
-			if (prefSyncEnable.isChecked()) prefSyncEnable.setChecked(false);
-		}
-	}
-
-	private void setAccountTitle(final SharedPreferences sharedPreferences) {
-		prefAccount.setTitle(sharedPreferences.getString(KEY_ACCOUNT, ""));
-		prefAccount.setSummary(R.string.settings_account_summary);
-	}
 }

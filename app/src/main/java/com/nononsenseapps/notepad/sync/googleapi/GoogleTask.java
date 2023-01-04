@@ -17,11 +17,7 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
 import com.nononsenseapps.helpers.RFC3339Date;
-import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.Task;
 
@@ -54,52 +50,6 @@ public class GoogleTask extends RemoteTask {
 
 	public final String possort = "";
 
-	public GoogleTask(final String accountName) {
-		super();
-		account = accountName;
-		this.service = GoogleTaskList.SERVICENAME;
-	}
-
-	public GoogleTask(final GoogleTasksAPI.TaskResource taskResource, final String accountName) {
-		super();
-		this.service = GoogleTaskList.SERVICENAME;
-		account = accountName;
-
-		updateFromTaskResource(taskResource);
-	}
-
-	/**
-	 * Fill in fields from taskresource
-	 */
-	public void updateFromTaskResource(GoogleTasksAPI.TaskResource taskResource) {
-		remoteId = taskResource.id;
-		try {
-			updated = RFC3339Date.parseRFC3339Date(taskResource.updated).getTime();
-		} catch (Exception e) {
-			updated = 0L;
-		}
-		//etag = jsonTask.getString("etag");
-
-		if (taskResource.title != null)
-			title = taskResource.title;
-		if (taskResource.notes != null)
-			notes = taskResource.notes;
-		if (taskResource.status != null)
-			status = taskResource.status;
-		if (taskResource.parent != null)
-			parent = taskResource.parent;
-		else
-			parent = null;
-		if (taskResource.position != null)
-			position = taskResource.position;
-		if (taskResource.due != null)
-			dueDate = taskResource.due;
-		if (taskResource.deleted != null && taskResource.deleted)
-			remotelydeleted = true;
-		if (taskResource.hidden != null && taskResource.hidden)
-			remotelydeleted = true;
-	}
-
 	public GoogleTask(final Task dbTask, final String accountName) {
 		super();
 		this.service = GoogleTaskList.SERVICENAME;
@@ -108,10 +58,6 @@ public class GoogleTask extends RemoteTask {
 			fillFrom(dbTask);
 	}
 
-	public GoogleTask(final Cursor c) {
-		super(c);
-		this.service = GoogleTaskList.SERVICENAME;
-	}
 
 	public void fillFrom(final Task dbTask) {
 		title = dbTask.title;
@@ -123,78 +69,6 @@ public class GoogleTask extends RemoteTask {
 		deleted = null;
 		dbid = dbTask._id;
 		listdbid = dbTask.dblist;
-	}
-
-	/**
-	 * Return a taskresource version of this task. Does not include id.
-	 */
-	public GoogleTasksAPI.TaskResource toTaskResource() {
-		GoogleTasksAPI.TaskResource result = new GoogleTasksAPI.TaskResource();
-
-		result.title = title;
-		result.notes = notes;
-		result.due = dueDate;
-		result.status = status;
-
-		return result;
-	}
-
-	/**
-	 * Returns a ContentValues hashmap suitable for database insertion in the
-	 * Lists table Includes modified flag and list id as specified in the
-	 * arguments
-	 */
-	public ContentValues toNotesContentValues(int modified, long listDbId) {
-		ContentValues values = new ContentValues();
-		if (title != null)
-			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
-		if (dueDate != null)
-			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, dueDate);
-		if (status != null)
-			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, status);
-		if (notes != null)
-			values.put(NotePad.Notes.COLUMN_NAME_NOTE, notes);
-
-		if (dbid > -1)
-			values.put(NotePad.Notes._ID, dbid);
-
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listDbId);
-		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
-		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
-		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
-		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
-		//values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
-
-		values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
-		//values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
-
-		return values;
-	}
-
-	/**
-	 * The parentIndex and previousIndex can be set to valid backreference
-	 * indices to indicate the id of the parent and previous of this note. If
-	 * set to null, already set values will be used which might be null.
-	 */
-	public ContentValues toNotesBackRefContentValues(Integer listIdIndex) {
-		ContentValues values = new ContentValues();
-		if (listIdIndex != null)
-			values.put(NotePad.Notes.COLUMN_NAME_LIST, listIdIndex);
-
-		return values;
-	}
-
-	public ContentValues toGTasksContentValues(String accountName) {
-		ContentValues values = new ContentValues();
-		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbid);
-		values.put(NotePad.GTasks.COLUMN_NAME_UPDATED, updated);
-		return values;
-	}
-
-	public ContentValues toGTasksBackRefContentValues(int pos) {
-		ContentValues values = new ContentValues();
-		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, pos);
-		return values;
 	}
 
 	/**

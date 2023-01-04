@@ -53,9 +53,7 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 			return;
 		}
 
-		final String accountName = PreferenceManager
-				.getDefaultSharedPreferences(activity)
-				.getString(SyncPrefs.KEY_ACCOUNT, "");
+		// get the selected account and verify if it is valid
 		boolean isAccountValid = false;
 		// Sync state might have changed, make sure we're spinning when we should
 		try {
