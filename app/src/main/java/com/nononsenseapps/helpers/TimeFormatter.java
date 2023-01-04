@@ -24,6 +24,8 @@ import androidx.preference.PreferenceManager;
 import com.nononsenseapps.notepad.R;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -252,5 +254,25 @@ public final class TimeFormatter {
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
 				WEEKDAY_SHORTEST_FORMAT);
+	}
+
+	/**
+	 * @return how many days the next month will have, so 28 for february and so on
+	 */
+	public static int getHowManyDaysInTheNextMonth() {
+		Calendar x = Calendar.getInstance();
+		x.add(Calendar.MONTH, 1);
+		return x.getActualMaximum(Calendar.DAY_OF_MONTH);
+	}
+
+	/**
+	 * @return the number of days from today until the beginning of the next month,
+	 * so 15 if this is being run on 14 feb 2023, because we consider 1 mar 2023
+	 */
+	public static int getHowManyDaysUntilFirstOfNextMonth() {
+		LocalDate today = LocalDate.now();
+		LocalDate endOfMonth = today.withDayOfMonth(today.lengthOfMonth());
+		long daysBetween = java.time.temporal.ChronoUnit.DAYS.between(today, endOfMonth);
+		return (int) daysBetween + 1;
 	}
 }

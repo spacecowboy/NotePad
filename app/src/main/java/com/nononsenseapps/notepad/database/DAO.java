@@ -22,6 +22,7 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import com.mobeta.android.dslv.DragSortListView;
 import android.provider.BaseColumns;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -141,6 +142,13 @@ public abstract class DAO {
 
 	/**
 	 * Second and Third value is wrapped in '' ticks, NOT the first.
+	 *
+	 * For example, <pre>asEmptyCommaStringExcept(new String[] { "a", "b", "c", "d" , "e" },"b",
+	 * "HELLO","c","WORLD","d","!!!!")</pre> will return <pre>null,HELLO,'WORLD','!!!!',null</pre>
+	 *
+	 * So it is useful to return a name & value pair for the header of the {@link DragSortListView}
+	 * when it is sorted by date. In that case you use this function to run a query that returns
+	 * special values: see {@link Task#CREATE_SECTIONED_DATE_VIEW}
 	 */
 	protected static String asEmptyCommaStringExcept(final String[] asColumns,
 													 final String exceptCol1, final String asValue1,

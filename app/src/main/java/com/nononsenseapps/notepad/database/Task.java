@@ -75,7 +75,13 @@ public class Task extends DAO {
 	public static final String TODAY_START = "strftime('%s','now', 'utc') * 1000";
 
 	/**
+	 * A constraint which is an unix time (in ms) representing midnight of the day that is
+	 * "offset" days after today. For example, Running {@code TODAY_PLUS(4)} on 04 jan 2023
+	 * will return a {@code strftime(...)} that SQLite will evaluate to "1673132400000", which
+	 * represents 00:00 of 8 jan 2023 in the user's local timezone
+	 *
 	 * @param offset in days
+	 * @return a SQL string that will eventually be evaluated to something like "1673132400000"
 	 */
 	public static String TODAY_PLUS(final int offset) {
 		return "strftime('%s','now','localtime','+" + offset
@@ -88,6 +94,9 @@ public class Task extends DAO {
 	public static final String HEADER_KEY_PLUS2 = "today+2";
 	public static final String HEADER_KEY_PLUS3 = "today+3";
 	public static final String HEADER_KEY_PLUS4 = "today+4";
+	public static final String HEADER_KEY_NEXT_MONTH = "next_month";
+	public static final String HEADER_KEY_NEXT_YEAR = "next_year";
+
 	public static final String HEADER_KEY_OVERDUE = "overdue";
 	public static final String HEADER_KEY_LATER = "later";
 	public static final String HEADER_KEY_NODATE = "nodate";
@@ -456,6 +465,24 @@ public class Task extends DAO {
 				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
 				" BETWEEN " + TODAY_PLUS(4) + " AND " + TODAY_PLUS(5) + ") ";
 
+		int daysUntilNextMonth = TimeFormatter.getHowManyDaysUntilFirstOfNextMonth();
+		// the next month will end in (...) days:
+		int toEndOfNextMonth = daysUntilNextMonth + TimeFormatter.getHowManyDaysInTheNextMonth();
+
+		// the goal of this is to add a "fake note" in the DATABASE view created by this function.
+		// This "fake note" will then show up in the drag-sort-listview (but not as an
+		// user-iteractable note, just a header) to show that the next month starts there.
+		// Any note after that is due after the next month begins
+		String nextMonth = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(daysUntilNextMonth), Columns.TITLE, HEADER_KEY_NEXT_MONTH,
+				Columns.DBLIST, listId) + ",0,0" +
+				// Only show header if there are tasks under it, so if there are task with a due
+				// time in the next month
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(daysUntilNextMonth) + " AND " + TODAY_PLUS(toEndOfNextMonth)
+				+ ") ";
+
 		// Overdue (0)
 		String overdue = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 				Columns.DUE, OVERDUE, Columns.TITLE, HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
@@ -465,14 +492,14 @@ public class Task extends DAO {
 				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
 				" BETWEEN " + OVERDUE + " AND " + TODAY_START + ") ";
 
-		// Later
+		// Later. As of now, later = "after the end of the next month"
 		String later = " UNION ALL " + " SELECT '-1'," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-				Columns.DUE, TODAY_PLUS(5), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
+				Columns.DUE, TODAY_PLUS(toEndOfNextMonth), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
 				listId) + ",0,0" +
 				// Only show header if there are tasks under it
 				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
 				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
-				" >= " + TODAY_PLUS(5) + ") ";
+				" >= " + TODAY_PLUS(toEndOfNextMonth) + ") ";
 
 		// No date
 		String noDate = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
@@ -492,8 +519,8 @@ public class Task extends DAO {
 				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.DBLIST +
 				" IS " + sListId + " AND " + Columns.COMPLETED + " IS NOT null " + ") " + ";";
 
-		return beginning + TODAY + PLUS_1 + PLUS_2 + PLUS_3 + PLUS_4 + overdue + later + noDate
-				+ finalSql;
+		return beginning + TODAY + PLUS_1 + PLUS_2 + PLUS_3 + PLUS_4 + nextMonth + overdue + later
+				+ noDate + finalSql;
 	}
 
 	/**
@@ -1034,6 +1061,9 @@ public class Task extends DAO {
 	 */
 
 	/**
+	 * These headers are just indicative. If there is no task due in 3 days, "tomorrow" will
+	 * include all the current month, by design.
+	 *
 	 * @param input         The {@link String} received from the {@link Cursor} which, I think,
 	 *                      comes from the query on the view returned by
 	 *                      {@link #CREATE_SECTIONED_DATE_VIEW}
@@ -1058,15 +1088,13 @@ public class Task extends DAO {
 		} else if (Task.HEADER_KEY_PLUS2.equals(input)
 				|| Task.HEADER_KEY_PLUS3.equals(input)
 				|| Task.HEADER_KEY_PLUS4.equals(input)) {
-			// TODO if you want to show text like "next month" in the
-			//  drag-sort-listview, you would add your code here.
-			//  As of now, it divides taks by next 2, 3 or 4 days, and "later"
-			//  for everything else. I think I'll add:
-			//  * HEADER_KEY_NEXT_WEEK or HEADER_KEY_PLUS7
-			//  * HEADER_KEY_NEXT_MONTH or HEADER_KEY_PLUS30
-			//  * HEADER_KEY_NEXT_YEAR or HEADER_KEY_PLUS365
-			//  see also CREATE_SECTIONED_DATE_VIEW, which is where these are made in the database
+			// if you want to show text like "next 15 days" in the drag-sort-listview, you would
+			// add your code in this class. For help, see where HEADER_KEY_PLUS4 is used
 			sTemp = formatterObj.format(new Date(dueDateMillis));
+		} else if (Task.HEADER_KEY_NEXT_MONTH.equals(input)) {
+			sTemp = context.getString(R.string.next_month);
+		} else if (Task.HEADER_KEY_NEXT_YEAR.equals(input)) {
+			sTemp = context.getString(R.string.next_year);
 		} else if (Task.HEADER_KEY_LATER.equals(input)) {
 			sTemp = context.getString(R.string.date_header_future);
 		} else if (Task.HEADER_KEY_NODATE.equals(input)) {

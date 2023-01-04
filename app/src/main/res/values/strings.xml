@@ -153,6 +153,8 @@
 	<string name="order_notes_by">Order notes by:</string>
 	<string name="show_elements_as">Show items as:</string>
 	<string name="version">Version: %s</string>
+	<string name="next_month">Next month</string>
+	<string name="next_year">Next year</string>
 
 	<!--
 		Use few if language need it. In English is the same.
