@@ -54,7 +54,6 @@ import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.PermissionsHelper;
 import com.nononsenseapps.helpers.PreferencesHelper;
-import com.nononsenseapps.helpers.SyncGtaskHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.helpers.ThemeHelper;
@@ -365,13 +364,7 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		boolean syncing = false;
-		// GTasks
-		if (SyncGtaskHelper.isGTasksConfigured(ActivityMain.this)) {
-			syncing = true;
-			SyncGtaskHelper.requestSyncIf(ActivityMain.this, SyncGtaskHelper.MANUAL);
-		}
 
-		// Others
 		if (OrgSyncService.areAnyEnabled(this)) {
 			syncing = true;
 			OrgSyncService.start(this);
@@ -542,11 +535,7 @@ public class ActivityMain extends AppCompatActivity
 		if (syncStatusReceiver != null) {
 			syncStatusReceiver.startMonitoring(this, this);
 		}
-		// Sync if appropriate
-		if (SyncGtaskHelper.enoughTimeSinceLastSync(this)) {
-			SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.ONAPPSTART);
-			OrgSyncService.start(this);
-		}
+		OrgSyncService.start(this);
 	}
 
 	/**
@@ -589,8 +578,7 @@ public class ActivityMain extends AppCompatActivity
 			dialog.show(getSupportFragmentManager(), "migrate_question");
 		}
 	}
-
-
+	
 	@UiThread(propagation = Propagation.REUSE)
 	void loadFragments() {
 		final Intent intent = getIntent();
@@ -989,7 +977,7 @@ public class ActivityMain extends AppCompatActivity
 					default:
 						return new CursorLoader(ActivityMain.this, TaskList.URI_WITH_COUNT,
 								new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE,
-								TaskList.Columns.VIEW_COUNT }, null,
+										TaskList.Columns.VIEW_COUNT }, null,
 								null, getResources()
 								.getString(R.string.const_as_alphabetic,
 										TaskList.Columns.TITLE));

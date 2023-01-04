@@ -28,37 +28,8 @@ import android.os.Bundle;
 
 import androidx.preference.PreferenceManager;
 
-import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
-
 /**
- * This adapter syncs with GoogleTasks API. Each sync is an incremental sync
- * from our last sync. This is accomplished with a combinatinon of etags and
- * last updated time stamp. The API returns a "global" e-tag (hash-value of all
- * content). If this is the same as the etag we have, then nothing has changed
- * on server. Hence, we can know that there is nothing to download. If the etag
- * has changed, the adapter requests, for all lists, all tasks which have been
- * updated since the latest synced task in the database.
- *
- * Before any changes are committed either way, we should have two DISJOINT
- * sets:
- *
- * TasksFromServer and TasksToServer.
- *
- * Due to the conflict resolution, no task should exist in both sets. We then
- * upload TasksToServer. For each upload the server will return the current
- * state of the task with some fields updated. These changes we want to save of
- * course, so we add them to TasksFromServer. Which means that after uploading
- * we have a single set:
- *
- * TasksFromServer
- *
- * Which now contains all tasks that were modified either locally or remotely.
- * In other words, this set is now the union of the two initially disjoint sets,
- * with some fields updated by the server.
- *
- * These tasks are then committed to the database in a single transaction.
+ * this used to do google tasks sync. It may be useful in the future
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
@@ -78,48 +49,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public void onPerformSync(Account account, Bundle extras, String authority,
 							  ContentProviderClient provider, SyncResult syncResult) {
 
-		Context mContext = this.getContext();
-
 		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(mContext);
-
-		/*
-		 * Only sync if it has been enabled by the user, and account is selected
-		 * Issue on reinstall where account approval is remembered by system
-		 * Also only sync if APIKEY has no spaces in it. A space in the key
-		 * means that the app has been built from the open source code, for
-		 * which the api key is naturally not included. A space also causes the
-		 * app to crash since that is entirely invalid. So don't sync if there
-		 * is a space in the api key.
-		 */
+				.getDefaultSharedPreferences(this.getContext());
 
 		Intent doneIntent = new Intent(SYNC_FINISHED)
 				.putExtra(SYNC_RESULT, ERROR);
-		try {
-			// Gtasks first
-			// Dummy key has a space in it. Only builds using real api keys
-			// should not have spaces
-			String apiKey = com.nononsenseapps.build.Config.getGtasksApiKey(mContext);
 
-			if (apiKey != null && !apiKey.contains(" ")) {
-				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
-						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty()
-						&& account != null
-						&& account.name.equals(
-						settings.getString(SyncPrefs.KEY_ACCOUNT, ""))) {
-
-					NnnLogger.debug(SyncAdapter.class, "onPerformSync");
-					mContext.sendBroadcast(new Intent(SYNC_STARTED));
-
-					if (GoogleTaskSync.fullSync(mContext,
-							account, extras, authority, provider, syncResult)) {
-						// Success
-						doneIntent.putExtra(SYNC_RESULT, SUCCESS);
-					}
-				}
-			}
-		} finally {
-			mContext.sendBroadcast(doneIntent);
-		}
+		this.getContext().sendBroadcast(doneIntent);
 	}
 }

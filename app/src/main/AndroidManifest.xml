@@ -25,10 +25,6 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:installLocation="internalOnly">
 
-	<!-- For Google tasks synchronization: re-enable this if you want to test it
-	<uses-permission android:name="android.permission.INTERNET"/>
-	-->
-
 	<!-- for ContentResolver.getIsSyncable -->
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
 	<!-- for ContentResolver.isSyncActive -->
@@ -237,14 +233,6 @@
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
-
-		<service
-			android:name="com.nononsenseapps.helpers.GTasksSyncDelay"
-			android:exported="false">
-			<intent-filter>
-				<action android:name="android.intent.action.RUN"/>
-			</intent-filter>
-		</service>
 
 		<!-- Handles notifications associated with notes -->
 		<receiver
