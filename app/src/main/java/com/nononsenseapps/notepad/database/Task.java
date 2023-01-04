@@ -70,9 +70,13 @@ public class Task extends DAO {
 	// Used in sectioned view date
 	static final String FAR_FUTURE = "strftime('%s','3999-01-01') * 1000";
 	public static final String OVERDUE = "strftime('%s', '1970-01-01') * 1000";
+
 	// Today should be from NOW...
 	public static final String TODAY_START = "strftime('%s','now', 'utc') * 1000";
 
+	/**
+	 * @param offset in days
+	 */
 	public static String TODAY_PLUS(final int offset) {
 		return "strftime('%s','now','localtime','+" + offset
 				+ " days','start of day', 'utc') * 1000";
@@ -108,11 +112,13 @@ public class Task extends DAO {
 	public static final int HISTORYQUERYCODE = 213;
 	public static final int MOVEITEMLEFTCODE = 214;
 	public static final int MOVEITEMRIGHTCODE = 215;
+
 	// Legacy support, these also need to use legacy projections
 	public static final int LEGACYBASEURICODE = 221;
 	public static final int LEGACYBASEITEMCODE = 222;
 	public static final int LEGACYVISIBLEURICODE = 223;
 	public static final int LEGACYVISIBLEITEMCODE = 224;
+
 	// Search URI
 	public static final int SEARCHCODE = 299;
 	public static final int SEARCHSUGGESTIONSCODE = 298;
@@ -197,6 +203,10 @@ public class Task extends DAO {
 		return Uri.withAppendedPath(URI_WRITE_MOVEITEMRIGHT, Long.toString(_id));
 	}
 
+	/**
+	 * Contains each column of the SQLite table that contains {@link Task} objects,
+	 * and functions to return them as lists
+	 */
 	public static class Columns implements BaseColumns {
 
 		private Columns() {}
@@ -253,15 +263,17 @@ public class Task extends DAO {
 
 			// Each side's value should be unique in it's list
 			// Handled in trigger
-			// ).append(" UNIQUE(").append(Columns.LEFT).append(", ").append(Columns.DBLIST).append(")"
-			// ).append(" UNIQUE(").append(Columns.RIGHT).append(", ").append(Columns.DBLIST).append(")"
+			// + " UNIQUE(" + Columns.LEFT + ", " + Columns.DBLIST + ")"
+			// + " UNIQUE(" + Columns.RIGHT + ", " + Columns.DBLIST + ")"
 
 			// Foreign key for list
 			"FOREIGN KEY(" + Columns.DBLIST + ") REFERENCES " + TaskList.TABLE_NAME + "(" +
 			TaskList.Columns._ID + ") ON DELETE CASCADE" + ")";
 
-	// Delete table has no constraints. In fact, list values and positions
-	// should not even be thought of as valid.
+	/**
+	 * Delete table has no constraints. In fact, list values and positions should not even be
+	 * thought of as valid
+	 */
 	public static final String CREATE_DELETE_TABLE = "CREATE TABLE " +
 			DELETE_TABLE_NAME + "(" +
 			Columns._ID + " INTEGER PRIMARY KEY," +
@@ -274,7 +286,9 @@ public class Task extends DAO {
 			" TIMESTAMP NOT NULL DEFAULT current_timestamp" +
 			")";
 
-	// Every change to a note gets saved here
+	/**
+	 * Every change to a note gets saved here
+	 */
 	public static final String CREATE_HISTORY_TABLE = "CREATE TABLE " +
 			HISTORY_TABLE_NAME + "(" +
 			Columns._ID + " INTEGER PRIMARY KEY," +
@@ -289,8 +303,8 @@ public class Task extends DAO {
 
 	static final String HISTORY_TRIGGER_BODY = " INSERT INTO " + HISTORY_TABLE_NAME + " (" +
 			arrayToCommaString(Columns.HISTORY_COLUMNS) + ")" + " VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
-			");";
+			arrayToCommaString("new.",
+					new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) + ");";
 
 	public static final String HISTORY_UPDATE_TRIGGER_NAME = "trigger_update_" + HISTORY_TABLE_NAME;
 	public static final String CREATE_HISTORY_UPDATE_TRIGGER = "CREATE TRIGGER " +
@@ -312,60 +326,67 @@ public class Task extends DAO {
 			"CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON " + DELETE_TABLE_NAME +
 					" BEGIN " + " INSERT INTO " + FTS3_DELETE_TABLE_NAME + " (" +
 					arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) + ") VALUES (" +
-					arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
+					arrayToCommaString("new.",
+							new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
 					");" + " END;";
 
-	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
-			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
-			" ON " +
-			DELETE_TABLE_NAME +
-			" BEGIN " +
-			" UPDATE " +
-			FTS3_DELETE_TABLE_NAME +
-			" SET " +
-			Columns.TITLE + " = new." + Columns.TITLE +
-			"," + Columns.NOTE + " = new." +
-			Columns.NOTE + " WHERE " + Columns._ID +
-			" IS new." + Columns._ID + ";" + " END;";
-	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON " +
-			DELETE_TABLE_NAME + " BEGIN " +
-			" DELETE FROM " + FTS3_DELETE_TABLE_NAME +
-			" WHERE " + Columns._ID + " IS old." +
-			Columns._ID + ";" + " END;";
+	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER =
+			"CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
+					arrayToCommaString(Columns.TITLE, Columns.NOTE) +
+					" ON " +
+					DELETE_TABLE_NAME +
+					" BEGIN " +
+					" UPDATE " +
+					FTS3_DELETE_TABLE_NAME +
+					" SET " +
+					Columns.TITLE + " = new." + Columns.TITLE +
+					"," + Columns.NOTE + " = new." +
+					Columns.NOTE + " WHERE " + Columns._ID +
+					" IS new." + Columns._ID + ";" + " END;";
+
+	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER =
+			"CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON " +
+					DELETE_TABLE_NAME + " BEGIN " +
+					" DELETE FROM " + FTS3_DELETE_TABLE_NAME +
+					" WHERE " + Columns._ID + " IS old." +
+					Columns._ID + ";" + " END;";
 
 	// Search table
 	public static final String CREATE_FTS3_TABLE = "CREATE VIRTUAL TABLE "
 			+ FTS3_TABLE_NAME + " USING FTS3(" + Columns._ID + ", "
 			+ Columns.TITLE + ", " + Columns.NOTE + ");";
 
-	public static final String CREATE_FTS3_INSERT_TRIGGER = "CREATE TRIGGER task_fts3_insert AFTER INSERT ON " +
-			TABLE_NAME +
-			" BEGIN " +
-			" INSERT INTO " +
-			FTS3_TABLE_NAME +
-			" (" +
-			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
-			") VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE }) +
-			");" +
-			" END;";
+	public static final String CREATE_FTS3_INSERT_TRIGGER =
+			"CREATE TRIGGER task_fts3_insert AFTER INSERT ON " +
+					TABLE_NAME +
+					" BEGIN " +
+					" INSERT INTO " +
+					FTS3_TABLE_NAME +
+					" (" +
+					arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
+					") VALUES (" +
+					arrayToCommaString("new.", new String[] { Columns._ID,
+							Columns.TITLE, Columns.NOTE }) +
+					");" +
+					" END;";
 
-	public static final String CREATE_FTS3_UPDATE_TRIGGER = "CREATE TRIGGER task_fts3_update AFTER UPDATE OF " +
-			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
-			" ON " +
-			TABLE_NAME +
-			" BEGIN " + " UPDATE " + FTS3_TABLE_NAME +
-			" SET " + Columns.TITLE + " = new." +
-			Columns.TITLE + "," + Columns.NOTE +
-			" = new." + Columns.NOTE + " WHERE " +
-			Columns._ID + " IS new." + Columns._ID +
-			";" + " END;";
+	public static final String CREATE_FTS3_UPDATE_TRIGGER =
+			"CREATE TRIGGER task_fts3_update AFTER UPDATE OF " +
+					arrayToCommaString(Columns.TITLE, Columns.NOTE) +
+					" ON " +
+					TABLE_NAME +
+					" BEGIN " + " UPDATE " + FTS3_TABLE_NAME +
+					" SET " + Columns.TITLE + " = new." +
+					Columns.TITLE + "," + Columns.NOTE +
+					" = new." + Columns.NOTE + " WHERE " +
+					Columns._ID + " IS new." + Columns._ID +
+					";" + " END;";
 
-	public static final String CREATE_FTS3_DELETE_TRIGGER = "CREATE TRIGGER task_fts3_delete AFTER DELETE ON " +
-			TABLE_NAME + " BEGIN " + " DELETE FROM " +
-			FTS3_TABLE_NAME + " WHERE " + Columns._ID +
-			" IS old." + Columns._ID + ";" + " END;";
+	public static final String CREATE_FTS3_DELETE_TRIGGER =
+			"CREATE TRIGGER task_fts3_delete AFTER DELETE ON " +
+					TABLE_NAME + " BEGIN " + " DELETE FROM " +
+					FTS3_TABLE_NAME + " WHERE " + Columns._ID +
+					" IS old." + Columns._ID + ";" + " END;";
 
 	/**
 	 * This is a view which returns the tasks in the specified list with headers
@@ -650,9 +671,7 @@ public class Task extends DAO {
 	public Long right = null;
 	public Long dblist = null;
 
-	public Task() {
-
-	}
+	public Task() {}
 
 	/**
 	 * Resets id and position values
@@ -897,9 +916,10 @@ public class Task extends DAO {
 			return;
 		}
 
+		long thisInstant = Calendar.getInstance().getTimeInMillis();
 		final ContentValues values = new ContentValues();
-		values.put(Columns.COMPLETED, completed ? Calendar.getInstance().getTimeInMillis() : null);
-		values.put(Columns.UPDATED, Calendar.getInstance().getTimeInMillis());
+		values.put(Columns.COMPLETED, completed ? thisInstant : null);
+		values.put(Columns.UPDATED, thisInstant);
 
 		String idStrings = "(";
 		for (Long id : ids) {
@@ -953,7 +973,9 @@ public class Task extends DAO {
 	}
 
 	// Makes a gap in the list where the task is being inserted
-	private static final String BUMP_TO_RIGHT = " UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %3$s >= new.%3$s AND %4$s IS new.%4$s;";
+	private static final String BUMP_TO_RIGHT =
+			" UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %3$s >= new.%3$s AND %4$s IS new.%4$s;";
+
 	public static final String TRIGGER_PRE_INSERT = String.format(
 			"CREATE TRIGGER task_pre_insert BEFORE INSERT ON %s BEGIN ",
 			TABLE_NAME)
@@ -969,7 +991,8 @@ public class Task extends DAO {
 			+ " END;";
 
 	// Upgrades children and closes the gap made from the delete
-	private static final String BUMP_TO_LEFT = " UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
+	private static final String BUMP_TO_LEFT =
+			" UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
 
 	public static final String TRIGGER_POST_DELETE = String.format(
 			"CREATE TRIGGER task_post_delete AFTER DELETE ON %s BEGIN ",
@@ -1029,22 +1052,16 @@ public class Task extends DAO {
 			" BEGIN " +
 			// Bump everything to the right, except the item itself (in same
 			// list)
-			String
-					.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
-							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns.DBLIST, Columns._ID) +
+			String.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
+					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns.DBLIST, Columns._ID) +
 
 			// Bump everything left in the old list, to the right of position
-			String
-					.format("UPDATE %1$s SET %2$s = %2$s - 2, %3$s = %3$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;",
-							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns.DBLIST) +
+			String.format("UPDATE %1$s SET %2$s = %2$s - 2, %3$s = %3$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;",
+					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns.DBLIST) +
 
 			// Set positions to 1 and 2 for item
-			String
-					.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
-							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns._ID) +
+			String.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
+					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns._ID) +
 			posUniqueConstraint("new", "Moving list, new positions not unique/ordered") +
 			posUniqueConstraint("old", "Moving list, old positions not unique/ordered") +
 			" END;";
@@ -1110,8 +1127,7 @@ public class Task extends DAO {
 						" ELSE 0 END " +
 						// And limit to the list in question
 						" WHERE %8$s IS %9$d;", TABLE_NAME,
-				Columns.LEFT, Columns.RIGHT, edgeCol, left, right, edgeVal, Columns.DBLIST,
-				dblist);
+				Columns.LEFT, Columns.RIGHT, edgeCol, left, right, edgeVal, Columns.DBLIST, dblist);
 	}
 
 	/*
@@ -1204,7 +1220,8 @@ public class Task extends DAO {
 			//  for everything else. I think I'll add:
 			//  * HEADER_KEY_NEXT_WEEK or HEADER_KEY_PLUS7
 			//  * HEADER_KEY_NEXT_MONTH or HEADER_KEY_PLUS30
-			//  * HEADER_KEY_NEXT_YEAR or HEADER_KEY_PLUS365 !
+			//  * HEADER_KEY_NEXT_YEAR or HEADER_KEY_PLUS365
+			//  see also CREATE_SECTIONED_DATE_VIEW, which is where these are made in the database
 			sTemp = formatterObj.format(new Date(dueDateMillis));
 		} else if (Task.HEADER_KEY_LATER.equals(input)) {
 			sTemp = context.getString(R.string.date_header_future);
