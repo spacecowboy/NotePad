@@ -372,21 +372,15 @@ public class Task extends DAO {
 
 	public static final String CREATE_FTS3_UPDATE_TRIGGER =
 			"CREATE TRIGGER task_fts3_update AFTER UPDATE OF " +
-					arrayToCommaString(Columns.TITLE, Columns.NOTE) +
-					" ON " +
-					TABLE_NAME +
-					" BEGIN " + " UPDATE " + FTS3_TABLE_NAME +
-					" SET " + Columns.TITLE + " = new." +
-					Columns.TITLE + "," + Columns.NOTE +
-					" = new." + Columns.NOTE + " WHERE " +
-					Columns._ID + " IS new." + Columns._ID +
-					";" + " END;";
+					arrayToCommaString(Columns.TITLE, Columns.NOTE) + " ON " + TABLE_NAME +
+					" BEGIN " + " UPDATE " + FTS3_TABLE_NAME + " SET " + Columns.TITLE + " = new." +
+					Columns.TITLE + "," + Columns.NOTE + " = new." + Columns.NOTE + " WHERE " +
+					Columns._ID + " IS new." + Columns._ID + ";" + " END;";
 
 	public static final String CREATE_FTS3_DELETE_TRIGGER =
-			"CREATE TRIGGER task_fts3_delete AFTER DELETE ON " +
-					TABLE_NAME + " BEGIN " + " DELETE FROM " +
-					FTS3_TABLE_NAME + " WHERE " + Columns._ID +
-					" IS old." + Columns._ID + ";" + " END;";
+			"CREATE TRIGGER task_fts3_delete AFTER DELETE ON " + TABLE_NAME + " BEGIN " +
+					" DELETE FROM " + FTS3_TABLE_NAME + " WHERE " + Columns._ID + " IS old." +
+					Columns._ID + ";" + " END;";
 
 	/**
 	 * This is a view which returns the tasks in the specified list with headers
@@ -394,275 +388,125 @@ public class Task extends DAO {
 	 * in the {@link DragSortListView}.
 	 * Provider hardcodes the sort order for this.
 	 *
-	 * @param listId if it is null, the function will return for all lists
+	 * @param listId if it is null, the function will return (a query) for all lists
+	 * @return a SQL query to create this view
 	 */
 	public static String CREATE_SECTIONED_DATE_VIEW(final String listId) {
 		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
 		// TODO this creates a SQLite view that the drag-sort-listview uses for the headers
 		//  when ordering tasks by date. add here the code for HEADER_KEY_NEXT_MONTH,
 		//  HEADER_KEY_NEXT_YEAR and so on
-		return "CREATE TEMP VIEW IF NOT EXISTS " +
-				getSECTION_DATE_VIEW_NAME(listId) +
+		String beginning = "CREATE TEMP VIEW IF NOT EXISTS " + getSECTION_DATE_VIEW_NAME(listId) +
 				// Tasks WITH dates NOT completed, secret 0
-				" AS SELECT " +
-				arrayToCommaString(Columns.FIELDS) +
-				",0" +
-				" AS " +
-				SECRET_TYPEID +
-				",1" +
-				" AS " +
-				SECRET_TYPEID2 +
-				" FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS null " +
-				" AND " +
-				Columns.DUE +
-				" IS NOT null " +
+				" AS SELECT " + arrayToCommaString(Columns.FIELDS) + ",0" + " AS " + SECRET_TYPEID +
+				",1" + " AS " + SECRET_TYPEID2 + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.COMPLETED + " IS null " + " AND " + Columns.DUE + " IS NOT null " +
 				" UNION ALL " +
 				// Tasks NO dates NOT completed, secret 1
-				" SELECT " +
-				arrayToCommaString(Columns.FIELDS) +
-				",1" +
-				" AS " +
-				SECRET_TYPEID +
-				",1" +
-				" AS " +
-				SECRET_TYPEID2 +
-				" FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS null " +
-				" AND " +
-				Columns.DUE +
-				" IS null " +
+				" SELECT " + arrayToCommaString(Columns.FIELDS) + ",1" + " AS " + SECRET_TYPEID +
+				",1" + " AS " + SECRET_TYPEID2 + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.COMPLETED + " IS null " + " AND " + Columns.DUE + " IS null " +
 				" UNION ALL " +
 				// Tasks completed, secret 2 + 1
-				" SELECT " +
-				arrayToCommaString(Columns.FIELDS) +
-				",3" +
-				" AS " +
-				SECRET_TYPEID +
-				",1" +
-				" AS " +
-				SECRET_TYPEID2 +
-				" FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NOT null " +
-				// TODAY
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_START, Columns.TITLE,
-						HEADER_KEY_TODAY, Columns.DBLIST, listId) +
+				" SELECT " + arrayToCommaString(Columns.FIELDS) + ",3" + " AS " + SECRET_TYPEID +
+				",1" + " AS " + SECRET_TYPEID2 + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.COMPLETED + " IS NOT null ";
+
+		String TODAY = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_START, Columns.TITLE, HEADER_KEY_TODAY, Columns.DBLIST, listId) +
 				",0,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_START +
-				" AND " +
-				TODAY_PLUS(1) +
-				") " +
-				// TOMORROW (Today + 1)
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(1), Columns.TITLE,
-						HEADER_KEY_PLUS1, Columns.DBLIST, listId) +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_START + " AND " + TODAY_PLUS(1) + ") ";
+
+		// TOMORROW = Today + 1
+		String PLUS_1 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(1), Columns.TITLE, HEADER_KEY_PLUS1, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(1) + " AND " + TODAY_PLUS(2) + ") ";
+
+		// Today + 2
+		String PLUS_2 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(2), Columns.TITLE, HEADER_KEY_PLUS2, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(2) + " AND " + TODAY_PLUS(3) + ") ";
+
+		// Today + 3
+		String PLUS_3 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(3), Columns.TITLE, HEADER_KEY_PLUS3, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(3) + " AND " + TODAY_PLUS(4) + ") ";
+
+		// Today + 4
+		String PLUS_4 = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(4), Columns.TITLE, HEADER_KEY_PLUS4, Columns.DBLIST,
+				listId) + ",0,0" +
+				// Only show header if there are tasks under it
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + TODAY_PLUS(4) + " AND " + TODAY_PLUS(5) + ") ";
+
+		// Overdue (0)
+		String overdue = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, OVERDUE, Columns.TITLE, HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
 				",0,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(1) +
-				" AND " +
-				TODAY_PLUS(2) +
-				") " +
-				// Today + 2
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(2), Columns.TITLE,
-						HEADER_KEY_PLUS2, Columns.DBLIST, listId) +
-				",0,0" +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" BETWEEN " + OVERDUE + " AND " + TODAY_START + ") ";
+
+		// Later
+		String later = " UNION ALL " + " SELECT '-1'," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, TODAY_PLUS(5), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
+				listId) + ",0,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(2) +
-				" AND " +
-				TODAY_PLUS(3) +
-				") " +
-				// Today + 3
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(3), Columns.TITLE,
-						HEADER_KEY_PLUS3, Columns.DBLIST, listId) +
-				",0,0" +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.COMPLETED +
+				" IS NULL " + " AND " + Columns.DBLIST + " IS " + sListId + " AND " + Columns.DUE +
+				" >= " + TODAY_PLUS(5) + ") ";
+
+		// No date
+		String noDate = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, "null", Columns.TITLE, HEADER_KEY_NODATE, Columns.DBLIST,
+				listId) + ",1,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(3) +
-				" AND " +
-				TODAY_PLUS(4) +
-				") " +
-				// Today + 4
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(4), Columns.TITLE,
-						HEADER_KEY_PLUS4, Columns.DBLIST, listId) +
-				",0,0" +
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.DBLIST +
+				" IS " + sListId + " AND " + Columns.DUE + " IS null " + " AND " +
+				Columns.COMPLETED + " IS null " + ") ";
+
+		// Complete, overdue to catch all
+		// Set complete time to 1
+		String finalSql = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				Columns.DUE, OVERDUE, Columns.COMPLETED, "1", Columns.TITLE,
+				HEADER_KEY_COMPLETE, Columns.DBLIST, listId) + ",2,0" +
 				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				TODAY_PLUS(4) +
-				" AND " +
-				TODAY_PLUS(5) +
-				") " +
-				// Overdue (0)
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, OVERDUE, Columns.TITLE,
-						HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
-				",0,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" BETWEEN " +
-				OVERDUE +
-				" AND " +
-				TODAY_START +
-				") " +
-				// Later
-				" UNION ALL " +
-				" SELECT '-1'," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, TODAY_PLUS(5), Columns.TITLE,
-						HEADER_KEY_LATER, Columns.DBLIST, listId) +
-				",0,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.COMPLETED +
-				" IS NULL " +
-				" AND " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" >= " +
-				TODAY_PLUS(5) +
-				") " +
-				// No date
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, "null", Columns.TITLE, HEADER_KEY_NODATE,
-						Columns.DBLIST, listId) +
-				",1,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " +
-				TABLE_NAME +
-				" WHERE " +
-				Columns.DBLIST +
-				" IS " +
-				sListId +
-				" AND " +
-				Columns.DUE +
-				" IS null " +
-				" AND " +
-				Columns.COMPLETED +
-				" IS null " +
-				") " +
-				// Complete, overdue to catch all
-				// Set complete time to 1
-				" UNION ALL " +
-				" SELECT -1," +
-				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, OVERDUE, Columns.COMPLETED, "1",
-						Columns.TITLE, HEADER_KEY_COMPLETE, Columns.DBLIST,
-						listId) +
-				",2,0" +
-				// Only show header if there are tasks under it
-				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME +
-				" WHERE " + Columns.DBLIST + " IS " +
-				sListId + " AND " + Columns.COMPLETED +
-				" IS NOT null " + ") " +
-				";";
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME + " WHERE " + Columns.DBLIST +
+				" IS " + sListId + " AND " + Columns.COMPLETED + " IS NOT null " + ") " + ";";
+
+		return beginning + TODAY + PLUS_1 + PLUS_2 + PLUS_3 + PLUS_4 + overdue + later + noDate
+				+ finalSql;
 	}
 
+	/**
+	 * Fields of this note
+	 */
 	public String title = null;
 	public String note = null;
+
 	// All milliseconds since 1970-01-01 UTC
 	public Long completed = null;
 	public Long due = null;
 	public Long updated = null;
+
 	// converted from integer
 	public boolean locked = false;
 
