@@ -258,4 +258,7 @@
     <string name="show_elements_as">Elemente anzeigen als:</string>
     <string name="canceled_note_locked">Abgebrochen: die Notiz ist gesperrt</string>
     <string name="order_notes_by">Notizen anordnen nach:</string>
+    <string name="version">Version: %s</string>
+    <string name="next_year">Nächstes Jahr</string>
+    <string name="next_month">Nächster Monat</string>
 </resources>
