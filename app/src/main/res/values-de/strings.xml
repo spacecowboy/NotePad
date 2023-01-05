@@ -42,8 +42,8 @@
     <string name="editor_note_hint">Notiz</string>
     <string name="resolve_edit">Notiz bearbeiten</string>
     <string name="default_style">Normaler Style</string>
-    <string name="show_items_as_tasks">Zeige Elemente als Aufgabe</string>
-    <string name="show_items_as_notes">Zeige Elemente als Notizen</string>
+    <string name="show_items_as_tasks"></string>
+    <string name="show_items_as_notes">einfache Notizen</string>
     <string name="sort_list_default">Standard-Sortierreihenfolge</string>
     <string name="sort_list_alphabetical">A-Z</string>
     <string name="sort_list_due">Fälligkeitsdatum</string>
@@ -57,7 +57,6 @@
     <string name="settings_theme">Aktuelles Design</string>
     <string name="settings_theme_dialog">Design verwenden</string>
     <string name="settings_lang">Sprache</string>
-
     <string name="settings_summary_theme_black">Schwarz</string>
     <string name="settings_summary_theme_dark">Dunkel</string>
     <string name="settings_summary_theme_light">Hell</string>
