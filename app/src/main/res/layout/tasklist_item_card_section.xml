@@ -28,6 +28,7 @@
 	android:paddingRight="8dp"
 	android:paddingBottom="4dp">
 
+	<!-- if you add "focusable, it doesn't let you click the note -->
 	<com.nononsenseapps.ui.DelegateFrame
 		android:id="@+id/checkboxcontainer"
 		android:layout_width="wrap_content"
@@ -35,8 +36,9 @@
 		android:layout_centerVertical="true"
 		android:clickable="true"
 		android:minHeight="40dp"
-		android:paddingRight="4dp"
-		app:enlargedView="@+id/itemDone">
+		android:paddingHorizontal="4dp"
+		app:enlargedView="@+id/itemDone"
+		android:focusable="false">
 
 		<com.nononsenseapps.ui.NoteCheckBox
 			android:id="@+id/checkbox"
@@ -48,6 +50,8 @@
 			android:text=""/>
 	</com.nononsenseapps.ui.DelegateFrame>
 
+	<!-- ensures that the date view on the bottom does not overlap with the squares that
+	you hold to drag the note -->
 	<View
 		android:id="@+id/dragpadding"
 		android:layout_width="@dimen/drag_grip_avoid_padding"
