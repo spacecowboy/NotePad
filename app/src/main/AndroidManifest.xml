@@ -60,17 +60,16 @@
 	<application
 		android:name="com.nononsenseapps.notepad.NnnApp"
 		android:allowBackup="true"
-		android:backupAgent="com.nononsenseapps.notepad.NnnBackupAgent"
 		android:hardwareAccelerated="true"
 		android:icon="@drawable/app_icon"
 		android:label="@string/nononsense_notes"
 		android:restoreAnyVersion="true">
 
-		<!-- For the Android Backup Service -->
-		<!-- TODO useless ? -->
-		<meta-data
-			android:name="com.google.android.backup.api_key"
-			android:value="AEdPqrEAAAAIZgz47Vv0rpsuH5ziPBpQsecAPAlZtw2P5-mgYw"/>
+		<!-- If you need more fine-grained control on what can be backed up, visit
+		https://developer.android.com/guide/topics/data/autobackup#IncludingFiles
+		but the default behavior already backs up the database, shared preferences
+		and org files to google drive, for users that choose to do it, and files
+		are automatically encrypted, so there is nothing more you need to do -->
 
 		<!-- Broadcast receiver for accepting actions from widget for example -->
 		<receiver
