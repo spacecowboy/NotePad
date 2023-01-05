@@ -122,10 +122,10 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.5.5'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation "androidx.preference:preference:1.2.0"
-    implementation "androidx.startup:startup-runtime:1.1.1" // just to fix build warnings
+    implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.google.android.material:material:1.7.0'
-    // yes we need both. These solve a dependency problem with androidx.preference
+    // yes we need both
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     // Time library, open source & up to date
@@ -146,16 +146,16 @@ dependencies {
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
     // Tests libraries
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test:rules:1.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0'
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.0"
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.5.1"
     androidTestUtil "androidx.test.services:test-services:1.4.2"
     // Desugaring library, needs android gradle plugin v7.4+ to upgrade
     //noinspection GradleDependency
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
-    // no kotlin
+    // no kotlin!
     // implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
 }
 
