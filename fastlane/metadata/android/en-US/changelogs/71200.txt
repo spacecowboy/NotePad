@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.2
+
+Highlights:
+- Translated using Weblate
+- voice search works again
+- more date formats to choose from
+- show "next month" and year when tasks are ordered by date
+- support for android auto backup
+
+Details:
+- UI tweaks for dialogs
+- bug fixes
+- removed all obsolete google tasks code, this should hide the annoying google account dialog
