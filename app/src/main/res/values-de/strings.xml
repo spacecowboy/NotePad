@@ -42,7 +42,6 @@
     <string name="editor_note_hint">Notiz</string>
     <string name="resolve_edit">Notiz bearbeiten</string>
     <string name="default_style">Normaler Style</string>
-    <string name="show_items_as_tasks"></string>
     <string name="show_items_as_notes">einfache Notizen</string>
     <string name="sort_list_default">Standard-Sortierreihenfolge</string>
     <string name="sort_list_alphabetical">A-Z</string>
