@@ -40,6 +40,8 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.ActivitySearchDeleted;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
@@ -47,6 +49,9 @@ import com.nononsenseapps.ui.TitleNoteTextView;
 
 import java.util.HashSet;
 
+/**
+ * The actual content of the "archive view" in {@link ActivitySearchDeleted }
+ */
 public class FragmentSearchDeleted extends FragmentSearch {
 
 	@Override
@@ -150,9 +155,8 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			/** Show a {@link Toast} in a thread-safe way */
 			@UiThread
 			void notifySuccess() {
-				new Handler(Looper.getMainLooper())
-						.post(() -> Toast.makeText(getActivity(), R.string.saved,
-								Toast.LENGTH_SHORT).show());
+				new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getActivity(),
+						R.string.saved, Toast.LENGTH_SHORT).show());
 			}
 
 			@Override
@@ -171,6 +175,15 @@ public class FragmentSearchDeleted extends FragmentSearch {
 					DialogDeleteTask.showDialog(getParentFragmentManager(), -1,
 							() -> deleteSelected(mode));
 					return true;
+				} else if (itemId == R.id.menu_select_all) {
+					// Note: don't use .getChildCount(), that only reports the VISIBLE items,
+					// so it's NEVER more than ~9, considering the average screen height!
+					int howMany = mBinding.list.getAdapter().getCount();
+
+					for (int i = 0; i < howMany; i++) {
+						// select every list item
+						mBinding.list.setItemChecked(i, true);
+					}
 				}
 				return false;
 			}

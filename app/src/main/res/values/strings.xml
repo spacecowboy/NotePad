@@ -114,7 +114,6 @@
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
 	<string name="permission_denied">Can not proceed: you denied the permission</string>
 	<string name="no_sync_method_chosen">You did not choose a sync method</string>
-
 	<string name="file_picker_not_available">The file picker is not available</string>
 	<string name="choose_backup_folder">Choose a backup folder</string>
 	<string name="use_exact_alarms">Use exact alarms</string>
@@ -153,6 +152,7 @@
 	<string name="version">Version: %s</string>
 	<string name="next_month">Next month</string>
 	<string name="next_year">Next year</string>
+	<string name="select_all">Select all</string>
 
 	<!--
 		Use few if language need it. In English is the same.
