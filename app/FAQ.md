@@ -33,6 +33,19 @@ A: No. At this point you should look into a more complicated app, like orgzly.
 A: It's a useless button. Notes are saved when they are closed or when the screen goes dark. Learn
 to trust it.
 
+**Q: what files can I save?**
+
+The app can save 2 kinds of files:
+
+* ORG files, used for SD card synchronization. 
+  * They are saved in a subfolder of `/storage/emulated/0/Android/data/`
+  * they will be visible to your file manager app, if you want to manually edit them
+* JSON files, for the backup-restore functionality
+  * you can save these wherever you want
+
+If you are not satisfied, [open an issue](https://github.com/spacecowboy/NotePad/issues/new/choose)
+and recommend a behavior.
+
 **Q: Why are the files saved there?**
 
 A: Newer Android versions limit what we can do when working with files. See https://github.com/spacecowboy/NotePad/issues/454

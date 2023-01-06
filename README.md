@@ -17,7 +17,8 @@ Help translate the app on [Hosted Weblate](https://hosted.weblate.org/projects/n
 
 ## Reporting bugs
 
-Please [report bugs](https://github.com/spacecowboy/NotePad/issues) explained in clear steps using the provided template.
+Please [report bugs](https://github.com/spacecowboy/NotePad/issues) explained in clear steps using
+the provided template.
 
 ## Build the project
 
@@ -36,9 +37,7 @@ if it does not work, [open an issue](https://github.com/spacecowboy/NotePad/issu
 
 ## Where are the files saved?
 
-The app can save 2 kinds of files:
-* ORG files, used for SD card synchronization. They are saved in a subfolder of `Android/data/` where they will be visible to your file manager, if you want to manually edit them
-* JSON files, for the backup-restore functionality. These are saved wherever you want
+See the [FAQ](app/FAQ.md)
 
 ## GPLv3+ License
 
