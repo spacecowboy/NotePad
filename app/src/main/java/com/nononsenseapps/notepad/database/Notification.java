@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 public class Notification extends DAO {
+
 	// These match WeekDaysView's values
 	public static final int mon = 0x1;
 	public static final int tue = 0x10;
@@ -49,6 +50,11 @@ public class Notification extends DAO {
 	public static final int fri = 0x10000;
 	public static final int sat = 0x100000;
 	public static final int sun = 0x1000000;
+	// TODO maybe with more flags we can add special types of repeat,
+	//  but we have to use long instead of int:
+	//  public static final long nextMonth = 0x100000000;
+
+	// TODO see if you can move these flags to an enum
 
 	// Location repeat, one left of sun
 	public static final int locationRepeat = 0x10000000;
@@ -61,14 +67,10 @@ public class Notification extends DAO {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps."
 			+ TABLE_NAME;
 
-	public static final Uri URI = Uri.withAppendedPath(
-			Uri.parse(MyContentProvider.SCHEME
-					+ MyContentProvider.AUTHORITY),
-			TABLE_NAME);
+	public static final Uri URI = Uri.withAppendedPath(Uri.parse(MyContentProvider.SCHEME
+			+ MyContentProvider.AUTHORITY), TABLE_NAME);
 	public static final Uri URI_WITH_TASK_PATH = Uri.withAppendedPath(
-			Uri.parse(MyContentProvider.SCHEME
-					+ MyContentProvider.AUTHORITY),
-			WITH_TASK_PATH);
+			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY), WITH_TASK_PATH);
 
 	public static final int BASEURICODE = 301;
 	public static final int BASEITEMCODE = 302;
@@ -89,8 +91,7 @@ public class Notification extends DAO {
 
 	public static class Columns implements BaseColumns {
 
-		private Columns() {
-		}
+		private Columns() {}
 
 		public static final String TIME = "time";
 		public static final String PERMANENT = "permanent";
@@ -107,16 +108,14 @@ public class Notification extends DAO {
 
 	public static class ColumnsWithTask extends Columns {
 
-		private ColumnsWithTask() {
-		}
+		private ColumnsWithTask() {}
 
 		// public static final String notificationPrefix = "n.";
 		public static final String taskPrefix = "t_";
 		public static final String listPrefix = "l_";
 
 		public static final String[] FIELDS = joinArrays(
-				// prefixArray(notificationPrefix,
-				// Columns.FIELDS),
+				// prefixArray(notificationPrefix, Columns.FIELDS),
 				Columns.FIELDS,
 				prefixArray(taskPrefix, Task.Columns.SHALLOWFIELDS),
 				prefixArray(listPrefix, TaskList.Columns.SHALLOWFIELDS));
@@ -190,7 +189,13 @@ public class Notification extends DAO {
 	public boolean permanent = false;
 
 	public Long taskID = null;
+
+	/**
+	 * flags to indicate on which week days the note repeats. See {@link #sat} for example
+	 */
 	public long repeats = 0;
+	// TODO make "repeats" private, and replace code like "note.repeats == 0" with
+	//  a function like isRepeatingWeekly() {...}
 
 	public String locationName = null;
 	public Double latitude = null;
