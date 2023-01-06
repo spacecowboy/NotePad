@@ -217,7 +217,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		searchView.setSearchableInfo(sMan.getSearchableInfo(getActivity().getComponentName()));
 		// expand the searchview by default when the user clicks on the icon
 		searchView.setIconifiedByDefault(false);
-		searchView.setQueryRefinementEnabled(true);
+		searchView.setQueryRefinementEnabled(false);
 		searchView.setSubmitButtonEnabled(false);
 
 		// enlarge the suggestions box so that it occupies the whole screen
