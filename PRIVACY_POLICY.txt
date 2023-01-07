@@ -1,8 +1,0 @@
-Your privacy is your own and the maintainer(s) of this app retain(s) NO rights
-to do shit with any of your data.
-
-The app does not request the permission to go online,
-nor to access any personal account information.
-
-There may still be old, leftover code that uses network functionality,
-but there is no conscious sharing of ANY data with ANY website.
