@@ -73,9 +73,6 @@
 	<string name="settings_account_title">Select an account</string>
 	<string name="settings_account_summary">Touch to switch account</string>
 
-	<!-- TODO all strings related to google tasks will (should!) be deleted by summer 2023.
-	      Their translated versions will also have to be deleted -->
-
 	<string name="settings_cat_syncing">Syncing</string>
 	<string name="show_from_all_lists">All lists</string>
 	<string name="lists">Lists</string>
@@ -148,6 +145,7 @@
 	<string name="next_month">Next month</string>
 	<string name="next_year">Next year</string>
 	<string name="select_all">Select all</string>
+	<string name="tutorial_online">Tutorial (online)</string>
 
 	<!--
 		Use few if language need it. In English is the same.
