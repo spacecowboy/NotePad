@@ -161,9 +161,8 @@ Read-Host "Done. Press ENTER to continue"
 very useful if don't want to sync bookmarks with google chrome.
 
 **Reminders**. On each task (or note) you can add as many reminders as you want. Then you
-configure them, choosing on which day and hour you want to see them. They appear as notifications.
-If you swipe the notification away, the task will get rescheduled if you set the reminder to repeat
-on week days. If it is a task, the notification will also show you 2 action buttons.
+configure them, choosing on which day and hour you want to see each reminder. They appear as notifications. If you set the reminder to repeat on some week days, and when the notification appears you swipe it away, the reminder will get rescheduled to the next valid day.
+If the reminder is for a task and without weekly repetitions, the notification will also show you 2 action buttons:
 
 ![notification](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut8.png)
 

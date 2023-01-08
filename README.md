@@ -67,6 +67,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 * [Contribution guide](./documents/CONTRIBUTING.md)
 * [Releases](https://github.com/spacecowboy/NotePad/releases)
 * [Privacy policy](./documents/PRIVACY.md)
+* [f-droid forum](https://forum.f-droid.org/t/i-want-to-update-an-old-discontinued-app-nononsense-notes/20037)
+
 
 Built by @spacecowboy, maintained by @CampelloManuel. \
 The app is currently being updated. Old versions are still available on F-droid.
