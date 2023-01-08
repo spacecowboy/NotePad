@@ -70,7 +70,7 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.legacy.DonateMigrator;
+
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
@@ -427,7 +427,6 @@ public class ActivityMain extends AppCompatActivity
 			mAnimateExit = true;
 		}
 
-		// If user has donated some other time
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
@@ -552,33 +551,6 @@ public class ActivityMain extends AppCompatActivity
 		startActivity(intent);
 	}
 
-	@UiThread
-	void migrateDonateUser() {
-		// TODO the donate version is very very old. delete this
-
-		// migrate user
-		if (!DonateMigrator.hasImported(this)) {
-			final DialogConfirmBase dialog = new DialogConfirmBase() {
-
-				@Override
-				public void onOKClick() {
-					startService(new Intent(ActivityMain.this, DonateMigrator.class));
-				}
-
-				@Override
-				public int getTitle() {
-					return R.string.import_data_question;
-				}
-
-				@Override
-				public int getMessage() {
-					return R.string.import_data_msg;
-				}
-			};
-			dialog.show(getSupportFragmentManager(), "migrate_question");
-		}
-	}
-	
 	@UiThread(propagation = Propagation.REUSE)
 	void loadFragments() {
 		final Intent intent = getIntent();

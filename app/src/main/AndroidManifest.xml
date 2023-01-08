@@ -298,12 +298,6 @@
 			android:name="com.nononsenseapps.notepad.ActivityTaskHistory"
 			android:label="@string/timemachine"/>
 
-		<!-- Service for migrating from donate app -->
-		<service
-			android:name="com.nononsenseapps.notepad.legacy.DonateMigrator"
-			android:enabled="true"
-			android:exported="false"/>
-
 		<!-- Receiver that schedules background sync for File -->
 		<receiver
 			android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
