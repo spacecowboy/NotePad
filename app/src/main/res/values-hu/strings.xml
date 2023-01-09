@@ -83,11 +83,8 @@
     <string name="import_started">Adatok importálása folyamatban. A művelet eltarthat néhány másodpercig.</string>
     <string name="imported_result">%1$d jegyzet importálása %2$d listába</string>
     <string name="import_error">Hiba: %s</string>
-    <string name="showcase_main_title">Tekintse meg listáit</string>
     <string name="showcase_main_msg">Koppintson az ikonra vagy csúsztasson a bal széltől</string>
-    <string name="showcase_drawer_title">Kezelje listáit</string>
     <string name="showcase_drawer_msg">Szerkesztéshez vagy törléshez nyomjon hosszan</string>
-    <string name="showcase_timemachine_title">Mindent ment</string>
     <string name="showcase_timemachine_msg">Kilépéskor minden változás mentésre kerül. Használja az időgépet hogy visszaállítsa az előző verzióra.</string>
     <string name="move">Áthelyezés</string>
     <string name="move_to">Áthelyezés</string>

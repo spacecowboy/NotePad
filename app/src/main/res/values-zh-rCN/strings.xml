@@ -83,11 +83,8 @@
     <string name="import_started">正在导入数据…</string>
     <string name="imported_result">已将 %1$d 条笔记导入 %2$d 个列表</string>
     <string name="import_error">出现了一些问题：%s</string>
-    <string name="showcase_main_title">访问列表</string>
     <string name="showcase_main_msg">点击图标，或是从左边缘滑动</string>
-    <string name="showcase_drawer_title">管理列表</string>
     <string name="showcase_drawer_msg">长按列表名编辑或删除</string>
-    <string name="showcase_timemachine_title">保存便签</string>
     <string name="showcase_timemachine_msg">任何更改都会立即保存下来。请使用时光机功能以恢复前一个版本。</string>
     <string name="move">移动</string>
     <string name="move_to">移动到</string>

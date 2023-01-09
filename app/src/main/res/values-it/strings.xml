@@ -76,11 +76,8 @@
     <string name="permission_write_desc">Permetti all\'app di inserire, aggiornare ed eliminare note ed elenchi di No Nonsense Notes</string>
     <string name="settings_list_dialog">Seleziona un elenco</string>
     <string name="settings_list">Elenco</string>
-    <string name="showcase_main_title">Accedi ai tuoi elenchi</string>
     <string name="showcase_main_msg">Toccare l\'icona o trascinare dal bordo sinistro</string>
-    <string name="showcase_drawer_title">Gestisci i tuoi elenchi</string>
     <string name="showcase_drawer_msg">Pressione lunga su un nome di lista per modificarla o eliminarla</string>
-    <string name="showcase_timemachine_title">Salva le tue note</string>
     <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
     <string name="notification_channel_name">Promemoria delle note</string>
     <string name="notification_channel_description">Mostra il contenuto della nota quando arriva il momento segnato nel promemoria</string>

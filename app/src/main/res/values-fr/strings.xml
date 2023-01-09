@@ -79,11 +79,8 @@
     <string name="import_started">Importation des données. Ceci prendra quelques secondes.</string>
     <string name="imported_result">%1$d notes importées dans %2$d listes</string>
     <string name="import_error">Quelque chose n\'a pas fonctionné: %s</string>
-    <string name="showcase_main_title">Accéder à vos listes</string>
     <string name="showcase_main_msg">Toucher l\'icône ou glisser depuis le côté gauche de l\'écran</string>
-    <string name="showcase_drawer_title">Gérer vos lites</string>
     <string name="showcase_drawer_msg">Appui long pour éditer ou supprimer</string>
-    <string name="showcase_timemachine_title">Sauvegarder vos notes</string>
     <string name="showcase_timemachine_msg">Les changements sont toujours sauvegardés. Utiliser la time machine pour restaurer une version précédente.</string>
     <string name="move">Déplacer</string>
     <string name="move_to">Déplacer vers</string>
