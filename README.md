@@ -15,9 +15,14 @@ Help translate the app on [Hosted Weblate](https://hosted.weblate.org/projects/n
 <img src="https://hosted.weblate.org/widgets/no-nonsense-notes/-/horizontal-auto.svg" alt="Translation status" />
 </a>
 
+## How does it work ?
+
+Read the [tutorial](./documents/TUTORIAL.md) to learn about the app,
+or the [FAQ](./documents/FAQ.md) for other kinds of questions.
+
 ## Reporting bugs
 
-Please [report bugs](https://github.com/spacecowboy/NotePad/issues) explained in clear steps using the provided template.
+Please [report bugs](https://github.com/spacecowboy/NotePad/issues) using the provided template.
 
 ## Build the project
 
@@ -29,16 +34,6 @@ cd NotePad
 ```
 
 if it does not work, [open an issue](https://github.com/spacecowboy/NotePad/issues)
-
-## Where did Google Tasks sync go?
-
-[Discussed here](https://github.com/spacecowboy/NotePad/issues/426)
-
-## Where are the files saved?
-
-The app can save 2 kinds of files:
-* ORG files, used for SD card synchronization. They are saved in a subfolder of `Android/data/` where they will be visible to your file manager, if you want to manually edit them
-* JSON files, for the backup-restore functionality. These are saved wherever you want
 
 ## GPLv3+ License
 
@@ -63,14 +58,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 </details>
 
-[Full license](LICENSE)
+[Full license](./LICENSE)
 
 ## Useful links
 
-* [FAQ](app/FAQ.md)
-* [Contribution guide](CONTRIBUTING.md)
+* [FAQ](./documents/FAQ.md)
+* [app tutorial](./documents/TUTORIAL.md)
+* [Contribution guide](./documents/CONTRIBUTING.md)
 * [Releases](https://github.com/spacecowboy/NotePad/releases)
-* [Privacy policy](PRIVACY_POLICY.txt)
+* [Privacy policy](./documents/PRIVACY.md)
+* [f-droid forum](https://forum.f-droid.org/t/i-want-to-update-an-old-discontinued-app-nononsense-notes/20037)
+
 
 Built by @spacecowboy, maintained by @CampelloManuel. \
 The app is currently being updated. Old versions are still available on F-droid.

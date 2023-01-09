@@ -120,7 +120,7 @@ public class FragmentSearch extends Fragment {
 		searchView.setSearchableInfo(sMan.getSearchableInfo(getActivity().getComponentName()));
 		searchView.setIconifiedByDefault(false); // Do not iconify the widget;
 		// expand it by default
-		searchView.setQueryRefinementEnabled(true);
+		searchView.setQueryRefinementEnabled(false);
 		searchView.setSubmitButtonEnabled(false);
 
 		// Disable suggestions in "note archive" search activity

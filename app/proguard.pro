@@ -21,6 +21,4 @@
 }
 
 # gradle (and stackoverflow) agree that suppressing the warning is appropriate
--dontwarn com.google.appengine.api.urlfetch.**
--dontwarn com.squareup.okhttp.**
 -dontwarn org.joda.convert.**

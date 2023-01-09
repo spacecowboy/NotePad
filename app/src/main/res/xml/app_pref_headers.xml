@@ -55,6 +55,13 @@
 	<Preference
 		android:icon="@drawable/ic_help_24dp"
 		android:summary=""
+		android:title="@string/tutorial_online">
+		<intent android:action="android.intent.action.VIEW"
+			android:data="https://github.com/spacecowboy/NotePad/blob/master/documents/TUTORIAL.md"/>
+	</Preference>
+	<Preference
+		android:icon="@drawable/ic_archive_24dp"
+		android:summary=""
 		android:title="@string/changelog_online">
 		<intent android:action="android.intent.action.VIEW"
 			android:data="https://github.com/spacecowboy/NotePad/releases"/>

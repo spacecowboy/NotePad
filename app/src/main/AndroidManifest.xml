@@ -185,18 +185,6 @@
 			</intent-filter>
 		</activity>
 
-		<service
-			android:name="com.nononsenseapps.notepad.sync.SyncService"
-			android:exported="true">
-			<intent-filter>
-				<action android:name="android.content.SyncAdapter"/>
-			</intent-filter>
-
-			<meta-data
-				android:name="android.content.SyncAdapter"
-				android:resource="@xml/syncadapter"/>
-		</service>
-
 		<!-- List Widget -->
 		<receiver
 			android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider"
@@ -298,12 +286,6 @@
 			android:name="com.nononsenseapps.notepad.ActivityTaskHistory"
 			android:label="@string/timemachine"/>
 
-		<!-- Service for migrating from donate app -->
-		<service
-			android:name="com.nononsenseapps.notepad.legacy.DonateMigrator"
-			android:enabled="true"
-			android:exported="false"/>
-
 		<!-- Receiver that schedules background sync for File -->
 		<receiver
 			android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
@@ -326,11 +308,11 @@
 
 		<provider
 			android:name=".android.provider.TextFileProvider"
-			android:label="SD-card files"
-			android:icon="@drawable/ic_sd_storage_24dp"
 			android:authorities="com.nononsenseapps.notepad.TESTPROVIDER"
 			android:enabled="true"
-			android:exported="true">
+			android:exported="true"
+			android:icon="@drawable/ic_sd_storage_24dp"
+			android:label="SD-card files">
 			<intent-filter>
 				<action android:name="com.nononsenseapps.notepad.PROVIDER"/>
 			</intent-filter>
@@ -359,11 +341,11 @@
 
 		<provider
 			android:name=".android.provider.DummyProvider"
-			android:label="Dummy items"
-			android:icon="@drawable/app_icon"
 			android:authorities="com.nononsenseapps.notepad.DUMMYPROVIDER"
 			android:enabled="true"
-			android:exported="true">
+			android:exported="true"
+			android:icon="@drawable/app_icon"
+			android:label="Dummy items">
 			<intent-filter>
 				<action android:name="com.nononsenseapps.notepad.PROVIDER"/>
 			</intent-filter>

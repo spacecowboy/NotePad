@@ -17,21 +17,12 @@
 
 package com.nononsenseapps.notepad.sync;
 
-import android.accounts.Account;
-import android.content.AbstractThreadedSyncAdapter;
-import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SyncResult;
-import android.os.Bundle;
-
-import androidx.preference.PreferenceManager;
-
 /**
- * this used to do google tasks sync. It may be useful in the future
+ * this used to do google tasks sync. Now it only provides constants
  */
-public class SyncAdapter extends AbstractThreadedSyncAdapter {
+public final class SyncAdapter {
+
+	private SyncAdapter() {}
 
 	public static final String SYNC_STARTED = "com.nononsenseapps.notepad.sync.SYNC_STARTED";
 	public static final String SYNC_FINISHED = "com.nononsenseapps.notepad.sync.SYNC_FINISHED";
@@ -41,20 +32,4 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public static final int LOGIN_FAIL = 1;
 	public static final int ERROR = 2;
 
-	public SyncAdapter(Context context, boolean autoInitialize) {
-		super(context, autoInitialize);
-	}
-
-	@Override
-	public void onPerformSync(Account account, Bundle extras, String authority,
-							  ContentProviderClient provider, SyncResult syncResult) {
-
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(this.getContext());
-
-		Intent doneIntent = new Intent(SYNC_FINISHED)
-				.putExtra(SYNC_RESULT, ERROR);
-
-		this.getContext().sendBroadcast(doneIntent);
-	}
 }

@@ -73,11 +73,7 @@
 	<string name="settings_account_title">Select an account</string>
 	<string name="settings_account_summary">Touch to switch account</string>
 
-	<!-- TODO all strings related to google tasks will (should!) be deleted by summer 2023.
-	      Their translated versions will also have to be deleted -->
-
 	<string name="settings_cat_syncing">Syncing</string>
-
 	<string name="show_from_all_lists">All lists</string>
 	<string name="lists">Lists</string>
 	<string name="deleted">Deleted</string>
@@ -91,16 +87,12 @@
 	<string name="settings_list_dialog">Select a list</string>
 	<string name="settings_list">List</string>
 	<string name="drag_to_timetravel">Drag to time travel</string>
-
 	<string name="navigation_drawer_open">Open navigation drawer</string>
 	<string name="navigation_drawer_close">Close navigation drawer</string>
-
 	<string name="import_data_question">Import data?</string>
 	<string name="import_started">Importing data…</string>
-	<string name="import_data_msg">Import the notes from the donate version? Afterwards you are given the option to uninstall it.</string>
 	<string name="imported_result">Imported %1$d notes into %2$d lists</string>
 	<string name="import_error">Something went wrong: %s</string>
-
 	<string name="showcase_main_title">Access your lists</string>
 	<string name="showcase_main_msg">Touch the icon or swipe from the left edge</string>
 	<string name="showcase_drawer_title">Manage your lists</string>
@@ -114,7 +106,6 @@
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
 	<string name="permission_denied">Can not proceed: you denied the permission</string>
 	<string name="no_sync_method_chosen">You did not choose a sync method</string>
-
 	<string name="file_picker_not_available">The file picker is not available</string>
 	<string name="choose_backup_folder">Choose a backup folder</string>
 	<string name="use_exact_alarms">Use exact alarms</string>
@@ -153,6 +144,8 @@
 	<string name="version">Version: %s</string>
 	<string name="next_month">Next month</string>
 	<string name="next_year">Next year</string>
+	<string name="select_all">Select all</string>
+	<string name="tutorial_online">Tutorial (online)</string>
 
 	<!--
 		Use few if language need it. In English is the same.
