@@ -25,4 +25,10 @@ public final class Constants {
 	public static final String KEY_DROPBOX_ENABLE = "pref_sync_dropbox_enabled";
 	public static final String KEY_DROPBOX_DIR = "pref_sync_dropbox_dir";
 	public static final String KEY_THEME = "preference_theme";
+
+	/**
+	 * Location of the app tutorial web page
+	 */
+	public static final String TUTORIAL_URL =
+			"https://github.com/spacecowboy/NotePad/blob/master/documents/TUTORIAL.md";
 }

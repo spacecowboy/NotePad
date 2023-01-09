@@ -578,9 +578,10 @@ public class Task extends DAO {
 	}
 
 	/**
-	 * Set first line as title, rest as note.
+	 * @param text this function sets this {@link String}'s first line as title, the rest as
+	 *             content of this {@link Task}, so don't forget the {@code \n } !
 	 */
-	public void setText(final String text) {
+	public void setText(@NonNull final String text) {
 		int titleEnd = text.indexOf("\n");
 
 		if (titleEnd < 0) {

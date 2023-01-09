@@ -28,6 +28,7 @@ import android.provider.BaseColumns;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.RFC3339Date;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.Constants;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 
@@ -279,22 +280,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			legacyDB.close();
 		} catch (SQLException e) {
 			// Database must have been empty. Ignore it
-			// Test reasons, throw it!
-			// throw e;
 		}
 
+		// ------------
 		// If no lists, insert a list and example note.
+		// ------------
 
 		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null,
 				null, null, null, null);
 
 		if (!c.isClosed() && c.getCount() > 0) {
-			// Done
+			// there is already a database: don't add anything
 		} else {
-			// Create a list
+			// there wasn't a database: add a new list (called "tasks" in the user's language)
 			final TaskList tl = new TaskList();
 			tl.title = context.getString(R.string.tasks);
 			tl.insert(context, db);
+
+			// compose a note that is shown when the app is first installed
+			String welcomeNoteText =
+					// first the title. the \n separates it from the content
+					context.getString(R.string.welcome_note_title) + "\n"
+							// an hint visible also on the task list
+							+ context.getString(R.string.welcome_note_row_2) + "\n\n\n"
+							// when the user open the task, he is told to open the tutorial
+							+ context.getString(R.string.welcome_note_row_3) + " "
+							+ Constants.TUTORIAL_URL;
+
+			final Task task = new Task();
+			task.setText(welcomeNoteText);
+			task.dblist = tl._id;
+			try {
+				task.insert(context, db);
+			} catch (Exception e) {
+				// well, whatever, the note will not be added. I'm sure the user will find the
+				// tutorial anyway...
+				NnnLogger.exception(e);
+			}
 		}
 		c.close();
 		db.setTransactionSuccessful();
@@ -343,6 +365,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Drop view, changing to temporary view instead
 			db.execSQL("DROP VIEW IF EXISTS " + Notification.WITH_TASK_VIEW_NAME);
 		}
+		// TODO if you want to change the database, add code here to handle the upgrade!
 	}
 
 	/**

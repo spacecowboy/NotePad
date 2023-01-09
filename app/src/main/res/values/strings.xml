@@ -142,6 +142,9 @@
 	<string name="tutorial_online">Tutorial (online)</string>
 	<string name="showcase_tutorial_title">Feeling lost?</string>
 	<string name="showcase_tutorial_description">We have an online tutorial. Find it in the settings</string>
+	<string name="welcome_note_title">Welcome!</string>
+	<string name="welcome_note_row_2">Open this to get started.</string>
+	<string name="welcome_note_row_3">This app has a detailed tutorial. You can find it at</string>
 
 	<!--
 		Use few if language need it. In English is the same.
