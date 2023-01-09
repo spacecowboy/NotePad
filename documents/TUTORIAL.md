@@ -22,6 +22,7 @@ Here you see:
   * if you type, you get suggestions. click on one to open that note
 * the hamburger menu `☰` which can open the drawer menu on the left
 * the 3 dots menu `⋮` which has many options
+  * "Sync" forces an update of the files on the SD card 
   * archive opens the "deleted tasks page", also called "note archive"
   * "clear completed" can delete all tasks marked as completed from the current list only
   * "settings" opens the app preferences page
@@ -127,27 +128,64 @@ Here you can:
 Navigating the app will show you (almost) all it has to offer.
 However, there are some features that still need to be explained.
 
-**Passwords**. You can edit the password in the settings, and apply it to single notes.
+### Passwords
+You can edit the password in the settings, and apply it to single notes.
 Passwords protect every aspect of the note. Unless the user provides the password:
 * only the note's title is visibile, not the content
 * the note can't be deleted
 * its reminders can't be edited. The notification still appear, don't worry
 * ~~backups and restores will be blocked~~ (still working on this one...)
 
-**SD sync**. Your notes are saved internally by the app, but you can get an updated representation
-of the notes in the form of org files (plain text) if you enable "sd sync" under the "sync"
-settings. Then you can sync those files and use this app together with emacs in org mode, for
-example. Changes go both ways: edit the org files with a text editor to update notes in the app.
+### SD sync
+Your notes are saved internally by the app, and you can get an updated representation of the notes
+in the form of org files (=plain text) if you enable "sd sync" under the "sync" settings. Then you
+can sync those files and use this app together with emacs in org mode, for example. Changes go both
+ways: edit the org files with a text editor to update notes in the app. Sync is automatic, but you
+can force it by pressing "Sync" from the menu next to the search bar. The app will produce 1 org
+file for each list. Deleting an org file deletes the equivalent list in the app, and adding a file
+creates a new list with the same name and all the notes it contains.
 
-**Links**. This app is a decent bookmark manager. You can save links by sharing them from the
-browser, and you can click them from the list-view or the note-detail-view to reopen them.
+For example, if your notes look like this:
+
+![org notes](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut10.png)
+
+Then in `/storage/emulated/0/Android/data/com.nononsenseapps.notepad/files/orgfiles/Tasks.org`, or
+some equivalent path, you will have a file with this text:
+
+```org
+
+* TODO Note 1
+# NONSENSEID: 7EEEE94E
+DEADLINE: <2023-01-09 Mon>
+Second row
+
+* DONE Note 2
+# NONSENSEID: 4535371F
+
+Content row
+
+* TODO Note 3
+# NONSENSEID: 58671F49
+
+```
+
+Limitations:
+* the reminders you set in the app cannot be saved to the org file
+  * In this case, "Note 3" had a reminder, but you don't see it in the equivalent org file
+* Archived notes, which you can see in the "archive" page, will **not** be saved to an org file
+* The note history is not saved: only the last version of the note goes into the org file
+
+### Links
+This app is a decent bookmark manager. You can save links by sharing them from the browser, and you
+can click them from the list-view or the note-detail-view to reopen them.
 Other apps let you open only one link at a time, overwriting the previous one, but in this app 
 you can open as many links as you want. Go into the settings to disable auto-highlighting
 for links, if you feel that you click them by mistake and find it irritating.
 
-**Backups**. Since this app can export all the notes as a json file, you can elaborate them on a
-computer. For example, the following is a short script that outputs the content of a list as a
-plain text file with a list of links:
+### Backups
+Since this app can export all the notes as a json file, you can elaborate them on a computer. For
+example, the following is a short script that outputs the content of a list as a plain text file
+with a list of links:
 
 ```powershell
 $json = Get-Content D:\Desktop\NoNonsenseNotes_Backup.json | ConvertFrom-Json 
@@ -160,9 +198,12 @@ Read-Host "Done. Press ENTER to continue"
 
 very useful if don't want to sync bookmarks with google chrome.
 
-**Reminders**. On each task (or note) you can add as many reminders as you want. Then you
-configure them, choosing on which day and hour you want to see each reminder. They appear as notifications. If you set the reminder to repeat on some week days, and when the notification appears you swipe it away, the reminder will get rescheduled to the next valid day.
-If the reminder is for a task and without weekly repetitions, the notification will also show you 2 action buttons:
+### Reminders
+On each task (or note) you can add as many reminders as you want. Then you configure them, choosing
+on which day and hour you want to see each reminder. They appear as notifications. If you set the
+reminder to repeat on some week days, and when the notification appears you swipe it away, the
+reminder will get rescheduled to the next valid day. If the reminder is for a task and without
+weekly repetitions, the notification will also show you 2 action buttons:
 
 ![notification](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut8.png)
 
@@ -170,7 +211,8 @@ As of now:
 * "snooze" will set a new reminder **after 30 minutes** from now
 * "completed" sets the task as completed in the app, so its check-box will be checked
 
-**Performance**. The notification settings, which you reach from the `⋮` menu -> then "settings"
+### Performance
+The notification settings, which you reach from the `⋮` menu -> then "settings"
 -> then "notifications", can bring you to pages where you disable hibernation and battery
 optimization.
 
@@ -186,4 +228,4 @@ notifications on time instead of saving battery, at least for this app.
 
 * see the [FAQ](./FAQ.md) which is mostly about design choices
 * see how you can [help with the development](./CONTRIBUTING.md)
-* you can always [open an issue](https://github.com/spacecowboy/NotePad/issues/new/choose) and ask your question
+* ask your question by [opening an issue](https://github.com/spacecowboy/NotePad/issues/new/choose) 
