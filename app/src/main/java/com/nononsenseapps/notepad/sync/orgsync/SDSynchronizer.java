@@ -21,9 +21,12 @@ package com.nononsenseapps.notepad.sync.orgsync;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.FileObserver;
+import android.widget.Toast;
 
 import com.nononsenseapps.helpers.FileHelper;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
+import com.nononsenseapps.notepad.R;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.parser.OrgParser;
@@ -138,16 +141,33 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	}
 
 	/**
-	 * Replaces the file on the remote end with the given content.
+	 * Replaces the file on the remote end with the given content. It needs the org file to have
+	 * write permission, so "r" is wrong but "rw" is fine
 	 *
 	 * @param orgFile The file to save. Uses the filename stored in the object.
 	 */
 	@Override
 	public void putRemoteFile(OrgFile orgFile) throws IOException {
-		final File file = new File(ORG_DIR, orgFile.getFilename());
-		final BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-		bw.write(orgFile.treeToString());
-		bw.close();
+		final String orgfname = orgFile.getFilename();
+		final File file = new File(ORG_DIR, orgfname);
+		try {
+			final BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+			bw.write(orgFile.treeToString());
+			bw.close();
+		} catch (FileNotFoundException e) {
+			// if you upload an org file with android studio's "device file explorer" tool,
+			// it will be in readonly mode (only "r"), but we need it to be (also) in write
+			// mode (so at least "rw"), because sync is 2-way. Amaze file manager can show
+			// this property of files.
+			NnnLogger.warning(SDSynchronizer.class, "Read-only files like "
+					+ orgfname + " are not supported! Please set this file as " +
+					"writable. If you don't know how, just delete it and replace it by moving " +
+					"it with an android file-manager app, which will probably fix it. This " +
+					"caused the following exception:");
+			NnnLogger.exception(e);
+			String msg = context.getString(R.string.unsupported_readonly_file, orgfname);
+			Toast.makeText(this.context, msg, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	/**
