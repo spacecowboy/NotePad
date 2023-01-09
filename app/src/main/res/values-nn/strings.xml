@@ -66,7 +66,6 @@
     <string name="drag_to_timetravel">Dra til tidsreise</string>
     <string name="import_data_question">Innfør data?</string>
     <string name="import_started">Innfører data. Dette kan ta noen sekunder.</string>
-    <string name="import_data_msg">Ønsker du å innføre notatene fra doneringsversjonen? Når ferdig, får du også muligheten til å avinstallere den.</string>
     <string name="imported_result">Innførte %1$d notater i %2$d lister</string>
     <string name="import_error">Noe gikk galt: %s</string>
     <string name="showcase_main_title">Gå til listene dine</string>

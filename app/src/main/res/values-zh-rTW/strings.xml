@@ -77,7 +77,6 @@
     <string name="settings_list">清單</string>
     <string name="import_data_question">匯入數據？</string>
     <string name="import_started">正在匯入數據。這可能需要幾秒。</string>
-    <string name="import_data_msg">您要把捐贈版本的便箋匯入嗎？當操作完成後您也可以選擇卸載它。</string>
     <string name="imported_result">已匯入 %1$d 條便箋至 %2$d 清單</string>
     <string name="import_error">出現了一些問題：%s</string>
     <string name="lock_note">鎖定便箋</string>

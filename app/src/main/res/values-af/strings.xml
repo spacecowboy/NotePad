@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Gebruik handvatsel vir tyd-reis</string>
     <string name="import_data_question">Lees data in?</string>
     <string name="import_started">Lees data in. Dit mag \'n paar sekondes duur.</string>
-    <string name="import_data_msg">Wil jy die notas uit die skenking-weergawe van Notes inlees? Na inlees kan jy die skenking-weergawe on-installeer.</string>
     <string name="imported_result">%1$d notas in %2$d lyste ingelees</string>
     <string name="import_error">Iets het skeefgeloop: %s</string>
     <string name="showcase_main_title">Bekyk jou lyste</string>

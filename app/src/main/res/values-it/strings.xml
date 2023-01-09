@@ -235,7 +235,6 @@
     <string name="bigger_titles_summary">Il titolo è la prima linea</string>
     <string name="sorting">Ordine</string>
     <string name="undo">Annulla</string>
-    <string name="import_data_msg">Importare le note dalla versione donazione \? Quando finisce, puoi anche disinstallarla.</string>
     <string name="app_about_dev_team">Creata da Jonas Kalderstam e mantenuta da Campello Manuel</string>
     <string name="app_about_license">Questo programma è fornito con la licenza GNU General Public License version 3, vedi http://www.gnu.org/licenses</string>
     <string name="app_about_bugreports">Segnala problemi qui https://github.com/spacecowboy/NotePad/issues</string>

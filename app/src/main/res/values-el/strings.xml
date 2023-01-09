@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Σύρετε για πλοήγηση στο χρόνο</string>
     <string name="import_data_question">Εισαγωγή δεδομένων;</string>
     <string name="import_started">Γίνεται εισαγωγή δεδομένων. Μπορεί να διαρκέσει μερικα δευτερόλεπτα</string>
-    <string name="import_data_msg">Θα θέλατε να εισάγετε τις σημειώσεις από την δωρεάν έκδοση; Όταν τελειώσει, σας δίνεται, επίσης, η επιλογή να το απεγκαταστήσετε.</string>
     <string name="imported_result">Εισήχθησαν %1$d σημειώσεις σε %2$d λίστες</string>
     <string name="import_error">Κάτι πήγε στραβά: %s</string>
     <string name="showcase_main_title">Πρόσβαση στις λίστες σας </string>

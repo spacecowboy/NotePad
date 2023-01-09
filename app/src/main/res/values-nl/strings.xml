@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Sleep om te tijdreizen</string>
     <string name="import_data_question">Importeer gegevens?</string>
     <string name="import_started">Gegevens aan het importeren. Dit kan een paar seconden duren.</string>
-    <string name="import_data_msg">Wil je notities van de donneerversie importeren? Wanneer je klaar bent krijg je de optie om het te verwijderen.</string>
     <string name="imported_result">%1$d notities in %2$d lijsten geïmporteerd</string>
     <string name="import_error">Er ging iets verkeerd: %s</string>
     <string name="showcase_main_title">Toegang tot jou lijsten</string>

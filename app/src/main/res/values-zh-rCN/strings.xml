@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">拖到时间旅行</string>
     <string name="import_data_question">导入数据？</string>
     <string name="import_started">正在导入数据…</string>
-    <string name="import_data_msg">从捐赠版本导入笔记？ 之后，您可以选择卸载它。</string>
     <string name="imported_result">已将 %1$d 条笔记导入 %2$d 个列表</string>
     <string name="import_error">出现了一些问题：%s</string>
     <string name="showcase_main_title">访问列表</string>

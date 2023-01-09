@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Arrastra para viaxares no tempo</string>
     <string name="import_data_question">Importar datos?</string>
     <string name="import_started">Importando datos. Isto pode tardar uns segundiños.</string>
-    <string name="import_data_msg">Queres importar as notas a partir da versión gratuíta? Ao rematar, terás a opción de desinstalala.</string>
     <string name="imported_result">Importáronse %1$d notas de %2$d listaxes</string>
     <string name="import_error">Algo foi mal: %s</string>
     <string name="showcase_main_title">Accede ás túas listaxes</string>
