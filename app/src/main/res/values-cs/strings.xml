@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Táhnout pro posun v čase</string>
     <string name="import_data_question">Importovat údaje?</string>
     <string name="import_started">Importuji data. Chvilku to zabere.</string>
-    <string name="import_data_msg">Chcete importovat poznámky z dotované verzi? Po dokončení vám bude nabídnuta možnost ji také odinstalovat.</string>
     <string name="imported_result">Importováno %1$d poznámek z %2$d seznamů</string>
     <string name="import_error">Něco se pokazilo: %s</string>
     <string name="showcase_main_title">Otevřít své seznamy</string>

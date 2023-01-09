@@ -78,7 +78,6 @@
     <string name="drag_to_timetravel">ドラッグして遡る</string>
     <string name="import_data_question">データをインポートしますか？</string>
     <string name="import_started">データをインポート中。完了まで数秒程度要します。</string>
-    <string name="import_data_msg">寄付版からノートをインポートしますか？完了した後、アンインストールするオプションが表示されます。</string>
     <string name="imported_result">%1$d個のノートを%2$dリストへインポートしました</string>
     <string name="import_error">エラーが発生しました： %s</string>
     <string name="showcase_main_title">リストにアクセス</string>

@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Zamanda yolculuk sürükleyin</string>
     <string name="import_data_question">Veri aktarılsın mı?</string>
     <string name="import_started">Veriler aktarılıyor. Bu bir kaç saniye sürebilir.</string>
-    <string name="import_data_msg">Bağış sürümünden notları içe aktarmak ister misiniz?  Bittiği zaman size de kaldırma seçeneği verilir.</string>
     <string name="imported_result">Listelerden%1$d içe aktarılan%2$dnotlar</string>
     <string name="import_error">Bir şeyler yanlış gitti: %s</string>
     <string name="showcase_main_title">Listelerinize erişin</string>

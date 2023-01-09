@@ -77,7 +77,6 @@
     <string name="settings_list">Lista</string>
     <string name="import_data_question">Importar dados?</string>
     <string name="import_started">Importando dados. Isto pode levar alguns segundos.</string>
-    <string name="import_data_msg">Gostaria de importar as notas a partir da versão de doação? Quando finalizado, você poderá desinstalá-la também.</string>
     <string name="imported_result">Importado %1$d notas de %2$d listas</string>
     <string name="import_error">Algo deu errado: %s</string>
     <string name="lock_note">Bloquear nota</string>

@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Влачете за промяна на времето</string>
     <string name="import_data_question">Внасяне на данни?</string>
     <string name="import_started">Данните се внасят. Това ще отнеме няколко секунди.</string>
-    <string name="import_data_msg">Искате ли да внесете бележките от дарителската версия? Когато приключи, ще имате възможност и да я деинсталирате.</string>
     <string name="imported_result">Внесени %1$d бележки в %2$d списъка</string>
     <string name="import_error">Нещо се обърка: %s</string>
     <string name="showcase_main_title">Докоснете за управление на списъците</string>

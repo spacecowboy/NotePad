@@ -80,7 +80,6 @@
     <string name="drag_to_timetravel">Træk for at rejse i tiden</string>
     <string name="import_data_question">Importer data?</string>
     <string name="import_started">Importerer data. Dette kan tage et par sekunder.</string>
-    <string name="import_data_msg">Vil du importere dine noter fra donations-versionen? Når du er færdig, får du også muligheden for at afinstallere den.</string>
     <string name="imported_result">Importeret %1$d noter i %2$d lister</string>
     <string name="import_error">Noget gik galt: %s</string>
     <string name="showcase_main_title">Rør for at administrere lister</string>

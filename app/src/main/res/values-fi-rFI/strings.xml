@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Raahaa aikamatkustaaksesi</string>
     <string name="import_data_question">Tuo tietoja?</string>
     <string name="import_started">Tietoja tuodaan. Tämä voi viedä muutaman sekunnin.</string>
-    <string name="import_data_msg">Haluatko tuoda muistiinpanot sovelluksen lahjoitusversiosta? Kun toiminto on suoritettu, voit myös poistaa kyseisen sovelluksen.</string>
     <string name="imported_result">Tuotiin %1$d muistiinpanoa %2$d listasta</string>
     <string name="import_error">Jokin meni vikaan: %s</string>
     <string name="showcase_main_title">Hallitse listojasi</string>

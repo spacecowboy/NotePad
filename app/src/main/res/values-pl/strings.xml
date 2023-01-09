@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Poprzednie wersje </string>
     <string name="import_data_question">Skopiować dane?</string>
     <string name="import_started">Importowanie danych. Może to zająć kilka sekund. </string>
-    <string name="import_data_msg">Czy chcesz zaimportować notatki z płatnej wersji aplikacji? Po zakończeniu będziesz miał również możliwość jej usunięcia.</string>
     <string name="imported_result">Zaimporotwano %1$d notatek z %2$d list</string>
     <string name="import_error">Coś poszło nie tak: %s</string>
     <string name="showcase_main_title">Dostęp do Twoich list</string>

@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Seret ke waktu perjalanan</string>
     <string name="import_data_question">Impor data?</string>
     <string name="import_started">Mengimpor data Ini mungkin memakan waktu beberapa detik.</string>
-    <string name="import_data_msg">Apakah Anda ingin mengimpor catatan dari versi donasi? Setelah selesai, Anda diberi pilihan untuk mencopot pemasangan juga.</string>
     <string name="imported_result">Diimpor %1$d catatan dalam %2$d daftar</string>
     <string name="import_error">Ada sesuatu yang salah: %s</string>
     <string name="showcase_main_title">Akses daftar Anda</string>
