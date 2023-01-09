@@ -93,12 +93,6 @@
 	<string name="import_started">Importing data…</string>
 	<string name="imported_result">Imported %1$d notes into %2$d lists</string>
 	<string name="import_error">Something went wrong: %s</string>
-	<string name="showcase_main_title">Access your lists</string>
-	<string name="showcase_main_msg">Touch the icon or swipe from the left edge</string>
-	<string name="showcase_drawer_title">Manage your lists</string>
-	<string name="showcase_drawer_msg">Long-press a list name to edit or delete it</string>
-	<string name="showcase_timemachine_title">Save your notes</string>
-	<string name="showcase_timemachine_msg">Changes are always saved. Use the time machine to restore a previous version.</string>
 
 	<!-- new strings added since 2022 -->
 	<string name="notification_channel_name">Reminders for notes</string>
@@ -146,6 +140,8 @@
 	<string name="next_year">Next year</string>
 	<string name="select_all">Select all</string>
 	<string name="tutorial_online">Tutorial (online)</string>
+	<string name="showcase_tutorial_title">Feeling lost?</string>
+	<string name="showcase_tutorial_description">We have an online tutorial. Find it in the settings</string>
 
 	<!--
 		Use few if language need it. In English is the same.

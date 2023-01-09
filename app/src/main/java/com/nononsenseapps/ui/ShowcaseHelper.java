@@ -3,7 +3,7 @@ package com.nononsenseapps.ui;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.StringRes;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentActivity;
 
@@ -11,7 +11,6 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.ThemeHelper;
-import com.nononsenseapps.notepad.ActivityMain;
 
 /**
  * Holds all code related to the showcase view, which for now is provided
@@ -20,27 +19,13 @@ import com.nononsenseapps.notepad.ActivityMain;
 public final class ShowcaseHelper {
 
 	/**
-	 * Create, configure and show a view to highlight a functionality, using an appropriate
-	 * library. The view is shown above the given {@link AppCompatActivity} and features a
+	 * Create, configure and show a view to highlight the overflow menu, using a library.
+	 * The view is shown above the given {@link FragmentActivity} and features a
 	 * title and a short description
 	 */
-	public static void showForView(AppCompatActivity activity, View targetToHighlight,
-								   int titleStringId, int descriptionStringId) {
-		// always a good idea to check
-		if (targetToHighlight == null) {
-			NnnLogger.error(ActivityMain.class,
-					"Can't show the TapTargetView for the given view");
-			return;
-		}
-
-		var target2 = TapTarget.forView(targetToHighlight,
-				activity.getString(titleStringId), activity.getString(descriptionStringId));
-
-		finishConfiguringAndShow(target2, activity);
-	}
-
 	public static void showForOverflowMenu(@NonNull FragmentActivity activity,
-										   int titleStringId, int descriptionStringId) {
+										   @StringRes int titleStringId,
+										   @StringRes int descriptionStringId) {
 		// get the toolbar from the activity
 		Toolbar tBar = activity.findViewById(androidx.appcompat.R.id.action_bar);
 
@@ -58,7 +43,9 @@ public final class ShowcaseHelper {
 	}
 
 	/**
-	 * All functions share this common configuration for the TapTargetView
+	 * All functions in this class share this common configuration for the TapTargetView, but to
+	 * highlight a {@link View} on the {@link FragmentActivity} you would implement an alternative
+	 * to {@link #showForOverflowMenu}
 	 */
 	private static void finishConfiguringAndShow(TapTarget target, FragmentActivity activity) {
 		// TODO can *you* make it prettier ? See also https://github.com/KeepSafe/TapTargetView

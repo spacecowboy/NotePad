@@ -38,7 +38,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -62,7 +61,6 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.ActivityMainBinding;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
@@ -70,13 +68,11 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.ui.ShowcaseHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -104,9 +100,6 @@ public class ActivityMain extends AppCompatActivity
 	// Using tags for test
 	public static final String DETAILTAG = "detailfragment";
 	public static final String LISTPAGERTAG = "listpagerfragment";
-	private static final String SHOWCASED_MAIN = "showcased_main_window";
-	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
-
 
 	@ViewById(resName = "leftDrawer")
 	ListView leftDrawer;
@@ -139,8 +132,6 @@ public class ActivityMain extends AppCompatActivity
 	boolean showingEditor = false;
 
 	boolean isDrawerClosed = true;
-	boolean alreadyShowcased = false;
-	boolean alreadyShowcasedDrawer = false;
 	SyncStatusMonitor syncStatusReceiver = null;
 
 	// WIll only be the viewpager fragment
@@ -428,9 +419,6 @@ public class ActivityMain extends AppCompatActivity
 		}
 
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
-		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
 
 		// To listen on fragment changes
 		getSupportFragmentManager().addOnBackStackChangedListener(() -> {
@@ -766,10 +754,6 @@ public class ActivityMain extends AppCompatActivity
 	protected void loadContent() {
 		loadLeftDrawer();
 		loadFragments();
-
-		if (!showingEditor || fragment2 != null) {
-			showcaseDrawer();
-		}
 	}
 
 	/**
@@ -796,15 +780,6 @@ public class ActivityMain extends AppCompatActivity
 					getSupportActionBar().setDisplayShowTitleEnabled(false);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-				}
-
-				/**
-				 * Called when a drawer has settled in a completely open state.
-				 */
-				@Override
-				public void onDrawerOpened(View drawerView) {
-					super.onDrawerOpened(drawerView);
-					showcaseDrawerPress();
 				}
 
 				@Override
@@ -1017,54 +992,6 @@ public class ActivityMain extends AppCompatActivity
 		LoaderManager
 				.getInstance(this)
 				.restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
-	}
-
-	/**
-	 * On first load, show some functionality hints
-	 */
-	private void showcaseDrawer() {
-		if (alreadyShowcased) {
-			return;
-		}
-
-		// the ID of the actionbar icon that opens the drawer menu is not known, so we have to
-		// get it in this way
-		var tBar = (Toolbar) this.findViewById(androidx.appcompat.R.id.action_bar);
-		if (tBar != null) {
-			// this view is the "hamburger menu" icon that opens the drawer
-			View hmv = tBar.getChildAt(1);
-			if (hmv != null) {
-				ShowcaseHelper.showForView(this, hmv, R.string.showcase_main_title,
-						R.string.showcase_main_msg);
-			}
-		} else {
-			// whatever, the user won't see the showcase view
-		}
-		PreferenceManager
-				.getDefaultSharedPreferences(this)
-				.edit()
-				.putBoolean(SHOWCASED_MAIN, true)
-				.commit();
-		alreadyShowcased = true;
-	}
-
-	private void showcaseDrawerPress() {
-		// only show on first boot
-		if (alreadyShowcasedDrawer) {
-			return;
-		}
-
-		ShowcaseHelper.showForView(this,
-				this.findViewById(R.id.drawer_menu_createlist),
-				R.string.showcase_drawer_title,
-				R.string.showcase_drawer_msg);
-
-		PreferenceManager
-				.getDefaultSharedPreferences(this)
-				.edit()
-				.putBoolean(SHOWCASED_DRAWER, true)
-				.commit();
-		alreadyShowcasedDrawer = true;
 	}
 
 	@Override

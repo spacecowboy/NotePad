@@ -226,13 +226,25 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById(resName = "editScrollView")
 	ScrollView editScrollView;
 
-	// Id of task to open
+	/**
+	 * Id of task to open
+	 */
 	public static final String ARG_ITEM_ID = "item_id";
-	// If no id is given, a string can be accepted as initial state
+
+	/**
+	 * If no id is given, a string can be accepted as initial state
+	 */
 	public static final String ARG_ITEM_CONTENT = "item_text";
-	// A list id is necessary
+
+	/**
+	 * A list id is necessary
+	 */
 	public static final String ARG_ITEM_LIST_ID = "item_list_id";
-	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
+
+	/**
+	 * preference key for the tutorial link message
+	 */
+	private static final String SHOWCASED_EDITOR = "showcased_tutorial_from_editor_window";
 
 	// To override intent values with
 	@InstanceState
@@ -241,7 +253,9 @@ public class TaskDetailFragment extends Fragment {
 	@InstanceState
 	long stateListId = -1;
 
-	// Dao version of the object this fragment represents
+	/**
+	 * Dao version of the object this fragment represents
+	 */
 	private Task mTask;
 
 	// Version when task was opened
@@ -262,8 +276,7 @@ public class TaskDetailFragment extends Fragment {
 	private boolean dontLoad = false;
 
 	/**
-	 * Performs no error checking. Only calls other getter with the last segment
-	 * parsed as long
+	 * Only calls other getter with the last segment parsed as long
 	 */
 	public static TaskDetailFragment_ getInstance(final Uri itemUri) {
 		return getInstance(Long.parseLong(itemUri.getLastPathSegment()));
@@ -421,20 +434,20 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	/**
-	 * Returns true if showcase window is visible
+	 * Show the message to tell the user about our online tutorial
+	 *
+	 * @return true if showcase window is visible
 	 */
 	boolean showcaseEditor() {
 		final boolean alreadyShowcased = PreferenceManager
 				.getDefaultSharedPreferences(getActivity())
 				.getBoolean(SHOWCASED_EDITOR, false);
 
-		if (alreadyShowcased) {
-			return false;
-		}
+		if (alreadyShowcased) return false;
 
 		ShowcaseHelper.showForOverflowMenu(this.getActivity(),
-				R.string.showcase_timemachine_title,
-				R.string.showcase_timemachine_msg);
+				R.string.showcase_tutorial_title,
+				R.string.showcase_tutorial_description);
 
 		PreferenceManager.getDefaultSharedPreferences(getActivity())
 				.edit()
