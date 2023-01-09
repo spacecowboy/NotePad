@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Trage pentru a călatori în timp</string>
     <string name="import_data_question">Importă datele?</string>
     <string name="import_started">Se importă datele. Ar putea dura câteva secunde.</string>
-    <string name="import_data_msg">Vrei să imporți notițele din versiunea de donat? Când se termină de importat, îți este dată opțiunea de dezinstalare.</string>
     <string name="imported_result">S-a importat %1$d notițe în %2$d liste</string>
     <string name="import_error">Ceva nu a funcționat corect: %s</string>
     <string name="showcase_main_title">Accesează listele</string>

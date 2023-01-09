@@ -80,7 +80,6 @@
     <string name="drag_to_timetravel">Verschieben für Zeitteise</string>
     <string name="import_data_question">Daten importieren?</string>
     <string name="import_started">Daten werden importiert…</string>
-    <string name="import_data_msg">Notizen aus der Spenderversion importieren\? Danach hast Du die Möglichkeit, sie zu deinstallieren.</string>
     <string name="imported_result">Es wurden %1$d Notizen in %2$d Listen importiert</string>
     <string name="import_error">Etwas hat nicht funktioniert: %s</string>
     <string name="showcase_main_title">Listen verwalten</string>

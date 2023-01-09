@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Húzd az időutazáshoz</string>
     <string name="import_data_question">Szeretné importálni az adatokat?</string>
     <string name="import_started">Adatok importálása folyamatban. A művelet eltarthat néhány másodpercig.</string>
-    <string name="import_data_msg">Szeretné átimportálni a jegyzeteket a támogatott verzióból? Amikor kész, eltávolíthatja az alkalmazást.</string>
     <string name="imported_result">%1$d jegyzet importálása %2$d listába</string>
     <string name="import_error">Hiba: %s</string>
     <string name="showcase_main_title">Tekintse meg listáit</string>

@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">Thả vào máy thời gian</string>
     <string name="import_data_question">Nhập dữ liệu?</string>
     <string name="import_started">Đang nhập dữ liệu. Hãy đợi trong giây lát.</string>
-    <string name="import_data_msg">Bạn có muốn nhập ghi chú từ phiên bản tính phí không? Khi đã nhập xong, bạn có thể gỡ cài đặt.</string>
     <string name="imported_result">Đã nhập %1$d ghi chú từ%2$d danh sách</string>
     <string name="import_error">Đã xảy ra lỗi: %s</string>
     <string name="showcase_main_title">Truy cập các danh sách của bạn</string>

@@ -79,7 +79,6 @@
     <string name="drag_to_timetravel">Ťahať pre cestovanie časom</string>
     <string name="import_data_question">Importovať dáta?</string>
     <string name="import_started">Importujem dáta. Môže to chvíľu trvať.</string>
-    <string name="import_data_msg">Importovať poznámky z platenej verzie? Ak sa importujú je taktiež možnosť ich odinštalovať.</string>
     <string name="showcase_main_title">Prístup k poznámkam</string>
     <string name="showcase_main_msg">Dotkni sa ikony, alebo potiahni naľavo</string>
     <string name="showcase_drawer_title">Spravovať zoznamy</string>

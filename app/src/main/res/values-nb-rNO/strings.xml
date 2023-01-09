@@ -153,7 +153,6 @@
     <string name="sort_list_updated">Sist oppdatert</string>
     <string name="permission_write_label">endre notater og lister</string>
     <string name="permission_write_desc">Tillater programmet å sette inn, oppdatere, og slette notater og lister i No Nonsense Notes.</string>
-    <string name="import_data_msg">Importer notater fra donasjonsversjonen\? Når fullført vil du bli gitt alternativet om å avinstallere den.</string>
     <string name="libraries_used">Bibliotek</string>
     <string name="imported_result">Importerte %1$d notater inn i %2$d lister</string>
     <string name="showcase_drawer_msg">Lang-trykk på et listenavn for å redigere eller slette det</string>

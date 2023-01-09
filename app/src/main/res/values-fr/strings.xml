@@ -77,7 +77,6 @@
     <string name="drag_to_timetravel">Glisser pour revenir en arrière</string>
     <string name="import_data_question">Importer les données?</string>
     <string name="import_started">Importation des données. Ceci prendra quelques secondes.</string>
-    <string name="import_data_msg">Voulez-vous importer les notes depuis la version donation? Lorsque terminé, vous aurez l\'option de la désinstaller.</string>
     <string name="imported_result">%1$d notes importées dans %2$d listes</string>
     <string name="import_error">Quelque chose n\'a pas fonctionné: %s</string>
     <string name="showcase_main_title">Accéder à vos listes</string>

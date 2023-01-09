@@ -42,8 +42,8 @@
     <string name="editor_note_hint">便签</string>
     <string name="resolve_edit">编辑便签</string>
     <string name="default_style">默认样式</string>
-    <string name="show_items_as_tasks">将条目以任务显示</string>
-    <string name="show_items_as_notes">将条目以便签显示</string>
+    <string name="show_items_as_tasks">可勾选的任务</string>
+    <string name="show_items_as_notes">简单便签</string>
     <string name="sort_list_default">默认排序方式</string>
     <string name="sort_list_alphabetical">A-Z</string>
     <string name="sort_list_due">到期日</string>
@@ -81,7 +81,6 @@
     <string name="drag_to_timetravel">拖到时间旅行</string>
     <string name="import_data_question">导入数据？</string>
     <string name="import_started">正在导入数据…</string>
-    <string name="import_data_msg">从捐赠版本导入笔记？ 之后，您可以选择卸载它。</string>
     <string name="imported_result">已将 %1$d 条笔记导入 %2$d 个列表</string>
     <string name="import_error">出现了一些问题：%s</string>
     <string name="showcase_main_title">访问列表</string>
@@ -109,7 +108,7 @@
     <string name="confirm_new_password">确认新密码</string>
     <string name="apply">应用</string>
     <string name="clear_password">清除密码</string>
-    <string name="password_info">任何一则笔记都可以被锁定，限制查看和修改。 仍然可以在其他设备上对其进行完全访问。设置空密码会禁用所有笔记锁</string>
+    <string name="password_info">任何一则笔记都可以被锁定，限制查看和修改。 仍然可以在其他设备上对其进行完全访问。如果你忘记了，可以清除它并新设一个</string>
     <string name="about">关于</string>
     <string name="sync_failed">同步失败</string>
     <string name="sync_login_failed">无法登录以使用 Google Tasks</string>
@@ -130,8 +129,8 @@
     <string name="hide_checkbox_summary_off">显示复选框</string>
     <string name="hide_date">隐藏过期时间</string>
     <string name="item_max_height">便签/任务的最大高度</string>
-    <string name="long_date_format">长日期格式</string>
-    <string name="short_date_format">短日期格式</string>
+    <string name="long_date_format">长日期格式，面板</string>
+    <string name="short_date_format">短日期格式，列表</string>
     <string name="select_date">选择日期</string>
     <string name="localedefault">使用所在地区的默认值</string>
     <string name="hide_header">隐藏整个小部件标题行</string>
