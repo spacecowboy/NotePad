@@ -83,11 +83,8 @@
     <string name="import_started">Veriler aktarılıyor. Bu bir kaç saniye sürebilir.</string>
     <string name="imported_result">Listelerden%1$d içe aktarılan%2$dnotlar</string>
     <string name="import_error">Bir şeyler yanlış gitti: %s</string>
-    <string name="showcase_main_title">Listelerinize erişin</string>
     <string name="showcase_main_msg">Simgeye dokunun veya sol kenardan hızlı bir şekilde kaydırın</string>
-    <string name="showcase_drawer_title">Listelerinizi yönetin</string>
     <string name="showcase_drawer_msg">Silmek veya düzenlemek için uzunca basılı tutun</string>
-    <string name="showcase_timemachine_title">Notlarınızı kaydetme</string>
     <string name="showcase_timemachine_msg">Değişiklikler her zaman kaydedildi. Bir önceki sürümü geri yüklemek için zaman makinesi kullanın.</string>
     <!--
         Use few if language need it. In English is the same.

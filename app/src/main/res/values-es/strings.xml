@@ -81,11 +81,8 @@
     <string name="import_data_question">¿Importar datos?</string>
     <string name="import_started">Importando datos. Esto puede tardar unos segundos.</string>
     <string name="import_error">Algo salió mal: %s</string>
-    <string name="showcase_main_title">Accede a tus listas</string>
     <string name="showcase_main_msg">Toque el icono o pase desde el borde izquierdo</string>
-    <string name="showcase_drawer_title">Gestiona tus listas</string>
     <string name="showcase_drawer_msg">Mantener presionado para editar o eliminar</string>
-    <string name="showcase_timemachine_title">Salva tus notas</string>
     <string name="showcase_timemachine_msg">Los cambios siempre se guardan. Use la máquina del tiempo para restaurar una versión anterior.</string>
     <string name="move">Mover</string>
     <string name="move_to">Mover a</string>

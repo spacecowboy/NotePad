@@ -83,11 +83,8 @@
     <string name="import_started">Uvažanje podatkov. To lahko traja nekaj sekund.</string>
     <string name="imported_result">Uvoženi %1$d opombe v %2$d seznami</string>
     <string name="import_error">Nekaj je šlo narobe: %s</string>
-    <string name="showcase_main_title">Dostop do vaše sezname</string>
     <string name="showcase_main_msg">Dotik ikono ali močan udarec po žogi od levega roba</string>
-    <string name="showcase_drawer_title">Upravljate svoje sezname</string>
     <string name="showcase_drawer_msg">Dolgo pritisnite za urejanje ali brisanje</string>
-    <string name="showcase_timemachine_title">Shranite zapiske</string>
     <string name="showcase_timemachine_msg">Spremembe so vedno shranjene. Uporabite časovni stroj za obnovitev prejšnje različice.</string>
     <string name="move">Premakni</string>
     <string name="move_to">Premakni v</string>

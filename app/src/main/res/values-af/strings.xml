@@ -83,11 +83,8 @@
     <string name="import_started">Lees data in. Dit mag \'n paar sekondes duur.</string>
     <string name="imported_result">%1$d notas in %2$d lyste ingelees</string>
     <string name="import_error">Iets het skeefgeloop: %s</string>
-    <string name="showcase_main_title">Bekyk jou lyste</string>
     <string name="showcase_main_msg">Raak die ikoon of vee van die linker-rant</string>
-    <string name="showcase_drawer_title">Redigeer jou lyste</string>
     <string name="showcase_drawer_msg">Lang-raak om te redigeer of uit te vee</string>
-    <string name="showcase_timemachine_title">Stoor jou notas</string>
     <string name="showcase_timemachine_msg">Alle veranderinge word gestoor. Gebruik die tydmasjien om vorige weergawes te herstel.</string>
     <string name="move">Verskuif</string>
     <string name="move_to">Verskuif na</string>

@@ -82,11 +82,8 @@
     <string name="import_started">Importerer data. Dette kan tage et par sekunder.</string>
     <string name="imported_result">Importeret %1$d noter i %2$d lister</string>
     <string name="import_error">Noget gik galt: %s</string>
-    <string name="showcase_main_title">Rør for at administrere lister</string>
     <string name="showcase_main_msg">Eller swipe fra venstre kant</string>
-    <string name="showcase_drawer_title">Langt tryk for at redigere eller slette</string>
     <string name="showcase_drawer_msg">Langt tryk for at redigere eller slette</string>
-    <string name="showcase_timemachine_title">Gemmer alt</string>
     <string name="showcase_timemachine_msg">Dine ændringer gemmes altid ved exit. Brug tidsmaskinen for at genskabe en note til en tidligere version.</string>
     <string name="move">Flyt</string>
     <string name="move_to">Flyt til</string>

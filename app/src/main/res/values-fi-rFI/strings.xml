@@ -83,11 +83,8 @@
     <string name="import_started">Tietoja tuodaan. Tämä voi viedä muutaman sekunnin.</string>
     <string name="imported_result">Tuotiin %1$d muistiinpanoa %2$d listasta</string>
     <string name="import_error">Jokin meni vikaan: %s</string>
-    <string name="showcase_main_title">Hallitse listojasi</string>
     <string name="showcase_main_msg">Kosketa kuvaketta tai pyyhkäise vasemmasta reunasta</string>
-    <string name="showcase_drawer_title">Hallitse listojasi</string>
     <string name="showcase_drawer_msg">Paina pitkään muokataksesi tai poistaaksesi</string>
-    <string name="showcase_timemachine_title">Tallenna muistiinpanosi</string>
     <string name="showcase_timemachine_msg">Muutokset tallennetaan aina. Käytä aikakonetta palauttaaksesi aikaisemman version.</string>
     <string name="move">Siirrä</string>
     <string name="move_to">Siirrä sijaintiin</string>

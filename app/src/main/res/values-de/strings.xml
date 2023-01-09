@@ -82,11 +82,8 @@
     <string name="import_started">Daten werden importiert…</string>
     <string name="imported_result">Es wurden %1$d Notizen in %2$d Listen importiert</string>
     <string name="import_error">Etwas hat nicht funktioniert: %s</string>
-    <string name="showcase_main_title">Listen verwalten</string>
     <string name="showcase_main_msg">Tippe auf das Icon in der oberen linken Ecke, oder swipe vom linken Bildschirmrand um Deine Listen anzuzeigen.</string>
-    <string name="showcase_drawer_title">Zum Bearbeiten, oder Löschen Item gedrückt halten</string>
     <string name="showcase_drawer_msg">Drücke lange auf einen Listennamen, um ihn zu bearbeiten oder zu löschen</string>
-    <string name="showcase_timemachine_title">Alle Änderungen werden gespeichert</string>
     <string name="showcase_timemachine_msg">Beim Bearbeiten einer Notiz werden alle Änderungen gespeichert. Um Notizen auf einen vorherigen Stand zu bringen, kannst Du die Time Machine benutzen.</string>
     <string name="move">Verschieben</string>
     <string name="move_to">Verschieben nach</string>

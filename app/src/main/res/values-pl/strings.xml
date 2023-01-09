@@ -83,11 +83,8 @@
     <string name="import_started">Importowanie danych. Może to zająć kilka sekund. </string>
     <string name="imported_result">Zaimporotwano %1$d notatek z %2$d list</string>
     <string name="import_error">Coś poszło nie tak: %s</string>
-    <string name="showcase_main_title">Dostęp do Twoich list</string>
     <string name="showcase_main_msg">Dotknij ikonę lub przesuń palcem od lewej krawędzi ekranu</string>
-    <string name="showcase_drawer_title">Zarządzaj swoimi listami </string>
     <string name="showcase_drawer_msg">Przytrzymaj, aby edytować lub usunąć </string>
-    <string name="showcase_timemachine_title">Zachowaj swoje notatki</string>
     <string name="showcase_timemachine_msg">Zmiany są zawsze zapisywane. Użyj kapsuły czasu, aby przywrócić poprzednie wersje. </string>
     <string name="move">Przenieś</string>
     <string name="move_to">Przenieś do</string>

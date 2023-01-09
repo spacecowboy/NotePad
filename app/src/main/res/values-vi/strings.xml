@@ -83,11 +83,8 @@
     <string name="import_started">Đang nhập dữ liệu. Hãy đợi trong giây lát.</string>
     <string name="imported_result">Đã nhập %1$d ghi chú từ%2$d danh sách</string>
     <string name="import_error">Đã xảy ra lỗi: %s</string>
-    <string name="showcase_main_title">Truy cập các danh sách của bạn</string>
     <string name="showcase_main_msg">Chạm vào biểu tượng hoặc lướt ngón tay từ cạnh trái màn hình</string>
-    <string name="showcase_drawer_title">Quản lí danh sách</string>
     <string name="showcase_drawer_msg">Nhấn giữ để sửa hoặc xoá</string>
-    <string name="showcase_timemachine_title">Lưu các ghi chú</string>
     <string name="showcase_timemachine_msg">Các thay đổi luôn luôn được lưu lại. Bạn có thể dùng máy thời gian để khôi phục phiên bản cũ.</string>
     <string name="move">Di chuyển</string>
     <string name="move_to">Di chuyển tới</string>

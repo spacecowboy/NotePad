@@ -69,11 +69,8 @@
     <string name="drag_to_timetravel">Trascina par tornare a nà version vecia</string>
     <string name="settings_list">Lista</string>
     <string name="import_error">Ghe se un problema: %s</string>
-    <string name="showcase_main_title">Varda e liste</string>
     <string name="showcase_main_msg">Toca l\'icona o scori el deo dal bordo sinistro</string>
-    <string name="showcase_drawer_title">Controea e liste</string>
     <string name="showcase_drawer_msg">Tien premuo el deo sul nome dea lista par cambiarla o butarla via</string>
-    <string name="showcase_timemachine_title">Salva e to note</string>
     <string name="showcase_timemachine_msg">Ogni modifica la vien salvada par conto suo. Usa la cronologia par tornare a na version vecia.</string>
     <string name="notification_channel_name">Promemoria pae note</string>
     <string name="feature_is_WIP">Sta roba a se ancora un lavoro in corso.</string>
