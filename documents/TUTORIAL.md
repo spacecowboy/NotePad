@@ -174,6 +174,7 @@ Limitations:
   * In this case, "Note 3" had a reminder, but you don't see it in the equivalent org file
 * Archived notes, which you can see in the "archive" page, will **not** be saved to an org file
 * The note history is not saved: only the last version of the note goes into the org file
+* Read-only org files are officially unsupported. Import only writable files: "rw" and not "r"
 
 ### Links
 This app is a decent bookmark manager. You can save links by sharing them from the browser, and you
