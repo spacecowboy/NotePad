@@ -1,0 +1,10 @@
+NoNonsense Notes v7.1.3
+
+Highlights:
+- Translated using Weblate
+- add an online tutorial
+- stop asking for google account access
+
+Details:
+- UI tweaks
+- code cleanup
