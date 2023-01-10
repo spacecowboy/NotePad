@@ -82,7 +82,6 @@
     <string name="import_started">Daten werden importiert…</string>
     <string name="imported_result">Es wurden %1$d Notizen in %2$d Listen importiert</string>
     <string name="import_error">Etwas hat nicht funktioniert: %s</string>
-    <string name="showcase_drawer_msg">Drücke lange auf einen Listennamen, um ihn zu bearbeiten oder zu löschen</string>
     <string name="move">Verschieben</string>
     <string name="move_to">Verschieben nach</string>
     <string name="moved_x_to_list">%1$d nach %2$s verschoben</string>
@@ -259,4 +258,6 @@
     <string name="select_all">Wähle alle</string>
     <string name="tutorial_online">Tutorial (online)</string>
     <string name="disable_android_hibernation_desc">Das ist eine Funktion, die die App weniger zuverlässig macht.Es kann Ihre Benachrichtigungen blockieren.Öffnen Sie diese, suchen Sie nach so etwas wie \"Suspend App -Aktivität, wenn sie nicht genutzt werden\" und schalten Sie es aus</string>
+    <string name="welcome_note_title">Willkommen!</string>
+    <string name="welcome_note_row_3">Diese App hat eine detaillierte Anleitung, zu finden unter</string>
 </resources>
