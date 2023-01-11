@@ -566,7 +566,7 @@ public class Notification extends DAO {
 
 	public void deleteOrReschedule(final Context context) {
 
-		if (repeats == 0 || time == null) {
+		if (!this.isRepeating() || time == null) {
 			delete(context);
 		} else {
 			// Need to set the correct time, but using today as the date

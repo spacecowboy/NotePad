@@ -346,7 +346,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 		final Intent iDelete = new Intent(context, NotificationHelper.class)
 				.setAction(Intent.ACTION_DELETE)
 				.setData(note.getUri());
-		if (note.repeats != 0) {
+		if (note.isRepeating()) {
 			iDelete.setAction(ACTION_RESCHEDULE);
 		}
 
