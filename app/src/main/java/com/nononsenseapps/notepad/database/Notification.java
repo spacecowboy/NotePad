@@ -40,6 +40,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+/**
+ * A model for the SQLite table where reminders are saved
+ */
 public class Notification extends DAO {
 
 	// These match WeekDaysView's values
@@ -621,5 +624,17 @@ public class Notification extends DAO {
 		}
 
 		return sb.toString();
+	}
+
+	/**
+	 * Notifications (=Reminders) can be "repeating reminders": they are supposed to re-appear
+	 * in one or more week days
+	 *
+	 * @return TRUE if this {@link Notification} is a repeating reminder
+	 * @implNote See {@link #mon} and {@link #sun}
+	 */
+	public boolean isRepeating() {
+		// "repeats == 0x1000001" means that the note repeats on monday and sunday, for example
+		return this.repeats != 0;
 	}
 }

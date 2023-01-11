@@ -152,8 +152,7 @@ public class OrgConverter {
 		setDeadline(node, task.due);
 	}
 
-	private static void setNotifications(final OrgNode node,
-										 final List<Notification> reminders) {
+	private static void setNotifications(final OrgNode node, final List<Notification> reminders) {
 		if (reminders == null)
 			return;
 

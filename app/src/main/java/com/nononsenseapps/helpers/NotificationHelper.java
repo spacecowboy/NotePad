@@ -109,9 +109,13 @@ public final class NotificationHelper extends BroadcastReceiver {
 						final long snoozeDelayInMillis = 1000 * 60 * minutes;
 						final Calendar now = Calendar.getInstance();
 
+						// it's 30 minutes from now, expressed in those unix millseconds
+						final long newTime = now.getTimeInMillis() + snoozeDelayInMillis;
+
+						// overwrites the due time of the reminder that triggered this notification
+						// with the value of "newTime"
 						com.nononsenseapps.notepad.database.Notification
-								.setTime(context, intent.getData(),
-										snoozeDelayInMillis + now.getTimeInMillis());
+								.setTime(context, intent.getData(), newTime);
 						break;
 					case ACTION_COMPLETE:
 						final long taskId = intent.getLongExtra(ARG_TASKID, -1);
@@ -393,12 +397,15 @@ public final class NotificationHelper extends BroadcastReceiver {
 		// the Delete intent for non-location repeats
 		builder.setDeleteIntent(piDelete);
 
-		// Snooze button only on time non-repeating
-		if (note.time != null && note.repeats == 0) {
+		// Snooze button only on non-repeating reminders
+		if (note.time != null && !note.isRepeating()) {
+			// TODO implement snooze for repeating reminders by ADDING a new reminder.
+			//  the current implementation is to edit the current notification record
 			builder.addAction(R.drawable.ic_alarm_24dp, context.getText(R.string.snooze), piSnooze);
 		}
-		// Complete button only on non-repeating, both time and location
-		if (note.repeats == 0) {
+
+		if (!note.isRepeating()) {
+			// Show a complete button only on non-repeating reminders. See issue #478
 			builder.addAction(R.drawable.ic_check_24dp, context.getText(R.string.completed), piComplete);
 		}
 
