@@ -123,7 +123,7 @@ Here you can:
 * press "cancel" to undo and go back
 * find a version you like, press "done", and overwrite the current note with that content
 
-## Features
+## App features
 
 Navigating the app will show you (almost) all it has to offer.
 However, there are some features that still need to be explained.
@@ -224,6 +224,22 @@ this app will show up more reliably, even when the phone is sleeping. I assume t
 a reminder at 3:00 AM, and the phone is in "standby" mode, you actually 
 **want to see the reminder**, and with these system settings you tell Android to deliver the
 notifications on time instead of saving battery, at least for this app.
+
+## Widgets
+
+### The shortcut
+
+With the shortcut widget, you can quickly open a list from the home screen.
+A toggle-button allows you to create a new note in that list, instead.
+
+### The list widget
+
+To add the widget to your home screen, look for this icon:
+
+![list widget icon](../app/src/main/res/drawable-nodpi/preview_ori_portrait.png)
+
+Then you will see a page where you can customize the widget's appearance:
+
 
 ## Learn more
 
