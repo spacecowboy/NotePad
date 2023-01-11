@@ -227,19 +227,38 @@ notifications on time instead of saving battery, at least for this app.
 
 ## Widgets
 
+This app has 2 widgets. They look like thi:
+
+![home screen](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut11.png)
+
 ### The shortcut
 
 With the shortcut widget, you can quickly open a list from the home screen.
-A toggle-button allows you to create a new note in that list, instead.
+You add it to the home screen as a normal app widget. When you do, a settings page appears.
+There, a toggle-button allows you to configure the shortcut to create a new note in the selected
+list, instead of opening it
 
 ### The list widget
 
-To add the widget to your home screen, look for this icon:
+The previous picture shows how the "list widget" looks like on the home screen.
+To add the widget, look for this icon among all available widgets:
 
 ![list widget icon](../app/src/main/res/drawable-nodpi/preview_ori_portrait.png)
 
 Then you will see a page where you can customize the widget's appearance:
 
+![widget prefs](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut12.png)
+
+Here you can choose:
+* which list of notes should be shown on the widget
+* how to order the notes of that list
+* the color for the widget, either black or white
+* a level of transparency for the background
+* the amount of rows to show before cutting a note
+* if the check-boxes to complete notes should be hidden in the widget
+* if the due date of notes should be shown
+* if the widget header (the row on top) should be shown.
+  * if you hide it, you will have to re-create the widget in order to change its settings
 
 ## Learn more
 
