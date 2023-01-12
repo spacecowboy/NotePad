@@ -390,7 +390,6 @@ public class Notification extends DAO {
 	}
 
 	public void saveInBackground(final Context context, final boolean schedule) {
-		// TODO replace all uses of AsyncTask<> with this, which is recommended. See https://stackoverflow.com/a/64969640/6307322
 		Executors.newSingleThreadExecutor().execute(() -> save(context, schedule));
 	}
 

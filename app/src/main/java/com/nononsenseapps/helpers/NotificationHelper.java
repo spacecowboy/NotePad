@@ -583,7 +583,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Does not touch db
+	 * removes the ANDROID notification: IT does not touch the db record
 	 */
 	public static void cancelNotification(final Context context, final int notId) {
 		final NotificationManager notificationManager = (NotificationManager) context

@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 
@@ -42,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.Executors;
 
 /**
  * An object that represents the task information contained in the database.
@@ -775,31 +775,21 @@ public class Task extends DAO {
 	}
 
 	/**
-	 * Convenience method to complete tasks in list view for example. Starts an
-	 * asynctask to do the operation in the background.
+	 * Convenience method to complete tasks in list view for example. Works in the background.
 	 */
-	public static void setCompleted(final Context context,
-									final boolean completed, final Long... ids) {
-		if (ids.length > 0) {
-			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
-				@Override
-				protected Void doInBackground(final Long... ids) {
-					setCompletedSynced(context, completed, ids);
-					return null;
-				}
-			};
-			task.execute(ids);
-		}
+	public static void setCompleted(final Context context, final boolean completed,
+									final Long... ids) {
+		if (ids.length < 1) return;
+		Executors.newSingleThreadExecutor()
+				.execute(() -> setCompletedSynced(context, completed, ids));
 	}
 
 	/**
 	 * Convenience method to complete tasks. Runs on the thread that called it.
 	 */
-	public static void setCompletedSynced(final Context context,
-										  final boolean completed, final Long... ids) {
-		if (ids.length < 1) {
-			return;
-		}
+	public static void setCompletedSynced(final Context context, final boolean completed,
+										  final Long... ids) {
+		if (ids.length < 1) return;
 
 		long thisInstant = Calendar.getInstance().getTimeInMillis();
 		final ContentValues values = new ContentValues();
@@ -906,16 +896,14 @@ public class Task extends DAO {
 					+ " END;", TABLE_NAME, DELETE_TABLE_NAME);
 
 	public String getSQLMoveItemLeft(final ContentValues values) {
-		if (!values.containsKey(TARGETPOS)
-				|| values.getAsLong(TARGETPOS) >= left) {
+		if (!values.containsKey(TARGETPOS) || values.getAsLong(TARGETPOS) >= left) {
 			return null;
 		}
 		return getSQLMoveItem(Columns.LEFT, values.getAsLong(TARGETPOS));
 	}
 
 	public String getSQLMoveItemRight(final ContentValues values) {
-		if (!values.containsKey(TARGETPOS)
-				|| values.getAsLong(TARGETPOS) <= right) {
+		if (!values.containsKey(TARGETPOS) || values.getAsLong(TARGETPOS) <= right) {
 			return null;
 		}
 		return getSQLMoveItem(Columns.RIGHT, values.getAsLong(TARGETPOS));
@@ -925,18 +913,9 @@ public class Task extends DAO {
 	 * Trigger to move between lists
 	 */
 	public static final String TRIGGER_MOVE_LIST = "CREATE TRIGGER trigger_post_move_list_" +
-			TABLE_NAME +
-			" AFTER UPDATE OF " +
-			Columns.DBLIST +
-			" ON " +
-			Task.TABLE_NAME +
-			" WHEN old." +
-			Columns.DBLIST +
-			" IS NOT new." +
-			Columns.DBLIST +
-			" BEGIN " +
-			// Bump everything to the right, except the item itself (in same
-			// list)
+			TABLE_NAME + " AFTER UPDATE OF " + Columns.DBLIST + " ON " + Task.TABLE_NAME +
+			" WHEN old." + Columns.DBLIST + " IS NOT new." + Columns.DBLIST + " BEGIN " +
+			// Bump everything to the right, except the item itself (in same list)
 			String.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
 					TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns.DBLIST, Columns._ID) +
 
