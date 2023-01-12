@@ -227,7 +227,7 @@ notifications on time instead of saving battery, at least for this app.
 
 ## Widgets
 
-This app has 2 widgets. They look like thi:
+This app has 2 widgets. They look like this:
 
 ![home screen](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut11.png)
 
@@ -259,6 +259,24 @@ Here you can choose:
 * if the due date of notes should be shown
 * if the widget header (the row on top) should be shown.
   * if you hide it, you will have to re-create the widget in order to change its settings
+
+#### Show a single note
+
+You can configure the list widget to show a single note. It will look like this:
+
+![single](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut13.png)
+
+You have to:
+* make a new list with only 1 note
+* add a new list widget from this app to your home screen. Its configuration page will open
+* in the first drop-down menu, select the list you just made
+* confirm "manual" sorting on the second drop-down menu
+* check the "hide checkbox" option
+* check the "hide entire widget header" option
+* press "DONE" to confirm 
+
+With that you have the minimal view shown in the picture. You can click the note to open a page
+to edit it. To re-configure the widget, you will have to delete it and make a new one.
 
 ## Learn more
 
