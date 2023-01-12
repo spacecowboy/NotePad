@@ -25,6 +25,8 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.view.View;
 
+import androidx.annotation.Nullable;
+
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.ui.WeekDaysView;
@@ -185,20 +187,25 @@ public class Notification extends DAO {
 			TaskList.Columns._ID + ";";
 
 	/**
-	 * milliseconds since 1970-01-01 UTC
+	 * milliseconds since 1970-01-01 UTC, or NULL in location-based reminders
 	 */
 	public Long time = null;
 
+	/**
+	 * It's initialized, but never used. I think I'll use it for sticky reminder notifications!
+	 */
 	public boolean permanent = false;
 
+	/**
+	 * The {@link Task#_id} of the {@link Task} that this reminder is for
+	 */
 	public Long taskID = null;
 
 	/**
 	 * flags to indicate on which week days the note repeats. See {@link #sat} for example
 	 */
 	public long repeats = 0;
-	// TODO make "repeats" private, and replace code like "note.repeats == 0" with
-	//  a function like isRepeatingWeekly() {...}
+	// TODO make "repeats" private, and use .isRepeating() instead
 
 	public String locationName = null;
 	public Double latitude = null;
@@ -252,6 +259,26 @@ public class Notification extends DAO {
 	public Notification(final long id, final ContentValues values) {
 		this(values);
 		_id = id;
+	}
+
+	/**
+	 * @param uri something like content://com.nononsenseapps.NotePad/notification/1
+	 * @return the {@link Notification} with the {@link #_id} in the given {@link Uri}, or NULL
+	 * if it didn't find (exactly) one
+	 */
+	@Nullable
+	public static Notification fromUri(final Uri uri, final Context context) {
+		final Cursor c = context
+				.getContentResolver()
+				.query(uri, Columns.FIELDS, null, null, null);
+
+		Notification n = null;
+		if (c.getCount() == 1) {
+			c.moveToFirst();
+			n = new Notification(c);
+		}
+		c.close();
+		return n;
 	}
 
 	public Notification(final JSONObject json) throws JSONException {
@@ -454,16 +481,12 @@ public class Notification extends DAO {
 	 * Returns list of notifications coupled to specified task, sorted by time
 	 */
 	public static List<Notification> getNotificationsOfTask(final Context context, final long taskId) {
-		return getNotificationsWithTasks(
-				context,
-				Columns.TASKID
-						+ " IS ?",
-				new String[] { Long.toString(taskId) },
-				Columns.TIME);
+		return getNotificationsWithTasks(context, Columns.TASKID + " IS ?",
+				new String[] { Long.toString(taskId) }, Columns.TIME);
 	}
 
 	/**
-	 * Returns a list of notifications occurring after/before specified time,
+	 * @return a list of notifications occurring after/before specified time,
 	 * and which do not have a location (radius == null). Sorted by time
 	 * ascending
 	 */
@@ -471,11 +494,9 @@ public class Notification extends DAO {
 															  final long time,
 															  final boolean before) {
 		final String comparison = before ? " <= ?" : " > ?";
-		return getNotificationsWithTasks(
-				context,
+		return getNotificationsWithTasks(context,
 				Columns.TIME + comparison + " AND " + Columns.RADIUS + " IS NULL",
-				new String[] { Long.toString(time) },
-				Columns.TIME);
+				new String[] { Long.toString(time) }, Columns.TIME);
 	}
 
 	public static List<Notification> getNotificationsWithTasks(final Context context,
@@ -496,7 +517,9 @@ public class Notification extends DAO {
 	}
 
 	/**
-	 * Used for snooze
+	 * Used for snooze, only for non-repeating reminders
+	 *
+	 * @param newTime from {@link NotificationHelper#getSnoozedReminderNewTimeMillis}
 	 */
 	public static int setTime(final Context context, final Uri uri, final long newTime) {
 		final ContentValues values = new ContentValues();
