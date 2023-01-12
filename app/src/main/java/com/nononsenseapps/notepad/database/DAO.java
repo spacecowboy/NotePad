@@ -317,6 +317,8 @@ public abstract class DAO {
 
 	/**
 	 * Delete object from database
+	 *
+	 * @return the number of rows deleted, or 0
 	 */
 	public int delete(final Context context) {
 		if (_id > 0) {

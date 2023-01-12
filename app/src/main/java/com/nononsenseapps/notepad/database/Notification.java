@@ -47,6 +47,8 @@ import java.util.concurrent.Executors;
  */
 public class Notification extends DAO {
 
+	// TODO see if you can rename this to "Reminder" without ruining the database logic
+
 	// These match WeekDaysView's values
 	public static final int mon = 0x1;
 	public static final int tue = 0x10;
@@ -262,7 +264,7 @@ public class Notification extends DAO {
 	}
 
 	/**
-	 * @param uri something like content://com.nononsenseapps.NotePad/notification/1
+	 * @param uri like content://com.nononsenseapps.NotePad/notification/1
 	 * @return the {@link Notification} with the {@link #_id} in the given {@link Uri}, or NULL
 	 * if it didn't find (exactly) one
 	 */
@@ -409,6 +411,12 @@ public class Notification extends DAO {
 		}
 	}
 
+	/**
+	 * Delete the record of this {@link Notification} from the database and remove the
+	 * associated {@link android.app.Notification} from the system's tray
+	 *
+	 * @return 1 if it was deleted, 0 otherwise
+	 */
 	@Override
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
@@ -464,6 +472,8 @@ public class Notification extends DAO {
 
 	/**
 	 * Delete or reschedule a specific notification.
+	 *
+	 * @param uri like content://com.nononsenseapps.NotePad/notification/1
 	 */
 	public static void deleteOrReschedule(final Context context, final Uri uri) {
 		final Cursor c = context
@@ -598,43 +608,49 @@ public class Notification extends DAO {
 		return (0 < (day & repeats));
 	}
 
+	/**
+	 * If this {@link Notification} is a repeating reminder, set the {@link #time} to the next
+	 * applicable day, A.K.A. reschedule it. If it is non-repeating, simply delete it.
+	 */
 	public void deleteOrReschedule(final Context context) {
-
 		if (!this.isRepeating() || time == null) {
+			// non-repeating reminder: just delete it
 			delete(context);
-		} else {
-			// Need to set the correct time, but using today as the date
-			// Because no sense in setting reminders in the past
-			GregorianCalendar gcOrgTime = new GregorianCalendar();
-			gcOrgTime.setTimeInMillis(time);
-			// Use today's date
-			GregorianCalendar gc = new GregorianCalendar();
-			final long now = gc.getTimeInMillis();
-			// With original time
-			gc.set(GregorianCalendar.HOUR_OF_DAY, gcOrgTime.get(GregorianCalendar.HOUR_OF_DAY));
-			gc.set(GregorianCalendar.MINUTE, gcOrgTime.get(GregorianCalendar.MINUTE));
-			// Save as base
-			final long base = gc.getTimeInMillis();
+			return;
+		}
+		// repeating reminder: re-schedule it
 
-			// Check today if the time is actually in the future
-			final int start = now < base ? 0 : 1;
-			final long oneDay = 24 * 60 * 60 * 1000;
-			boolean done = false;
-			for (int i = start; i <= 7; i++) {
-				gc.setTimeInMillis(base + i * oneDay);
+		// Need to set the correct time, but using today as the date
+		// Because no sense in setting reminders in the past
+		GregorianCalendar gcOrgTime = new GregorianCalendar();
+		gcOrgTime.setTimeInMillis(time);
+		// Use today's date
+		GregorianCalendar gc = new GregorianCalendar();
+		final long now = gc.getTimeInMillis();
+		// With original time
+		gc.set(GregorianCalendar.HOUR_OF_DAY, gcOrgTime.get(GregorianCalendar.HOUR_OF_DAY));
+		gc.set(GregorianCalendar.MINUTE, gcOrgTime.get(GregorianCalendar.MINUTE));
+		// Save as base
+		final long base = gc.getTimeInMillis();
 
-				if (repeatsOn(gc.get(GregorianCalendar.DAY_OF_WEEK))) {
-					done = true;
-					time = gc.getTimeInMillis();
-					save(context);
-					break;
-				}
+		// Check today if the time is actually in the future
+		final int start = now < base ? 0 : 1;
+		final long oneDay = 24 * 60 * 60 * 1000;
+		boolean done = false;
+		for (int i = start; i <= 7; i++) {
+			gc.setTimeInMillis(base + i * oneDay);
 
+			if (repeatsOn(gc.get(GregorianCalendar.DAY_OF_WEEK))) {
+				done = true;
+				time = gc.getTimeInMillis();
+				save(context);
+				break;
 			}
-			// Just in case of faulty repeat codes
-			if (!done) {
-				delete(context);
-			}
+
+		}
+		// Just in case of faulty repeat codes
+		if (!done) {
+			delete(context);
 		}
 	}
 

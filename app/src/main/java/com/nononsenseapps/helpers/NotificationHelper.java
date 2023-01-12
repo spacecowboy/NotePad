@@ -106,7 +106,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 				switch (action) {
 					case Intent.ACTION_DELETE:
 					case ACTION_RESCHEDULE:
-						// Just a notification
+						// User swiped notification away: delete reminder
 						com.nononsenseapps.notepad.database.Notification
 								.deleteOrReschedule(context, notifUri);
 						break;
@@ -117,12 +117,21 @@ public final class NotificationHelper extends BroadcastReceiver {
 						var oldReminder = com.nononsenseapps.notepad.database.Notification
 								.fromUri(notifUri, context);
 						if (oldReminder.isRepeating()) {
-							// for repeating reminders: snoozing adds a new reminder, without
-							// altering the one that launched this notification
+							// for repeating reminders
+
+							// add a new (non-repeating) reminder, for "snooze" effect
 							var newReminder = new com.nononsenseapps.notepad.database
 									.Notification(oldReminder.taskID);
 							newReminder.time = getSnoozedReminderNewTimeMillis();
+							newReminder.repeats = 0; // I WANT this
 							newReminder.save(context);
+
+							// then, reschedule repeating reminder to next applicable day, as if
+							// user swiped notification away
+							com.nononsenseapps.notepad.database.Notification
+									.deleteOrReschedule(context, notifUri);
+							// Later, "newReminder" will show up, but we handle that in other
+							// branch of this if block.
 						} else {
 							// for non-repeating reminders: snoozing overwrites the due time of the
 							// reminder that triggered this notification
@@ -598,10 +607,9 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Deletes the indicated notification from the notification tray (does not
-	 * touch database)
+	 * Deletes the indicated notification from the notification tray (does not touch database)
 	 *
-	 * Called by notification.delete()
+	 * Called by {@link com.nononsenseapps.notepad.database.Notification#delete}
 	 */
 	public static void cancelNotification(final Context context,
 										  final com.nononsenseapps.notepad.database.Notification not) {
