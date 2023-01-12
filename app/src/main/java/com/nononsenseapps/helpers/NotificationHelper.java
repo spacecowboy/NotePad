@@ -50,6 +50,11 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Receives signals and contains helper methods to show Android Notifications. Remember that a
+ * {@link android.app.Notification} is different from one of our reminders, which the database
+ * saves as {@link com.nononsenseapps.notepad.database.Notification}
+ */
 public final class NotificationHelper extends BroadcastReceiver {
 
 	// Intent notification argument
@@ -57,10 +62,12 @@ public final class NotificationHelper extends BroadcastReceiver {
 	public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
 
 	static final String ARG_TASKID = "taskid";
+	public static final String CHANNEL_ID = "remindersNotificationChannelId";
+
+	// if you edit these, update AndroidManifest.xml !
 	private static final String ACTION_COMPLETE = "com.nononsenseapps.notepad.ACTION.COMPLETE";
 	private static final String ACTION_SNOOZE = "com.nononsenseapps.notepad.ACTION.SNOOZE";
 	private static final String ACTION_RESCHEDULE = "com.nononsenseapps.notepad.ACTION.RESCHEDULE";
-	public static final String CHANNEL_ID = "remindersNotificationChannelId";
 
 	private static ContextObserver observer = null;
 
@@ -91,31 +98,37 @@ public final class NotificationHelper extends BroadcastReceiver {
 				// Intent.ACTION_BOOT_COMPLETED when the phone is rebooted.
 				// Intent.ACTION_RUN for notifications scheduled through the Alarm Manager
 			} else {
-				// => always cancel
-				cancelNotification(context, intent.getData());
+				// something like content://com.nononsenseapps.NotePad/notification/1
+				Uri notifUri = intent.getData();
+				// always dismiss the android notification
+				cancelNotification(context, notifUri);
 
 				switch (action) {
 					case Intent.ACTION_DELETE:
 					case ACTION_RESCHEDULE:
 						// Just a notification
 						com.nononsenseapps.notepad.database.Notification
-								.deleteOrReschedule(context, intent.getData());
+								.deleteOrReschedule(context, notifUri);
 						break;
 					case ACTION_SNOOZE:
-						// TODO snooze logic is hardcoded to 30' here.
-						//  Set a custom timer in the preferences and load the number here
-						final long minutes = 30;
-						// msec/sec * sec/min * (snooze minutes)
-						final long snoozeDelayInMillis = 1000 * 60 * minutes;
-						final Calendar now = Calendar.getInstance();
+						// the user choose to dismiss this notification and display it later.
 
-						// it's 30 minutes from now, expressed in those unix millseconds
-						final long newTime = now.getTimeInMillis() + snoozeDelayInMillis;
-
-						// overwrites the due time of the reminder that triggered this notification
-						// with the value of "newTime"
-						com.nononsenseapps.notepad.database.Notification
-								.setTime(context, intent.getData(), newTime);
+						// the one that launched the notification snoozed by the user
+						var oldReminder = com.nononsenseapps.notepad.database.Notification
+								.fromUri(notifUri, context);
+						if (oldReminder.isRepeating()) {
+							// for repeating reminders: snoozing adds a new reminder, without
+							// altering the one that launched this notification
+							var newReminder = new com.nononsenseapps.notepad.database
+									.Notification(oldReminder.taskID);
+							newReminder.time = getSnoozedReminderNewTimeMillis();
+							newReminder.save(context);
+						} else {
+							// for non-repeating reminders: snoozing overwrites the due time of the
+							// reminder that triggered this notification
+							com.nononsenseapps.notepad.database.Notification
+									.setTime(context, notifUri, getSnoozedReminderNewTimeMillis());
+						}
 						break;
 					case ACTION_COMPLETE:
 						final long taskId = intent.getLongExtra(ARG_TASKID, -1);
@@ -130,6 +143,26 @@ public final class NotificationHelper extends BroadcastReceiver {
 		}
 		// run this in ANY case
 		schedule(context);
+	}
+
+	/**
+	 * @return the time, in unix milliseconds, that corresponds to 30 minutes from when this
+	 * function is called. Used when the user presses "snooze" in the notification.
+	 */
+	public static long getSnoozedReminderNewTimeMillis() {
+		// TODO snooze logic is hardcoded to 30' here.
+		//  Set a custom timer in the preferences and load the number here
+		final long minutes = 30;
+
+		// msec/sec * sec/min * (snooze minutes)
+		final long snoozeDelayInMillis = 1000 * 60 * minutes;
+
+		final Calendar now = Calendar.getInstance();
+
+		// it's 30 minutes from [when the user presses "snooze"], expressed in unix millseconds
+		final long newTime = now.getTimeInMillis() + snoozeDelayInMillis;
+
+		return newTime;
 	}
 
 	/**
@@ -336,7 +369,11 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
+	 * Configures and shows an android notification for the given reminder
+	 *
 	 * Needs the builder that contains non-note specific values.
+	 *
+	 * @param note the reminder that triggered this android notification
 	 */
 	private static void notifyBigText(final Context context,
 									  final NotificationManager notificationManager,
@@ -397,10 +434,9 @@ public final class NotificationHelper extends BroadcastReceiver {
 		// the Delete intent for non-location repeats
 		builder.setDeleteIntent(piDelete);
 
-		// Snooze button only on non-repeating reminders
-		if (note.time != null && !note.isRepeating()) {
-			// TODO implement snooze for repeating reminders by ADDING  a new reminder.
-			//  the current implementation is to edit the current notification record
+		// Snooze button only on time reminders, not location-based reminders
+		if (note.time != null) {
+			// see ACTION_SNOOZE branch in onReceive()
 			builder.addAction(R.drawable.ic_alarm_24dp, context.getText(R.string.snooze), piSnooze);
 		}
 
@@ -575,7 +611,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Does not touch db
+	 * removes the ANDROID notification: IT does not touch the db record
 	 */
 	public static void cancelNotification(final Context context, final Uri uri) {
 		if (uri == null) return;
