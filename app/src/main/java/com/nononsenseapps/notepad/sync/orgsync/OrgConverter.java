@@ -296,7 +296,8 @@ public class OrgConverter {
 	public static void setListTypeOnFile(TaskList list, OrgFile file) {
 		final StringBuilder comments = new StringBuilder();
 		if (list.listtype != null) {
-			comments.append(LISTSTYLECOMMENT).append(list.listtype)
+			comments.append(LISTSTYLECOMMENT)
+					.append(list.listtype)
 					.append("\n");
 		}
 		comments.append(PatternStyle.matcher(file.getComments()).replaceAll

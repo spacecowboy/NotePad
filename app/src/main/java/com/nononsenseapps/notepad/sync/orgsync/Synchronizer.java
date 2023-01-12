@@ -35,8 +35,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class Synchronizer extends DBSyncBase implements
-		SynchronizerInterface {
+public abstract class Synchronizer extends DBSyncBase implements SynchronizerInterface {
 
 	public static final int SAVENONE = 0x0;
 	public static final int SAVEDB = 0x01;
@@ -164,8 +163,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 	 * @return an integer denoting which should be saved. 0 for none, 0x01 for
 	 * task, 0x10 for node. 0x11 for both.
 	 */
-	private int merge(final TaskList list, final RemoteTaskList dbEntry,
-					  final OrgFile file) {
+	private int merge(final TaskList list, final RemoteTaskList dbEntry, final OrgFile file) {
 		int shouldSave = SAVENONE;
 
 		shouldSave |= mergeSorting(list, dbEntry, file);
@@ -196,22 +194,20 @@ public abstract class Synchronizer extends DBSyncBase implements
 		return shouldSave;
 	}
 
-	private int mergeListType(final TaskList list,
-							  final RemoteTaskList dbEntry, final OrgFile file) {
+	private int mergeListType(final TaskList list, final RemoteTaskList dbEntry,
+							  final OrgFile file) {
 		final int shouldSave;
 		final String filelisttype = OrgConverter.getListTypeFromMeta(file);
 		if (list.listtype == null
 				&& RemoteTaskListFile.getListType(dbEntry) != null
 				|| list.listtype != null
-				&& !list.listtype.equals(RemoteTaskListFile
-				.getListType(dbEntry))) {
+				&& !list.listtype.equals(RemoteTaskListFile.getListType(dbEntry))) {
 			shouldSave = SAVEORG;
 			OrgConverter.setListTypeOnFile(list, file);
 		} else if (filelisttype == null
 				&& RemoteTaskListFile.getListType(dbEntry) != null
 				|| filelisttype != null
-				&& !filelisttype
-				.equals(RemoteTaskListFile.getListType(dbEntry))) {
+				&& !filelisttype.equals(RemoteTaskListFile.getListType(dbEntry))) {
 			shouldSave = SAVEORG;
 			list.listtype = filelisttype;
 		} else {
@@ -220,10 +216,8 @@ public abstract class Synchronizer extends DBSyncBase implements
 		return shouldSave;
 	}
 
-	private boolean syncTasks(final Context context, final TaskList list,
-							  final OrgFile file) {
-		final List<Pair<OrgNode, Pair<RemoteTask, Task>>> pairs = getNodesAndDBEntries(
-				file, list);
+	private boolean syncTasks(final Context context, final TaskList list, final OrgFile file) {
+		final List<Pair<OrgNode, Pair<RemoteTask, Task>>> pairs = getNodesAndDBEntries(file, list);
 		boolean shouldUpdateFile = false;
 
 		OrgNode prevNode = null;
@@ -269,8 +263,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 					dbEntry.listdbid = list._id;
 					dbEntry.account = getAccountName();
 					dbEntry.service = getServiceName();
-					shouldUpdateFile = OrgConverter.toRemoteFromNode(dbEntry,
-							node);
+					shouldUpdateFile = OrgConverter.toRemoteFromNode(dbEntry, node);
 					dbEntry.save(context);
 
 					replaceNotifications(task, node);
@@ -345,11 +338,9 @@ public abstract class Synchronizer extends DBSyncBase implements
 	 * @return an integer denoting which should be saved. 0 for none, 0x01 for
 	 * task, 0x10 for node. 0x11 for both.
 	 */
-	protected int merge(final Task task, final RemoteTask remote,
-						final OrgNode node) {
+	protected int merge(final Task task, final RemoteTask remote, final OrgNode node) {
 		if (task == null || remote == null || node == null) {
-			throw new NullPointerException(
-					"A merge operation can't have null parties!");
+			throw new NullPointerException("A merge operation can't have null parties!");
 		}
 		// 0x01 if task should be saved
 		// 0x10 if node should be saved
@@ -365,8 +356,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 		return shouldSave;
 	}
 
-	private int mergeTodo(final Task task, final RemoteTask remote,
-						  final OrgNode node) {
+	private int mergeTodo(final Task task, final RemoteTask remote, final OrgNode node) {
 		final int shouldSave;
 		final String taskTodo;
 		if (task.completed != null)
@@ -392,8 +382,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 		return shouldSave;
 	}
 
-	private int mergeTimestamps(final Task task, final RemoteTask remote,
-								final OrgNode node) {
+	private int mergeTimestamps(final Task task, final RemoteTask remote, final OrgNode node) {
 		final int shouldSave;
 		Long basedue = null;
 		if (RemoteTaskNode.getDueTime(remote) != null
@@ -416,8 +405,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 		return shouldSave;
 	}
 
-	private int mergeBodies(final Task task, final RemoteTask remote,
-							final OrgNode node) {
+	private int mergeBodies(final Task task, final RemoteTask remote, final OrgNode node) {
 		final int shouldSave;
 		boolean taskChanged = !task.note.equals(RemoteTaskNode.getBody(remote));
 		// Check with trailing newline also
@@ -445,8 +433,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 		return shouldSave;
 	}
 
-	private int mergeTitles(final Task task, final RemoteTask remote,
-							final OrgNode node) {
+	private int mergeTitles(final Task task, final RemoteTask remote, final OrgNode node) {
 		final int shouldSave;
 		if (!task.title.equals(RemoteTaskNode.getTitle(remote))) {
 			shouldSave = SAVEORG;

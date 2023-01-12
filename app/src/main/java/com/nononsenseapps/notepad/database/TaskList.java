@@ -20,6 +20,7 @@ package com.nononsenseapps.notepad.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
+import com.nononsenseapps.notepad.R;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
@@ -124,7 +125,11 @@ public class TaskList extends DAO {
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
 
-	// Null, use global prefs
+	/**
+	 * The database column is "tasktype". Either {@link R.string#const_listtype_notes},
+	 * {@link R.string#const_listtype_tasks} or NULL.
+	 * NULL means: use global preferences
+	 */
 	public String listtype = null;
 	public String sorting = null;
 

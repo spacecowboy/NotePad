@@ -88,8 +88,7 @@ public class DBProviderMovementTest extends TestCase {
 		// Test maximum value
 		Cursor c = resolver.query(Task.URI, Task.Columns.FIELDS,
 				Task.Columns.DBLIST + " IS ?",
-				new String[] { Long.toString(listId) }, Task.Columns.RIGHT
-						+ " DESC");
+				new String[] { Long.toString(listId) }, Task.Columns.RIGHT + " DESC");
 		assertCursorGood(c);
 		HashSet<Long> positions = new HashSet<>();
 		if (c.getCount() > 0) {

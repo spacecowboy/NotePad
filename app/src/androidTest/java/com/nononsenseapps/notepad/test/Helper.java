@@ -19,7 +19,9 @@ import java.io.IOException;
 public class Helper {
 
 	private static Task getATask(final Context context) {
-		Cursor c = context.getContentResolver().query(Task.URI, Task.Columns.FIELDS, null, null, null);
+		Cursor c = context
+				.getContentResolver()
+				.query(Task.URI, Task.Columns.FIELDS, null, null, null);
 		Task result = null;
 		if (c.moveToFirst())
 			result = new Task(c);
@@ -27,7 +29,9 @@ public class Helper {
 	}
 
 	private static TaskList getATaskList(final Context context) {
-		Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns.FIELDS, null, null, null);
+		Cursor c = context
+				.getContentResolver()
+				.query(TaskList.URI, TaskList.Columns.FIELDS, null, null, null);
 		TaskList result = null;
 		if (c.moveToFirst())
 			result = new TaskList(c);
