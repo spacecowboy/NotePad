@@ -332,13 +332,19 @@ public class Notification extends DAO {
 		return TimeFormatter.getDateFormatter(context).format(new Date(time));
 	}
 
+	/**
+	 * Calls {@link #insert} or performs an update, depending on the status of this
+	 * {@link Notification} object
+	 */
 	@Override
 	public int save(final Context context) {
 		int result = 0;
 		if (_id < 1) {
 			result += insert(context);
 		} else {
-			result += context.getContentResolver().update(getUri(), getContent(), null, null);
+			result += context
+					.getContentResolver()
+					.update(getUri(), getContent(), null, null);
 			if (result < 1) {
 				// To allow editor to edit deleted notifications
 				result += insert(context);
@@ -347,6 +353,12 @@ public class Notification extends DAO {
 		return result;
 	}
 
+	/**
+	 * Inserts this {@link Notification} as a new record into its SQLite table
+	 * and sets its {@link #_id}
+	 *
+	 * @return 1 if it worked, 0 if it failed
+	 */
 	private int insert(final Context context) {
 		int result = 0;
 		final Uri uri = context.getContentResolver().insert(getBaseUri(), getContent());

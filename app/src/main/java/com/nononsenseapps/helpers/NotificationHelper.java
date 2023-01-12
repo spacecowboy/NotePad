@@ -84,12 +84,12 @@ public final class NotificationHelper extends BroadcastReceiver {
 		String action = intent.getAction();
 		if (action != null) {
 			// should we cancel something? we decide it here:
+
 			if (Intent.ACTION_BOOT_COMPLETED.equals(action) || Intent.ACTION_RUN.equals(action)) {
 				// => can't cancel anything. Just schedule and notify at end of the function.
-				// (Intent.ACTION_BOOT_COMPLETED is for when the phone is rebooted,
-				// Intent.ACTION_RUN is for notifications scheduled through the Alarm Manager)
-
-				// TODO test boot completed with pending notifications, see if it works in API 32
+				// You receive:
+				// Intent.ACTION_BOOT_COMPLETED when the phone is rebooted.
+				// Intent.ACTION_RUN for notifications scheduled through the Alarm Manager
 			} else {
 				// => always cancel
 				cancelNotification(context, intent.getData());
@@ -399,7 +399,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 
 		// Snooze button only on non-repeating reminders
 		if (note.time != null && !note.isRepeating()) {
-			// TODO implement snooze for repeating reminders by ADDING a new reminder.
+			// TODO implement snooze for repeating reminders by ADDING  a new reminder.
 			//  the current implementation is to edit the current notification record
 			builder.addAction(R.drawable.ic_alarm_24dp, context.getText(R.string.snooze), piSnooze);
 		}
@@ -538,15 +538,13 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Updates/Inserts notifications in the database. Immediately notifies and
+	 * Updates or Inserts the given Notification in the database. Immediately notifies and
 	 * schedules next wake up on finish.
 	 */
-	public static void updateNotification(final Context context,
-										  final com.nononsenseapps.notepad.database.Notification notification) {
-		/*
-		 * Only don't insert if update is success This way the editor can update
-		 * a deleted notification and still have it persisted in the database
-		 */
+	private static void updateNotification(final Context context,
+										   final com.nononsenseapps.notepad.database.Notification notification) {
+		// Avoid INSERTing only if update is success. This way the editor can update
+		// a deleted notification and still have it persisted in the database
 		boolean shouldInsert = true;
 		// If id is -1, then this should be inserted
 		if (notification._id > 0) {
@@ -560,8 +558,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 			notification.save(context);
 		}
 
-		notifyPast(context);
-		scheduleNext(context);
+		schedule(context);
 	}
 
 	/**
