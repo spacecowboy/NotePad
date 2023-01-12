@@ -247,7 +247,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {
-			// cancelAll permanent notifications here if/when that is implemented.
+			// TODO cancelAll permanent notifications here if/when that is implemented.
 			// Don't touch others. Dont do this, it clears location
 			// notificationManager.cancelAll();
 			return;
@@ -259,7 +259,8 @@ public final class NotificationHelper extends BroadcastReceiver {
 			// The user turned OFF notifications for this app => send a warning
 			NnnLogger.warning(NotificationHelper.class,
 					"areNotificationsVisible() claims the user denied notifications");
-			Toast.makeText(context, R.string.msg_enable_notifications, Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, R.string.msg_enable_notifications,
+					Toast.LENGTH_SHORT).show();
 		}
 
 		// Fetch sound and vibrate settings. The following settings are ARE ONLY VALID
@@ -328,9 +329,8 @@ public final class NotificationHelper extends BroadcastReceiver {
 	 * notifications. The result is that each note is only associated with ONE
 	 * EXPIRED notification.
 	 */
-	private static void makeUnique(
-			final Context context,
-			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
+	private static void makeUnique(final Context context,
+								   final List<com.nononsenseapps.notepad.database.Notification> notifications) {
 		// get duplicates and iterate over them
 		for (var noti : getLatestOccurence(notifications)) {
 			// remove all but the first one from database, and big list
@@ -449,8 +449,10 @@ public final class NotificationHelper extends BroadcastReceiver {
 			builder.addAction(R.drawable.ic_alarm_24dp, context.getText(R.string.snooze), piSnooze);
 		}
 
-		if (!note.isRepeating()) {
-			// Show a complete button only on non-repeating reminders. See issue #478
+		if (!note.isRepeating() && note.belongsToNoteInListOfTasks(context)) {
+			// Show a complete button only on:
+			// * non-repeating reminders. See issue #478
+			// * reminders for task-types and not note-types, see #312
 			builder.addAction(R.drawable.ic_check_24dp, context.getText(R.string.completed), piComplete);
 		}
 

@@ -29,6 +29,7 @@ import androidx.annotation.Nullable;
 
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.ui.WeekDaysView;
 
 import org.json.JSONException;
@@ -686,5 +687,26 @@ public class Notification extends DAO {
 	public boolean isRepeating() {
 		// "repeats == 0x1000001" means that the note repeats on monday and sunday, for example
 		return this.repeats != 0;
+	}
+
+	/**
+	 * a {@link Notification} belongs to a {@link Task} which belongs to a {@link TaskList}
+	 * which can be of 2 types: "simple notes" or "checkable tasks"
+	 *
+	 * @return TRUE if this reminder is for a "checkable task", FALSE if it is for a "simple note",
+	 * NULL if it could not be determined
+	 */
+	@Nullable
+	public Boolean belongsToNoteInListOfTasks(final Context context) {
+		Cursor cc = context
+				.getContentResolver()
+				.query(TaskList.URI, null, TaskList.Columns._ID + " IS ?",
+						new String[] { Long.toString(this.listID) }, null);
+		TaskList result = null;
+		if (cc.moveToFirst()) result = new TaskList(cc);
+		cc.close();
+		if (result == null) return null;
+
+		return context.getString(R.string.const_listtype_tasks).equals(result.listtype);
 	}
 }
