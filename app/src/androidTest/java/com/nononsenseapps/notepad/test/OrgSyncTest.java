@@ -1,6 +1,10 @@
 package com.nononsenseapps.notepad.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,13 +12,13 @@ import android.database.Cursor;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.nononsenseapps.helpers.FileHelper;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.helpers.FileHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.junit.After;

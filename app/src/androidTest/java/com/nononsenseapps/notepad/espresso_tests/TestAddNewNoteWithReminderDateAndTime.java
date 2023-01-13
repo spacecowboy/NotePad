@@ -3,13 +3,16 @@ package com.nononsenseapps.notepad.espresso_tests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 @LargeTest
 public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass {

@@ -17,12 +17,11 @@
 
 package com.nononsenseapps.notepad.test;
 
-import org.junit.Test;
-
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 import com.nononsenseapps.notepad.android.provider.ProviderHelper;
+
+import org.junit.Test;
 
 public class ProviderHelperTest {
 

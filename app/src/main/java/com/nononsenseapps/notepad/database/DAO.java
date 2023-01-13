@@ -22,9 +22,9 @@ import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import com.mobeta.android.dslv.DragSortListView;
 import android.provider.BaseColumns;
 
+import com.mobeta.android.dslv.DragSortListView;
 import com.nononsenseapps.helpers.NnnLogger;
 
 import java.util.ArrayList;

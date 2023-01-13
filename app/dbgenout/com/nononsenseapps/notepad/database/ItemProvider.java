@@ -1,4 +1,3 @@
-
 package com.nononsenseapps.notepad.database;
 
 import android.content.ContentProvider;

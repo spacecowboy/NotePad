@@ -20,10 +20,11 @@ package com.nononsenseapps.notepad.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
-import com.nononsenseapps.notepad.R;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+
+import com.nononsenseapps.notepad.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

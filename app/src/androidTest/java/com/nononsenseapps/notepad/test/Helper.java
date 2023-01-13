@@ -3,14 +3,14 @@ package com.nononsenseapps.notepad.test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 
 import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
 import java.io.File;
 import java.io.FileOutputStream;
