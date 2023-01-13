@@ -80,7 +80,6 @@
     <string name="settings_list">Список</string>
     <string name="import_data_question">Импортировать данные?</string>
     <string name="import_started">Импорт данных. Это может занять несколько секунд.</string>
-    <string name="showcase_timemachine_title">Сохранить заметки</string>
     <string name="move">Переместить</string>
     <string name="move_to">Переместить в</string>
     <string name="moved_x_to_list">Переместить %1$d в%2$s</string>

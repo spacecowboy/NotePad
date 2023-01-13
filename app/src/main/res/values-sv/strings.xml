@@ -83,9 +83,7 @@
     <string name="import_started">Importerar data. Detta kan ta några sekunder.</string>
     <string name="imported_result">Importerade %1$d anteckningar i %2$d listor</string>
     <string name="import_error">Något gick fel: %s</string>
-    <string name="showcase_main_msg">Tryck på ikonen eller dra från skärmens vänstra sida</string>
     <string name="showcase_drawer_msg">Tryck och håll inne för att ändra eller ta bort</string>
-    <string name="showcase_timemachine_msg">Dina ändringar sparas alltid. Använd tidsmaskinen för att återställa en äldre version.</string>
     <string name="move">Flytta</string>
     <string name="move_to">Flytta till</string>
     <string name="moved_x_to_list">Flyttade %1$d till %2$s</string>

@@ -79,9 +79,7 @@
     <string name="drag_to_timetravel">Ťahať pre cestovanie časom</string>
     <string name="import_data_question">Importovať dáta?</string>
     <string name="import_started">Importujem dáta. Môže to chvíľu trvať.</string>
-    <string name="showcase_main_msg">Dotkni sa ikony, alebo potiahni naľavo</string>
     <string name="showcase_drawer_msg">Dlhé podržanie pre úpravu alebo vymazanie</string>
-    <string name="showcase_timemachine_msg">Zmeny sú vždy ukladané. Použite časostroj pre vrátenie zmien.</string>
     <string name="move">Presunúť</string>
     <string name="move_to">Presunúť do</string>
     <string name="moved_x_to_list">Presunuté %1$d do %2$s</string>

@@ -83,9 +83,7 @@
     <string name="import_started">Γίνεται εισαγωγή δεδομένων. Μπορεί να διαρκέσει μερικα δευτερόλεπτα</string>
     <string name="imported_result">Εισήχθησαν %1$d σημειώσεις σε %2$d λίστες</string>
     <string name="import_error">Κάτι πήγε στραβά: %s</string>
-    <string name="showcase_main_msg">Πατήστε το εικονίδιο ή σαρώστε από την αριστερή άκρη</string>
     <string name="showcase_drawer_msg">Παρατεταμένο πάτημα για επεξεργασία ή διαγραφή</string>
-    <string name="showcase_timemachine_msg">Οι αλλαγές αποθηκεύονται πάντα. Χρησιμοποιήστε τη χρονομηχανή για να επαναφέρετε μια προηγούμενη έκδοση.</string>
     <string name="move">Μετακίνηση</string>
     <string name="move_to">Μετακίνηση σε</string>
     <string name="moved_x_to_list">Μετακινήθηκαν %1$d στο %2$s</string>

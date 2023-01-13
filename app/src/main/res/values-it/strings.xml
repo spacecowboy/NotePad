@@ -76,7 +76,6 @@
     <string name="permission_write_desc">Permetti all\'app di inserire, aggiornare ed eliminare note ed elenchi di No Nonsense Notes</string>
     <string name="settings_list_dialog">Seleziona un elenco</string>
     <string name="settings_list">Elenco</string>
-    <string name="showcase_drawer_msg">Pressione lunga su un nome di lista per modificarla o eliminarla</string>
     <string name="notification_channel_name">Promemoria delle note</string>
     <string name="notification_channel_description">Mostra il contenuto della nota quando arriva il momento segnato nel promemoria</string>
     <string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>

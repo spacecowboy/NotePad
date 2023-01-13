@@ -68,9 +68,7 @@
     <string name="import_started">Innfører data. Dette kan ta noen sekunder.</string>
     <string name="imported_result">Innførte %1$d notater i %2$d lister</string>
     <string name="import_error">Noe gikk galt: %s</string>
-    <string name="showcase_main_msg">Trykk på ikonet eller sveip fra venstre side</string>
     <string name="showcase_drawer_msg">Hold for å redigere eller slette</string>
-    <string name="showcase_timemachine_msg">Endringer lagres alltid. Bruk tidsmaskinen til å gjenopprette en tidligere versjon.</string>
     <string name="move">Flytt</string>
     <string name="move_to">Flytt til</string>
     <string name="moved_x_to_list">Flyttet %1$d til %2$s</string>

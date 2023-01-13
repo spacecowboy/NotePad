@@ -83,9 +83,7 @@
     <string name="import_started">Importuji data. Chvilku to zabere.</string>
     <string name="imported_result">Importováno %1$d poznámek z %2$d seznamů</string>
     <string name="import_error">Něco se pokazilo: %s</string>
-    <string name="showcase_main_msg">Ťuknout na ikonu nebo potáhnout z levého okraje</string>
     <string name="showcase_drawer_msg">Dlouhým stiskem upravovat nebo odstranit</string>
-    <string name="showcase_timemachine_msg">Změny jsou pokaždé uloženy. Použít stroj času pro obnovení předchozí verze.</string>
     <string name="move">Přesunout</string>
     <string name="move_to">Přesunout do</string>
     <string name="moved_x_to_list">%1$d přesunuto do %2$s</string>
