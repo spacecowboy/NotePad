@@ -91,28 +91,24 @@ public final class UpdateNotifier {
 	 * Update all widgets's views as this database has changed somehow
 	 */
 	public static void updateWidgets(Context context) {
-		final AppWidgetManager appWidgetManager = AppWidgetManager
-				.getInstance(context);
-		int[] appWidgetIds = appWidgetManager
-				.getAppWidgetIds(new ComponentName(context,
-						ListWidgetProvider.class));
-		if (appWidgetIds.length > 0) {
-			/*
-			 * Tell the widgets that the list items should be invalidated and
-			 * refreshed! Will call onDatasetChanged in ListWidgetService, doing
-			 * a new requery
-			 */
-			// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
-			// R.id.notes_list);
+		final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
+				new ComponentName(context, ListWidgetProvider.class));
 
-			// Only update widgets that exist
-			for (int widgetId : appWidgetIds) {
-				final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
-				if (prefs.isPresent()) {
-					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,
-							R.id.notesList);
-				}
+		if (appWidgetIds.length <= 0) return;
+
+		// Tell the widgets that the list items should be invalidated and refreshed!
+		// Will call onDatasetChanged in ListWidgetService, doing a new requery
+
+		// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.notes_list);
+
+		// Only update widgets that exist
+		for (int widgetId : appWidgetIds) {
+			final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
+			if (prefs.isPresent()) {
+				appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.notesList);
 			}
 		}
+
 	}
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.TypedValue;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -25,6 +26,7 @@ public final class ThemeHelper {
 	 *
 	 * @return This theme's accent color, in the form 0xAARRGGBB
 	 */
+	@ColorInt
 	public static int getThemeAccentColor(@NonNull Context context) {
 		var outValue = new TypedValue();
 		context.getTheme()

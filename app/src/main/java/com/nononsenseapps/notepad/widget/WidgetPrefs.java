@@ -20,6 +20,9 @@ package com.nononsenseapps.notepad.widget;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/**
+ * An helper class to interact with shared preferences related to the "list widget"
+ */
 public class WidgetPrefs {
 
 	public final static String PREFS_KEY = "NotesListWidget";

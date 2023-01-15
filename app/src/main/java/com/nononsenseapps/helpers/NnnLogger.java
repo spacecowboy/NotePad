@@ -57,14 +57,15 @@ public final class NnnLogger {
 	 * Logs the given warning message with tag "NNN".
 	 *
 	 * @param caller  the class who's calling this function. Its name is added to the message
-	 * @param message the additional message sent to logcat
+	 * @param message the additional message sent to logcat. Mostly {@link String}, but it
+	 *                will try to write everything
 	 */
-	public static <T> void warning(@NonNull Class<T> caller, @NonNull String message) {
+	public static <T> void warning(@NonNull Class<T> caller, @NonNull Object message) {
 		try {
 			String tag2 = caller.getSimpleName();
 			Log.w("NNN", tag2 + ": " + message);
-		} catch (Exception ignored) {
-			Log.w("NNN", message);
+		} catch (Exception ex) {
+			Log.d("NNN", "Can't write LOG line: " + ex.getMessage());
 		}
 	}
 
