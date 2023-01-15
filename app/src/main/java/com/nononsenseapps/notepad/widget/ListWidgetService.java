@@ -27,6 +27,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -51,11 +52,16 @@ public class ListWidgetService extends RemoteViewsService {
 	 */
 	static class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-		final private Context mContext;
+		/**
+		 * column names of this cursor are in {@link Task.Columns#FIELDS}
+		 */
 		private Cursor mCursor;
+
+		final private Context mContext;
 		final private int mAppWidgetId;
+
+		// these 2 must be reloaded every time, to react to changes in locale preferences
 		private SimpleDateFormat mDateFormatter = null;
-		private SimpleDateFormat weekdayFormatter;
 
 		public ListRemoteViewsFactory(Context context, Intent intent) {
 			mContext = context;
@@ -68,17 +74,14 @@ public class ListWidgetService extends RemoteViewsService {
 
 		@Override
 		public void onDestroy() {
-			if (mCursor != null) {
-				mCursor.close();
-			}
+			if (mCursor == null) return;
+			mCursor.close();
 		}
 
 		@Override
 		public int getCount() {
-			if (mCursor != null)
-				return mCursor.getCount();
-			else
-				return 0;
+			if (mCursor == null) return 0;
+			return mCursor.getCount();
 		}
 
 		@Override
@@ -109,13 +112,9 @@ public class ListWidgetService extends RemoteViewsService {
 
 			// TODO rest
 
-			if (weekdayFormatter == null) {
-				weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(mContext);
-			}
-
 			RemoteViews rv = null;
 			if (mCursor.moveToPosition(position)) {
-				// column names of this cursor are in Task.Columns.FIELDS
+
 				boolean isHeader = mCursor.getLong(0) < 1;
 				if (isHeader) {
 					rv = new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_header);
@@ -123,8 +122,7 @@ public class ListWidgetService extends RemoteViewsService {
 
 					String sTemp = mCursor.getString(1);
 					long dueDateMillis = mCursor.getLong(4);
-					sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
-							weekdayFormatter, mContext);
+					sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis, mContext);
 
 					// Set text
 					rv.setTextViewText(android.R.id.text1, sTemp);
@@ -133,16 +131,35 @@ public class ListWidgetService extends RemoteViewsService {
 				} else {
 					rv = new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_item);
 
-					// Complete checkbox
+					// "Complete" checkbox. RemoteViews limitations:
+					// * this ImageButton simulates a checkbox for android widgets
+					// * you can't use the actual CheckBox in API < 31
+					// * Used in widgetlist_item.xml
+					// * we can't call setChecked() on ImageButtons, so we change the drawable
+					// * we also can't use setSelected, setActivated, setChecked on the widget
 					final int visibleCheckBox;
 					final int hiddenCheckBox;
 					if (theme == ListWidgetConfig.THEME_LIGHT) {
+						// show only the "light" imagebutton for the light theme
 						hiddenCheckBox = R.id.completedCheckBoxDark;
 						visibleCheckBox = R.id.completedCheckBoxLight;
 					} else {
 						hiddenCheckBox = R.id.completedCheckBoxLight;
 						visibleCheckBox = R.id.completedCheckBoxDark;
 					}
+
+					// 0 if user did not complete the task, > 0 otherwise
+					long millisOfCompletion = mCursor.getLong(3);
+					if (millisOfCompletion > 0) {
+						rv.setImageViewResource(visibleCheckBox, R.drawable.ic_checkbox_checked);
+					} else {
+						rv.setImageViewResource(visibleCheckBox, R.drawable.ic_checkbox_unchecked);
+					}
+					// use the accent color to tint the checkboxes.
+					// You could also use primaryTextColor, if users complain ...
+					int checkboxColor = ThemeHelper.getThemeAccentColor(mContext);
+					rv.setInt(visibleCheckBox, "setColorFilter", checkboxColor);
+
 					rv.setViewVisibility(hiddenCheckBox, View.GONE);
 					rv.setViewVisibility(visibleCheckBox,
 							isCheckboxHidden ? View.GONE : View.VISIBLE);
@@ -214,11 +231,12 @@ public class ListWidgetService extends RemoteViewsService {
 			return rv;
 		}
 
+		/**
+		 * We aren't going to return a custom loading view, so the OS will show some text like
+		 * "Loading..." or "Caricamento..." depending on the system locale.
+		 */
 		@Override
 		public RemoteViews getLoadingView() {
-			// We aren't going to return a custom loading view in this sample,
-			// so the OS will show some text like "Loading..." or "Caricamento..."
-			// depending on the system locale.
 			return null;
 		}
 
@@ -239,8 +257,7 @@ public class ListWidgetService extends RemoteViewsService {
 
 		@Override
 		public void onDataSetChanged() {
-			// Revert back to our process' identity so we can work with our
-			// content provider
+			// Revert back to our process' identity so we can work with our content provider
 			final long identityToken = Binder.clearCallingIdentity();
 
 			// Refresh the cursor
@@ -260,41 +277,52 @@ public class ListWidgetService extends RemoteViewsService {
 			final String sortSpec;
 			final String sortType = widgetPrefs.getString(ListWidgetConfig.KEY_SORT_TYPE,
 					mContext.getString(R.string.default_sorttype));
+			boolean isShowingCompleted = widgetPrefs
+					.getBoolean(ListWidgetConfig.KEY_SHOWCOMPLETED, false);
 
-			if (sortType.equals(mContext
-					.getString(R.string.const_possubsort)) && listId > 0) {
+			if (sortType.equals(mContext.getString(R.string.const_possubsort)) && listId > 0) {
 				targetUri = Task.URI;
 				sortSpec = Task.Columns.LEFT;
-			} else if (sortType.equals(mContext
-					.getString(R.string.const_modified))) {
+			} else if (sortType.equals(mContext.getString(R.string.const_modified))) {
 				targetUri = Task.URI;
 				sortSpec = Task.Columns.UPDATED + " DESC";
-			}
-			// due date sorting
-			else if (sortType.equals(mContext
-					.getString(R.string.const_duedate))) {
+			} else if (sortType.equals(mContext.getString(R.string.const_duedate))) {
+				// due date sorting
 				targetUri = Task.URI_SECTIONED_BY_DATE;
 				sortSpec = null;
-			}
-			// Alphabetic
-			else {
+			} else {
+				// Alphabetic
 				targetUri = Task.URI;
-				sortSpec = mContext.getString(R.string.const_as_alphabetic,
-						Task.Columns.TITLE);
+				sortSpec = mContext.getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
 			}
 
 			String listWhere;
 			String[] listArg;
+
+
 			if (listId > 0) {
-				listWhere = Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED
-						+ " IS NULL";
+				// only get notes in that list id
 				listArg = new String[] { Long.toString(listId) };
+
+				// if user does not want to also show completed tasks in widget, the query
+				// will filter away database records with a "completed" unix time
+				listWhere = isShowingCompleted
+						? Task.Columns.DBLIST + " IS ?"
+						: Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED + " IS NULL";
 			} else {
-				listWhere = Task.Columns.COMPLETED + " IS NULL";
+				// all list ids
 				listArg = null;
+
+				// if user wants to show completed tasks, since here it shows from all lists,
+				// then this "where" should show everything. In android logic, that means
+				// sending "null" to .query() here below
+				listWhere = isShowingCompleted
+						? null
+						: Task.Columns.COMPLETED + " IS NULL";
 			}
 
-			mCursor = mContext.getContentResolver()
+			mCursor = mContext
+					.getContentResolver()
 					.query(targetUri, Task.Columns.FIELDS, listWhere, listArg, sortSpec);
 
 			// Restore the identity - not sure if it's needed since we're going
