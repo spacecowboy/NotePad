@@ -203,13 +203,13 @@ public class ListWidgetConfig extends AppCompatActivity {
 							if (millisOfCompletion > 0) {
 								// this is an imageview, not a checkbox. I change its state
 								// by swapping the image source
-								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_checked);
+								((ImageButton) view).setImageResource(R.drawable.ic_checkbox_checked);
 							} else {
-								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_unchecked);
+								((ImageButton) view).setImageResource(R.drawable.ic_checkbox_unchecked);
 							}
 							// set the color of the checkbox: use the system's accent color
 							int color = ThemeHelper.getThemeAccentColor(ListWidgetConfig.this);
-							((ImageButton)view).setColorFilter(color);
+							((ImageButton) view).setColorFilter(color);
 						} else if (view.getId() == R.id.completedCheckBoxDark) {
 							assert view instanceof ImageButton;
 							visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME);
@@ -217,12 +217,12 @@ public class ListWidgetConfig extends AppCompatActivity {
 							// see above
 							long millisOfCompletion = c.getLong(3);
 							if (millisOfCompletion > 0) {
-								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_checked);
+								((ImageButton) view).setImageResource(R.drawable.ic_checkbox_checked);
 							} else {
-								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_unchecked);
+								((ImageButton) view).setImageResource(R.drawable.ic_checkbox_unchecked);
 							}
 							int color = ThemeHelper.getThemeAccentColor(ListWidgetConfig.this);
-							((ImageButton)view).setColorFilter(color);
+							((ImageButton) view).setColorFilter(color);
 						} else {
 							// Spacer
 							assert view.getId() == R.id.itemSpacer;
@@ -277,8 +277,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 				final long listId = widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID);
 				final String sortSpec;
-				final String sortType = widgetPrefs.getString(KEY_SORT_TYPE,
-						getString(R.string.default_sorttype));
+				final String sortType = widgetPrefs
+						.getString(KEY_SORT_TYPE, getString(R.string.default_sorttype));
 				boolean isShowingCompleted = widgetPrefs
 						.getBoolean(ListWidgetConfig.KEY_SHOWCOMPLETED, false);
 
@@ -353,6 +353,11 @@ public class ListWidgetConfig extends AppCompatActivity {
 		LoaderManager.getInstance(this).restartLoader(1, null, mCallback);
 	}
 
+	/**
+	 * Calling {@link SimpleWidgetPreviewAdapter#notifyDataSetChanged} on {@link #mNotesAdapter}
+	 * can only refresh the views, but it doesn't change the cursor, so it can't toggle between
+	 * "do/dont show completed notes". This function can, because it updates the underlying cursor
+	 */
 	void reloadTasks() {
 		LoaderManager.getInstance(this).restartLoader(0, null, mCallback);
 	}
@@ -561,7 +566,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 		mBinding.widgetConfWrapper.showCompletedCheckBox
 				.setOnCheckedChangeListener((btn, isChecked) -> {
 					widgetPrefs.putBoolean(KEY_SHOWCOMPLETED, isChecked);
-					if (mNotesAdapter != null) mNotesAdapter.notifyDataSetChanged();
+					reloadTasks();
 				});
 		mBinding.widgetConfWrapper.showCompletedCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_SHOWCOMPLETED, false));
