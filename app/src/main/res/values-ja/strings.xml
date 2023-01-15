@@ -80,9 +80,7 @@
     <string name="import_started">データをインポート中。完了まで数秒程度要します。</string>
     <string name="imported_result">%1$d個のノートを%2$dリストへインポートしました</string>
     <string name="import_error">エラーが発生しました： %s</string>
-    <string name="showcase_main_msg">アイコンをタップまたは画面左端からスワイプ</string>
     <string name="showcase_drawer_msg">長押しで編集または削除</string>
-    <string name="showcase_timemachine_msg">変更は常に保存されます。タイムマシン機能を利用すると以前の版を復元することができます。</string>
     <string name="move">移動</string>
     <string name="move_to">...へ移動</string>
     <string name="moved_x_to_list">%1$d を %2$s へ移動</string>

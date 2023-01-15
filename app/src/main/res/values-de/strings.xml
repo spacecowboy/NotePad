@@ -82,9 +82,6 @@
     <string name="import_started">Daten werden importiert…</string>
     <string name="imported_result">Es wurden %1$d Notizen in %2$d Listen importiert</string>
     <string name="import_error">Etwas hat nicht funktioniert: %s</string>
-    <string name="showcase_main_msg">Tippe auf das Icon in der oberen linken Ecke, oder swipe vom linken Bildschirmrand um Deine Listen anzuzeigen.</string>
-    <string name="showcase_drawer_msg">Drücke lange auf einen Listennamen, um ihn zu bearbeiten oder zu löschen</string>
-    <string name="showcase_timemachine_msg">Beim Bearbeiten einer Notiz werden alle Änderungen gespeichert. Um Notizen auf einen vorherigen Stand zu bringen, kannst Du die Time Machine benutzen.</string>
     <string name="move">Verschieben</string>
     <string name="move_to">Verschieben nach</string>
     <string name="moved_x_to_list">%1$d nach %2$s verschoben</string>
@@ -125,7 +122,7 @@
     <string name="hide_checkbox_summary_off">Kontrollkästchen angezeigt</string>
     <string name="hide_date">Fälligkeitsdatum verbergen</string>
     <string name="item_max_height">Maximale Höhe</string>
-    <string name="long_date_format">Langes Datumsformat</string>
+    <string name="long_date_format">"Langes Datumsformat für das  Panel"</string>
     <string name="short_date_format">Kurzes Datumsformat, für die Liste</string>
     <string name="select_date">Datum wählen</string>
     <string name="localedefault">Systemsprache</string>
@@ -257,4 +254,10 @@
     <string name="version">Version: %s</string>
     <string name="next_year">Nächstes Jahr</string>
     <string name="next_month">Nächster Monat</string>
+    <string name="show_items_as_tasks">überprüfbare Aufgabe</string>
+    <string name="select_all">Wähle alle</string>
+    <string name="tutorial_online">Tutorial (online)</string>
+    <string name="disable_android_hibernation_desc">Das ist eine Funktion, die die App weniger zuverlässig macht.Es kann Ihre Benachrichtigungen blockieren.Öffnen Sie diese, suchen Sie nach so etwas wie \"Suspend App -Aktivität, wenn sie nicht genutzt werden\" und schalten Sie es aus</string>
+    <string name="welcome_note_title">Willkommen!</string>
+    <string name="welcome_note_row_3">Diese App hat eine detaillierte Anleitung, zu finden unter</string>
 </resources>

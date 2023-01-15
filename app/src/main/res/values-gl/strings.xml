@@ -83,9 +83,7 @@
     <string name="import_started">Importando datos. Isto pode tardar uns segundiños.</string>
     <string name="imported_result">Importáronse %1$d notas de %2$d listaxes</string>
     <string name="import_error">Algo foi mal: %s</string>
-    <string name="showcase_main_msg">Toca na icona ou pasa o dedo desde a esquerda</string>
     <string name="showcase_drawer_msg">Toque longo para editar ou eliminar</string>
-    <string name="showcase_timemachine_msg">Os cambios sempre se gardan. Utiliza a máquina do tempo para restaurar unha versión anterior.</string>
     <string name="move">Mover</string>
     <string name="move_to">Mover a</string>
     <string name="moved_x_to_list">Moveuse %1$d a %2$s</string>
