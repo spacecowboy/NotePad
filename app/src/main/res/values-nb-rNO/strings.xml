@@ -46,7 +46,6 @@
     <string name="settings_list_dialog">Velg en liste</string>
     <string name="import_started">Importerer data …</string>
     <string name="navigation_drawer_open">Åpne navigasjonsskuff</string>
-    <string name="showcase_timemachine_msg">Endringer lagres alltid. Bruk tidsmaskinen for å gjenopprette en tidligere versjon.</string>
     <string name="feature_is_WIP">Denne funksjonen er under konstruksjon.</string>
     <string name="permission_denied">Kan ikke fortsette. du har ikke innvilget tilgangen.</string>
     <string name="choose_backup_folder">Valgt sikkerhetskopimappe</string>
@@ -126,7 +125,6 @@
     <string name="settings_list">Liste</string>
     <string name="move_to">Flytt til</string>
     <string name="import_error">Noe gikk galt: %s</string>
-    <string name="showcase_timemachine_title">Lagre notatene dine</string>
     <string name="allow_exact_reminders">Tillat nøyaktige påminnelser</string>
     <string name="app_about_translations">Bistå oversettelsen på https://hosted.weblate.org/engage/no-nonsense-notes/</string>
     <string name="move">Flytt</string>
@@ -153,7 +151,6 @@
     <string name="permission_write_desc">Tillater programmet å sette inn, oppdatere, og slette notater og lister i No Nonsense Notes.</string>
     <string name="libraries_used">Bibliotek</string>
     <string name="imported_result">Importerte %1$d notater inn i %2$d lister</string>
-    <string name="showcase_main_title">Listetilgang</string>
     <string name="no_sync_method_chosen">Du har ikke valgt en synkroniseringsmetode</string>
     <string name="file_picker_not_available">Filutvelgeren virker ikke</string>
     <string name="app_about_dev_team">Laget av Jonas Kalderstam og vedlikeholdt av Campello Manuel</string>

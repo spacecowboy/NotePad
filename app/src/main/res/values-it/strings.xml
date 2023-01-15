@@ -76,9 +76,6 @@
     <string name="permission_write_desc">Permetti all\'app di inserire, aggiornare ed eliminare note ed elenchi di No Nonsense Notes</string>
     <string name="settings_list_dialog">Seleziona un elenco</string>
     <string name="settings_list">Elenco</string>
-    <string name="showcase_main_msg">Toccare l\'icona o trascinare dal bordo sinistro</string>
-    <string name="showcase_drawer_msg">Pressione lunga su un nome di lista per modificarla o eliminarla</string>
-    <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
     <string name="notification_channel_name">Promemoria delle note</string>
     <string name="notification_channel_description">Mostra il contenuto della nota quando arriva il momento segnato nel promemoria</string>
     <string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>
@@ -105,7 +102,7 @@
     <string name="confirm_new_password">Conferma la nuova password</string>
     <string name="apply">Applica</string>
     <string name="clear_password">Azzera password</string>
-    <string name="password_info">Puoi impostare una password per bloccare le note. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate. Impostare una password vuota disabilita questa funzione. Nel caso ti dimenticassi la password, puoi usare un backup</string>
+    <string name="password_info">Puoi impostare una password per bloccare le note. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate. Nel caso ti dimenticassi la password, puoi ripulirla e impostarne un\'altra</string>
     <string name="about">Informazioni</string>
     <string name="sync_failed">Sincronizzazione non riuscita</string>
     <string name="sync_login_failed">Login non riuscito, non è possibile connettersi a Google Tasks</string>
@@ -123,8 +120,8 @@
     <string name="hide_checkbox_summary_off">La casella di spunta verrà mostrata</string>
     <string name="hide_date">Nascondi la data di scadenza</string>
     <string name="item_max_height">Altezza massima della nota, in righe</string>
-    <string name="long_date_format">Formato data estesa</string>
-    <string name="short_date_format">Formato data compatta</string>
+    <string name="long_date_format">Formato data estesa, per il pannello</string>
+    <string name="short_date_format">Formato data compatta, per la lista</string>
     <string name="select_date">Seleziona la data</string>
     <string name="localedefault">Predefinita del sistema</string>
     <string name="hide_header">Nascondi intestazione widget</string>
@@ -256,4 +253,15 @@
     <string name="canceled_note_locked">Annullato: la nota è bloccata</string>
     <string name="order_notes_by">Ordina le note per:</string>
     <string name="show_elements_as">Mostra gli elementi come:</string>
+    <string name="next_month">Prossimo mese</string>
+    <string name="next_year">Prossimo anno</string>
+    <string name="showcase_tutorial_title">Troppo difficile\?</string>
+    <string name="showcase_tutorial_description">C\'è un tutorial online, lo trovi nelle impostazioni</string>
+    <string name="welcome_note_row_3">Quest\'app ha un tutorial dettagliato. Puoi trovarlo alla pagina</string>
+    <string name="unsupported_readonly_file">File in sola lettura non supportato: %s</string>
+    <string name="select_all">Seleziona tutti</string>
+    <string name="welcome_note_row_2">Apri questa nota per iniziare.</string>
+    <string name="tutorial_online">Tutorial (online)</string>
+    <string name="welcome_note_title">Benvenuto!</string>
+    <string name="version">Versione: %s</string>
 </resources>
