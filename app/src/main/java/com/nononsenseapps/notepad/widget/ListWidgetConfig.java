@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -46,6 +47,7 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -57,6 +59,9 @@ import com.nononsenseapps.ui.TitleNoteTextView;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * The activity where the user can configure the "list widget". It also shows a preview!
+ */
 public class ListWidgetConfig extends AppCompatActivity {
 
 	public static final String KEY_LIST = "widget1_key_list";
@@ -73,6 +78,11 @@ public class ListWidgetConfig extends AppCompatActivity {
 	public static final String KEY_HIDDENDATE = "widget1_key_hiddendate";
 	public static final String KEY_HIDDENCHECKBOX = "widget1_key_hiddencheckbox";
 	public static final String KEY_TITLEROWS = "widget1_key_titlerows";
+
+	/**
+	 * If the widget should show completed notes instead of hiding them
+	 */
+	public static final String KEY_SHOWCOMPLETED = "widget1_key_showcompleted";
 
 	/**
 	 * Used in widget service/provider
@@ -181,14 +191,43 @@ public class ListWidgetConfig extends AppCompatActivity {
 						// already done.
 						return true;
 					case 3:
-						// Complete checkbox
+						// Complete checkbox => decide if it will be visible
 						boolean visible;
+
+						// see widgetlist_item.xml
 						if (view.getId() == R.id.completedCheckBoxLight) {
+							assert view instanceof ImageButton;
+							// show one of the 2 imagebuttons depending on the chosen theme
 							visible = THEME_LIGHT == widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME);
+
+							// > 0 if it user completed the task, 0 otherwise
+							long millisOfCompletion = c.getLong(3);
+							if (millisOfCompletion > 0) {
+								// this is an imageview, not a checkbox. I change its state
+								// by swapping the image source
+								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_checked);
+							} else {
+								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_unchecked);
+							}
+							// set the color of the checkbox: use the system's accent color
+							int color = ThemeHelper.getThemeAccentColor(ListWidgetConfig.this);
+							((ImageButton)view).setColorFilter(color);
 						} else if (view.getId() == R.id.completedCheckBoxDark) {
+							assert view instanceof ImageButton;
 							visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME);
+
+							// see above
+							long millisOfCompletion = c.getLong(3);
+							if (millisOfCompletion > 0) {
+								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_checked);
+							} else {
+								((ImageButton)view).setImageResource(R.drawable.ic_checkbox_unchecked);
+							}
+							int color = ThemeHelper.getThemeAccentColor(ListWidgetConfig.this);
+							((ImageButton)view).setColorFilter(color);
 						} else {
 							// Spacer
+							assert view.getId() == R.id.itemSpacer;
 							visible = true;
 						}
 						visible &= !widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false);
@@ -210,6 +249,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 					default:
 						return false;
 				}
+
+
 			}
 		});
 
@@ -217,57 +258,73 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		mCallback = new LoaderCallbacks<>() {
 
+			/**
+			 * This is for the preview of the widget that appears in the config activity,
+			 * but most of the code is taken from
+			 * {@link ListWidgetService.ListRemoteViewsFactory#onDataSetChanged()}
+			 */
 			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-
 				if (id == 1) {
 					return new CursorLoader(ListWidgetConfig.this,
 							TaskList.URI, TaskList.Columns.FIELDS, null, null,
 							getString(R.string.const_as_alphabetic, TaskList.Columns.TITLE));
-				} else {
-					final Uri targetUri;
-
-					final long listId = widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID);
-					final String sortSpec;
-					final String sortType = widgetPrefs.getString(KEY_SORT_TYPE,
-							getString(R.string.default_sorttype));
-
-					if (sortType.equals(getString(R.string.const_possubsort))
-							&& listId > 0) {
-						targetUri = Task.URI;
-						sortSpec = Task.Columns.LEFT;
-					} else if (sortType.equals(getString(R.string.const_modified))) {
-						targetUri = Task.URI;
-						sortSpec = Task.Columns.UPDATED + " DESC";
-					}
-					// due date sorting
-					else if (sortType.equals(getString(R.string.const_duedate))) {
-						targetUri = Task.URI_SECTIONED_BY_DATE;
-						sortSpec = null;
-					}
-					// Alphabetic
-					else {
-						targetUri = Task.URI;
-						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
-					}
-
-					String listWhere;
-					String[] listArg;
-					if (listId > 0) {
-						listWhere = Task.Columns.DBLIST + " IS ? AND "
-								+ Task.Columns.COMPLETED + " IS NULL";
-						listArg = new String[] { Long.toString(listId) };
-					} else {
-						listWhere = Task.Columns.COMPLETED + " IS NULL";
-						listArg = null;
-					}
-
-					return new CursorLoader(ListWidgetConfig.this, targetUri,
-							Task.Columns.FIELDS,
-							listWhere,
-							listArg, sortSpec);
 				}
+
+				// TODO maybe ListWidgetService.onDataSetChanged() and this function share some
+				//  common code. Try to understand and refactor it
+
+				final Uri targetUri;
+
+				final long listId = widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID);
+				final String sortSpec;
+				final String sortType = widgetPrefs.getString(KEY_SORT_TYPE,
+						getString(R.string.default_sorttype));
+				boolean isShowingCompleted = widgetPrefs
+						.getBoolean(ListWidgetConfig.KEY_SHOWCOMPLETED, false);
+
+				if (sortType.equals(getString(R.string.const_possubsort)) && listId > 0) {
+					targetUri = Task.URI;
+					sortSpec = Task.Columns.LEFT;
+				} else if (sortType.equals(getString(R.string.const_modified))) {
+					targetUri = Task.URI;
+					sortSpec = Task.Columns.UPDATED + " DESC";
+				} else if (sortType.equals(getString(R.string.const_duedate))) {
+					// due date sorting
+					targetUri = Task.URI_SECTIONED_BY_DATE;
+					sortSpec = null;
+				} else {
+					// Alphabetic
+					targetUri = Task.URI;
+					sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
+				}
+
+				String listWhere;
+				String[] listArg;
+				if (listId > 0) {
+					// only get notes in that list id
+					listArg = new String[] { Long.toString(listId) };
+
+					// if user does not want to also show completed tasks in widget, the query
+					// will filter away database records with a "completed" unix time
+					listWhere = isShowingCompleted
+							? Task.Columns.DBLIST + " IS ?"
+							: Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED + " IS NULL";
+				} else {
+					// all list ids
+					listArg = null;
+
+					// if user wants to show completed tasks, since here it shows from all lists,
+					// then this "where" should show everything. In android logic, that means
+					// sending "null" to CursorLoader() here below
+					listWhere = isShowingCompleted
+							? null
+							: Task.Columns.COMPLETED + " IS NULL";
+				}
+
+				return new CursorLoader(ListWidgetConfig.this, targetUri,
+						Task.Columns.FIELDS, listWhere, listArg, sortSpec);
 			}
 
 			@Override
@@ -493,6 +550,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		mBinding.widgetConfWrapper.listSpinner.setAdapter(mListAdapter);
 
+		// for each checkbox, set listener & initialize value
 		mBinding.widgetConfWrapper.transparentHeaderCheckBox
 				.setOnCheckedChangeListener((buttonView, isChecked) -> {
 					mBinding.widgetPreviewWrapper.widgetPreview.widgetHeader
@@ -502,11 +560,18 @@ public class ListWidgetConfig extends AppCompatActivity {
 		mBinding.widgetConfWrapper.transparentHeaderCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER, false));
 
+		mBinding.widgetConfWrapper.showCompletedCheckBox
+				.setOnCheckedChangeListener((btn, isChecked) -> {
+					widgetPrefs.putBoolean(KEY_SHOWCOMPLETED, isChecked);
+					if (mNotesAdapter != null) mNotesAdapter.notifyDataSetChanged();
+				});
+		mBinding.widgetConfWrapper.showCompletedCheckBox
+				.setChecked(widgetPrefs.getBoolean(KEY_SHOWCOMPLETED, false));
+
 		mBinding.widgetConfWrapper.hideCheckBox
 				.setOnCheckedChangeListener((buttonView, isChecked) -> {
 					widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
-					if (mNotesAdapter != null)
-						mNotesAdapter.notifyDataSetChanged();
+					if (mNotesAdapter != null) mNotesAdapter.notifyDataSetChanged();
 				});
 		mBinding.widgetConfWrapper.hideCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
@@ -514,8 +579,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 		mBinding.widgetConfWrapper.hideDateCheckBox
 				.setOnCheckedChangeListener((buttonView, isChecked) -> {
 					widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
-					if (mNotesAdapter != null)
-						mNotesAdapter.notifyDataSetChanged();
+					if (mNotesAdapter != null) mNotesAdapter.notifyDataSetChanged();
 				});
 		mBinding.widgetConfWrapper.hideDateCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
@@ -654,8 +718,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
 				final LayoutInflater inflater = LayoutInflater.from(this.mContext);
-				convertView = inflater
-						.inflate(getViewLayout(position), parent, false);
+				convertView = inflater.inflate(getViewLayout(position), parent, false);
 			}
 			return super.getView(position, convertView, parent);
 		}
