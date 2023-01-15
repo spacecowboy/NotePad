@@ -201,6 +201,7 @@ public class ListWidgetService extends RemoteViewsService {
 								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 						rv.setOnClickFillInIntent(R.id.widget_item, clickIntent);
 					} else {
+						// on the launcher, not on the lock screen
 						final Intent fillInIntent = new Intent()
 								.setAction(ListWidgetProvider.CLICK_ACTION)
 								.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, mCursor.getLong(0))
@@ -209,15 +210,16 @@ public class ListWidgetService extends RemoteViewsService {
 					}
 
 					// Set complete broadcast
-					// If not on lock screen, send broadcast to complete.
-					// Otherwise, have to open note
 					final Intent completeIntent = new Intent();
 					if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN, false)) {
+						// on lock screen => have to open note
 						completeIntent
 								.setAction(Intent.ACTION_EDIT)
 								.setData(Task.getUri(mCursor.getLong(0)))
 								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 					} else {
+						// the pseudo-checkbox of a note was pressed while on the launcher
+						// => not on lock screen => send broadcast to complete.
 						completeIntent
 								.setAction(ListWidgetProvider.COMPLETE_ACTION)
 								.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,

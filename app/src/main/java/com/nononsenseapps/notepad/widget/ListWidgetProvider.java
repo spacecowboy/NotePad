@@ -57,7 +57,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	public ListWidgetProvider() {}
 
 	/**
-	 * Complete note calls go here
+	 * When the user touches the checkbox on a list item in the widget, an intent is launched.
+	 * This receives that signal. In other words, Complete note calls go here
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -83,8 +84,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			// This will complete the note
 			if (noteId > -1) {
+				// choose if you have to set the note as complete or incomplete
+				String action2 = Task.byId(noteId, context).isCompleted()
+						? NotePadBroadcastReceiver.SET_NOTE_INCOMPLETE
+						: NotePadBroadcastReceiver.SET_NOTE_COMPLETE;
+
 				Intent bintent = new Intent(context, NotePadBroadcastReceiver.class)
-						.setAction(context.getString(R.string.complete_note_broadcast_intent))
+						.setAction(action2)
 						.putExtra(Task.Columns._ID, noteId);
 				context.sendBroadcast(bintent);
 			}

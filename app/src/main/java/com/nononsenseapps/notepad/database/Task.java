@@ -1098,4 +1098,27 @@ public class Task extends DAO {
 		}
 		return sTemp;
 	}
+
+	/**
+	 * @return TRUE if this task was set as "completed" by the user, FALSE otherwise
+	 */
+	public boolean isCompleted() {
+		return this.completed != null && this.completed > 0;
+	}
+
+	/**
+	 * @param id the {@link Columns#_ID} of the {@link Task} to return
+	 * @return the corresponding {@link Task} or NULL if it could not get one
+	 */
+	public static Task byId(long id, Context context) {
+		Cursor c = context
+				.getContentResolver()
+				.query(Task.URI, null, Task.Columns._ID + " = ?",
+						new String[] { Long.toString(id) }, null);
+		if (c == null || c.getCount() != 1) return null;
+		c.moveToFirst();
+		var x = new Task(c);
+		c.close();
+		return x;
+	}
 }

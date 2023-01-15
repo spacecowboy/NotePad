@@ -33,22 +33,34 @@ import com.nononsenseapps.notepad.widget.ListWidgetProvider;
  */
 public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
+	// TODO but at this point can't you just embed this in ListWidgetProvider.onReceive() ?
+
+	// if you edit these, see also AndroidManifest.xml
+	public static final String SET_NOTE_COMPLETE = "com.nononsenseapps.SetNoteComplete";
+	public static final String SET_NOTE_INCOMPLETE = "com.nononsenseapps.SetNoteIncomplete";
+
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		Bundle extras = intent.getExtras();
-		if (extras == null) {
-			return;
-		}
+		if (extras == null || context == null) return;
 
-		if (extras.getLong(BaseColumns._ID, -1) > 0 && context != null) {
-			Task.setCompleted(context, true,
-					extras.getLong(BaseColumns._ID, -1));
+		long id = extras.getLong(BaseColumns._ID, -1);
+		if (id <= 0) return;
 
-			Toast.makeText(context, R.string.completed, Toast.LENGTH_SHORT).show();
-
-			// Broadcast that it has been completed, primarily for AndroidAgendaWidget
-			Intent i = new Intent(context.getString(R.string.note_completed_broadcast_intent));
-			context.sendBroadcast(i);
+		String action = intent.getAction();
+		switch (action) {
+			case SET_NOTE_COMPLETE:
+				Task.setCompleted(context, true, id);
+				// Toast.makeText(context, R.string.completed, Toast.LENGTH_SHORT).show();
+				// Broadcast that it has been completed, primarily for AndroidAgendaWidget
+				Intent i = new Intent(context.getString(R.string.note_completed_broadcast_intent));
+				context.sendBroadcast(i);
+				break;
+			case SET_NOTE_INCOMPLETE:
+				Task.setCompleted(context, false, id);
+				break;
+			default:
+				break;
 		}
 	}
 }
