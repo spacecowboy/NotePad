@@ -1062,28 +1062,26 @@ public class Task extends DAO {
 	 *                      {@link #CREATE_SECTIONED_DATE_VIEW}
 	 * @param dueDateMillis the value of {@link Task.Columns#DUE} from the same {@link Cursor}
 	 *                      that gave you the "input" parameter
-	 * @param formatterObj  an object that specifies how days are shown. Usually it comes from
-	 *                      {@link TimeFormatter#getLocalFormatterWeekday}
 	 * @return the name to show on a header of the {@link DragSortListView} when the notes are
 	 * ordered by date. For example, "Tomorrow", or "Later", depending on when the note
 	 * is due.
 	 */
 	public static String getHeaderNameForListSortedByDate(String input, long dueDateMillis,
-														  @NonNull SimpleDateFormat formatterObj,
 														  @NonNull Context context) {
 		String sTemp;
 		if (Task.HEADER_KEY_OVERDUE.equals(input)) {
 			sTemp = context.getString(R.string.date_header_overdue);
 		} else if (Task.HEADER_KEY_TODAY.equals(input)) {
+			// if you want to show text like "next 15 days" in the drag-sort-listview, you would
+			// add your code in this class. For help, see where HEADER_KEY_PLUS4 is used
 			sTemp = context.getString(R.string.date_header_today);
 		} else if (Task.HEADER_KEY_PLUS1.equals(input)) {
 			sTemp = context.getString(R.string.date_header_tomorrow);
-		} else if (Task.HEADER_KEY_PLUS2.equals(input)
-				|| Task.HEADER_KEY_PLUS3.equals(input)
+		} else if (Task.HEADER_KEY_PLUS2.equals(input) || Task.HEADER_KEY_PLUS3.equals(input)
 				|| Task.HEADER_KEY_PLUS4.equals(input)) {
-			// if you want to show text like "next 15 days" in the drag-sort-listview, you would
-			// add your code in this class. For help, see where HEADER_KEY_PLUS4 is used
-			sTemp = formatterObj.format(new Date(dueDateMillis));
+			// Receives a "Date" and returns a string with the translated name of the week day
+			SimpleDateFormat weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(context);
+			sTemp = weekdayFormatter.format(new Date(dueDateMillis));
 		} else if (Task.HEADER_KEY_NEXT_MONTH.equals(input)) {
 			sTemp = context.getString(R.string.next_month);
 		} else if (Task.HEADER_KEY_NEXT_YEAR.equals(input)) {

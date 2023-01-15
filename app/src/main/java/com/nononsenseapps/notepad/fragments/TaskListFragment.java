@@ -199,10 +199,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 		mAdapter.setViewBinder(new ViewBinder() {
 
-			/** Receives a {@link Date} and returns a string with the
-			 *  translated name of the week day */
-			final SimpleDateFormat weekdayFormatter = TimeFormatter
-					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
 
 			final String manualsort = getString(R.string.const_possubsort);
@@ -225,7 +221,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						if (isHeader) {
 							long dueDateMillis = c.getLong(4);
 							sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
-									weekdayFormatter, TaskListFragment.this.getContext());
+									getActivity());
 						} else {
 							// Set height of text for non-headers
 							((TitleNoteTextView) view).setMaxLines(mRowCount);

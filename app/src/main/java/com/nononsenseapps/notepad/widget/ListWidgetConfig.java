@@ -154,12 +154,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 				R.id.completedCheckBoxDark, R.id.itemSpacer,
 				R.id.completedCheckBoxLight }, 0);
 		mNotesAdapter.setViewBinder(new ViewBinder() {
-			final WidgetPrefs widgetPrefs = new WidgetPrefs(
-					ListWidgetConfig.this, appWidgetId);
+
+			final WidgetPrefs widgetPrefs = new WidgetPrefs(ListWidgetConfig.this, appWidgetId);
 			boolean isHeader = false;
 			String sTemp = "";
-			final SimpleDateFormat weekdayFormatter = TimeFormatter
-					.getLocalFormatterWeekday(ListWidgetConfig.this);
 			final SimpleDateFormat dateFormatter = TimeFormatter
 					.getLocalFormatterMicro(ListWidgetConfig.this);
 
@@ -174,7 +172,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 							sTemp = c.getString(1);
 							long dueDateMillis = c.getLong(4);
 							sTemp = Task.getHeaderNameForListSortedByDate(sTemp, dueDateMillis,
-									weekdayFormatter, ListWidgetConfig.this);
+									ListWidgetConfig.this);
 							((TextView) view).setText(sTemp);
 						} else {
 							((TextView) view).setText(TitleNoteTextView.getStyledText(
