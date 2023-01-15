@@ -17,8 +17,8 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="4dp"
 		android:orientation="vertical"
-		android:paddingLeft="16dp"
-		android:paddingRight="16dp"
+		android:paddingHorizontal="16dp"
+		android:paddingBottom="16dp"
 		tools:context="com.nononsenseapps.notepad.widget.ListWidgetConfig">
 
 		<Spinner
@@ -116,17 +116,13 @@
 			android:layout_height="@dimen/list_item_min_size"
 			android:text="@string/hide_header"/>
 
-		<!-- <LinearLayout
-			android:id="@+id/spacer"
+		<CheckBox
+			android:id="@+id/showCompletedCheckBox"
+			style="?android:attr/checkboxStyle"
 			android:layout_width="fill_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1" >
-		</LinearLayout> -->
+			android:layout_height="@dimen/list_item_min_size"
+			android:text="@string/show_completed_notes"/>
 
-		<!-- <include
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			layout="@layout/dialog_ok_cancel" /> -->
 	</LinearLayout>
 
 </ScrollView>

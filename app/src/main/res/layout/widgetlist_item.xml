@@ -19,6 +19,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:minHeight="@dimen/widget_item_min_size"
 	android:orientation="horizontal"
 	android:paddingRight="12dp"
@@ -72,7 +73,10 @@
 			android:textSize="12sp"/>
 	</RelativeLayout>
 
-	<!-- Two to support theme switching. Cant change image src through remoteviews -->
+	<!-- The following is the implementation of checkboxes. You can't use actual checkboxes
+	as widgets (see https://developer.android.com/reference/android/widget/RemoteViews ) so
+	you have to use ImageButton instead. There are 2, to support theme switching.
+	You Can't change image src through RemoteViews -->
 
 	<ImageButton
 		android:id="@+id/completedCheckBoxDark"
@@ -81,9 +85,9 @@
 		android:layout_gravity="center_vertical|left"
 		android:background="@null"
 		android:contentDescription="Complete task"
-		android:padding="0dp"
+		android:padding="5dp"
 		android:scaleType="fitStart"
-		android:src="@drawable/btn_check_selector_dark"/>
+		android:src="@drawable/ic_checkbox_unchecked"/>
 
 	<ImageButton
 		android:id="@+id/completedCheckBoxLight"
@@ -92,9 +96,11 @@
 		android:layout_gravity="center_vertical|left"
 		android:background="@null"
 		android:contentDescription="Complete task"
-		android:padding="0dp"
+		android:padding="5dp"
 		android:scaleType="fitStart"
-		android:src="@drawable/btn_check_selector_light"
+		android:src="@drawable/ic_checkbox_unchecked"
 		android:visibility="gone"/>
+
+	<!-- TODO remove the 2° imagebutton. now they're basically clones with != names -->
 
 </FrameLayout>

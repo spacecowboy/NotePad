@@ -146,6 +146,7 @@
 	<string name="welcome_note_row_2">Open this to get started.</string>
 	<string name="welcome_note_row_3">This app has a detailed tutorial. You can find it at</string>
 	<string name="unsupported_readonly_file">Unsupported read-only file: %s</string>
+	<string name="show_completed_notes">Show completed notes</string>
 
 	<!--
 		Use few if language need it. In English is the same.
