@@ -77,6 +77,8 @@ import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
@@ -537,6 +539,7 @@ public class ActivityMain extends AppCompatActivity
 		startActivity(intent);
 	}
 
+	@UiThread(propagation = Propagation.REUSE)
 	void loadFragments() {
 		final Intent intent = getIntent();
 
@@ -558,19 +561,25 @@ public class ActivityMain extends AppCompatActivity
 			if (showingEditor) {
 				// Portrait, with editor, modify action bar
 				setHomeAsDrawer(false);
-				return; // Done
+				// Done
+				return;
+			} else {
+				// Find the listpager
+				left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
+				listOpener = (ListOpener) left;
+
+				if (left != null && fragment2 == null) {
+					// Done
+					return;
+				} else if (left != null && fragment2 != null) {
+					right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
+				}
+
+				if (left != null && right != null) {
+					// Done
+					return;
+				}
 			}
-
-			// Find the listpager
-			left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
-			listOpener = (ListOpener) left;
-
-			if (left != null) {
-				if (fragment2 == null) return; // Done
-				else right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
-			}
-
-			if (left != null && right != null) return; // Done
 		}
 
 		// Load stuff
