@@ -6,24 +6,19 @@
 	android:layout_height="wrap_content"
 	android:layout_marginLeft="@dimen/activity_lone_horizontal_margin"
 	android:layout_marginRight="@dimen/activity_lone_horizontal_margin"
-	android:background="?attr/list_item_card_background"
 	android:orientation="vertical"
 	android:paddingLeft="@dimen/activity_lone_horizontal_padding"
 	android:paddingTop="@dimen/activity_lone_vertical_margin"
 	android:paddingRight="@dimen/activity_lone_horizontal_padding"
 	android:paddingBottom="@dimen/activity_lone_vertical_margin"
 	tools:context=".ActivityTaskHistory">
-	<!-- TODO change background so its own element -->
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:fontFamily="sans-serif-thin"
 		android:text="@string/drag_to_timetravel"
 		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:textColor="@android:color/holo_blue_dark"
-		android:textSize="24sp"
-		/>
+		android:textColor="@color/accent"/>
 
 	<SeekBar
 		android:id="@+id/seekBar"
@@ -40,8 +35,7 @@
 		android:fontFamily="sans-serif-light"
 		android:text="@string/drag_to_timetravel"
 		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textColor="?android:attr/textColorSecondary"
-		/>
+		android:textColor="?android:attr/textColorSecondary"/>
 
 	<ScrollView
 		android:layout_width="match_parent"
@@ -58,8 +52,10 @@
 			android:singleLine="false"
 			android:textAppearance="?android:attr/textAppearanceSmall"
 			android:textColor="?android:attr/textColorPrimary"
+			android:background="?attr/list_item_card_background"
 			android:textIsSelectable="true"
 			custom:linkify="true"
+			android:padding="10dp"
 			custom:titleFontFamily="robotocondensed"
 			custom:titleFontStyle="bold"
 			custom:titleRelativeSize="1.4"/>
