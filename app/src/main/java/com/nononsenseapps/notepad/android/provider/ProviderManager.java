@@ -48,7 +48,7 @@ public final class ProviderManager {
 	 * @return a list of providers which are available for use/setup.
 	 */
 	@NonNull
-	public final List<Provider> getAvailableProviders() {
+	public List<Provider> getAvailableProviders() {
 		ArrayList<Provider> availableUris = new ArrayList<>();
 		PackageManager pm = this.applicationContext.getPackageManager();
 		var var10000 = pm
@@ -75,7 +75,7 @@ public final class ProviderManager {
 	// Instead of wrapping code in multiple ifs
 	// TODO include providers which have been setup by user
 	@NonNull
-	public final ArrayList<Provider> getConfiguredProviders() {
+	public ArrayList<Provider> getConfiguredProviders() {
 		var availableUris = new ArrayList<Provider>();
 		var pm = applicationContext.getPackageManager();
 		var resolveInfos = pm.queryIntentContentProviders(
@@ -98,7 +98,7 @@ public final class ProviderManager {
 	 *                 *
 	 * @return true or false
 	 */
-	public final boolean providerHasValidMetadata(@NonNull Bundle metadata) {
+	public boolean providerHasValidMetadata(@NonNull Bundle metadata) {
 		// Only one protocol level atm
 		var result = 1 == metadata.getInt(METADATA_PROTOCOL_VERSION, -1);
 
@@ -115,7 +115,7 @@ public final class ProviderManager {
 	 *                 *
 	 * @return true if provider is valid and specifies no required config
 	 */
-	public final boolean providerRequiresConfig(@NonNull Bundle metadata) {
+	public boolean providerRequiresConfig(@NonNull Bundle metadata) {
 		return metadata.getBoolean(METADATA_REQUIRES_CONFIG, false);
 	}
 
@@ -148,31 +148,31 @@ public final class ProviderManager {
 		}
 
 		@NonNull
-		public final String getAuthority() {
+		public String getAuthority() {
 			return this.authority;
 		}
 
 		@NonNull
-		public final Uri getUriBase() {
+		public Uri getUriBase() {
 			return this.uriBase;
 		}
 
 		@NonNull
-		public final Uri getUriList() {
+		public Uri getUriList() {
 			return this.uriList;
 		}
 
 		@NonNull
-		public final Uri getUriDetails() {
+		public Uri getUriDetails() {
 			return this.uriDetails;
 		}
 
 		@NonNull
-		public final String getLabel() {
+		public String getLabel() {
 			return this.label;
 		}
 
-		public final int getIcon() {
+		public int getIcon() {
 			return this.icon;
 		}
 	}

@@ -169,9 +169,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 		final Calendar now = Calendar.getInstance();
 
 		// it's 30 minutes from [when the user presses "snooze"], expressed in unix millseconds
-		final long newTime = now.getTimeInMillis() + snoozeDelayInMillis;
-
-		return newTime;
+		return now.getTimeInMillis() + snoozeDelayInMillis;
 	}
 
 	/**

@@ -295,9 +295,7 @@ public abstract class DAO {
 		_id = Long.parseLong(uri.getLastPathSegment());
 	}
 
-	protected void beforeInsert(final Context context, final SQLiteDatabase db) {
-
-	}
+	protected void beforeInsert(final Context context, final SQLiteDatabase db) {}
 
 	protected void afterInsert(final Context context, final SQLiteDatabase db) {}
 

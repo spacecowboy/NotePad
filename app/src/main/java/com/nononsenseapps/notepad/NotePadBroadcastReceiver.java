@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.BaseColumns;
-import android.widget.Toast;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
