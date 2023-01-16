@@ -42,12 +42,6 @@
 			android:padding="8dp"
 			android:src="@drawable/ic_settings_24dp"/>
 
-		<LinearLayout
-			android:layout_width="8dp"
-			android:layout_height="fill_parent"
-			android:orientation="vertical"
-			android:visibility="gone"/>
-
 		<TextView
 			android:id="@+id/titleButton"
 			android:layout_width="0dp"

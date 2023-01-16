@@ -31,7 +31,7 @@ import com.nononsenseapps.notepad.R;
 public class DashclockPrefActivity extends AppCompatActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
-		requestWindowFeature(Window.FEATURE_ACTION_BAR);
+		supportRequestWindowFeature(Window.FEATURE_ACTION_BAR);
 
 		super.onCreate(savedInstanceState);
 

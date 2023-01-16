@@ -234,19 +234,19 @@
 	<string name="loading_widget">Loading widget…</string>
 	<string name="default_list">Default list</string>
 	<string name="please_type_before_reminder">Please type some text before adding a reminder</string>
-	<string name="notecopied_one">Copied %d note</string>
+	<string name="notecopied_one">Copied one note</string>
 	<string name="notecopied_other">Copied %d notes</string>
 	<string name="notecopied_zero" translatable="false">@string/notecopied_other</string>
 	<string name="notecopied_two" translatable="false">@string/notecopied_other</string>
 	<string name="notecopied_few" translatable="false">@string/notecopied_other</string>
 	<string name="notecopied_many" translatable="false">@string/notecopied_other</string>
-	<string name="notedeleted_one">Deleted %d note</string>
+	<string name="notedeleted_one">Deleted one note</string>
 	<string name="notedeleted_other">Deleted %d notes</string>
 	<string name="notedeleted_zero" translatable="false">@string/notedeleted_other</string>
 	<string name="notedeleted_two" translatable="false">@string/notedeleted_other</string>
 	<string name="notedeleted_few" translatable="false">@string/notedeleted_other</string>
 	<string name="notedeleted_many" translatable="false">@string/notedeleted_other</string>
-	<string name="selected_one">Selected %d note</string>
+	<string name="selected_one">Selected one note</string>
 	<string name="selected_other">Selected %d notes</string>
 	<string name="selected_zero" translatable="false">@string/selected_other</string>
 	<string name="selected_two" translatable="false">@string/selected_other</string>

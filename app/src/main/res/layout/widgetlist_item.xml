@@ -19,7 +19,6 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:minHeight="@dimen/widget_item_min_size"
 	android:orientation="horizontal"
 	android:paddingRight="12dp"

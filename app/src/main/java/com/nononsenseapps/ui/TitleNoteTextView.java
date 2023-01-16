@@ -66,9 +66,6 @@ public class TitleNoteTextView extends AppCompatTextView {
 	private String mRest = "";
 
 	public TitleNoteTextView(Context context, AttributeSet attrs) {
-		// TODO it crashes here in the editor. check activity_task_history.xml in design mode.
-		//  It may be a nullpointerexception on a method on "ColorStateList mTextColor",
-		//  so maybe you have to set that ?
 		super(context, attrs);
 
 		TypedArray attributes = context

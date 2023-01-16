@@ -257,7 +257,7 @@
     <string name="show_items_as_tasks">überprüfbare Aufgabe</string>
     <string name="select_all">Wähle alle</string>
     <string name="tutorial_online">Tutorial (online)</string>
-    <string name="disable_android_hibernation_desc">Das ist eine Funktion, die die App weniger zuverlässig macht.Es kann Ihre Benachrichtigungen blockieren.Öffnen Sie diese, suchen Sie nach so etwas wie \"Suspend App -Aktivität, wenn sie nicht genutzt werden\" und schalten Sie es aus</string>
+    <string name="disable_android_hibernation_desc">Das ist eine Funktion, die App weniger zuverlässig macht.Es kann Ihre Benachrichtigungen blockieren.Öffnen Sie diese, suchen Sie nach so etwas wie \"Suspend App -Aktivität, wenn sie nicht genutzt werden\" und schalten Sie es aus</string>
     <string name="welcome_note_title">Willkommen!</string>
     <string name="welcome_note_row_3">Diese App hat eine detaillierte Anleitung, zu finden unter</string>
 </resources>
