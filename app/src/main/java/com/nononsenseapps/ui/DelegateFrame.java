@@ -72,7 +72,7 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 		TypedArray a = this.getContext().obtainStyledAttributes(attrs, R.styleable.DelegateFrame);
 		enlargedViewId = a.getResourceId(R.styleable.DelegateFrame_enlargedView, UNDEFINED);
 		// enlargedViewId = attrs.getAttributeResourceValue("http://nononsenseapps.com", "enlargedView", UNDEFINED);
-		NnnLogger.debug(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
+		// NnnLogger.debug(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
 		setOnClickListener(this);
 		a.recycle();
 	}

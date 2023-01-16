@@ -857,11 +857,9 @@ public class ActivityMain extends AppCompatActivity
 		);
 		adapter.setExtraData(extraData);
 
-		// Load count of tasks in each one
-		NnnLogger.debug(ActivityMain.class, TaskList.CREATE_COUNT_VIEW);
-
 		leftDrawer.setAdapter(adapter);
-		// Set click handler
+
+		// Set click handler (go to list)
 		leftDrawer.setOnItemClickListener((arg0, v, pos, id) -> {
 			if (id < -1) {
 				// Set preference which type was chosen
@@ -874,6 +872,7 @@ public class ActivityMain extends AppCompatActivity
 			openList(id);
 		});
 
+		// set long-click handler (open popup)
 		leftDrawer.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
 			// Open dialog to edit list
 			if (id > 0) {
@@ -896,12 +895,14 @@ public class ActivityMain extends AppCompatActivity
 				return false;
 			}
 		});
+
+		// Load count of tasks in each list, to show the number next to the list's name
+
 		// Define the callback handler
 		final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<>() {
 
 			final String[] COUNTROWS = new String[] { "COUNT(1)" };
-			final String NOTCOMPLETED =
-					Task.Columns.COMPLETED + " IS NULL ";
+			final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
 
 			@NonNull
 			@Override

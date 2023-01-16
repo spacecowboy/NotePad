@@ -547,7 +547,9 @@ public class Task extends DAO {
 	public Long due = null;
 	public Long updated = null;
 
-	// converted from integer
+	/**
+	 * If this {@link Task} is password-protected. Saved as integer in the database
+	 */
 	public boolean locked = false;
 
 	// position stuff

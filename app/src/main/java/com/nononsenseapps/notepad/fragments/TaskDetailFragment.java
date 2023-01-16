@@ -54,7 +54,6 @@ import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
@@ -261,10 +260,11 @@ public class TaskDetailFragment extends Fragment {
 	// Version when task was opened
 	private Task mTaskOrg;
 
-	// To save orgState
-	// TODO
-	//  AND with task.locked. If result is true, note is locked and has not been
-	//  unlocked, otherwise good to show
+	/**
+	 * To save orgState
+	 */
+	// TODO [use it in "] AND [" logic] with task.locked. If result is true, note is locked and
+	//  has not been unlocked, otherwise good to show
 	private boolean mLocked = true;
 
 	private OnFragmentInteractionListener mListener;
@@ -584,15 +584,14 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	/**
-	 * task.locked & mLocked
+	 * "not having a password in the app" is different from
+	 * "the note being saved as un/locked in the database", so this function does not check for a
+	 * password. If the note is locked and a password is not set, a popup will launch and ask
+	 * the user to set a new, app-wide password.
+	 *
+	 * @return TRUE if {@link #mTask} is password-protected, by evaluating "task.locked & mLocked"
 	 */
 	public boolean isLocked() {
-		if (getActivity() != null) {
-			boolean hasPassword = PreferencesHelper.isPasswordSet(getActivity());
-			NnnLogger.debug(TaskDetailFragment.class, "hasPassword = " + hasPassword);
-			// if (!hasPassword) return false; // TODO check and use these, if necessary
-		}
-
 		if (mTask != null) {
 			return mTask.locked & mLocked;
 		}

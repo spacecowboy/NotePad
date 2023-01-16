@@ -63,8 +63,7 @@ public class OrgSyncService extends Service {
 
 	public static void start(Context context) {
 		if (!PreferencesHelper.isSincEnabledAtAll(context)) {
-			NnnLogger.debug(OrgSyncService.class,
-					"not starting: sync is disabled in the prefs");
+			// not starting: sync is disabled in the prefs
 			return;
 		}
 
@@ -78,11 +77,8 @@ public class OrgSyncService extends Service {
 	// TODO this service crashes in API 23 - default image on github
 
 	public static void pause(Context context) {
-		NnnLogger.debug(OrgSyncService.class, "pause() #1");
-		// TODO startservice. does this work correctly in newer android versions ?
 		context.startService(new Intent(context, OrgSyncService.class)
 				.setAction(ACTION_PAUSE));
-		NnnLogger.debug(OrgSyncService.class, "pause() #2");
 	}
 
 	public static void stop(Context context) {
