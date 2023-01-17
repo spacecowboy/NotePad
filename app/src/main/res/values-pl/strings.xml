@@ -83,7 +83,6 @@
     <string name="import_started">Importowanie danych. Może to zająć kilka sekund. </string>
     <string name="imported_result">Zaimporotwano %1$d notatek z %2$d list</string>
     <string name="import_error">Coś poszło nie tak: %s</string>
-    <string name="showcase_drawer_msg">Przytrzymaj, aby edytować lub usunąć </string>
     <string name="move">Przenieś</string>
     <string name="move_to">Przenieś do</string>
     <string name="lock_note">Zablokuj notatkę</string>

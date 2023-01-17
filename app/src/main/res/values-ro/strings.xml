@@ -83,7 +83,6 @@
     <string name="import_started">Se importă datele. Ar putea dura câteva secunde.</string>
     <string name="imported_result">S-a importat %1$d notițe în %2$d liste</string>
     <string name="import_error">Ceva nu a funcționat corect: %s</string>
-    <string name="showcase_drawer_msg">Apasă lung pentru a edita sau șterge</string>
     <string name="move">Mută</string>
     <string name="move_to">Mută la</string>
     <string name="moved_x_to_list">Mutat %1$d la %2$s</string>

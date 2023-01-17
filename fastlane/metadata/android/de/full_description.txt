@@ -1,0 +1,17 @@
+Open-Source-Notizblock und To-Do-Liste App mit den neuesten Android-Technologien.
+
+* Unterstützung der Dash Clock (ja, sie funktioniert noch)
+* Benachrichtigungen: Setzen Sie Erinnerungen zu einer bestimmten Zeit, mit optionaler Wiederholung an bestimmten Wochentagen
+* Sprachauswahl
+* Widget, mit Unterstützung für den Sperrbildschirm, in der Größe veränderbar und konfigurierbar.
+* Passwortschutz für wichtige Notizen
+* Verschieben von Aufgaben zwischen verschiedenen Listen
+* Ziehen, um Aufgaben neu zu ordnen
+* Integration mit Android Agenda Widget
+* Suche
+* Helle und dunkle Themen
+* Sichern (Import und Export) von Notizen in einer JSON-Datei
+* Synchronisierung mit einer ORG-Datei auf dem lokalen Speicher
+
+Verbessern Sie diese App, oder teilen Sie einfach Ihre Ideen mit.
+Besuchen Sie uns unter https://github.com/spacecowboy/NotePad
