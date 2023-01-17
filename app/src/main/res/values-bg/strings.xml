@@ -83,7 +83,6 @@
     <string name="import_started">Данните се внасят. Това ще отнеме няколко секунди.</string>
     <string name="imported_result">Внесени %1$d бележки в %2$d списъка</string>
     <string name="import_error">Нещо се обърка: %s</string>
-    <string name="showcase_drawer_msg">Задръжте, за да редактирате или изтриете</string>
     <string name="move">Преместване</string>
     <string name="move_to">Преместване в</string>
     <string name="moved_x_to_list">Преместена %1$d в %2$s</string>

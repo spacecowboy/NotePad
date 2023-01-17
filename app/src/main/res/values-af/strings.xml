@@ -83,7 +83,6 @@
     <string name="import_started">Lees data in. Dit mag \'n paar sekondes duur.</string>
     <string name="imported_result">%1$d notas in %2$d lyste ingelees</string>
     <string name="import_error">Iets het skeefgeloop: %s</string>
-    <string name="showcase_drawer_msg">Lang-raak om te redigeer of uit te vee</string>
     <string name="move">Verskuif</string>
     <string name="move_to">Verskuif na</string>
     <string name="moved_x_to_list">Het %1$d na %2$s verskuif</string>

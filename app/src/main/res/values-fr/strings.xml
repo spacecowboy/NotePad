@@ -79,7 +79,6 @@
     <string name="import_started">Importation des données. Ceci prendra quelques secondes.</string>
     <string name="imported_result">%1$d notes importées dans %2$d listes</string>
     <string name="import_error">Quelque chose n\'a pas fonctionné: %s</string>
-    <string name="showcase_drawer_msg">Appui long pour éditer ou supprimer</string>
     <string name="move">Déplacer</string>
     <string name="move_to">Déplacer vers</string>
     <string name="moved_x_to_list">%1$d déplacé vers %2$s</string>

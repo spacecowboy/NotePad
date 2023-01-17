@@ -83,7 +83,6 @@
     <string name="import_started">Mengimpor data Ini mungkin memakan waktu beberapa detik.</string>
     <string name="imported_result">Diimpor %1$d catatan dalam %2$d daftar</string>
     <string name="import_error">Ada sesuatu yang salah: %s</string>
-    <string name="showcase_drawer_msg">Tekan lama untuk mengedit atau menghapus</string>
     <string name="move">Pindah</string>
     <string name="move_to">Pindah ke</string>
     <string name="moved_x_to_list">Pindah %1$d ke %2$s</string>

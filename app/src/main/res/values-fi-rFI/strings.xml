@@ -83,7 +83,6 @@
     <string name="import_started">Tietoja tuodaan. Tämä voi viedä muutaman sekunnin.</string>
     <string name="imported_result">Tuotiin %1$d muistiinpanoa %2$d listasta</string>
     <string name="import_error">Jokin meni vikaan: %s</string>
-    <string name="showcase_drawer_msg">Paina pitkään muokataksesi tai poistaaksesi</string>
     <string name="move">Siirrä</string>
     <string name="move_to">Siirrä sijaintiin</string>
     <string name="moved_x_to_list">Siirrettiin %1$d sijaintiin %2$s</string>
