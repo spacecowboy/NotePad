@@ -45,10 +45,8 @@ public class BaseTestClass {
 	/**
 	 * API 33 requires permission for notifications, older APIs crash if you run this
 	 */
-	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
 	@Rule
-	public GrantPermissionRule mNotifRule = GrantPermissionRule
-			.grant(Manifest.permission.POST_NOTIFICATIONS);
+	public GrantPermissionRule mNotifRule;
 
 	/**
 	 * @return a string with the content of the given resourceId
@@ -75,6 +73,12 @@ public class BaseTestClass {
 	public void launchAndWait() {
 		// ensure that this is called BEFORE trying to start the activity
 		clearAppData();
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			// this permission works only on API >= 33, it crashes on older versions!
+			mNotifRule = GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS);
+		} else
+			mNotifRule = null;
 
 		try {
 			// it responds => we can return now

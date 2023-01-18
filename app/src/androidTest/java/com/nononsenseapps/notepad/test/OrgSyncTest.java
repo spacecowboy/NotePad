@@ -2,6 +2,7 @@ package com.nononsenseapps.notepad.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -54,11 +55,9 @@ public class OrgSyncTest {
 	@Before
 	public void setUp() {
 		DIR = FileHelper.getUserSelectedOrgDir(getTheContext());
+		assertNotNull(DIR);
 		var d = new File(DIR);
-
-		if (!d.exists()) {
-			assertTrue(d.mkdirs());
-		}
+		if (!d.exists()) assertTrue(d.mkdirs());
 	}
 
 	@After
@@ -70,8 +69,9 @@ public class OrgSyncTest {
 		resolver.delete(RemoteTask.URI, null, null);
 
 		File d = new File(DIR);
-		assertNotNull("Can not get files in folder", d.listFiles());
-		for (File f : d.listFiles()) {
+		File[] filesInFolder = d.listFiles();
+		assertNotNull("Can not get files in folder", filesInFolder);
+		for (File f : filesInFolder) {
 			FileHelper.tryDeleteFile(f, getTheContext());
 		}
 	}
@@ -659,7 +659,7 @@ public class OrgSyncTest {
 
 		int nowInB = 0;
 		for (RemoteTask remoteTask : remoteTasks) {
-			assertFalse("deleted".equals(remoteTask.deleted));
+			assertNotEquals("deleted", remoteTask.deleted);
 			if (remoteTask.listdbid == listB._id) {
 				nowInB += 1;
 			}

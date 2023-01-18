@@ -8,6 +8,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
 
 import com.nononsenseapps.notepad.R;
@@ -69,7 +70,7 @@ public class TestPasswords extends BaseTestClass {
 		EspressoHelper.navigateUp();
 
 		// in the list view, only the title is shown
-		onView(instanceOf(TitleNoteTextView.class))
-				.check(matches(withText(noteTitle)));
+		onView(allOf(withText(noteTitle), instanceOf(TitleNoteTextView.class)))
+				.check(matches(isDisplayed()));
 	}
 }

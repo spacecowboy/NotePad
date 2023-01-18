@@ -931,7 +931,7 @@ public class TaskDetailFragment extends Fragment {
 		// remove all reminders from the list. Next time this Fragment is loaded,
 		// onLoadFinished() will add them back. It MUST be here in onStop(). See
 		// the big comment on top of this file to understand why
-		notificationList.removeAllViews();
+		if (notificationList != null) notificationList.removeAllViews();
 	}
 
 	@Override

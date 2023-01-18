@@ -37,17 +37,23 @@ public class DBFreshTest extends TestCase {
 		context.deleteDatabase(PREFIX + DatabaseHandler.DATABASE_NAME);
 		final SQLiteDatabase db = new DatabaseHandler(context, PREFIX).getReadableDatabase();
 		// Just open the database, there should be one list and one task present
-		Cursor tlc = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null, null, null, null, null);
+		Cursor tlc = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS,
+				null, null, null, null, null);
 
-		assertEquals("Should be ONE list present on fresh installs", 1, tlc.getCount());
+		assertEquals("Should be ONE list present on fresh installs",
+				1, tlc.getCount());
 		tlc.close();
 
-		Cursor tc = db.query(Task.TABLE_NAME, Task.Columns.FIELDS, null, null, null, null, null);
-		assertEquals("Should be NO task present on fresh installs", 0, tc.getCount());
+		Cursor tc = db.query(Task.TABLE_NAME, Task.Columns.FIELDS,
+				null, null, null, null, null);
+		assertEquals("Should be 1 task present on fresh installs, the 'welcome' task",
+				0, tc.getCount());
 		tc.close();
 
 		db.close();
-		assertTrue("Could not delete database", context.deleteDatabase(PREFIX + LegacyDBHelper.LEGACY_DATABASE_NAME));
-		assertTrue("Could not delete database", context.deleteDatabase(PREFIX + DatabaseHandler.DATABASE_NAME));
+		assertTrue("Could not delete database",
+				context.deleteDatabase(PREFIX + LegacyDBHelper.LEGACY_DATABASE_NAME));
+		assertTrue("Could not delete database",
+				context.deleteDatabase(PREFIX + DatabaseHandler.DATABASE_NAME));
 	}
 }
