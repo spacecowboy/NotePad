@@ -7,6 +7,7 @@ import android.os.StrictMode;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.material.color.DynamicColors;
+import com.nononsenseapps.notepad.activities.ActivityMain;
 
 /**
  * Represents this app. The application object is not guaranteed to stay
@@ -29,7 +30,8 @@ public class NnnApp extends Application {
 
 	/**
 	 * Detects every disk read/write operation, and every time a cursor is not closed.
-	 * Useful for tests during development. Remember that disk activity is core app functionality!
+	 * Useful for tests during development. Remember that disk activity is core app
+	 * functionality!
 	 */
 	@RequiresApi(api = Build.VERSION_CODES.P)
 	private static void enableStrictModeAnalysis() {

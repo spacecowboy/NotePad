@@ -55,8 +55,8 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.activities.ActivityMain;
+import com.nononsenseapps.notepad.activities.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;

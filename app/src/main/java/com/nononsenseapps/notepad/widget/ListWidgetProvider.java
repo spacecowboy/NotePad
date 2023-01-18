@@ -30,7 +30,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.activities.ActivityMain_;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;

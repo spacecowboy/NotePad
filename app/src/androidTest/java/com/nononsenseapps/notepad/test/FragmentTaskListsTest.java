@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
-import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.activities.ActivityMain_;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class FragmentTaskListsTest {
 		Fragment listPagerFragment = mActivityRule
 				.getActivity()
 				.getSupportFragmentManager()
-				.findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.LISTPAGERTAG);
+				.findFragmentByTag(ActivityMain_.LISTPAGERTAG);
 
 		assertNotNull("List pager fragment should not be null", listPagerFragment);
 		assertTrue("List pager fragment should be visible",

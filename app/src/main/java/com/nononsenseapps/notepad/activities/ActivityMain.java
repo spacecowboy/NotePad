@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -56,6 +56,7 @@ import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.helpers.ThemeHelper;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;

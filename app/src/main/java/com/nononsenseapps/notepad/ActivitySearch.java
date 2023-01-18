@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
+import com.nononsenseapps.notepad.activities.ActivityMain_;
 import com.nononsenseapps.notepad.databinding.FullscreenFragmentBinding;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;
 

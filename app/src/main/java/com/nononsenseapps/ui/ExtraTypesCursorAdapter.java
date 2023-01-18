@@ -20,7 +20,7 @@ package com.nononsenseapps.ui;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.nononsenseapps.notepad.ActivityMain;
+import com.nononsenseapps.notepad.activities.ActivityMain;
 
 import java.util.ArrayList;
 import java.util.HashSet;

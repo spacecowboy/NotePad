@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.fragment.app.Fragment;
 
+import com.nononsenseapps.notepad.activities.ActivityMain_;
 import com.nononsenseapps.notepad.espresso_tests.BaseTestClass;
 import com.nononsenseapps.notepad.espresso_tests.EspressoHelper;
 
@@ -22,7 +23,7 @@ public class FragmentTaskDetailTest extends BaseTestClass {
 		Fragment fragment = mActRule
 				.getActivity()
 				.getSupportFragmentManager()
-				.findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.DETAILTAG);
+				.findFragmentByTag(ActivityMain_.DETAILTAG);
 		assertNotNull("Editor should NOT be null", fragment);
 		assertTrue("Editor should be visible",
 				fragment.isAdded() && fragment.isVisible());
