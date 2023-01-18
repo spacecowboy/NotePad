@@ -83,7 +83,6 @@
     <string name="import_started">Veriler aktarılıyor. Bu bir kaç saniye sürebilir.</string>
     <string name="imported_result">Listelerden%1$d içe aktarılan%2$dnotlar</string>
     <string name="import_error">Bir şeyler yanlış gitti: %s</string>
-    <string name="showcase_drawer_msg">Silmek veya düzenlemek için uzunca basılı tutun</string>
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>

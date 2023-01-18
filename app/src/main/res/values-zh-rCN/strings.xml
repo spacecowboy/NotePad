@@ -83,7 +83,6 @@
     <string name="import_started">正在导入数据…</string>
     <string name="imported_result">已将 %1$d 条笔记导入 %2$d 个列表</string>
     <string name="import_error">出现了一些问题：%s</string>
-    <string name="showcase_drawer_msg">长按列表名编辑或删除</string>
     <string name="move">移动</string>
     <string name="move_to">移动到</string>
     <string name="moved_x_to_list">移动 %1$d到%2$s</string>

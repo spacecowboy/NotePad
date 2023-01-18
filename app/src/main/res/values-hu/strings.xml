@@ -83,7 +83,6 @@
     <string name="import_started">Adatok importálása folyamatban. A művelet eltarthat néhány másodpercig.</string>
     <string name="imported_result">%1$d jegyzet importálása %2$d listába</string>
     <string name="import_error">Hiba: %s</string>
-    <string name="showcase_drawer_msg">Szerkesztéshez vagy törléshez nyomjon hosszan</string>
     <string name="move">Áthelyezés</string>
     <string name="move_to">Áthelyezés</string>
     <string name="moved_x_to_list">%1$d elem áthelyezve a következő listába: %2$s</string>

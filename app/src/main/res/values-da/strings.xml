@@ -82,7 +82,6 @@
     <string name="import_started">Importerer data. Dette kan tage et par sekunder.</string>
     <string name="imported_result">Importeret %1$d noter i %2$d lister</string>
     <string name="import_error">Noget gik galt: %s</string>
-    <string name="showcase_drawer_msg">Langt tryk for at redigere eller slette</string>
     <string name="move">Flyt</string>
     <string name="move_to">Flyt til</string>
     <string name="moved_x_to_list">%1$d flyttet til %2$s</string>

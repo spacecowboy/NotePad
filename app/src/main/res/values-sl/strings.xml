@@ -83,7 +83,6 @@
     <string name="import_started">Uvažanje podatkov. To lahko traja nekaj sekund.</string>
     <string name="imported_result">Uvoženi %1$d opombe v %2$d seznami</string>
     <string name="import_error">Nekaj je šlo narobe: %s</string>
-    <string name="showcase_drawer_msg">Dolgo pritisnite za urejanje ali brisanje</string>
     <string name="move">Premakni</string>
     <string name="move_to">Premakni v</string>
     <string name="moved_x_to_list">Preseli %1$d v %2$s</string>

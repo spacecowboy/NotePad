@@ -83,7 +83,6 @@
     <string name="import_started">Gegevens aan het importeren. Dit kan een paar seconden duren.</string>
     <string name="imported_result">%1$d notities in %2$d lijsten geïmporteerd</string>
     <string name="import_error">Er ging iets verkeerd: %s</string>
-    <string name="showcase_drawer_msg">Lang indrukken om te bewerken of te verwijderen</string>
     <string name="move">Verplaats</string>
     <string name="move_to">Verplaats naar</string>
     <string name="moved_x_to_list">%1$d naar %2$s verplaatst</string>

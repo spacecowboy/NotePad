@@ -81,7 +81,6 @@
     <string name="import_data_question">¿Importar datos?</string>
     <string name="import_started">Importando datos. Esto puede tardar unos segundos.</string>
     <string name="import_error">Algo salió mal: %s</string>
-    <string name="showcase_drawer_msg">Mantener presionado para editar o eliminar</string>
     <string name="move">Mover</string>
     <string name="move_to">Mover a</string>
     <string name="moved_x_to_list">Movido %1$d a %2$s</string>
