@@ -162,11 +162,11 @@ public class ActivityMain extends AppCompatActivity
 	 * {@link AppCompatActivity#onRestoreInstanceState(Bundle)} because this runs before
 	 * {@link #onCreate(Bundle)}, and it's important.
 	 */
-	/*private void restoreSavedInstanceState_(Bundle savedInstanceState) {
+	private void restoreSavedInstanceState_(Bundle savedInstanceState) {
 		if (savedInstanceState == null) return;
 		showingEditor = savedInstanceState.getBoolean("showingEditor");
 	}
-
+/*
 	@Override
 	public void onSaveInstanceState(@NonNull Bundle bundle_) {
 		super.onSaveInstanceState(bundle_);
@@ -184,7 +184,6 @@ public class ActivityMain extends AppCompatActivity
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_main, menu);
-
 		return true;
 	}
 

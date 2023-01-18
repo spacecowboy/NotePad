@@ -53,7 +53,6 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	public DBSyncBase(final Context context) {
 		this.context = context;
 		this.resolver = context.getContentResolver();
-
 	}
 
 	/**
