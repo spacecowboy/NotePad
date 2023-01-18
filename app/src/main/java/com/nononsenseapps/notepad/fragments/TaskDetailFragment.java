@@ -57,7 +57,7 @@ import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.activities.ActivityMain;
 import com.nononsenseapps.notepad.activities.ActivityMain_;
-import com.nononsenseapps.notepad.ActivityTaskHistory;
+import com.nononsenseapps.notepad.activities.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;

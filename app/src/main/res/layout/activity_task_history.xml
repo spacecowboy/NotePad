@@ -11,7 +11,7 @@
 	android:paddingTop="@dimen/activity_lone_vertical_margin"
 	android:paddingRight="@dimen/activity_lone_horizontal_padding"
 	android:paddingBottom="@dimen/activity_lone_vertical_margin"
-	tools:context=".ActivityTaskHistory">
+	tools:context=".activities.ActivityTaskHistory">
 
 	<TextView
 		android:layout_width="wrap_content"

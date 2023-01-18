@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -22,6 +22,7 @@ import androidx.loader.content.Loader;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.databinding.ActivityTaskHistoryBinding;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;

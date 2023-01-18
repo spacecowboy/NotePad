@@ -284,7 +284,7 @@
 
 		<!-- Time Machine -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivityTaskHistory"
+			android:name="com.nononsenseapps.notepad.activities.ActivityTaskHistory"
 			android:label="@string/timemachine"/>
 
 		<!-- Receiver that schedules background sync for File -->
