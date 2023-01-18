@@ -43,8 +43,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -268,7 +266,6 @@ public class ActivityMain extends AppCompatActivity
 					R.anim.activity_slide_out_right_full);
 		}
 	}
-
 
 	/**
 	 * Opens the specified list and closes the left drawer
@@ -759,85 +756,8 @@ public class ActivityMain extends AppCompatActivity
 		// Load count of tasks in each list, to show the number next to the list's name
 
 		// Define the callback handler
-		final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<>() {
-
-			final String[] COUNTROWS = new String[] { "COUNT(1)" };
-			final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
-
-			@NonNull
-			@Override
-			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-				// Normal lists
-				switch (id) {
-					case TaskListFragment.LIST_ID_OVERDUE:
-						return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
-								NOTCOMPLETED + TaskListFragment.andWhereOverdue(),
-								null, null);
-					case TaskListFragment.LIST_ID_TODAY:
-						return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
-								NOTCOMPLETED + TaskListFragment.andWhereToday(),
-								null, null);
-					case TaskListFragment.LIST_ID_WEEK:
-						return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
-								NOTCOMPLETED + TaskListFragment.andWhereWeek(),
-								null, null);
-					case 0:
-					default:
-						return new CursorLoader(ActivityMain.this, TaskList.URI_WITH_COUNT,
-								new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE,
-										TaskList.Columns.VIEW_COUNT }, null,
-								null, getResources()
-								.getString(R.string.const_as_alphabetic,
-										TaskList.Columns.TITLE));
-				}
-			}
-
-			@Override
-			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
-				switch (l.getId()) {
-					case TaskListFragment.LIST_ID_OVERDUE:
-						if (c.moveToFirst()) {
-							updateExtra(1, c.getInt(0));
-						}
-						break;
-					case TaskListFragment.LIST_ID_TODAY:
-						if (c.moveToFirst()) {
-							updateExtra(2, c.getInt(0));
-						}
-						break;
-					case TaskListFragment.LIST_ID_WEEK:
-						if (c.moveToFirst()) {
-							updateExtra(3, c.getInt(0));
-						}
-						break;
-					case 0:
-					default:
-						adapter.swapCursor(c);
-				}
-			}
-
-			private void updateExtra(final int pos, final int count) {
-				while (extraData.get(pos).size() < 2) {
-					// To avoid crashes
-					extraData.get(pos).add("0");
-				}
-				extraData.get(pos).set(1, Integer.toString(count));
-				adapter.notifyDataSetChanged();
-			}
-
-			@Override
-			public void onLoaderReset(Loader<Cursor> l) {
-				switch (l.getId()) {
-					case TaskListFragment.LIST_ID_OVERDUE:
-					case TaskListFragment.LIST_ID_TODAY:
-					case TaskListFragment.LIST_ID_WEEK:
-						break;
-					case 0:
-					default:
-						adapter.swapCursor(null);
-				}
-			}
-		};
+		final LoaderCallbacks<Cursor> callbacks =
+				new DrawerCursorLoader(this, extraData, adapter);
 
 		// Load actual data
 		LoaderManager
