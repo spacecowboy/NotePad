@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.activities;
 
 import android.app.SearchManager;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import androidx.fragment.app.Fragment;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
-import com.nononsenseapps.notepad.activities.ActivityMain_;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.databinding.FullscreenFragmentBinding;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;
 

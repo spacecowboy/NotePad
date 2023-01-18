@@ -136,7 +136,7 @@
 
 		<!-- Search activity -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivitySearch"
+			android:name="com.nononsenseapps.notepad.activities.ActivitySearch"
 			android:exported="true"
 			android:label="@string/search_hint"
 			android:launchMode="singleTop"
@@ -152,7 +152,7 @@
 
 		<!-- Deleted tasks activity -->
 		<activity
-			android:name="com.nononsenseapps.notepad.ActivitySearchDeleted"
+			android:name="com.nononsenseapps.notepad.activities.ActivitySearchDeleted"
 			android:exported="true"
 			android:label="@string/archive"
 			android:launchMode="singleTop"
