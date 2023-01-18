@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
  * the activity and potentially other fragments contained in that activity.
  */
 public interface OnFragmentInteractionListener {
-	//public void onFragmentInteraction(final Uri uri);
+
 	void onFragmentInteraction(final Uri uri, final long listId, final View origin);
 
 	void addTaskInList(final String text, final long listId);

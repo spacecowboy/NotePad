@@ -57,8 +57,6 @@ import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.helpers.ThemeHelper;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.LegacyDBHelper;
-import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.ActivityMainBinding;
@@ -67,6 +65,7 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
+import com.nononsenseapps.notepad.interfaces.ListOpener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
@@ -84,7 +83,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
-
 
 /**
  * This is extended by {@link ActivityMain_}. It was renamed to ActivityList
@@ -130,7 +128,7 @@ public class ActivityMain extends AppCompatActivity
 	 * Changes depending on what we're showing since the started activity can receive new intents
 	 */
 	@InstanceState
-	boolean showingEditor = false;
+	boolean isShowingEditor = false;
 
 	boolean isDrawerClosed = true;
 	SyncStatusMonitor syncStatusReceiver = null;
@@ -149,9 +147,6 @@ public class ActivityMain extends AppCompatActivity
 	private Bundle state;
 	private boolean shouldRestart = false;
 
-	// TODO should we add a FAB ? it's ~useless
-	// private FloatingActionButton mFab;
-
 	/**
 	 * for both {@link R.layout#activity_main}
 	 */
@@ -165,15 +160,16 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	private void restoreSavedInstanceState_(Bundle savedInstanceState) {
 		if (savedInstanceState == null) return;
-		showingEditor = savedInstanceState.getBoolean("showingEditor");
+		isShowingEditor = savedInstanceState.getBoolean("isShowingEditor");
 	}
-/*
-	@Override
-	public void onSaveInstanceState(@NonNull Bundle bundle_) {
-		super.onSaveInstanceState(bundle_);
-		bundle_.putBoolean("showingEditor", showingEditor);
-	}
-*/
+
+	/*
+		@Override
+		public void onSaveInstanceState(@NonNull Bundle bundle_) {
+			super.onSaveInstanceState(bundle_);
+			bundle_.putBoolean("isShowingEditor", isShowingEditor);
+		}
+	*/
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
@@ -192,7 +188,6 @@ public class ActivityMain extends AppCompatActivity
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
 		menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
-
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -206,7 +201,7 @@ public class ActivityMain extends AppCompatActivity
 		// Handle your other action bar items...
 		int itemId = item.getItemId();
 		if (itemId == android.R.id.home) {
-			if (showingEditor) {
+			if (isShowingEditor) {
 				// Only true in portrait mode
 				final View focusView = ActivityMain.this.getCurrentFocus();
 				InputMethodManager inputManager = this.getSystemService(InputMethodManager.class);
@@ -217,7 +212,7 @@ public class ActivityMain extends AppCompatActivity
 
 				// Should load the same list again
 				// Try getting the list from the original intent
-				final long listId = getListId(getIntent());
+				final long listId = ActivityMainHelper.getListId(getIntent());
 
 				final Intent intent = new Intent()
 						.setAction(Intent.ACTION_VIEW)
@@ -274,34 +269,6 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
-	/**
-	 * @return a list id from an intent if it contains one, either as part of
-	 * its URI or as an extra. Returns -1 if no id was contained, this includes insert actions
-	 */
-	static long getListId(final Intent intent) {
-		long retval = -1;
-		if (intent != null && intent.getData() != null &&
-				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
-						Intent.ACTION_VIEW.equals(intent.getAction()) ||
-						Intent.ACTION_INSERT.equals(intent.getAction()))) {
-			if ((intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
-					intent.getData().getPath().startsWith(NotePad.Lists.PATH_LISTS) ||
-					intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
-				try {
-					retval = Long.parseLong(intent.getData().getLastPathSegment());
-				} catch (NumberFormatException ignored) {
-					// retval remains = -1
-				}
-			} else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
-				retval = intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-			} else if (-1 != intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
-				retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
-			} else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
-				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
-			}
-		}
-		return retval;
-	}
 
 	/**
 	 * Opens the specified list and closes the left drawer
@@ -334,19 +301,6 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	private void handleSyncRequest() {
-		/* TODO check this
-		{
-			// in version 6.0.0, it does this:
-			SyncHelper.onManualSyncRequest(this);
-			return;
-		}
-
-		or you can have this:
-		{
-			boolean syncing = SyncHelper.onManualSyncRequest(this);
-			if (!syncing) setRefreshOfAllSwipeLayoutsTo(false);
-		}
-		*/
 		if (!PreferencesHelper.isSincEnabledAtAll(this)) {
 			Toast.makeText(this, R.string.no_sync_method_chosen,
 					Toast.LENGTH_SHORT).show();
@@ -422,7 +376,7 @@ public class ActivityMain extends AppCompatActivity
 
 		// To listen on fragment changes
 		getSupportFragmentManager().addOnBackStackChangedListener(() -> {
-					if (showingEditor && !isNoteIntent(getIntent())) {
+					if (isShowingEditor && !ActivityMainHelper.isNoteIntent(getIntent())) {
 						setHomeAsDrawer(true);
 					}
 					// Always update menu
@@ -462,8 +416,7 @@ public class ActivityMain extends AppCompatActivity
 
 	@Override
 	public void onDestroy() {
-		// this should avoid crashes due to its resources being called
-		// when the activity is closing (?)
+		// avoid crashes due to drawer's resources being called when the activity is closing
 		leftDrawer.setAdapter(null);
 
 		super.onDestroy();
@@ -504,7 +457,6 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-
 		setIntent(intent);
 		loadFragments();
 		// Just to be sure it gets done. Clear notification if present
@@ -551,14 +503,14 @@ public class ActivityMain extends AppCompatActivity
 
 		if (this.state != null) {
 			this.state = null;
-			if (showingEditor && fragment2 != null) {
+			if (isShowingEditor && fragment2 != null) {
 				// Should only be true in portrait
-				showingEditor = false;
+				isShowingEditor = false;
 			}
 
 			// Find fragments
 			// This is an instance state variable
-			if (showingEditor) {
+			if (isShowingEditor) {
 				// Portrait, with editor, modify action bar
 				setHomeAsDrawer(false);
 				// Done
@@ -595,27 +547,27 @@ public class ActivityMain extends AppCompatActivity
 
 		// If it contains a noteId, load an editor. If also tablet, load the lists
 		if (fragment2 != null) {
-			if (right == null) {
-				if (getNoteId(intent) > 0) {
-					right = TaskDetailFragment_.getInstance(getNoteId(intent));
-				} else if (isNoteIntent(intent)) {
-					// some text was shared to this app
-					right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
-							TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
-				}
+			if (ActivityMainHelper.getNoteId(intent) > 0) {
+				right = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteId(intent));
+			} else if (ActivityMainHelper.isNoteIntent(intent)) {
+				// some text was shared to this app
+				right = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteShareText(intent),
+						TaskListViewPagerFragment.getAShowList(this,
+								ActivityMainHelper.getListId(intent)));
 			}
-		} else if (isNoteIntent(intent)) {
-			showingEditor = true;
+		} else if (ActivityMainHelper.isNoteIntent(intent)) {
+			isShowingEditor = true;
 			listOpener = null;
 			leftTag = DETAILTAG;
-			if (getNoteId(intent) > 0) {
-				left = TaskDetailFragment_.getInstance(getNoteId(intent));
+			if (ActivityMainHelper.getNoteId(intent) > 0) {
+				left = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteId(intent));
 			} else {
 				// Get a share text (null safe)
 				// In a list (if specified, or default otherwise)
-				left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+				left = TaskDetailFragment_.getInstance(
+						ActivityMainHelper.getNoteShareText(intent),
 						TaskListViewPagerFragment
-								.getARealList(this, getListId(intent))
+								.getARealList(this, ActivityMainHelper.getListId(intent))
 				);
 			}
 			// fucking stack
@@ -630,15 +582,16 @@ public class ActivityMain extends AppCompatActivity
 		/*
 		 * Other case, is a list id or a tablet
 		 */
-		if (!isNoteIntent(intent) || fragment2 != null) {
+		if (!ActivityMainHelper.isNoteIntent(intent) || fragment2 != null) {
 			// If we're no longer in the editor, reset the action bar
 			if (fragment2 == null) {
 				setHomeAsDrawer(true);
 			}
 			// TODO
-			showingEditor = false;
+			isShowingEditor = false;
 
-			left = TaskListViewPagerFragment.getInstance(getListIdToShow(intent));
+			left = TaskListViewPagerFragment.getInstance(
+					ActivityMainHelper.getListIdToShow(intent,this));
 			leftTag = LISTPAGERTAG;
 			listOpener = (ListOpener) left;
 		}
@@ -656,92 +609,7 @@ public class ActivityMain extends AppCompatActivity
 		shouldAddToBackStack = true;
 	}
 
-	/**
-	 * Returns a note id from an intent if it contains one, either as part of
-	 * its URI or as an extra
-	 * <p/>
-	 * Returns -1 if no id was contained, this includes insert actions
-	 */
-	static long getNoteId(@NonNull final Intent intent) {
-		long retval = -1;
-		if (intent.getData() != null &&
-				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
-						Intent.ACTION_VIEW.equals(intent.getAction()))) {
-			if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
-				// Find it in the extras. See DashClock extension for an example
-				retval = intent.getLongExtra(Task.TABLE_NAME, -1);
-			} else if ((intent.getData().getPath().startsWith(
-					LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-					intent.getData().getPath().startsWith(
-							LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
-					intent.getData().getPath()
-							.startsWith(Task.URI.getPath()))) {
-				retval = Long.parseLong(intent.getData().getLastPathSegment());
-			}
-		}
-		return retval;
-	}
 
-	/**
-	 * Returns the text that has been shared with the app. Does not check
-	 * anything other than EXTRA_SUBJECT AND EXTRA_TEXT
-	 * <p/>
-	 * If it is a Google Now intent, will ignore the subject which is
-	 * "Note to self"
-	 */
-	static String getNoteShareText(final Intent intent) {
-		if (intent == null || intent.getExtras() == null) {
-			return "";
-		}
-
-		StringBuilder retval = new StringBuilder();
-		// possible title
-		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) &&
-				!"com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
-			retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
-		}
-		// possible note
-		if (intent.getExtras().containsKey(Intent.EXTRA_TEXT)) {
-			if (retval.length() > 0) {
-				retval.append("\n");
-			}
-			retval.append(intent.getExtras().get(Intent.EXTRA_TEXT));
-		}
-		return retval.toString();
-	}
-
-	/**
-	 * If intent contains a list_id, returns that. Else, checks preferences for
-	 * default list setting. Else, -1.
-	 */
-	long getListIdToShow(final Intent intent) {
-		long result = getListId(intent);
-		return TaskListViewPagerFragment.getAShowList(this, result);
-	}
-
-	/**
-	 * Returns true the intent URI targets a note. Either an edit/view or
-	 * insert.
-	 */
-	static boolean isNoteIntent(final Intent intent) {
-		if (intent == null) {
-			return false;
-		}
-		if (Intent.ACTION_SEND.equals(intent.getAction()) ||
-				"com.google.android.gm.action.AUTO_SEND"
-						.equals(intent.getAction())) {
-			return true;
-		}
-
-		return intent.getData() != null &&
-				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
-						Intent.ACTION_VIEW.equals(intent.getAction()) ||
-						Intent.ACTION_INSERT.equals(intent.getAction())) &&
-				(intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) ||
-						intent.getData().getPath().startsWith(NotePad.Notes.PATH_NOTES) ||
-						intent.getData().getPath().startsWith(Task.URI.getPath())) &&
-				!intent.getData().getPath().startsWith(TaskList.URI.getPath());
-	}
 
 	void setHomeAsDrawer(final boolean value) {
 		mDrawerToggle.setDrawerIndicatorEnabled(value);
@@ -761,7 +629,7 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	protected void loadLeftDrawer() {
 		// TODO very long function. you should move everything related to drawer
-		//  into static methods in ActivityHelper.java
+		//  into static methods in ActivityMainHelper.java
 
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
@@ -1063,7 +931,6 @@ public class ActivityMain extends AppCompatActivity
 			taskHint.animate().alpha(1f).setStartDelay(500);
 		} else {
 			// Phone case, simulate back button
-			// finish();
 			simulateBack();
 		}
 	}
@@ -1142,9 +1009,5 @@ public class ActivityMain extends AppCompatActivity
 	public void onSyncStartStop(final boolean isOngoing) {
 		// Notify PullToRefreshAttacher of the refresh state
 		this.runOnUiThread(() -> setRefreshOfAllSwipeLayoutsTo(isOngoing));
-	}
-
-	public interface ListOpener {
-		void openList(final long id);
 	}
 }

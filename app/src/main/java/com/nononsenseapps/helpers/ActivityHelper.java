@@ -42,7 +42,6 @@ public final class ActivityHelper {
 	// forbid instances: it's a static class
 	private ActivityHelper() {}
 
-
 	/**
 	 * @return the users's default or selected locale
 	 */
