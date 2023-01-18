@@ -372,8 +372,6 @@ public class ActivityMain extends AppCompatActivity
 			mAnimateExit = true;
 		}
 
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
 		// To listen on fragment changes
 		getSupportFragmentManager().addOnBackStackChangedListener(() -> {
 					if (isShowingEditor && !ActivityMainHelper.isNoteIntent(getIntent())) {
@@ -515,23 +513,18 @@ public class ActivityMain extends AppCompatActivity
 				setHomeAsDrawer(false);
 				// Done
 				return;
-			} else {
-				// Find the listpager
-				left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
-				listOpener = (ListOpener) left;
-
-				if (left != null && fragment2 == null) {
-					// Done
-					return;
-				} else if (left != null && fragment2 != null) {
-					right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
-				}
-
-				if (left != null && right != null) {
-					// Done
-					return;
-				}
 			}
+
+			// Find the listpager
+			left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
+			listOpener = (ListOpener) left;
+
+			if (left != null) {
+				if (fragment2 == null) return; // Done
+				right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
+			}
+
+			if (left != null && right != null) return; // Done
 		}
 
 		// Load stuff
@@ -591,7 +584,7 @@ public class ActivityMain extends AppCompatActivity
 			isShowingEditor = false;
 
 			left = TaskListViewPagerFragment.getInstance(
-					ActivityMainHelper.getListIdToShow(intent,this));
+					ActivityMainHelper.getListIdToShow(intent, this));
 			leftTag = LISTPAGERTAG;
 			listOpener = (ListOpener) left;
 		}
@@ -608,7 +601,6 @@ public class ActivityMain extends AppCompatActivity
 		// Next go, always add
 		shouldAddToBackStack = true;
 	}
-
 
 
 	void setHomeAsDrawer(final boolean value) {
