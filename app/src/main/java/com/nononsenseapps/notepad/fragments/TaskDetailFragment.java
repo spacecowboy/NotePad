@@ -59,6 +59,7 @@ import com.nononsenseapps.notepad.activities.main.ActivityMain;
 import com.nononsenseapps.notepad.activities.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
+import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;

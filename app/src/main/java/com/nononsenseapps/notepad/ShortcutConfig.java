@@ -20,7 +20,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
-import com.nononsenseapps.notepad.activities.ActivityMain_;
+import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.ActivityShortcutConfigBinding;
