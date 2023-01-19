@@ -47,7 +47,7 @@ public class DBFreshTest extends TestCase {
 		Cursor tc = db.query(Task.TABLE_NAME, Task.Columns.FIELDS,
 				null, null, null, null, null);
 		assertEquals("Should be 1 task present on fresh installs, the 'welcome' task",
-				0, tc.getCount());
+				1, tc.getCount());
 		tc.close();
 
 		db.close();
