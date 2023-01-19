@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad.widget;
+package com.nononsenseapps.notepad.widget.list;
 
 import android.content.Context;
 import android.content.SharedPreferences;

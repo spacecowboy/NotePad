@@ -24,7 +24,7 @@ import android.os.Bundle;
 import android.provider.BaseColumns;
 
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
+import com.nononsenseapps.notepad.widget.list.ListWidgetProvider;
 
 /**
  * Used by {@link ListWidgetProvider} to receive the signal

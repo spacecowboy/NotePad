@@ -9,7 +9,7 @@
 	android:fillViewport="true"
 	android:isScrollContainer="true"
 	android:scrollbars="vertical"
-	tools:context="com.nononsenseapps.notepad.widget.ListWidgetConfig"
+	tools:context="com.nononsenseapps.notepad.widget.list.ListWidgetConfig"
 	tools:ignore="Overdraw">
 
 	<LinearLayout
@@ -19,7 +19,7 @@
 		android:orientation="vertical"
 		android:paddingHorizontal="16dp"
 		android:paddingBottom="16dp"
-		tools:context="com.nononsenseapps.notepad.widget.ListWidgetConfig">
+		tools:context="com.nononsenseapps.notepad.widget.list.ListWidgetConfig">
 
 		<Spinner
 			android:id="@+id/listSpinner"

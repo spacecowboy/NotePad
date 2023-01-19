@@ -188,7 +188,7 @@
 
 		<!-- List Widget -->
 		<receiver
-			android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider"
+			android:name="com.nononsenseapps.notepad.widget.list.ListWidgetProvider"
 			android:exported="true">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
@@ -200,12 +200,12 @@
 		</receiver>
 
 		<service
-			android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
+			android:name="com.nononsenseapps.notepad.widget.list.ListWidgetService"
 			android:exported="false"
 			android:permission="android.permission.BIND_REMOTEVIEWS"/>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig"
+			android:name="com.nononsenseapps.notepad.widget.list.ListWidgetConfig"
 			android:exported="true"
 			android:theme="@style/ThemeWidgetConfig">
 			<intent-filter>

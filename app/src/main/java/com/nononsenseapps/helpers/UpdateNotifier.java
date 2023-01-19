@@ -26,8 +26,8 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
-import com.nononsenseapps.notepad.widget.WidgetPrefs;
+import com.nononsenseapps.notepad.widget.list.ListWidgetProvider;
+import com.nononsenseapps.notepad.widget.list.WidgetPrefs;
 
 /**
  * The purpose here is to make it easy for other classes to notify that
