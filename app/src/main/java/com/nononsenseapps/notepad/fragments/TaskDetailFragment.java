@@ -534,7 +534,6 @@ public class TaskDetailFragment extends Fragment {
 		*/
 	}
 
-
 	private void setDueText() {
 		if (mTask.due == null) {
 			dueDateBox.setText("");
@@ -697,14 +696,6 @@ public class TaskDetailFragment extends Fragment {
 			titleEnd = text.length();
 		}
 		String noteTitle = text.substring(0, titleEnd);
-
-		/* useless alternative
-		Intent i = new Intent(Intent.ACTION_SEND)
-				.setType("text/plain")
-				.putExtra(Intent.EXTRA_TEXT, text)
-				.putExtra(Intent.EXTRA_SUBJECT, noteTitle)
-				.putExtra(Intent.EXTRA_TITLE, noteTitle);
-		var toReturn = Intent.createChooser(i, noteTitle); */
 
 		return new ShareCompat
 				.IntentBuilder(this.getContext())
@@ -875,16 +866,14 @@ public class TaskDetailFragment extends Fragment {
 		stateId = mTask._id;
 		stateListId = mTask.dblist;
 
-		if (getActivity() == null)
-			return;
+		if (getActivity() == null) return;
 
 		final Intent orgIntent = getActivity().getIntent();
 		if (orgIntent == null || orgIntent.getAction() == null
 				|| !orgIntent.getAction().equals(Intent.ACTION_INSERT))
 			return;
 
-		if (mTask == null || mTask._id < 1)
-			return;
+		if (mTask == null || mTask._id < 1) return;
 
 		final Intent intent = new Intent()
 				.setAction(Intent.ACTION_EDIT)
@@ -907,9 +896,7 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		if (dontLoad) {
-			return;
-		}
+		if (dontLoad) return;
 
 		saveTask();
 		// Set locked again
@@ -937,9 +924,8 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onAttach(@NonNull Activity activity) {
 		super.onAttach(activity);
-		if (dontLoad) {
-			return;
-		}
+		if (dontLoad) return;
+
 		try {
 			mListener = (OnFragmentInteractionListener) activity;
 		} catch (ClassCastException e) {
@@ -992,9 +978,7 @@ public class TaskDetailFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (dontLoad) {
-			return;
-		}
+		if (dontLoad) return;
 
 		// Hide data from snoopers
 		if (mTask != null && isLocked()) {
