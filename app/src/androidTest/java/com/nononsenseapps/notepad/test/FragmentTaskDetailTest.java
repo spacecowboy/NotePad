@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.fragment.app.Fragment;
 
-import com.nononsenseapps.notepad.activities.ActivityMain_;
+import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 import com.nononsenseapps.notepad.espresso_tests.BaseTestClass;
 import com.nononsenseapps.notepad.espresso_tests.EspressoHelper;
 

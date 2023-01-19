@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotNull;
 import androidx.test.rule.ActivityTestRule;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.activities.ActivityMain_;
+import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 
 import org.junit.Rule;
 import org.junit.Test;
