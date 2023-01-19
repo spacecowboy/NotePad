@@ -47,7 +47,7 @@ import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.activities.ActivityMain;
+import com.nononsenseapps.notepad.activities.main.ActivityMain;
 import com.nononsenseapps.notepad.interfaces.ListOpener;
 import com.nononsenseapps.notepad.activities.ActivitySearchDeleted;
 import com.nononsenseapps.notepad.R;

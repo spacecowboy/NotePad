@@ -25,7 +25,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.activities.ActivityMain;
+import com.nononsenseapps.notepad.activities.main.ActivityMain;
 import com.nononsenseapps.notepad.R;
 
 import org.junit.Assert;

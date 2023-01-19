@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad.activities;
+package com.nononsenseapps.notepad.activities.main;
 
 import android.content.Context;
 import android.database.Cursor;

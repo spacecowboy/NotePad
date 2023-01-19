@@ -7,7 +7,7 @@ import android.os.StrictMode;
 import androidx.annotation.RequiresApi;
 
 import com.google.android.material.color.DynamicColors;
-import com.nononsenseapps.notepad.activities.ActivityMain;
+import com.nononsenseapps.notepad.activities.main.ActivityMain;
 
 /**
  * Represents this app. The application object is not guaranteed to stay
