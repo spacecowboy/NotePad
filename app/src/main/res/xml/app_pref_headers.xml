@@ -72,14 +72,4 @@
 		android:summary=""
 		android:title="@string/about"/>
 
-	<!--
-	<Preference android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
-			android:title="Appereance"
-			android:summary="Set the theme and background transparency">
-		Arbitrary key/value pairs can be included with a header as
-			 arguments to its fragment.
-		<extra android:name="someKey" android:value="someHeaderValue" />
-	</header>
-	-->
-
 </PreferenceScreen>

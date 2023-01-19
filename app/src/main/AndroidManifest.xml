@@ -214,7 +214,7 @@
 		</activity>
 
 		<activity
-			android:name="com.nononsenseapps.notepad.ShortcutConfig"
+			android:name="com.nononsenseapps.notepad.widget.shortcut.ShortcutConfig"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
 			android:theme="@style/ThemeNnnLight">

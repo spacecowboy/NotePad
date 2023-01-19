@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.widget.shortcut;
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -20,6 +20,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
