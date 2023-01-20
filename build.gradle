@@ -15,11 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-Top-level build file where you can add configuration options
-common to all sub-projects/modules: everything in here will
-be applied to ALL gradle modules
-*/
+
+// Top-level build file where you can add configuration options common to all sub-modules:
+// everything in here will be applied to ALL gradle modules
 buildscript {
     repositories {
         mavenCentral()

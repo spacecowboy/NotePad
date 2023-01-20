@@ -60,6 +60,14 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
         }
+        releasePlayStore {
+            applicationIdSuffix ".play"
+            versionNameSuffix "-Play"
+            // enable R8
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
+        }
     }
 
     defaultConfig {
@@ -92,6 +100,16 @@ android {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
+    }
+
+    buildFeatures {
+        buildConfig true
+        // these features are useless for us
+        compose false
+        aidl false
+        renderScript false
+        resValues false
+        shaders false
     }
 
     // kotlinOptions { jvmTarget = 11 } // compile kotlin to java 11, for compatibility
@@ -129,7 +147,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     // Time library, open source & up to date
-    implementation 'joda-time:joda-time:2.12.1'
+    implementation 'joda-time:joda-time:2.12.2'
     // Dashclock API, open source & abandoned, but it still works
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // Writes org files, open source & abandoned, but it still works
