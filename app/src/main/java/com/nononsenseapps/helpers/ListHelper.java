@@ -30,13 +30,12 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
+import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 
 /**
- * Simple utility class to hold some general functions.
+ * Simple utility class to hold some general functions for lists
  */
 public final class ListHelper {
-
-	// TODO useless ? methods are somewhere else ?
 
 	/**
 	 * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
@@ -45,6 +44,8 @@ public final class ListHelper {
 	 */
 	public static long getAViewList(final Context context, final long tempList) {
 		long returnList = tempList;
+
+
 		if (returnList == TaskListFragment.LIST_ID_ALL) {
 			// This is fine
 			return returnList;
@@ -53,9 +54,10 @@ public final class ListHelper {
 		returnList = getARealList(context, returnList);
 
 		if (returnList < 1) {
-			// Return all in this case
+			// If nothing was found, return all of them in this case
 			returnList = TaskListFragment.LIST_ID_ALL;
 		}
+
 
 		return returnList;
 	}
@@ -154,5 +156,35 @@ public final class ListHelper {
 			}
 		}
 		return retval;
+	}
+
+	/**
+	 * For {@link TaskListViewPagerFragment}
+	 *
+	 * @param tempList from ActivityMainHelper.getListId()
+	 * @return and ID that might belong to a "meta list"
+	 */
+	public static long getAShowList(final Context context, final long tempList) {
+		long returnList = tempList;
+
+		if (returnList == -1) {
+			// Then check if a default list is specified
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+			String defListId = prefs.getString(
+					context.getString(R.string.pref_defaultlist), "-1");
+			returnList = prefs.getLong(
+					context.getString(R.string.pref_defaultstartlist), Long.parseLong(defListId));
+		}
+
+		if (returnList == -1) {
+			returnList = getARealList(context, returnList);
+		}
+
+		// If nothing was found, show ALL
+		if (returnList == -1) {
+			returnList = TaskListFragment.LIST_ID_ALL;
+		}
+
+		return returnList;
 	}
 }

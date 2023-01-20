@@ -5,11 +5,11 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 
+import com.nononsenseapps.helpers.ListHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 /**
  * static methods that take some code away from {@link ActivityMain}. It's used only in that
  * class, that's why it's package-private
@@ -131,6 +131,6 @@ class ActivityMainHelper {
 	 */
 	static long getListIdToShow(final Intent intent, Context context) {
 		long result = ActivityMainHelper.getListId(intent);
-		return TaskListViewPagerFragment.getAShowList(context, result);
+		return ListHelper.getAShowList(context, result);
 	}
 }

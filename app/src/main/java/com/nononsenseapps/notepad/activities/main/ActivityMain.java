@@ -543,7 +543,7 @@ public class ActivityMain extends AppCompatActivity
 			} else if (ActivityMainHelper.isNoteIntent(intent)) {
 				// some text was shared to this app
 				right = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteShareText(intent),
-						TaskListViewPagerFragment.getAShowList(this,
+						ListHelper.getAShowList(this,
 								ActivityMainHelper.getListId(intent)));
 			}
 		} else if (ActivityMainHelper.isNoteIntent(intent)) {

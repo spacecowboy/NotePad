@@ -18,7 +18,6 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -46,7 +45,6 @@ import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.nononsenseapps.helpers.ListHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.activities.main.ActivityMain;
 import com.nononsenseapps.notepad.interfaces.ListOpener;
@@ -318,35 +316,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 		LoaderManager.getInstance(this).destroyLoader(0);
 
 		super.onDestroy();
-	}
-
-	/**
-	 * Might be a meta list
-	 */
-	public static long getAShowList(final Context context, final long tempList) {
-		long returnList = tempList;
-
-		if (returnList == -1) {
-			// Then check if a default list is specified
-			SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(context);
-			returnList = prefs
-					.getLong(
-							context.getString(R.string.pref_defaultstartlist),
-							Long.parseLong(prefs.getString(context
-									.getString(R.string.pref_defaultlist), "-1")));
-		}
-
-		if (returnList == -1) {
-			returnList = ListHelper.getARealList(context, returnList);
-		}
-
-		// If nothing was found, show ALL
-		if (returnList == -1) {
-			returnList = TaskListFragment.LIST_ID_ALL;
-		}
-
-		return returnList;
 	}
 
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
