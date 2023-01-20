@@ -18,17 +18,13 @@
 package com.nononsenseapps.helpers;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.LegacyDBHelper;
-import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 
@@ -45,6 +41,7 @@ public final class ListHelper {
 	public static long getAViewList(final Context context, final long tempList) {
 		long returnList = tempList;
 
+		// TODO useless, you already have getAShowList() in this class
 
 		if (returnList == TaskListFragment.LIST_ID_ALL) {
 			// This is fine
@@ -121,41 +118,6 @@ public final class ListHelper {
 		}
 
 		return returnList;
-	}
-
-	/**
-	 * Returns a list id from an intent if it contains one, either as part of
-	 * its URI or as an extra
-	 * <p/>
-	 * Returns -1 if no id was contained, this includes insert actions
-	 */
-	public static long getListId(final Intent intent) {
-		long retval = -1;
-		if (intent != null &&
-				intent.getData() != null &&
-				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
-						Intent.ACTION_VIEW.equals(intent.getAction()) ||
-						Intent.ACTION_INSERT.equals(intent.getAction()))) {
-			if ((intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Lists
-					.PATH_VISIBLE_LISTS) ||
-					intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Lists
-							.PATH_LISTS) ||
-					intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
-				try {
-					retval = Long.parseLong(intent.getData().getLastPathSegment());
-				} catch (NumberFormatException e) {
-					retval = -1;
-				}
-			} else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
-					-1)) {
-				retval = intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-			} else if (-1 != intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
-				retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
-			} else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
-				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
-			}
-		}
-		return retval;
 	}
 
 	/**

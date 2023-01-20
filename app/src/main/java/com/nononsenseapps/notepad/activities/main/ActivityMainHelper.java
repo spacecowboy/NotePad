@@ -27,9 +27,11 @@ class ActivityMainHelper {
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
 						Intent.ACTION_VIEW.equals(intent.getAction()) ||
 						Intent.ACTION_INSERT.equals(intent.getAction()))) {
-			if ((intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Lists.PATH_VISIBLE_LISTS) ||
-					intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Lists.PATH_LISTS) ||
-					intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
+
+			String path = intent.getData().getPath();
+			if ((path.startsWith(LegacyDBHelper.NotePad.Lists.PATH_VISIBLE_LISTS) ||
+					path.startsWith(LegacyDBHelper.NotePad.Lists.PATH_LISTS) ||
+					path.startsWith(TaskList.URI.getPath()))) {
 				try {
 					retval = Long.parseLong(intent.getData().getLastPathSegment());
 				} catch (NumberFormatException ignored) {
