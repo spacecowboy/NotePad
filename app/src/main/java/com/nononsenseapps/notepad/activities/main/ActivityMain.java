@@ -47,6 +47,7 @@ import androidx.preference.PreferenceManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.ListHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.PermissionsHelper;
@@ -556,8 +557,7 @@ public class ActivityMain extends AppCompatActivity
 				// In a list (if specified, or default otherwise)
 				left = TaskDetailFragment_.getInstance(
 						ActivityMainHelper.getNoteShareText(intent),
-						TaskListViewPagerFragment
-								.getARealList(this, ActivityMainHelper.getListId(intent))
+						ListHelper.getARealList(this, ActivityMainHelper.getListId(intent))
 				);
 			}
 			// fucking stack

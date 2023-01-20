@@ -57,6 +57,7 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
+import com.nononsenseapps.helpers.ListHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.notepad.activities.main.ActivityMain_;
@@ -719,8 +720,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			if (mListener != null && mListId > 0) {
 				mListener.addTaskInList("", mListId);
 			} else if (mListener != null) {
-				mListener.addTaskInList("", TaskListViewPagerFragment
-						.getARealList(getActivity(), -1));
+				mListener.addTaskInList("", ListHelper.getARealList(getActivity(), -1));
 			}
 			return true;
 		} else if (itemId == R.id.menu_clearcompleted) {

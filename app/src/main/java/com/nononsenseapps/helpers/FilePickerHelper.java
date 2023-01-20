@@ -20,7 +20,7 @@ import com.nononsenseapps.notepad.R;
  * Methods to use android's built-in file picker. See {@link DocumentFileHelper}
  * that you can use to handle the {@link Uri} returned by this file picker
  */
-public class FilePickerHelper {
+public final class FilePickerHelper {
 
 	/**
 	 * For onActivityResult

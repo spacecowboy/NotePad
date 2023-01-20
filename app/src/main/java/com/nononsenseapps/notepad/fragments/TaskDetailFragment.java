@@ -53,6 +53,7 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.ListHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.activities.main.ActivityMain;
@@ -395,7 +396,7 @@ public class TaskDetailFragment extends Fragment {
 			// If the given list is not valid, find a valid list
 			if (argItemListId < 1) {
 				getArguments().putLong(ARG_ITEM_LIST_ID,
-						TaskListViewPagerFragment.getARealList(getActivity(), -1));
+						ListHelper.getARealList(getActivity(), -1));
 				// then update the variable
 				argItemListId = getArguments().getLong(ARG_ITEM_LIST_ID, stateListId);
 			}

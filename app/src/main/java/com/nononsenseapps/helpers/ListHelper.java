@@ -34,7 +34,7 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
 /**
  * Simple utility class to hold some general functions.
  */
-public class ListHelper {
+public final class ListHelper {
 
 	// TODO useless ? methods are somewhere else ?
 
@@ -61,25 +61,34 @@ public class ListHelper {
 	}
 
 	/**
-	 * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
-	 * then returns that. If none set, then returns first (alphabetical) list.
+	 * Guarantees default list is valid.
+	 *
+	 * @return If "tempList" > 0, returns it if it exists.
+	 * Else, checks if a default list is set then returns that.
+	 * If none set, then returns first (alphabetical) list.
 	 * If no lists exist in the database, returns -1.
 	 */
 	public static long getARealList(final Context context, final long tempList) {
 		long returnList = tempList;
 
 		if (returnList < 1 && returnList != TaskListFragment.LIST_ID_ALL) {
+			assert returnList == -1;  // ... I think ??
+
 			// Then check if a default list is specified
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-			returnList = Long.parseLong(prefs.getString(context.getString(R.string
-					.pref_defaultlist), "-1"));
+			String defListPrefName = context.getString(R.string.pref_defaultlist);
+			returnList = Long.parseLong(prefs.getString(defListPrefName, "-1"));
 		}
 
 		if (returnList > 0) {
 			// See if it exists
-			final Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns
-					.FIELDS, TaskList.Columns._ID + " IS ?", new String[] { Long.toString
-					(returnList) }, null);
+			final Cursor c = context
+					.getContentResolver()
+					.query(TaskList.URI,
+							TaskList.Columns.FIELDS,
+							TaskList.Columns._ID + " IS ?",
+							new String[] { Long.toString(returnList) },
+							null);
 			if (c != null) {
 				if (c.moveToFirst()) {
 					returnList = c.getLong(0);
@@ -91,10 +100,16 @@ public class ListHelper {
 		}
 
 		if (returnList < 1) {
+			assert returnList == -1; // ... I think ??
+
 			// Fetch a valid list from database if previous attempts are invalid
-			final Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns
-					.FIELDS, null, null, context.getResources().getString(R.string
-					.const_as_alphabetic, TaskList.Columns.TITLE));
+			String orderingSql = context
+					.getResources()
+					.getString(R.string.const_as_alphabetic, TaskList.Columns.TITLE);
+			final Cursor c = context
+					.getContentResolver()
+					.query(TaskList.URI, TaskList.Columns.FIELDS, null,
+							null, orderingSql);
 			if (c != null) {
 				if (c.moveToFirst()) {
 					returnList = c.getLong(0);
