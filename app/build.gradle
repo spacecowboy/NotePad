@@ -60,13 +60,20 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
         }
-        releasePlayStore {
+        playStore {
+            // a RELEASE build for the google play store. The ONLY difference is the package name,
+            // which lets you install this app alongside the version from f-droid
             applicationIdSuffix ".play"
             versionNameSuffix "-Play"
             // enable R8
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
+            // This is a sorted list of fallback build types used when a dependency does not
+            // include a "playStore" build type. The plugin selects the first build type available
+            // in the dependency. So this will use the "release" mode of drag-sort-listview for
+            // our "playStore" profile
+            matchingFallbacks = ['release', 'debug']
         }
     }
 
@@ -88,6 +95,14 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments disableAnalytics: 'true'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                // you need this to make org.androidannotations:androidannotations compile
+                // in "playStore" build type. Once you get rid of the library, delete this
+                arguments = ["resourcePackageName": android.defaultConfig.applicationId]
+            }
+        }
     }
 
     testOptions {
