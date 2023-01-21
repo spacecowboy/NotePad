@@ -49,7 +49,6 @@
 	<!-- Vetted -->
 	<attr name="my_list_selector" format="reference"/>
 	<attr name="editorBackgroundColor" format="reference"/>
-	<attr name="btn_default_selector" format="reference"/>
 	<attr name="img_default_selector" format="reference"/>
 
 	<attr name="viewpager_bg" format="reference"/>

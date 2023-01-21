@@ -31,7 +31,7 @@
 	<style name="ThemeBaseDark" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
+
 		<item name="img_default_selector">@drawable/img_default_selector_dark</item>
 		<item name="viewpager_bg">@android:drawable/dark_header</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
@@ -93,7 +93,6 @@
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="editorBackgroundColor">@drawable/card_light</item>
-		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_light</item>
 		<item name="viewpager_bg">@color/googlenow_grey_trans</item>
 		<item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
