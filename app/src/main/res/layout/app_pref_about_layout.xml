@@ -106,6 +106,16 @@
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView
+			android:id="@+id/tvDonations"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="8dp"
+			android:text="filled in AboutPrefs.java"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:autoLink="all"

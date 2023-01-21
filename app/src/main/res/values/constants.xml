@@ -93,6 +93,9 @@
 	<string name="dashclock_pref_next7">Next7</string>
 	<string name="dashclock_pref_none">None</string>
 
+	<!-- URLs -->
+	<string name="github_repo_url" translatable="false">https://github.com/spacecowboy/NotePad</string>
+
 	<!-- Date formats. "localtime" is replaced at runtime with 12/24 hour clock.
 	 They're hardcoded and untranslatable because if translators make mistakes,
 	 the app will crash at runtime, and I won't check those strings on every pull request.

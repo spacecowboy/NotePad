@@ -48,5 +48,10 @@ public class AboutPrefs extends Fragment {
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		mBinding.appVersionRow.setText(getString(R.string.version, BuildConfig.VERSION_NAME));
+		mBinding.tvDonations.setText(getString(R.string.app_about_donations,
+				getString(R.string.sponsor_this_project),
+				getString(R.string.github_repo_url)
+		));
+
 	}
 }
