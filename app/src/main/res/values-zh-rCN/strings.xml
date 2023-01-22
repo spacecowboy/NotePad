@@ -134,11 +134,11 @@
     <string name="loading_widget">正在加载小部件……</string>
     <string name="default_list">默认列表</string>
     <string name="please_type_before_reminder">设置提醒前请先输入一些文字</string>
-    <string name="notecopied_one">已复制 %d 则笔记</string>
+    <string name="notecopied_one">已复制一则笔记</string>
     <string name="notecopied_other">已复制 %d 条便签</string>
-    <string name="notedeleted_one">已删除 %d 则笔记</string>
+    <string name="notedeleted_one">已删除一则笔记</string>
     <string name="notedeleted_other">已删除 %d 条便签</string>
-    <string name="selected_one">已选定 %d 则笔记</string>
+    <string name="selected_one">已选定一则笔记</string>
     <string name="selected_other">已选定 %d 条便签</string>
     <string name="background_sync">后台同步</string>
     <string name="background_sync_info">每小时同步一次</string>
