@@ -1,0 +1,43 @@
+name: Publish to Play store
+
+on:
+  push:
+    # Branch only during testing
+    branches:
+      - fastlane
+    #tags:
+    #  - '*'
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+    - name: perform the checkout
+      uses: actions/checkout@v3
+      with:
+        submodules: 'recursive'
+        fetch-depth: 0
+
+    - name: perform the validation
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: perform the JDK setup
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: 'gradle'
+
+    - name: perform Gradle caching
+      uses: gradle/gradle-build-action@v2
+
+    - name: build and deploy
+      run: ./deploy_playstore.sh --dry-run
+      env:
+        SERVICEACCOUNTJSON: ${{ secrets.SERVICEACCOUNTJSON }}
+        KEYSTOREPASSWORD: ${{ secrets.KEYSTOREPASSWORD }}
+        KEYSTORE: ${{ secrets.KEYSTORE }}
+        KEYPASSWORD: ${{ secrets.KEYPASSWORD }}
+        KEYALIAS: ${{ secrets.KEYALIAS }}
