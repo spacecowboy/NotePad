@@ -3,10 +3,10 @@ name: Publish to Play store
 on:
   push:
     # Branch only during testing
-    branches:
-      - fastlane
-    #tags:
-    #  - '*'
+    #branches:
+    #  - master
+    tags:
+      - '*'
 
 jobs:
   build_and_deploy:
@@ -34,7 +34,7 @@ jobs:
       uses: gradle/gradle-build-action@v2
 
     - name: build and deploy
-      run: ./deploy_playstore.sh --dry-run
+      run: ./deploy_playstore.sh
       env:
         SERVICEACCOUNTJSON: ${{ secrets.SERVICEACCOUNTJSON }}
         KEYSTOREPASSWORD: ${{ secrets.KEYSTOREPASSWORD }}
