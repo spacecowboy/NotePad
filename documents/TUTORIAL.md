@@ -5,11 +5,31 @@ document will explain every unintuitive feature of the app, to turn you into a p
 This guide is written for the phone layout. The tablet layout is a bit different, it's optimized for
 bigger screens.
 
+## Summary
+
+```mermaid
+graph TD
+    A[Main view] -->|swipe right| B(Drawer menu)
+    B --> C{Choose \n action}
+    C -->|1 of 3 lists on top| D[fa:fa-list abstract view]
+    C -->|long press a list| E[edit dialog]
+    C -->|press a list| F[show list]
+    C -->|fa:fa-folder button| G[add list]
+
+    A --> H[fa:fa-dots overflow menu]
+    H --> I[fa:fa-archive archive view]
+    H --> |clear completed| J[send completed \n notes to archive]
+
+%% comment: you should finish this chart
+%% https://mermaid.live/ is very helpful
+
+```
+
 ## Navigating the app
 
 ### The main view
 
-![main view](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut1.png)
+![main view](../tutorial/tut1.png)
 
 Here you see:
 
@@ -30,7 +50,7 @@ Here you see:
 
 ### The left drawer
 
-![left drawer](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut2.png)
+![left drawer](../tutorial/tut2.png)
 
 Here you see:
 
@@ -46,7 +66,7 @@ Here you see:
 
 ### The list edit dialog
 
-![edit dialog](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut3.png)
+![edit dialog](../tutorial/tut3.png)
 
 In this dialog you can:
 
@@ -65,7 +85,7 @@ In this dialog you can:
 
 ### The archive view
 
-![archive](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut4.png)
+![archive](../tutorial/tut4.png)
 
 Here you can:
 
@@ -78,7 +98,7 @@ Here you can:
 
 ### The settings page
 
-![settings](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut5.png)
+![settings](../tutorial/tut5.png)
 
 Here you can see all our settings. They are laid out linearly. I recommend checking all of them, but
 in particular the **notification settings**, where you can customize the behavior of notifications
@@ -88,7 +108,7 @@ re-install the app even on another phone.
 
 ### The task detail panel
 
-![task detail view](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut6.png)
+![task detail view](../tutorial/tut6.png)
 
 Here you can:
 
@@ -119,7 +139,7 @@ Here you can:
 
 ### The task history page
 
-![task history](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut7.png)
+![task history](../tutorial/tut7.png)
 
 Here you can:
 
@@ -154,7 +174,7 @@ creates a new list with the same name and all the notes it contains.
 
 For example, if your notes look like this:
 
-![org notes](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut10.png)
+![org notes](../tutorial/tut10.png)
 
 Then in `/storage/emulated/0/Android/data/com.nononsenseapps.notepad/files/orgfiles/Tasks.org`, or
 some equivalent path, you will have a file with this text:
@@ -216,7 +236,7 @@ on which day and hour you want to see each reminder. They appear as notification
 reminder to repeat on some week days, and when the notification appears you swipe it away, the
 reminder will get rescheduled to the next valid day.
 
-![notification](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut8.png)
+![notification](../tutorial/tut8.png)
 
 As you just saw, in some occasions the notification can show 2 action buttons:
 
@@ -236,7 +256,7 @@ The notification settings, which you reach from the `⋮` menu -> then "settings
 -> then "notifications", can bring you to pages where you disable hibernation and battery
 optimization.
 
-![prefs](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut9.png)
+![prefs](../tutorial/tut9.png)
 
 I recommend you do this, and also enable "exact notifications", because then the reminders from this
 app will show up more reliably, even when the phone is sleeping. I assume that, if you set a
@@ -248,7 +268,7 @@ notifications on time instead of saving battery, at least for this app.
 
 This app has 2 widgets. They look like this:
 
-![home screen](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut11.png)
+![home screen](../tutorial/tut11.png)
 
 ### The shortcut
 
@@ -265,7 +285,7 @@ look for this icon among all available widgets:
 
 Then you will see a page where you can customize the widget's appearance:
 
-![widget prefs](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut12.png)
+![widget prefs](../tutorial/tut12.png)
 
 Here you can choose:
 
@@ -283,7 +303,7 @@ Here you can choose:
 
 You can configure the list widget to show a single note. It will look like this:
 
-![single](../fastlane/metadata/android/en-US/images/phoneScreenshots/tut13.png)
+![single](../tutorial/tut13.png)
 
 You have to:
 
