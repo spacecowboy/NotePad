@@ -44,6 +44,19 @@ android {
         }
     }
 
+    if (project.hasProperty('STORE_FILE')) {
+        signingConfigs {
+            release {
+                storeFile file(STORE_FILE)
+                storePassword STORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }
+        }
+    } else {
+        // println "No key store defined. Signed release not available..."
+    }
+
     // disable code shrinking in debug, enable it in release mode
     buildTypes {
         debug {
@@ -59,6 +72,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
+            if (project.hasProperty('STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
         }
         playStore {
             // a RELEASE build for the google play store. The ONLY difference is the package name,
@@ -69,6 +85,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
+            if (project.hasProperty('STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
             // This is a sorted list of fallback build types used when a dependency does not
             // include a "playStore" build type. The plugin selects the first build type available
             // in the dependency. So this will use the "release" mode of drag-sort-listview for
@@ -128,15 +147,6 @@ android {
     }
 
     // kotlinOptions { jvmTarget = 11 } // compile kotlin to java 11, for compatibility
-
-    if (project.hasProperty('STORE_FILE')) {
-        buildTypes {
-            release {
-            }
-        }
-    } else {
-        // println "No key store defined. Signed release not available..."
-    }
 
     // control which types of configuration APKs you want your
     // app bundle to support

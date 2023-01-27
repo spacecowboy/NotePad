@@ -22,7 +22,7 @@ platform :android do
 
     # Fetch latest codes
     track_version_codes += google_play_track_version_codes(track: "production")
-    track_version_codes += google_play_track_version_codes(track: "beta")
+    #track_version_codes += google_play_track_version_codes(track: "beta")
 
     track_version_codes.max
   end
@@ -46,14 +46,14 @@ platform :android do
 
   desc "Build play bundle"
   lane :build_play_bundle do
-    gradle(task: "clean app:bundlePlay")
+    gradle(task: "clean app:bundlePlayStore")
   end
 
   desc "Deploy a new version to the Google Play"
   lane :deploy do |options|
     upload_to_play_store(
-      mapping: "app/build/outputs/mapping/play/mapping.txt",
-      aab: "app/build/outputs/bundle/play/app-play.aab",
+      #mapping: "app/build/outputs/mapping/play/mapping.txt",
+      aab: "app/build/outputs/bundle/playStore/app-playStore.aab",
       track: options[:track]
     )
   end
@@ -61,8 +61,8 @@ platform :android do
   desc "Validate deployment of a new version to the Google Play"
   lane :validate_deploy do |options|
     upload_to_play_store(
-      mapping: "app/build/outputs/mapping/play/mapping.txt",
-      aab: "app/build/outputs/bundle/play/app-play.aab",
+      #mapping: "app/build/outputs/mapping/play/mapping.txt",
+      aab: "app/build/outputs/bundle/playStore/app-playStore.aab",
       track: options[:track],
       validate_only: true
     )
