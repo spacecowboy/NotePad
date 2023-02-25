@@ -264,4 +264,6 @@
     <string name="tutorial_online">Tutorial (online)</string>
     <string name="welcome_note_title">Benvenuto!</string>
     <string name="version">Versione: %s</string>
+    <string name="show_completed_notes">Mostra le note completate</string>
+    <string name="app_about_donations">Accettiamo donazioni. Per supportarci, cerca %1$s in %2$s</string>
 </resources>
