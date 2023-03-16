@@ -14,7 +14,8 @@ Aggiornata per supportare la Android 13, quest'applicazione open source vanta le
 * Cronologia nota
 * Elenco di note eliminate
 
-Se vuoi migliorare quest'app, o condividere qualche idea, visita la nostra pagina su github.
+Se vuoi migliorare quest'app, fare una donazione o condividere qualche idea,
+visita la nostra pagina su github: https://github.com/spacecowboy/NotePad
 
 Una possibile alternativa è https://f-droid.org/packages/com.orgzly
 Orgzly è un'app per le note in sviluppo attivo che può importare le note di quest'app
