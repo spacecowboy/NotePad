@@ -1,0 +1,10 @@
+NoNonsense Notes v7.1.3
+
+Reflejos:
+- Traducido usando Weblate
+- agregar un tutorial en línea
+- deja de pedir acceso a la cuenta de google
+
+Detalles:
+- Ajustes de interfaz de usuario
+- limpieza de código
