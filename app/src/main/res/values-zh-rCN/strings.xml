@@ -160,7 +160,7 @@
     <string name="all_tasks">所有任务</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">仅限特定列表中的任务</string>
     <string name="dashclock_show_overdue_tasks">显示过期任务</string>
-    <string name="dashclock_overdue_tasks_show">显示过期任务</string>
+    <string name="dashclock_overdue_tasks_show">显示了过期任务</string>
     <string name="dashclock_overdue_tasks_hide">隐藏过期任务</string>
     <string name="dashclock_title_activity_tasks_settings">设置</string>
     <string name="dashclock_pref_header_general">一般</string>
