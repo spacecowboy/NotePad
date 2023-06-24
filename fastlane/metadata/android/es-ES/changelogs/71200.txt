@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.2
+
+Reflejos:
+- Traducido usando Weblate
+- la búsqueda por voz vuelve a funcionar
+- más formatos de fecha para elegir
+- mostrar "el próximo mes" y el año cuando las tareas se ordenan por fecha
+- soporte para copia de seguridad automática de Android
+
+Detalles:
+- Ajustes de interfaz de usuario para cuadros de diálogo.
+- corrección de errores
+- Se eliminó todo el código obsoleto de las tareas de Google, esto debería ocultar el molesto cuadro de diálogo de la cuenta de Google

@@ -1,0 +1,11 @@
+NoNonsense Notes v7.1.0
+
+Reflejos:
+- Selector de archivos mejorado para archivos de copia de seguridad
+- Archivos ORG movidos a una carpeta predeterminada
+- Traducciones actualizadas usando Weblate
+- Se corrigió un error que clonaba recordatorios al volver a abrir notas
+
+Detalles:
+- Objetivo Androide 13
+- Ajustes de interfaz de usuario

@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.1
+
+Reflejos:
+- Traducido usando Weblate
+- preferencia de sincronización global agregada, puede evitar que el código de sincronización se ejecute en absoluto
+- permisos cambiados
+- El icono de acceso directo ahora es visible en "lanzador simple"
+- bloquear la edición de recordatorios de notas cuando está bloqueado
+- corrige el error que muestra una nota vacía al compartir un enlace
+
+Detalles:
+- pequeñas mejoras en la interfaz de usuario
+- eliminar el código no utilizado

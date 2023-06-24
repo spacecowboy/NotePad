@@ -1,0 +1,13 @@
+v7.0.0: NoNonsense Notes
+
+Reflejos:
+- Ahora compatible con Android 12
+- Sincronización de Google Tasks caída
+- Los archivos ORG y JSON ahora se pueden guardar en varios lugares. Puedes elegir cuales.
+
+Detalles:
+- Target SDK aumentó a la versión 32
+- Actualizado a la biblioteca de AndroidX
+- Se corrigieron todas las pruebas.
+- Dependencias actualizadas y Gradle
+- Limpieza general de código

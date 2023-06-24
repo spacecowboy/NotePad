@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Reflejos:
+- Arreglar la sincronización de tareas de Google.
+- Solucione el error que eliminaría todas las notas durante la sincronización de Google Tasks.
