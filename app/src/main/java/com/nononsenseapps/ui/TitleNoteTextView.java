@@ -299,7 +299,7 @@ public class TitleNoteTextView extends AppCompatTextView {
 				/*
 				 * A bug reported on Miui Android 4.4. NullPointerException inside setText method
 				 * due to some nullpointer in android.text.SpannableStringInternal.equals method.
-				 * See crashlog in issue #291
+				 * See crash log in issue #291
 				 */
 				setText(mStyledText);
 			}

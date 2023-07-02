@@ -23,7 +23,7 @@ import android.util.AttributeSet;
 import androidx.appcompat.widget.AppCompatCheckBox;
 
 /**
- * Convenience class to use in listviews. Bind the id to the checkbox inorder to
+ * Convenience class to use in listviews. Bind the id to the checkbox in order to
  * use a onCheckedChangeListener more easily.
  */
 public class NoteCheckBox extends AppCompatCheckBox {
