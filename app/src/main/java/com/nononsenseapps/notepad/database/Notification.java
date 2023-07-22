@@ -75,8 +75,8 @@ public class Notification extends DAO {
 	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps."
 			+ TABLE_NAME;
 
-	public static final Uri URI = Uri.withAppendedPath(Uri.parse(MyContentProvider.SCHEME
-			+ MyContentProvider.AUTHORITY), TABLE_NAME);
+	public static final Uri URI = Uri.withAppendedPath(
+			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY), TABLE_NAME);
 	public static final Uri URI_WITH_TASK_PATH = Uri.withAppendedPath(
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY), WITH_TASK_PATH);
 

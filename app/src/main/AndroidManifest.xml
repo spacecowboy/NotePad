@@ -261,9 +261,11 @@
 			android:theme="@style/DashClockSettings.Theme"/>
 
 		<!-- DataBase provider -->
+		<!-- "${applicationId}" gives a different ID to the fdroid and play store versions,
+		 so that they can be both installed simultaneously -->
 		<provider
 			android:name="com.nononsenseapps.notepad.database.MyContentProvider"
-			android:authorities="com.nononsenseapps.NotePad"
+			android:authorities="${applicationId}.MyAuthority"
 			android:enabled="true"
 			android:exported="true"
 			android:grantUriPermissions="true"/>

@@ -30,11 +30,18 @@ import android.net.Uri;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.UpdateNotifier;
+import com.nononsenseapps.notepad.BuildConfig;
 
 import java.util.ArrayList;
 
 public class MyContentProvider extends ContentProvider {
-	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
+
+	/**
+	 * Corresponds to <i>android:authorities="${applicationId}.MyAuthority"</i>
+	 * in AndroidManifest.xml
+	 */
+	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".MyAuthority";
+
 	public static final String SCHEME = "content://";
 	private static final UriMatcher sURIMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
