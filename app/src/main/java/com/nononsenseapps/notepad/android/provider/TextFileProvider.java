@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 import java.io.File;
@@ -38,7 +39,12 @@ public class TextFileProvider extends ContentProvider {
 
 	// TODO is this whole com.nononsenseapps.notepad.android.provider namespace useless ?
 
-	public static final String AUTHORITY = "com.nononsenseapps.notepad.TESTPROVIDER";
+	/**
+	 * Corresponds to <i>android:authorities="${applicationId}.TESTPROVIDER"</i>
+	 * in AndroidManifest.xml
+	 */
+	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".TESTPROVIDER";
+
 	private static final String TAG = "TextFileProvider";
 
 	// This urimatcher converts incoming URIs to corresponding uricodes

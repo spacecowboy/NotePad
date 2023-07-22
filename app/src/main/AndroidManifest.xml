@@ -297,7 +297,7 @@
 
 		<provider
 			android:name=".android.provider.TextFileProvider"
-			android:authorities="com.nononsenseapps.notepad.TESTPROVIDER"
+			android:authorities="${applicationId}.TESTPROVIDER"
 			android:enabled="true"
 			android:exported="true"
 			android:icon="@drawable/ic_sd_storage_24dp"
