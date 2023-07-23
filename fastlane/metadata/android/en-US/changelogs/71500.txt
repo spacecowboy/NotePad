@@ -1,0 +1,5 @@
+NoNonsense Notes v7.1.5
+
+Highlights:
+- Hotfix for play store publication
+- Updated dependencies
