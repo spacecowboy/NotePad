@@ -46,6 +46,11 @@ then
   ./gradlew :app:checkLanguages --quiet
 fi
 
+# empty new line
+echo >&2 ""
+echo >&2 "Opening changelog editor..."
+echo >&2 ""
+
 # changelog template. To add all the new commit messages, move this line inside the ""
 
 CL="NoNonsense Notes v${NEXT_VERSION}
