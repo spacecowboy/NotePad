@@ -17,7 +17,7 @@
 -->
 <!-- password popups will shake if you write the wrong password. This animation is used -->
 <translate xmlns:android="http://schemas.android.com/apk/res/android"
-	android:duration="500"
+	android:duration="@android:integer/config_longAnimTime"
 	android:fromXDelta="0"
 	android:interpolator="@anim/cycle_7"
 	android:toXDelta="10"/>

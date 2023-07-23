@@ -14,6 +14,6 @@
      limitations under the License.
 -->
 <translate xmlns:android="http://schemas.android.com/apk/res/android"
-	android:duration="300"
+	android:duration="@android:integer/config_mediumAnimTime"
 	android:fromXDelta="-50%p"
 	android:toXDelta="0"/>
