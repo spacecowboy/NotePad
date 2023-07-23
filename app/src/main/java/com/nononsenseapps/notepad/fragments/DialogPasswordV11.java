@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.databinding.FragmentDialogPasswordBinding;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
@@ -98,8 +99,11 @@ public class DialogPasswordV11 extends DialogFragment {
 			}
 			dismiss();
 		} else {
-			Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
-			mBinding.passwordField.startAnimation(shake);
+			if (PreferencesHelper.areAnimationsEnabled(this.getContext())) {
+				// shake the dialog to show that the password is wrong
+				Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
+				mBinding.passwordField.startAnimation(shake);
+			}
 			Toast.makeText(getActivity(), getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();
 		}

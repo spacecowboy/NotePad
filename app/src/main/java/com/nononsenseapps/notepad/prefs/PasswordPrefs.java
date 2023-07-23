@@ -30,6 +30,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.databinding.AppPrefPasswordLayoutBinding;
 import com.nononsenseapps.notepad.fragments.DialogPasswordV11;
@@ -83,9 +84,12 @@ public class PasswordPrefs extends Fragment {
 				showPasswordDialog(passw1);
 			}
 		} else {
+			if (PreferencesHelper.areAnimationsEnabled(this.getContext())) {
+				// shake the dialog to show that the password is wrong
+				Animation shake = AnimationUtils.loadAnimation(this.getContext(), R.anim.shake);
+				mBinding.tempPassword2.startAnimation(shake);
+			}
 			// Show a toast so the user knows he did something wrong
-			Animation shake = AnimationUtils.loadAnimation(this.getContext(), R.anim.shake);
-			mBinding.tempPassword2.startAnimation(shake);
 			Toast.makeText(this.getContext(), getText(R.string.passwords_dont_match),
 					Toast.LENGTH_SHORT).show();
 		}

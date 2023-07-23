@@ -19,6 +19,7 @@ package com.nononsenseapps.helpers;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
@@ -101,6 +102,30 @@ public final class PreferencesHelper {
 	 */
 	public static boolean isPasswordSet(@NonNull Context context) {
 		return !Prefs(context).getString(PasswordPrefs.KEY_PASSWORD, "").isEmpty();
+	}
+
+	/**
+	 * @return TRUE if animations are enabled in the system settings. Used to choose if animations
+	 * should be displayed in the app
+	 */
+	public static boolean areAnimationsEnabled(@NonNull Context context) {
+
+		// there are 3 redundant system settings that control animations
+		String[] sysSettingsToCheck = new String[] {
+				Settings.Global.ANIMATOR_DURATION_SCALE,
+				Settings.Global.TRANSITION_ANIMATION_SCALE,
+				Settings.Global.WINDOW_ANIMATION_SCALE
+		};
+
+		// if at least 1 of those is set to "0x", which means "disable animations",
+		// we assume that the user wants to disable all animations, also in this app
+		for (String option : sysSettingsToCheck) {
+			float f = Settings.Global.getFloat(context.getContentResolver(), option, 1.0f);
+			if (f == 0) return false;
+		}
+
+		// if none of the 3 settings is "0x", we assume that animations are enabled
+		return true;
 	}
 
 }
