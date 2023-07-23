@@ -1,0 +1,15 @@
+NoNonsense Notes v7.1.4
+
+Highlights:
+- updated translations
+- show animations only if they are enabled in system settings #501
+- fix bug causing snoozed reminder to reappear
+- hide complete on notifications for note-types, fixes #312
+- show completed notes on widget
+- allow installing app from many app stores simultaneously
+- fix bug hiding search suggestions
+
+Details:
+- added fastlane deployment pipeline to Play store. Pipeline only runs on tags
+- update dependencies
+- code cleanup
