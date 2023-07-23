@@ -262,7 +262,7 @@ public class ActivityMain extends AppCompatActivity
 	public void finish() {
 		super.finish();
 		// Only animate when specified. Should be when it was animated "in"
-		if (mAnimateExit) {
+		if (mAnimateExit && PreferencesHelper.areAnimationsEnabled(this)) {
 			overridePendingTransition(R.anim.activity_slide_in_right,
 					R.anim.activity_slide_out_right_full);
 		}
@@ -529,11 +529,17 @@ public class ActivityMain extends AppCompatActivity
 		final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		if (mReverseAnimation) {
 			mReverseAnimation = false;
-			transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top,
-					R.anim.slide_in_top, R.anim.slide_out_bottom);
+			if (PreferencesHelper.areAnimationsEnabled(this)) {
+				transaction.setCustomAnimations(
+						R.anim.slide_in_bottom, R.anim.slide_out_top,
+						R.anim.slide_in_top, R.anim.slide_out_bottom);
+			}
 		} else {
-			transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom,
-					R.anim.slide_in_bottom, R.anim.slide_out_top);
+			if (PreferencesHelper.areAnimationsEnabled(this)) {
+				transaction.setCustomAnimations(
+						R.anim.slide_in_top, R.anim.slide_out_bottom,
+						R.anim.slide_in_bottom, R.anim.slide_out_top);
+			}
 		}
 
 		// If it contains a noteId, load an editor. If also tablet, load the lists
@@ -543,7 +549,7 @@ public class ActivityMain extends AppCompatActivity
 			} else if (ActivityMainHelper.isNoteIntent(intent)) {
 				// some text was shared to this app
 				right = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteShareText(intent),
-						ActivityMainHelper.getListIdToShow(intent,this));
+						ActivityMainHelper.getListIdToShow(intent, this));
 			}
 		} else if (ActivityMainHelper.isNoteIntent(intent)) {
 			isShowingEditor = true;
@@ -788,10 +794,10 @@ public class ActivityMain extends AppCompatActivity
 
 			// Set the intent here also so rotations open the same item
 			setIntent(intent);
-			getSupportFragmentManager()
-					.beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
-					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(taskUri))
+			var tmp1 = getSupportFragmentManager().beginTransaction();
+			if (PreferencesHelper.areAnimationsEnabled(this))
+				tmp1.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom);
+			tmp1.replace(R.id.fragment2, TaskDetailFragment_.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		} else {
@@ -817,10 +823,10 @@ public class ActivityMain extends AppCompatActivity
 			// Set intent to preserve state when rotating
 			setIntent(intent);
 			// Replace editor fragment
-			getSupportFragmentManager()
-					.beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
-					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
+			var tmp1 = getSupportFragmentManager().beginTransaction();
+			if (PreferencesHelper.areAnimationsEnabled(this))
+				tmp1.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom);
+			tmp1.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		} else {
@@ -832,11 +838,10 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void closeFragment(final Fragment fragment) {
 		if (fragment2 != null) {
-			getSupportFragmentManager()
-					.beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
-					.remove(fragment)
-					.commitAllowingStateLoss();
+			var tmp1 = getSupportFragmentManager().beginTransaction();
+			if (PreferencesHelper.areAnimationsEnabled(this))
+				tmp1.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom);
+			tmp1.remove(fragment).commitAllowingStateLoss();
 			taskHint.setAlpha(0f);
 			taskHint.setVisibility(View.VISIBLE);
 			taskHint.animate().alpha(1f).setStartDelay(500);
