@@ -24,8 +24,15 @@ android {
     namespace "com.nononsenseapps.notepad" // for R.*
 
     buildFeatures {
+        buildConfig true
         // replaces part of the androidannotations library. See mBinding in java classes
         viewBinding true
+        // these features are useless for us
+        compose false
+        aidl false
+        resValues false
+        renderScript false
+        shaders false
     }
 
     lint {
@@ -134,16 +141,6 @@ android {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-    }
-
-    buildFeatures {
-        buildConfig true
-        // these features are useless for us
-        compose false
-        aidl false
-        renderScript false
-        resValues false
-        shaders false
     }
 
     // kotlinOptions { jvmTarget = 11 } // compile kotlin to java 11, for compatibility
