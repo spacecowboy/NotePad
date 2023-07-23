@@ -258,11 +258,11 @@
 			android:theme="@style/DashClockSettings.Theme"/>
 
 		<!-- DataBase provider -->
-		<!-- "${applicationId}" gives a different ID to the fdroid and play store versions,
-		 so that they can be both installed simultaneously -->
+		<!-- its authority must be unique among different buildTypes (debug, fdroid, playstore)
+		 and equal to the one used in searchable.xml -->
 		<provider
 			android:name="com.nononsenseapps.notepad.database.MyContentProvider"
-			android:authorities="com.nononsenseapps.notepad.MY_AUTHORITY"
+			android:authorities="@string/NnnAuthority_1"
 			android:enabled="true"
 			android:exported="true"
 			android:grantUriPermissions="true"/>
@@ -291,10 +291,10 @@
 			android:label="File Watcher"/>
 
 		<!-- A couple of providers -->
-
+		<!-- gradle automatically replaces ${applicationId} when building -->
 		<provider
 			android:name=".android.provider.TextFileProvider"
-			android:authorities="${applicationId}.TESTPROVIDER"
+			android:authorities="${applicationId}.TESTPROVIDER.AUTHORITY"
 			android:enabled="true"
 			android:exported="true"
 			android:icon="@drawable/ic_sd_storage_24dp"
@@ -324,10 +324,11 @@
 		</provider>
 
 		<!-- TODO useless ? -->
-
+		<!-- ${applicationId} makes the authority unique, allowing to install the fdroid
+		 and play store versions simultaneously -->
 		<provider
 			android:name=".android.provider.DummyProvider"
-			android:authorities="com.nononsenseapps.notepad.DUMMYPROVIDER"
+			android:authorities="${applicationId}.DUMMYPROVIDER.AUTHORITY"
 			android:enabled="true"
 			android:exported="true"
 			android:icon="@drawable/app_icon"

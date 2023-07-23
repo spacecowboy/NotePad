@@ -37,10 +37,11 @@ import java.util.ArrayList;
 public class MyContentProvider extends ContentProvider {
 
 	/**
-	 * Corresponds to <i>android:authorities="${applicationId}.MyAuthority"</i>
-	 * in AndroidManifest.xml
+	 * The authority of the content provider must be unique for each package (app) installed,
+	 * and it must be equal to the values used in searchable.xml and AndroidManifest.xml
+	 * This one is defined in build.gradle for each buildType. It's equal to @string/NnnAuthority_1
 	 */
-	public static final String AUTHORITY = "com.nononsenseapps.notepad.MY_AUTHORITY";// BuildConfig.APPLICATION_ID + ".MyAuthority";
+	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".MyContentAuthority";
 
 	public static final String SCHEME = "content://";
 	private static final UriMatcher sURIMatcher = new UriMatcher(

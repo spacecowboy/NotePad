@@ -40,10 +40,10 @@ public class TextFileProvider extends ContentProvider {
 	// TODO is this whole com.nononsenseapps.notepad.android.provider namespace useless ?
 
 	/**
-	 * Corresponds to <i>android:authorities="${applicationId}.TESTPROVIDER"</i>
+	 * Corresponds to <i>android:authorities="${applicationId}.TESTPROVIDER.AUTHORITY"</i>
 	 * in AndroidManifest.xml
 	 */
-	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".TESTPROVIDER";
+	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".TESTPROVIDER.AUTHORITY";
 
 	private static final String TAG = "TextFileProvider";
 

@@ -28,6 +28,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ import java.util.List;
 public class DummyProvider extends ContentProvider {
 
 	// TODO change authority and add corresponding manifest entry
-	public static final String AUTHORITY = "com.nononsenseapps.notepad.DUMMYPROVIDER";
+	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".DUMMYPROVIDER.AUTHORITY";
 	public static final String SCHEME = "content://";
 	private static final String TAG = "DummyProvider";
 
@@ -44,9 +45,7 @@ public class DummyProvider extends ContentProvider {
 
 	private List<DummyItem> mData;
 
-	public DummyProvider() {
-	}
-
+	public DummyProvider() {}
 
 	@Override
 	public boolean onCreate() {

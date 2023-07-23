@@ -27,10 +27,11 @@ android {
         buildConfig true
         // replaces part of the androidannotations library. See mBinding in java classes
         viewBinding true
+        // allow declaring different string resources for different buildTypes
+        resValues true
         // these features are useless for us
         compose false
         aidl false
-        resValues false
         renderScript false
         shaders false
     }
@@ -64,45 +65,6 @@ android {
         // println "No key store defined. Signed release not available..."
     }
 
-    // disable code shrinking in debug, enable it in release mode
-    buildTypes {
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            pseudoLocalesEnabled true
-            // TODO test https://developer.android.com/guide/topics/resources/pseudolocales
-            // just to make gradle shut up about missing classes
-            proguardFiles 'proguard.pro'
-        }
-        release {
-            // enable R8
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
-            if (project.hasProperty('STORE_FILE')) {
-                signingConfig signingConfigs.release
-            }
-        }
-        playStore {
-            // a RELEASE build for the google play store. The ONLY difference is the package name,
-            // which lets you install this app alongside the version from f-droid
-            applicationIdSuffix ".play"
-            versionNameSuffix "-Play"
-            // enable R8
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
-            if (project.hasProperty('STORE_FILE')) {
-                signingConfig signingConfigs.release
-            }
-            // This is a sorted list of fallback build types used when a dependency does not
-            // include a "playStore" build type. The plugin selects the first build type available
-            // in the dependency. So this will use the "release" mode of drag-sort-listview for
-            // our "playStore" profile
-            matchingFallbacks = ['release', 'debug']
-        }
-    }
-
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         targetSdkVersion 33
@@ -128,6 +90,65 @@ android {
                 // in "playStore" build type. Once you get rid of the library, delete this
                 arguments = ["resourcePackageName": android.defaultConfig.applicationId]
             }
+        }
+    }
+
+    // disable code shrinking in debug, enable it in release mode
+    buildTypes {
+        debug {
+            // identifying the debug version allows installing alongside the fdroid or play store version
+            applicationIdSuffix ".debug"
+            versionNameSuffix "-Debug"
+
+            minifyEnabled false
+            shrinkResources false
+            pseudoLocalesEnabled true
+            // TODO test https://developer.android.com/guide/topics/resources/pseudolocales
+            // just to make gradle shut up about missing classes
+            proguardFiles 'proguard.pro'
+
+            // to install the play store and fdroid versions simultaneously, content provider
+            // authorities must be unique => define one for xml files
+            resValue "string", "NnnAuthority_1", defaultConfig.applicationId + applicationIdSuffix + ".MyContentAuthority"
+        }
+        release {
+            // a RELEASE build for F-DROID. The ONLY difference is the package name,
+            // which lets you install this app alongside the debug version
+            applicationIdSuffix ".fdroid"
+            versionNameSuffix "-Fdroid"
+            // enable R8
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
+            if (project.hasProperty('STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
+
+            /// to install the play store and fdroid versions simultaneously, content provider
+            // authorities must be unique => define one for xml and for java
+            resValue "string", "NnnAuthority_1", defaultConfig.applicationId + applicationIdSuffix + ".MyContentAuthority"
+        }
+        playStore {
+            // a RELEASE build for the google play store. The ONLY difference is the package name,
+            // which lets you install this app alongside the version from f-droid
+            applicationIdSuffix ".play"
+            versionNameSuffix "-Play"
+            // enable R8
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
+            if (project.hasProperty('STORE_FILE')) {
+                signingConfig signingConfigs.release
+            }
+            // This is a sorted list of fallback build types used when a dependency does not
+            // include a "playStore" build type. The plugin selects the first build type available
+            // in the dependency. So this will use the "release" mode of drag-sort-listview for
+            // our "playStore" profile
+            matchingFallbacks = ['release', 'debug']
+
+            // to install the play store and fdroid versions simultaneously, content provider
+            // authorities must be unique => define one for xml and for java
+            resValue "string", "NnnAuthority_1", defaultConfig.applicationId + applicationIdSuffix + ".MyContentAuthority"
         }
     }
 
