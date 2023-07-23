@@ -15,6 +15,7 @@
      limitations under the License.
 
 -->
+<!-- password popups will shake if you write the wrong password. This animation is used -->
 <translate xmlns:android="http://schemas.android.com/apk/res/android"
 	android:duration="500"
 	android:fromXDelta="0"
