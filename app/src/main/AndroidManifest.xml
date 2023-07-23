@@ -16,10 +16,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<!--
-     Declare the contents of this Android application. The namespace
-     attribute brings in the Android platform namespace
--->
+<!-- Declare the contents of this Android application -->
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -81,7 +78,7 @@
 			android:windowSoftInputMode="adjustResize">
 			<meta-data
 				android:name="android.app.default_searchable"
-				android:value="com.nononsenseapps.notepad.ActivitySearch"/>
+				android:value="com.nononsenseapps.notepad.activities.ActivitySearch"/>
 
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -265,7 +262,7 @@
 		 so that they can be both installed simultaneously -->
 		<provider
 			android:name="com.nononsenseapps.notepad.database.MyContentProvider"
-			android:authorities="${applicationId}.MyAuthority"
+			android:authorities="com.nononsenseapps.notepad.MY_AUTHORITY"
 			android:enabled="true"
 			android:exported="true"
 			android:grantUriPermissions="true"/>

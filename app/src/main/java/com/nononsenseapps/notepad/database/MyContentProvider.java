@@ -40,7 +40,7 @@ public class MyContentProvider extends ContentProvider {
 	 * Corresponds to <i>android:authorities="${applicationId}.MyAuthority"</i>
 	 * in AndroidManifest.xml
 	 */
-	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".MyAuthority";
+	public static final String AUTHORITY = "com.nononsenseapps.notepad.MY_AUTHORITY";// BuildConfig.APPLICATION_ID + ".MyAuthority";
 
 	public static final String SCHEME = "content://";
 	private static final UriMatcher sURIMatcher = new UriMatcher(
