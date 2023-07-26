@@ -202,5 +202,5 @@
     <string name="sd_card_sync">SD kártya szinkronizálás</string>
     <string name="sd_card_summary">A bejegyzések az SD kártyára vannak tükrözve. A változások mind két irányban szinronizálva vannak. A fájlok törlésével a bejegyzések is törlődnek az alkalmazásból!</string>
     <string name="directory">Mappa</string>
-    <string name="cannot_write_to_directory">Mappa nem írható!</string>
+    <string name="cannot_write_to_directory">Mappa nem írható</string>
 </resources>
