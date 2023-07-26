@@ -122,7 +122,7 @@
     <string name="hide_checkbox_summary_off">Kontrollkästchen angezeigt</string>
     <string name="hide_date">Fälligkeitsdatum verbergen</string>
     <string name="item_max_height">Maximale Höhe</string>
-    <string name="long_date_format">"Langes Datumsformat für das  Panel"</string>
+    <string name="long_date_format">Langes Datumsformat für das Panel</string>
     <string name="short_date_format">Kurzes Datumsformat, für die Liste</string>
     <string name="select_date">Datum wählen</string>
     <string name="localedefault">Systemsprache</string>

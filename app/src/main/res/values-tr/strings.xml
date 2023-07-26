@@ -68,7 +68,7 @@
     <string name="settings_cat_syncing">Senkronizasyon</string>
     <string name="show_from_all_lists">Tüm listeler</string>
     <string name="lists">Listeler</string>
-    <string name="deleted">Silindi: </string>
+    <string name="deleted">Silindi</string>
     <string name="repeat">Tekrarla</string>
     <string name="once">Bir defa</string>
     <string name="always">Herzaman</string>
