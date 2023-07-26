@@ -200,7 +200,7 @@
     <string name="backup_export_failed">Không thể tạo sao lưu</string>
     <string name="sd_card">Thẻ SD</string>
     <string name="sd_card_sync">Đồng bộ hoá với thẻ SD</string>
-    <string name="sd_card_summary">Các ghi chú được lưu cả trên thẻ SD và trong ứng dụng. Cảnh báo: Nếu xoá tập tin đồng bộ, các ghi chú sẽ bị mất.</string>
+    <string name="sd_card_summary">Các ghi chú được lưu cả trên thẻ SD và trong ứng dụng. Cảnh báo: Nếu xoá tập tin đồng bộ, các ghi chú sẽ bị mất!</string>
     <string name="directory">Đường dẫn</string>
     <string name="cannot_write_to_directory">Không thể ghi vào đường đẫn</string>
 </resources>
