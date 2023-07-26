@@ -40,3 +40,6 @@ allprojects {
         options.encoding = 'UTF-8'
     }
 }
+
+// import our custom gradle tasks
+apply from: 'customTasks.gradle'
