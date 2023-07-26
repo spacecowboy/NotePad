@@ -43,7 +43,7 @@ fi
 read -r -p "Check consistency of languages list with values- folders? [y/N] " response
 if [[ "$response" =~ ^[yY]$ ]]
 then
-  ./gradlew :app:checkLanguages --quiet
+  ./gradlew checkLanguages --quiet
 fi
 
 # empty new line
