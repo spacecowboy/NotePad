@@ -16,7 +16,7 @@
  */
 
 apply plugin: 'com.android.application'
-// apply plugin: 'kotlin-android'
+// apply plugin: 'kotlin-android' we don't use kotlin for this app
 
 android {
     compileSdkVersion 33
@@ -68,14 +68,13 @@ android {
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         targetSdkVersion 33
+
         // most people have at least android 7.1 anyway: https://apilevels.com/
         // 90% of users are on API>=27 => don't write special code for 23<=API<=26, it's worthless
         minSdkVersion 23
 
-        // Making either of these two values dynamic in the defaultConfig will
-        // require a full app build and reinstallation, even for the smallest change.
-        // If these values are fixed, incremental builds are optimized.
-        // Also, f-droid prefers these values to be static => update them manually, please.
+        // If these values remain static, incremental builds are optimized and faster.
+        // Also, FDROID is happier. Update them only with ./release.sh
         versionCode 71500
         versionName "7.1.5"
 
@@ -96,7 +95,8 @@ android {
     // disable code shrinking in debug, enable it in release mode
     buildTypes {
         debug {
-            // identifying the debug version allows installing alongside the fdroid or play store version
+            // identify the debug version to allow installing it
+            // alongside the fdroid or play store version
             applicationIdSuffix ".debug"
             versionNameSuffix "-Debug"
 
@@ -112,10 +112,8 @@ android {
             resValue "string", "NnnAuthority_1", defaultConfig.applicationId + applicationIdSuffix + ".MyContentAuthority"
         }
         release {
-            // a RELEASE build for F-DROID. The ONLY difference is the package name,
-            // which lets you install this app alongside the debug version
-            applicationIdSuffix ".fdroid"
-            versionNameSuffix "-Fdroid"
+            // the FDROID release, where we CAN'T use applicationIdSuffix or versionNameSuffix
+
             // enable R8
             minifyEnabled true
             shrinkResources true
@@ -126,7 +124,7 @@ android {
 
             /// to install the play store and fdroid versions simultaneously, content provider
             // authorities must be unique => define one for xml and for java
-            resValue "string", "NnnAuthority_1", defaultConfig.applicationId + applicationIdSuffix + ".MyContentAuthority"
+            resValue "string", "NnnAuthority_1", defaultConfig.applicationId + ".MyContentAuthority"
         }
         playStore {
             // a RELEASE build for the google play store. The ONLY difference is the package name,
