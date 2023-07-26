@@ -44,7 +44,7 @@ jobs:
       - name: perform the set up for the JDK
         uses: actions/setup-java@v3
         with:
-          java-version: 11
+          java-version: 17
           distribution: temurin
 
       - name: perform Gradle setup & caching
