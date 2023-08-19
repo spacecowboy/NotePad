@@ -36,7 +36,7 @@
     <string name="delete_question">Usuwanie</string>
     <string name="delete_items_message">Na pewno chcesz usunąć wybrane elementy? </string>
     <string name="delete_item_message">Na pewno chcesz usunąć wybrany element? </string>
-    <string name="delete_list_message">Na pewno chcesz usunąć listę? </string>
+    <string name="delete_list_message">Usunąć tę listę\?</string>
     <string name="editor_due_date_hint">Termin</string>
     <string name="editor_title_hint">Tytuł</string>
     <string name="editor_note_hint">Notatka</string>
