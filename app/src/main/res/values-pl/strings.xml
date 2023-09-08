@@ -43,9 +43,9 @@
     <string name="resolve_edit">Edytuj notatkę</string>
     <string name="default_style">Wyświetlanie domyślne </string>
     <string name="show_items_as_tasks">zadania do sprawdzenia</string>
-    <string name="show_items_as_notes">Wyświetlaj jako notatki</string>
-    <string name="sort_list_default">Sortowanie domyślne</string>
-    <string name="sort_list_alphabetical">Alfabetycznie</string>
+    <string name="show_items_as_notes">proste notatki</string>
+    <string name="sort_list_default">Domyślna kolejność sortowania</string>
+    <string name="sort_list_alphabetical">A-Z</string>
     <string name="sort_list_due">Według terminu</string>
     <string name="sort_list_updated">Według ostatniej modyfikacji</string>
     <string name="sort_list_manual">Własna kolejność</string>
