@@ -34,15 +34,15 @@
     <string name="menu_managelists">Zarządzaj listą</string>
     <string name="add_item">Dodaj</string>
     <string name="delete_question">Usuwanie</string>
-    <string name="delete_items_message">Na pewno chcesz usunąć wybrane elementy? </string>
-    <string name="delete_item_message">Na pewno chcesz usunąć wybrany element? </string>
+    <string name="delete_items_message">Usunąć te elementy\?</string>
+    <string name="delete_item_message">Usunąć ten element\?</string>
     <string name="delete_list_message">Usunąć tę listę\?</string>
     <string name="editor_due_date_hint">Termin</string>
     <string name="editor_title_hint">Tytuł</string>
     <string name="editor_note_hint">Notatka</string>
     <string name="resolve_edit">Edytuj notatkę</string>
     <string name="default_style">Wyświetlanie domyślne </string>
-    <string name="show_items_as_tasks">Wyświetlaj jako zadania</string>
+    <string name="show_items_as_tasks">zadania do sprawdzenia</string>
     <string name="show_items_as_notes">Wyświetlaj jako notatki</string>
     <string name="sort_list_default">Sortowanie domyślne</string>
     <string name="sort_list_alphabetical">Alfabetycznie</string>
@@ -202,4 +202,5 @@
     <string name="sd_card_summary">Zadania są dublowane na karcie SD. Zmiany są synchronizowane w obie strony. Należy pamiętać, że usunięcie plików usunie zadania w aplikacji!</string>
     <string name="directory">Katalog</string>
     <string name="cannot_write_to_directory">Nie można zapisać do katalogu</string>
+    <string name="delete_completed_tasks_question">Usunąć wszystkie ukończone zadania\?</string>
 </resources>
