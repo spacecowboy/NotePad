@@ -204,4 +204,6 @@
     <string name="navigation_drawer_close">Cerrar el cajón de navegación</string>
     <string name="drag_to_timetravel">Arrastra para moverte en el tiempo</string>
     <string name="navigation_drawer_open">Abrir el cajón de navegación</string>
+    <string name="use_exact_alarms">Utilizar alarmas exactas</string>
+    <string name="choose_backup_folder">Elige una carpeta para la copia de seguridad</string>
 </resources>
