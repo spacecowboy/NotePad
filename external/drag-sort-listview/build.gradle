@@ -17,17 +17,17 @@
 apply plugin: 'com.android.library'
 
 // suppress (most) warnings related to javadocs that we don't care about
-tasks.withType(Javadoc) {
+tasks.withType(Javadoc).configureEach {
     options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 android {
-    compileSdkVersion 33
+    compileSdk 33
     buildToolsVersion '33.0.1'
     namespace "com.mobeta.android.dslv"
 
     defaultConfig {
-        targetSdkVersion 33
+        targetSdk 33
         minSdkVersion 23
     }
 

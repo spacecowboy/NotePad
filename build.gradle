@@ -35,9 +35,11 @@ allprojects {
         mavenCentral()
         google()
     }
-    tasks.withType(JavaCompile) {
-        options.incremental = true
-        options.encoding = 'UTF-8'
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.incremental = true
+            options.encoding = 'UTF-8'
+        }
     }
 }
 
