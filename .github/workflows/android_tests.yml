@@ -95,6 +95,9 @@ jobs:
       - name: perform the Gradle build
         run: ./gradlew build
 
+      - name: run custom tasks for additional checks
+        run: ./gradlew checkLanguages checkFastlane
+
       - name: install ffmpeg
         run: brew install ffmpeg
 

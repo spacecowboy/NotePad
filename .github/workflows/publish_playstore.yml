@@ -33,6 +33,9 @@ jobs:
     - name: perform Gradle caching
       uses: gradle/gradle-build-action@v2
 
+    - name: run custom tasks to ensure app can be published on play store
+      run: ./gradlew checkLanguages checkFastlane
+
     - name: build and deploy
       run: ./deploy_playstore.sh
       env:

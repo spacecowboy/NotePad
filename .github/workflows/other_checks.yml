@@ -29,9 +29,13 @@ jobs:
       - name: perform the Gradle build
         run: ./gradlew build
 
+      - name: run custom tasks for additional checks
+        run: ./gradlew checkLanguages checkFastlane
+
       - name: lint with gradle
         run: ./gradlew lint
 
 # add something else ?
 # anything that may be interesting for github ?
 # something related to weblate ?
+# TODO as of now, this file is USELESS. maybe add "./gradlew lint" on android_build.yml and delete this file ?
