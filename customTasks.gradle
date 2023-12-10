@@ -1,7 +1,7 @@
 // custom tasks for gradle
 
 // run with: ./gradlew checkLanguages
-task checkLanguages {
+tasks.register('checkLanguages') {
 
     // TODO Feeder has a better version of this, but you need to change the locales code. See:
     //  https://gitlab.com/spacecowboy/Feeder/-/blob/master/app/build.gradle.kts#L344
@@ -60,5 +60,49 @@ task checkLanguages {
             errMsg += " locales, but the values-* folders are " + listDir.size
             throw new GradleException(errMsg)
         }
+    }
+}
+
+// run with: ./gradlew checkFastlane
+tasks.register('checkFastlane') {
+
+    // in fastlane/metadata/android there are folders for each language supported
+    // by F-Droid and the Play Store. Each of these folders MUST have (at least)
+    // 3 files: full_description.txt, short_description.txt, title.txt
+    // Otherwise, fastlane will crash and we can't publish the update to the app
+    // stores. This function checks if the 'fastlane/' sub-directories are
+    // configured correctly
+
+    group 'NoNonsenseNotes custom'
+    description 'Ensure all languages in fastlane/metadata/android folders are configured correctly'
+
+    doLast {
+        // folder containing all languages sub-directories
+        File flDir = new File(projectDir, "fastlane/metadata/android")
+
+        for (File langSubDir : flDir.listFiles()) {
+            // check that each sub-folder has the 3 mandatory files
+
+            var onlyTxtFilesFilter = new FilenameFilter() {
+                @Override
+                boolean accept(File dir, String fname) {
+                    return fname.endsWithIgnoreCase('.txt')
+                }
+            }
+
+            String[] requiredFileNames = [ 'full_description.txt', 'short_description.txt', 'title.txt' ]
+            String[] presentFileName = langSubDir.list(onlyTxtFilesFilter)
+
+            for (String fn : requiredFileNames) {
+                if (!presentFileName.contains(fn)) {
+                    // 1 of the 3 required files is missing => fail the task
+                    String errMsg = "Missing file " + fn + " in folder " + langSubDir.name + " for fastlane"
+                    throw new GradleException(errMsg)
+                }
+
+            }
+        }
+        // finished: we have confirmed that all the folders have the 3 required .txt files,
+        // and now fastlane can publish without issues
     }
 }
