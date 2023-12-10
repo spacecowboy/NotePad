@@ -158,11 +158,11 @@ android {
     compileOptions {
         // enable support for new language APIs in old devices
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
-    // kotlinOptions { jvmTarget = 11 } // compile kotlin to java 11, for compatibility
+    // kotlinOptions { jvmTarget = 17 } // compile kotlin to java 11, for compatibility
 
     // control which types of configuration APKs you want your
     // app bundle to support
