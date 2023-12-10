@@ -19,8 +19,8 @@ apply plugin: 'com.android.application'
 // apply plugin: 'kotlin-android' we don't use kotlin for this app
 
 android {
-    compileSdk 33
-    buildToolsVersion "33.0.1"
+    compileSdk 34
+    buildToolsVersion "34.0.0"
     namespace "com.nononsenseapps.notepad" // for R.*
 
     buildFeatures {
@@ -180,10 +180,10 @@ dependencies {
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.5'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation "androidx.preference:preference:1.2.0"
+    implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'com.google.android.material:material:1.10.0'
     // yes we need both
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
@@ -204,7 +204,7 @@ dependencies {
     // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
     // Tests libraries
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test:rules:1.5.0'

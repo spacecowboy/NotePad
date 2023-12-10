@@ -22,8 +22,8 @@ tasks.withType(Javadoc).configureEach {
 }
 
 android {
-    compileSdk 33
-    buildToolsVersion '33.0.1'
+    compileSdk 34
+    buildToolsVersion '34.0.0'
     namespace "com.mobeta.android.dslv"
 
     defaultConfig {
@@ -64,5 +64,5 @@ android {
 
 dependencies {
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
 }

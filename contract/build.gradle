@@ -2,8 +2,8 @@ apply plugin: 'com.android.library'
 
 android {
     namespace "com.nononsenseapps.notepad.providercontract" // for R.*
-    compileSdk 33
-    buildToolsVersion "33.0.1"
+    compileSdk 34
+    buildToolsVersion "34.0.0"
 
     defaultConfig {
         minSdkVersion 23
@@ -24,5 +24,5 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.5.0'
+    implementation 'androidx.annotation:annotation:1.7.0'
 }

@@ -24,7 +24,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath 'com.android.tools.build:gradle:8.1.4'
         // no kotlin: this is an old project, it's easier to keep java
         // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
     }
