@@ -53,11 +53,11 @@ tasks.register('checkLanguages') {
 
     doLast {
         // actually run the task
-        var listDir = readFromFolders()
-        var listXML = readFromXML()
-        if (listDir.size != listXML.size) {
-            String errMsg = "Outdated translation: XML element has " + listXML.size
-            errMsg += " locales, but the values-* folders are " + listDir.size
+        var listDirSize = readFromFolders().size()
+        var listXMLSize = readFromXML().size()
+        if (listDirSize != listXMLSize) {
+            String errMsg = "Outdated translation: XML element has " + listXMLSize
+            errMsg += " locales, but the values-* folders are " + listDirSize
             throw new GradleException(errMsg)
         }
     }
