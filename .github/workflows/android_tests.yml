@@ -17,11 +17,12 @@ jobs:
     continue-on-error: true # finish for all configurations, even if one fails
     strategy:
       matrix:
-        # test on emulators with these Android API versions. minSdk & higher
-        api-level: [ 23, 25, 27, 29, 31, 33 ]
-        target: [ default, google_apis ] # OS images without, or with, google apps
-        # TODO if you use this then disable the "avd cache" step, because you don't have space to save 20 emulator images
-        # profile: [ 5.1in WVGA, 10.1in WXGA ] # phone or tablet
+        # test on emulators with these Android API versions.
+        # api-level: [ 23, 25, 27, 29, 31, 33 ] # test on 6 versions, from minSdk to targetSdk
+        api-level: [ 30, 34 ] # test on 2 api versions that have ATD images
+        # target: [ default, google_apis ] # user-friendly OS images without, or with, google apps
+        target: [ aosp_atd, google_atd ] # test-friendly OS images without, or with, google apps
+        # profile: [ 5.1in WVGA, 10.1in WXGA ] # TODO you can also test with phones and tablets!
         exclude:
             # the images for these configurations do not exist
           - api-level: 33
@@ -75,9 +76,9 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
-          profile: 5.1in WVGA  # low resolution: faster. This has no software buttons
-          arch: x86_64          # faster
-          disk-size: 500M       # needed for saving org and json files
+          profile: 5.1in WVGA # low resolution: faster. This has no software buttons
+          arch: x86_64        # faster
+          disk-size: 2G       # needed for saving org and json files. We need 2 GB for API 34
           force-avd-creation: false
           # The emulator is picky on these parameters. For...
           # tests with "-accel on": see github run #84
@@ -120,7 +121,6 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           emulator-options: -no-snapshot-save -verbose -no-boot-anim -no-window -gpu off
-          # runners also have powershell. maybe remake the script so it's comprehensible ?
           script: bash ./github_on_emu_started.sh
 
       - name: upload the generated files
