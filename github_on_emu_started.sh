@@ -67,8 +67,6 @@ function getScreenStreamFromEmu() {
 	done
 }
 
-# TODO android API 32 images have a built-in screen record feature that can make long videos, but you have to start it from the top drawer menu. Check if API 23 has it, and try to use it with ADB. Videos are saved on /sdcard/movies/ then you have to pull them with adb
-
 # save the video stream to a file
 { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
  -nostats -hide_banner -framerate 15 -bufsize 1M emu-video.mp4 ; } &
