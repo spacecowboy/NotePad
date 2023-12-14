@@ -34,8 +34,11 @@ jobs:
     - name: perform the Gradle build
       run: ./gradlew build
 
-    - name: run custom tasks for additional checks
+    - name: perform additional checks with our custom tasks
       run: ./gradlew checkLanguages checkFastlane
+
+    - name: perform lint checks with gradle # TODO the output files are not saved!
+      run: ./gradlew lint
 
     - name: perform the APK upload
       uses: actions/upload-artifact@v3
