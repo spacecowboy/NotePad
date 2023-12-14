@@ -37,7 +37,8 @@ jobs:
     - name: perform additional checks with our custom tasks
       run: ./gradlew checkLanguages checkFastlane
 
-    - name: perform lint checks with gradle # TODO the output files are not saved!
+    # TODO output files from this step are not saved. Take a look at them
+    - name: perform lint checks with gradle
       run: ./gradlew lint
 
     - name: perform the APK upload
