@@ -58,8 +58,15 @@ public class OrgSyncTest {
 		assertNotNull(DIR);
 		var d = new File(DIR);
 		if (!d.exists()) assertTrue(d.mkdirs());
+
+		// since the app starts with a default, "Welcome!" note, we must clear all notes,
+		// (and tasks, org files, ...) to make sure the tests in this class can complete
+		tearDown();
 	}
 
+	/**
+	 * Performs a cleanup of the app's data and org files
+	 */
 	@After
 	public void tearDown() {
 		ContentResolver resolver = getTheContext().getContentResolver();
