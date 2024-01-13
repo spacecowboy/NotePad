@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Sorotan: 
+- Memperbaiki sinkronisasi Google Tasks 
+- Memperbaiki bug yang akan menghapus semua catatan selama sinkronisasi Google Tasks.
