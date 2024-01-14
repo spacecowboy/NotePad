@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
@@ -42,8 +43,8 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 		this.activity = activity;
 		this.listener = listener;
 
-		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
-		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
+		ContextCompat.registerReceiver(activity, this, new IntentFilter(SyncAdapter.SYNC_FINISHED), ContextCompat.RECEIVER_NOT_EXPORTED);
+		ContextCompat.registerReceiver(activity, this, new IntentFilter(SyncAdapter.SYNC_STARTED), ContextCompat.RECEIVER_NOT_EXPORTED);
 
 		if (!PreferencesHelper.isSincEnabledAtAll(activity)) {
 			// not starting: sync is disabled in the prefs
