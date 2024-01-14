@@ -26,7 +26,7 @@ import androidx.annotation.NonNull;
  */
 public abstract class ProviderBase extends ContentProvider {
 
-	protected UriMatcher uriMatcher;
+	protected final UriMatcher uriMatcher;
 
 	protected abstract String getAuthority();
 
@@ -42,7 +42,7 @@ public abstract class ProviderBase extends ContentProvider {
 	}
 
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
+	public Cursor query(@NonNull Uri uri, String[] projection, String selection,
 						String[] selectionArgs, String sortOrder) {
 		switch (uriMatcher.match(uri)) {
 			case URI_FEATURES:
@@ -88,12 +88,12 @@ public abstract class ProviderBase extends ContentProvider {
 											String[] selectionArgs, String sortOrder);
 
 	@Override
-	public String getType(final Uri uri) {
+	public String getType(@NonNull final Uri uri) {
 		throw new IllegalArgumentException("Not yet implemented");
 	}
 
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
+	public Uri insert(@NonNull Uri uri, ContentValues values) {
 		switch (uriMatcher.match(uri)) {
 			case URI_ACCOUNTS:
 				return insertAccount(uri, values);
@@ -115,7 +115,7 @@ public abstract class ProviderBase extends ContentProvider {
 	protected abstract Uri insertAccount(Uri uri, ContentValues values);
 
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 		switch (uriMatcher.match(uri)) {
 			case URI_ACCOUNTS:
 				return deleteAccounts(uri, selection, selectionArgs);
@@ -149,7 +149,7 @@ public abstract class ProviderBase extends ContentProvider {
 	protected abstract int deleteAccounts(Uri uri, String selection, String[] selectionArgs);
 
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
+	public int update(@NonNull Uri uri, ContentValues values, String selection,
 					  String[] selectionArgs) {
 		switch (uriMatcher.match(uri)) {
 			case URI_ACCOUNTS:

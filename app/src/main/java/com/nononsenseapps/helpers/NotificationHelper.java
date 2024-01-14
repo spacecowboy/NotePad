@@ -104,13 +104,11 @@ public final class NotificationHelper extends BroadcastReceiver {
 				cancelNotification(context, notifUri);
 
 				switch (action) {
-					case Intent.ACTION_DELETE:
-					case ACTION_RESCHEDULE:
+					case Intent.ACTION_DELETE, ACTION_RESCHEDULE ->
 						// User swiped notification away: delete reminder
-						com.nononsenseapps.notepad.database.Notification
-								.deleteOrReschedule(context, notifUri);
-						break;
-					case ACTION_SNOOZE:
+							com.nononsenseapps.notepad.database.Notification
+									.deleteOrReschedule(context, notifUri);
+					case ACTION_SNOOZE -> {
 						// the user choose to dismiss this notification and display it later.
 
 						// the one that launched the notification snoozed by the user
@@ -138,15 +136,15 @@ public final class NotificationHelper extends BroadcastReceiver {
 							com.nononsenseapps.notepad.database.Notification
 									.setTime(context, notifUri, getSnoozedReminderNewTimeMillis());
 						}
-						break;
-					case ACTION_COMPLETE:
+					}
+					case ACTION_COMPLETE -> {
 						final long taskId = intent.getLongExtra(ARG_TASKID, -1);
 						// Complete note
 						Task.setCompletedSynced(context, true, taskId);
 						// Delete notifications with the same task id
 						com.nononsenseapps.notepad.database.Notification
 								.removeWithTaskIdsSynced(context, taskId);
-						break;
+					}
 				}
 			}
 		}
@@ -485,7 +483,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Schedules this {@link BroadcastReceiver} to be woken up at the next notification time.
 	 * Uses {@link AlarmManager}, which can set alarms with different priorities.
-	 * See https://developer.android.com/training/scheduling/alarms#exact
+	 * See <a href="https://developer.android.com/training/scheduling/alarms#exact">this page</a>.
 	 * You can't expect android to be precise or reliable: reminders will appear within
 	 * a few minutes from the specified time, or may not appear at all until the app
 	 * is restarted. OEM and vendors make this impossibile to solve

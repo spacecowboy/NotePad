@@ -113,15 +113,11 @@ public final class SyncStatusMonitor extends BroadcastReceiver {
 	private void tellUser(Context context, int result) {
 		int text;
 		switch (result) {
-			case SyncAdapter.ERROR:
-				text = R.string.sync_failed;
-				break;
-			case SyncAdapter.LOGIN_FAIL:
-				text = R.string.sync_login_failed;
-				break;
-			case SyncAdapter.SUCCESS:
-			default:
+			case SyncAdapter.ERROR -> text = R.string.sync_failed;
+			case SyncAdapter.LOGIN_FAIL -> text = R.string.sync_login_failed;
+			default -> {
 				return;
+			}
 		}
 
 		NnnLogger.debug(SyncStatusMonitor.class, "SYNC: " + result);

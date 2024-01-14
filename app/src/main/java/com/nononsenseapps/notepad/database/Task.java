@@ -728,8 +728,7 @@ public class Task extends DAO {
 	public boolean equals(Object o) {
 		boolean result;
 
-		if (o instanceof Task) {
-			final Task other = (Task) o;
+		if (o instanceof Task other) {
 			result = true;
 
 			result &= (title != null && title.equals(other.title));

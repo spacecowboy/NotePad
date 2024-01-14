@@ -118,18 +118,10 @@ public class StyledEditText extends AppCompatEditText {
 	 */
 	public void setTitleFontFamily(final int family) {
 		switch (family) {
-			case 1:
-				titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
-				break;
-			case 2:
-				titleFamilySpan = new TypefaceSpan("sans-serif-light");
-				break;
-			case 3:
-				titleFamilySpan = new TypefaceSpan("sans-serif-thin");
-				break;
-			default:
-				titleFamilySpan = new TypefaceSpan("sans-serif");
-				break;
+			case 1 -> titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
+			case 2 -> titleFamilySpan = new TypefaceSpan("sans-serif-light");
+			case 3 -> titleFamilySpan = new TypefaceSpan("sans-serif-thin");
+			default -> titleFamilySpan = new TypefaceSpan("sans-serif");
 		}
 	}
 
@@ -138,15 +130,9 @@ public class StyledEditText extends AppCompatEditText {
 	 */
 	public void setTitleFontStyle(final int style) {
 		switch (style) {
-			case 1:
-				titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
-				break;
-			case 2:
-				titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
-				break;
-			default:
-				titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
-				break;
+			case 1 -> titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+			case 2 -> titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
+			default -> titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
 		}
 	}
 
@@ -155,18 +141,10 @@ public class StyledEditText extends AppCompatEditText {
 	 */
 	public void setBodyFontFamily(final int family) {
 		switch (family) {
-			case 1:
-				bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
-				break;
-			case 2:
-				bodyFamilySpan = new TypefaceSpan("sans-serif-light");
-				break;
-			case 3:
-				bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
-				break;
-			default:
-				bodyFamilySpan = new TypefaceSpan("sans-serif");
-				break;
+			case 1 -> bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
+			case 2 -> bodyFamilySpan = new TypefaceSpan("sans-serif-light");
+			case 3 -> bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
+			default -> bodyFamilySpan = new TypefaceSpan("sans-serif");
 		}
 	}
 
@@ -175,19 +153,15 @@ public class StyledEditText extends AppCompatEditText {
 	 */
 	public void setTheTextSize(final int size) {
 		switch (size) {
-			case 0:
+			case 0 ->
 				// small
-				super.setTextSize(14.0f);
-				break;
-			case 2:
+					super.setTextSize(14.0f);
+			case 2 ->
 				// large
-				super.setTextSize(22.0f);
-				break;
-			case 1:
-			default:
+					super.setTextSize(22.0f);
+			default ->
 				// medium
-				super.setTextSize(18.0f);
-				break;
+					super.setTextSize(18.0f);
 		}
 	}
 

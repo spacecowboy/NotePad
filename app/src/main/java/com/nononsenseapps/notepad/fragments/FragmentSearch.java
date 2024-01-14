@@ -240,7 +240,7 @@ public class FragmentSearch extends Fragment {
 		return (view, c, colIndex) -> {
 			switch (colIndex) {
 				// Matches order in Task.Columns.Fields
-				case 1:
+				case 1 -> {
 					// Title
 					String sTemp = c.getString(colIndex);
 
@@ -253,10 +253,10 @@ public class FragmentSearch extends Fragment {
 					}
 					// Change color based on complete status
 					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
-
 					((TitleNoteTextView) view).setTextTitle(sTemp);
 					return true;
-				case 2:
+				}
+				case 2 -> {
 					// Note
 					// Only if task it not locked
 					if (c.getInt(9) != 1) {
@@ -265,10 +265,12 @@ public class FragmentSearch extends Fragment {
 						((TitleNoteTextView) view).setTextRest("");
 					}
 					return true;
-				default:
+				}
+				default -> {
 					// Checkbox
 					view.setVisibility(View.GONE);
 					return true;
+				}
 			}
 		};
 	}

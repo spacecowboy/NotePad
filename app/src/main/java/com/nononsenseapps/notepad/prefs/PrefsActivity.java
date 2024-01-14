@@ -85,7 +85,7 @@ public class PrefsActivity extends AppCompatActivity implements
 	/**
 	 * called when a settings category is clicked. It opens the appropriate
 	 * preference fragment. From:
-	 * https://developer.android.com/develop/ui/views/components/settings/organize-your-settings
+	 * <a href="https://developer.android.com/develop/ui/views/components/settings/organize-your-settings">here</a>.
 	 */
 	@Override
 	public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller,
@@ -154,10 +154,9 @@ public class PrefsActivity extends AppCompatActivity implements
 			sBindPreferenceSummaryToValueListener = (preference, value) -> {
 		final String stringValue = value.toString();
 
-		if (preference instanceof ListPreference) {
+		if (preference instanceof ListPreference listPreference) {
 			// For list preferences, look up the correct display value in
 			// the preference's 'entries' list.
-			ListPreference listPreference = (ListPreference) preference;
 			int index = listPreference.findIndexOfValue(stringValue);
 
 			// Set the summary to reflect the new value, if possible

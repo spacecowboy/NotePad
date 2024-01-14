@@ -122,17 +122,11 @@ public class TextFileProvider extends ContentProvider {
 
 		Log.d(TAG, "Uri: " + uri.getAuthority() + ", " + uri.getPath() + ", " + uri.getQuery());
 
-		String relativePath;
-		switch (sUriMatcher.match(uri)) {
-			case URI_ROOT:
-				relativePath = "/";
-				break;
-			case URI_LIST:
-				relativePath = ProviderHelper.getRelativePath(uri);
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown path: " + uri);
-		}
+		String relativePath = switch (sUriMatcher.match(uri)) {
+			case URI_ROOT -> "/";
+			case URI_LIST -> ProviderHelper.getRelativePath(uri);
+			default -> throw new IllegalArgumentException("Unknown path: " + uri);
+		};
 
 		final File filePath = new File(ProviderHelper.join(mRootPath, relativePath));
 		File[] files = filePath.listFiles(mFileFilter);

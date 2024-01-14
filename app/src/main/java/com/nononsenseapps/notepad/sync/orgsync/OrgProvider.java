@@ -81,6 +81,9 @@ public class OrgProvider extends ContentProvider {
 		bw.close();
 	}
 
+	/**
+	 * @return 1 = the number of items affected
+	 */
 	private int deleteFile(Uri uri) {
 		final String title = uri.getLastPathSegment();
 		final String filename = title + ".org";
@@ -151,12 +154,14 @@ public class OrgProvider extends ContentProvider {
 		String fragment = getFragment(uri);
 
 		switch (uriMatcher.match(uri)) {
-			case CODE_FILE:
+			case CODE_FILE -> {
 				return queryFiles(uri, projection, selection, selectionArgs, sortOrder);
-			case CODE_FILE_ID:
+			}
+			case CODE_FILE_ID -> {
 				return fragment == null ?
 						queryFile(uri, projection, selection, selectionArgs, sortOrder) :
 						queryItem(uri, projection, selection, selectionArgs, sortOrder);
+			}
 		}
 
 		throw new UnsupportedOperationException("Not yet implemented");
@@ -175,17 +180,19 @@ public class OrgProvider extends ContentProvider {
 		// TODO: Implement this to handle requests to insert a new row.
 
 		switch (uriMatcher.match(uri)) {
-			case CODE_FILE:
+			case CODE_FILE -> {
 				return insertFile(uri, values);
-			case CODE_FILE_ID:
+			}
+			case CODE_FILE_ID -> {
 				return insertItem(uri, values);
+			}
 		}
 
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
 		if (!PreferencesHelper.isSdSyncEnabled(getContext())) {
 			return -1;
 		}

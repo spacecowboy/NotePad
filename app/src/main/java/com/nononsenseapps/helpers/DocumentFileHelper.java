@@ -19,9 +19,9 @@ import java.util.function.Function;
 
 /**
  * Functions to work with {@link DocumentFile}. See
- * https://developer.android.com/training/data-storage/shared/documents-files#create-file
+ * <a href="https://developer.android.com/training/data-storage/shared/documents-files#create-file">here</a>
  * And, to understand why {@link DocumentFile} is better than {@link MediaStore}, see
- * https://developer.android.com/training/data-storage
+ * <a href="https://developer.android.com/training/data-storage">here</a>.
  * This API can read files created by this app even after you reinstall it, so it's
  * better than {@link MediaStore}
  */

@@ -95,7 +95,7 @@ public final class UpdateNotifier {
 		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
 				new ComponentName(context, ListWidgetProvider.class));
 
-		if (appWidgetIds.length <= 0) return;
+		if (appWidgetIds.length == 0) return;
 
 		// Tell the widgets that the list items should be invalidated and refreshed!
 		// Will call onDatasetChanged in ListWidgetService, doing a new requery

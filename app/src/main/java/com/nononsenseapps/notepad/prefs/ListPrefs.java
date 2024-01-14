@@ -60,10 +60,9 @@ public class ListPrefs extends PreferenceFragmentCompat {
 		Preference.OnPreferenceChangeListener listener = (preference, value) -> {
 			String stringValue = value.toString();
 
-			if (preference instanceof ListPreference) {
+			if (preference instanceof ListPreference listPreference) {
 				// For list preferences, look up the correct display value in
 				// the preference's 'entries' list.
-				ListPreference listPreference = (ListPreference) preference;
 				int index = listPreference.findIndexOfValue(stringValue);
 
 				// Set the summary to reflect the new value.

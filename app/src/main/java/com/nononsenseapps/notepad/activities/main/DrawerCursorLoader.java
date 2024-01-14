@@ -49,52 +49,45 @@ class DrawerCursorLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 		// Normal lists
-		switch (id) {
-			case TaskListFragment.LIST_ID_OVERDUE:
-				return new CursorLoader(mContext, Task.URI, COUNTROWS,
-						NOTCOMPLETED + TaskListFragment.andWhereOverdue(),
-						null, null);
-			case TaskListFragment.LIST_ID_TODAY:
-				return new CursorLoader(mContext, Task.URI, COUNTROWS,
-						NOTCOMPLETED + TaskListFragment.andWhereToday(),
-						null, null);
-			case TaskListFragment.LIST_ID_WEEK:
-				return new CursorLoader(mContext, Task.URI, COUNTROWS,
-						NOTCOMPLETED + TaskListFragment.andWhereWeek(),
-						null, null);
-			case 0:
-			default:
-				return new CursorLoader(mContext,
-						TaskList.URI_WITH_COUNT,
-						new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE,
-								TaskList.Columns.VIEW_COUNT },
-						null, null,
-						mContext.getResources()
-								.getString(R.string.const_as_alphabetic, TaskList.Columns.TITLE));
-		}
+		return switch (id) {
+			case TaskListFragment.LIST_ID_OVERDUE -> new CursorLoader(mContext, Task.URI, COUNTROWS,
+					NOTCOMPLETED + TaskListFragment.andWhereOverdue(),
+					null, null);
+			case TaskListFragment.LIST_ID_TODAY -> new CursorLoader(mContext, Task.URI, COUNTROWS,
+					NOTCOMPLETED + TaskListFragment.andWhereToday(),
+					null, null);
+			case TaskListFragment.LIST_ID_WEEK -> new CursorLoader(mContext, Task.URI, COUNTROWS,
+					NOTCOMPLETED + TaskListFragment.andWhereWeek(),
+					null, null);
+			default -> new CursorLoader(mContext,
+					TaskList.URI_WITH_COUNT,
+					new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE,
+							TaskList.Columns.VIEW_COUNT },
+					null, null,
+					mContext.getResources()
+							.getString(R.string.const_as_alphabetic, TaskList.Columns.TITLE));
+		};
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> l, Cursor c) {
 		switch (l.getId()) {
-			case TaskListFragment.LIST_ID_OVERDUE:
+			case TaskListFragment.LIST_ID_OVERDUE -> {
 				if (c.moveToFirst()) {
 					updateExtra(1, c.getInt(0));
 				}
-				break;
-			case TaskListFragment.LIST_ID_TODAY:
+			}
+			case TaskListFragment.LIST_ID_TODAY -> {
 				if (c.moveToFirst()) {
 					updateExtra(2, c.getInt(0));
 				}
-				break;
-			case TaskListFragment.LIST_ID_WEEK:
+			}
+			case TaskListFragment.LIST_ID_WEEK -> {
 				if (c.moveToFirst()) {
 					updateExtra(3, c.getInt(0));
 				}
-				break;
-			case 0:
-			default:
-				mAdapter.swapCursor(c);
+			}
+			default -> mAdapter.swapCursor(c);
 		}
 	}
 

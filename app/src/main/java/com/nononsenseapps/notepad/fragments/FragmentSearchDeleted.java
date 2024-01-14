@@ -247,7 +247,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 				// Each number in the "case" instruction matches the order in Task.Columns.Fields,
 				// in fact c.getColumnNames() returns the fields of the note in the database:
 				// ["_id", "title", "note", "completed", "due", "dblist", "deletedtime" ]
-				case 1:
+				case 1 -> {
 					// Title, in column "title"
 					String noteTitle = c.getString(colIndex);
 
@@ -269,17 +269,20 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 					((TitleNoteTextView) view).setTextTitle(noteTitle);
 					return true;
-				case 2:
+				}
+				case 2 -> {
 					// Note content, in column "note". Let's show it even in the "Archive" view,
 					// so that the user can distinguish 2 deleted notes with the same title
 					String noteContent = c.getString(colIndex);
 					((TitleNoteTextView) view).setTextRest(noteContent);
 					return true;
-				default:
+				}
+				default -> {
 					// we won't show any other field of the note. Maybe it would be nice to show
 					// the due date ? But it's an archived note, so I guess the user does not care?
 					view.setVisibility(View.GONE);
 					return true;
+				}
 			}
 		};
 	}

@@ -186,26 +186,20 @@ public class BackupPrefs extends PreferenceFragmentCompat {
 												boolean isRestoring, int result) {
 		int msgId;
 		switch (result) {
-			case 0:
-				msgId = isRestoring
-						? R.string.backup_import_success
-						: R.string.backup_export_success;
-				break;
-			case 1:
-				msgId = R.string.backup_file_not_found;
-				break;
-			case 2:
+			case 0 -> msgId = isRestoring
+					? R.string.backup_import_success
+					: R.string.backup_export_success;
+			case 1 -> msgId = R.string.backup_file_not_found;
+			case 2 ->
 				// can't read from / write to that folder: missing permission ?
-				msgId = R.string.permission_denied;
-				break;
-			case 3:
-				msgId = isRestoring
-						? R.string.backup_import_failed
-						: R.string.backup_export_failed;
-				break;
-			default:
+					msgId = R.string.permission_denied;
+			case 3 -> msgId = isRestoring
+					? R.string.backup_import_failed
+					: R.string.backup_export_failed;
+			default -> {
 				// won't happen, anyway
 				return;
+			}
 		}
 		Toast.makeText(mContext, msgId, Toast.LENGTH_SHORT).show();
 	}

@@ -48,18 +48,16 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
 		String action = intent.getAction();
 		switch (action) {
-			case SET_NOTE_COMPLETE:
+			case SET_NOTE_COMPLETE -> {
 				Task.setCompleted(context, true, id);
 				// Toast.makeText(context, R.string.completed, Toast.LENGTH_SHORT).show();
 				// Broadcast that it has been completed, primarily for AndroidAgendaWidget
 				Intent i = new Intent(context.getString(R.string.note_completed_broadcast_intent));
 				context.sendBroadcast(i);
-				break;
-			case SET_NOTE_INCOMPLETE:
-				Task.setCompleted(context, false, id);
-				break;
-			default:
-				break;
+			}
+			case SET_NOTE_INCOMPLETE -> Task.setCompleted(context, false, id);
+			default -> {
+			}
 		}
 	}
 }

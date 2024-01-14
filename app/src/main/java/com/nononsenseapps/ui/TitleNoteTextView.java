@@ -142,21 +142,12 @@ public class TitleNoteTextView extends AppCompatTextView {
 			titleEnd = text.length();
 		}
 
-		TypefaceSpan fontSpan;
-		switch (font) {
-			case 1:
-				fontSpan = new TypefaceSpan("sans-serif-condensed");
-				break;
-			case 2:
-				fontSpan = new TypefaceSpan("sans-serif-light");
-				break;
-			case 3:
-				fontSpan = new TypefaceSpan("sans-serif-thin");
-				break;
-			default:
-				fontSpan = new TypefaceSpan("sans-serif");
-				break;
-		}
+		TypefaceSpan fontSpan = switch (font) {
+			case 1 -> new TypefaceSpan("sans-serif-condensed");
+			case 2 -> new TypefaceSpan("sans-serif-light");
+			case 3 -> new TypefaceSpan("sans-serif-thin");
+			default -> new TypefaceSpan("sans-serif");
+		};
 
 		SpannableString ss = new SpannableString(text);
 		if (titleEnd > 0) {
@@ -181,18 +172,10 @@ public class TitleNoteTextView extends AppCompatTextView {
 		mTitleFontFamily = family;
 
 		switch (family) {
-			case 1:
-				titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
-				break;
-			case 2:
-				titleFamilySpan = new TypefaceSpan("sans-serif-light");
-				break;
-			case 3:
-				titleFamilySpan = new TypefaceSpan("sans-serif-thin");
-				break;
-			default:
-				titleFamilySpan = new TypefaceSpan("sans-serif");
-				break;
+			case 1 -> titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
+			case 2 -> titleFamilySpan = new TypefaceSpan("sans-serif-light");
+			case 3 -> titleFamilySpan = new TypefaceSpan("sans-serif-thin");
+			default -> titleFamilySpan = new TypefaceSpan("sans-serif");
 		}
 	}
 
@@ -206,15 +189,9 @@ public class TitleNoteTextView extends AppCompatTextView {
 		mTitleFontStyle = style;
 
 		switch (style) {
-			case 1:
-				titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
-				break;
-			case 2:
-				titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
-				break;
-			default:
-				titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
-				break;
+			case 1 -> titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+			case 2 -> titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
+			default -> titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
 		}
 	}
 
@@ -228,18 +205,10 @@ public class TitleNoteTextView extends AppCompatTextView {
 		mBodyFontFamily = family;
 
 		switch (family) {
-			case 1:
-				bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
-				break;
-			case 2:
-				bodyFamilySpan = new TypefaceSpan("sans-serif-light");
-				break;
-			case 3:
-				bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
-				break;
-			default:
-				bodyFamilySpan = new TypefaceSpan("sans-serif");
-				break;
+			case 1 -> bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
+			case 2 -> bodyFamilySpan = new TypefaceSpan("sans-serif-light");
+			case 3 -> bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
+			default -> bodyFamilySpan = new TypefaceSpan("sans-serif");
 		}
 	}
 
@@ -344,18 +313,16 @@ public class TitleNoteTextView extends AppCompatTextView {
 			// Don't call the span
 		} else if (link.length != 0) {
 			switch (action) {
-				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_UP ->
 					// the user touched a link => fire a custom onClick() method
-					onClickableSpanClicked(link[0]);
-					break;
-				case MotionEvent.ACTION_DOWN:
+						onClickableSpanClicked(link[0]);
+				case MotionEvent.ACTION_DOWN ->
 					// select text
-					Selection.setSelection(buffer,
-							buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
-					break;
-				default:
-					// 100% impossible to reach this.
-					break;
+						Selection.setSelection(buffer,
+								buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
+				default -> {
+				}
+				// 100% impossible to reach this.
 			}
 
 			// ONLY in this case we can say that the event was handled
@@ -438,19 +405,15 @@ public class TitleNoteTextView extends AppCompatTextView {
 	 */
 	public void setTheTextSize(final int size) {
 		switch (size) {
-			case 0:
+			case 0 ->
 				// small
-				super.setTextSize(12.0f);
-				break;
-			case 2:
+					super.setTextSize(12.0f);
+			case 2 ->
 				// large
-				super.setTextSize(18.0f);
-				break;
-			case 1:
-			default:
+					super.setTextSize(18.0f);
+			default ->
 				// medium
-				super.setTextSize(14.0f);
-				break;
+					super.setTextSize(14.0f);
 		}
 	}
 }

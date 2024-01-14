@@ -29,7 +29,7 @@ public final class FilePickerHelper {
 
 	/**
 	 * Shows the system's default filepicker, to  let the user choose a directory. See:
-	 * https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory
+	 * <a href="https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory">this link</a>
 	 *
 	 * @param prefFragComp The settings page that launched this file picker
 	 * @param initialDir   the starting directory to show, or NULL if you don't care

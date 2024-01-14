@@ -578,33 +578,16 @@ public class Notification extends DAO {
 	 * week as given by Calendar.getField(DayOfWeek)
 	 */
 	public boolean repeatsOn(final int calendarDay) {
-		int day;
-
-		switch (calendarDay) {
-			case Calendar.MONDAY:
-				day = WeekDaysView.mon;
-				break;
-			case Calendar.TUESDAY:
-				day = WeekDaysView.tue;
-				break;
-			case Calendar.WEDNESDAY:
-				day = WeekDaysView.wed;
-				break;
-			case Calendar.THURSDAY:
-				day = WeekDaysView.thu;
-				break;
-			case Calendar.FRIDAY:
-				day = WeekDaysView.fri;
-				break;
-			case Calendar.SATURDAY:
-				day = WeekDaysView.sat;
-				break;
-			case Calendar.SUNDAY:
-				day = WeekDaysView.sun;
-				break;
-			default:
-				day = 0;
-		}
+		int day = switch (calendarDay) {
+			case Calendar.MONDAY -> WeekDaysView.mon;
+			case Calendar.TUESDAY -> WeekDaysView.tue;
+			case Calendar.WEDNESDAY -> WeekDaysView.wed;
+			case Calendar.THURSDAY -> WeekDaysView.thu;
+			case Calendar.FRIDAY -> WeekDaysView.fri;
+			case Calendar.SATURDAY -> WeekDaysView.sat;
+			case Calendar.SUNDAY -> WeekDaysView.sun;
+			default -> 0;
+		};
 
 		return (0 < (day & repeats));
 	}

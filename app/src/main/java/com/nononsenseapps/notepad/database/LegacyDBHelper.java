@@ -938,21 +938,15 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 					Task.Columns.COMPLETED.equals(colName)) {
 				val = cursor.isNull(i) ? "needsAction" : "completed";
 			} else {
-				switch (cursor.getType(i)) {
-					case Cursor.FIELD_TYPE_FLOAT:
-						val = cursor.getFloat(i);
-						break;
-					case Cursor.FIELD_TYPE_INTEGER:
-						val = cursor.getLong(i);
-						break;
-					case Cursor.FIELD_TYPE_STRING:
-						val = cursor.getString(i);
-						break;
-					case Cursor.FIELD_TYPE_NULL:
-					case Cursor.FIELD_TYPE_BLOB: // the legacy DB did not have BLOBs, anyway
-					default:
-						val = null;
-				}
+				val = switch (cursor.getType(i)) {
+					case Cursor.FIELD_TYPE_FLOAT -> cursor.getFloat(i);
+					case Cursor.FIELD_TYPE_INTEGER -> cursor.getLong(i);
+					case Cursor.FIELD_TYPE_STRING -> cursor.getString(i);
+					// the legacy DB did not have BLOBs, anyway
+					case Cursor.FIELD_TYPE_BLOB -> null;
+					case Cursor.FIELD_TYPE_NULL -> null;
+					default -> null;
+				};
 			}
 			//Log.d("nononsenseapps db", "legacy notes col: " + val);
 			retval[i] = val;

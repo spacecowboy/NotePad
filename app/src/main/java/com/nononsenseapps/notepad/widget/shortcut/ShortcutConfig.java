@@ -94,8 +94,8 @@ public class ShortcutConfig extends AppCompatActivity {
 			if (c != null && !c.isClosed() && !c.isAfterLast()) {
 				shortcutTitle = c.getString(1);
 			}
-			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, ""
-					+ mBinding.listSpinner.getSelectedItem());
+			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+					"" + mBinding.listSpinner.getSelectedItem());
 
 			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
 					.setAction(Intent.ACTION_VIEW)
