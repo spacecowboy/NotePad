@@ -134,11 +134,11 @@
     <string name="loading_widget">Nalaganje widget…</string>
     <string name="default_list">Privzeti seznam</string>
     <string name="please_type_before_reminder">Vnesite nekaj besedila, preden nastavite opomnik</string>
-    <string name="notecopied_one">Opomba prekopirane %d</string>
+    <string name="notecopied_one">Opomba prekopirane 1</string>
     <string name="notecopied_other">Kopirane %d opombe</string>
-    <string name="notedeleted_one">Opomba izbrisani %d</string>
+    <string name="notedeleted_one">Opomba izbrisani 1</string>
     <string name="notedeleted_other">Izbrisati %d opombe</string>
-    <string name="selected_one">Opomba izbrani %d</string>
+    <string name="selected_one">Opomba izbrani 1</string>
     <string name="selected_other">Izbrati %d opombe</string>
     <string name="background_sync">Ozadju sinhronizacijo</string>
     <string name="background_sync_info">Sinhronizira enkrat na uro</string>

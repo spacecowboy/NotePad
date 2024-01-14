@@ -11,7 +11,7 @@
     <string name="dashclock_pref_header_general">Impostasion</string>
     <string name="priority">Priorità</string>
     <string name="silent">Siensioso</string>
-    <string name="selected_one">Sèesionada %d nota</string>
+    <string name="selected_one">Sèesionada na nota</string>
     <string name="selected_other">Sèesionae %d note</string>
     <string name="transparency">Trasparensa</string>
     <string name="hide_date">Scondi a data de scadensa</string>
@@ -159,7 +159,7 @@
     <string name="next_n_days">Prosimi %d dì</string>
     <string name="loading_widget">So drio caricare sto widget…</string>
     <string name="notecopied_other">Copiae %d note</string>
-    <string name="notedeleted_one">Canseada %d nota</string>
+    <string name="notedeleted_one">Canseada na nota</string>
     <string name="background_sync">Sincronisasion sconta</string>
     <string name="snooze">Pì tardi</string>
     <string name="sound">Suono</string>

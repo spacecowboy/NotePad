@@ -134,11 +134,11 @@
     <string name="loading_widget">Laddar widget…</string>
     <string name="default_list">Standardlista</string>
     <string name="please_type_before_reminder">Skriv en anteckning innan du sätter en påminnelse</string>
-    <string name="notecopied_one">Kopierade %d anteckning</string>
+    <string name="notecopied_one">Kopierade 1 anteckning</string>
     <string name="notecopied_other">Kopierade %d anteckningar</string>
-    <string name="notedeleted_one">Raderade %d anteckning</string>
+    <string name="notedeleted_one">Raderade 1 anteckning</string>
     <string name="notedeleted_other">Raderade %d anteckningar</string>
-    <string name="selected_one">Markerade %d anteckning</string>
+    <string name="selected_one">Markerade 1 anteckning</string>
     <string name="selected_other">Markerade %d anteckningar</string>
     <string name="background_sync">Synka i bakgrunden</string>
     <string name="background_sync_info">Synka en gång per timme</string>

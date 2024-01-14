@@ -134,11 +134,11 @@
     <string name="loading_widget">Widget betölt</string>
     <string name="default_list">Alapértelmezett lista</string>
     <string name="please_type_before_reminder">Emlékeztető beállítása elött kérem írjon valamit.</string>
-    <string name="notecopied_one">%d jegyzet másolva</string>
+    <string name="notecopied_one">1 jegyzet másolva</string>
     <string name="notecopied_other">%d jegyzet másolva</string>
-    <string name="notedeleted_one">%d jegyzet törölve</string>
+    <string name="notedeleted_one">1 jegyzet törölve</string>
     <string name="notedeleted_other">%d jegyzet törölve</string>
-    <string name="selected_one">%d jegyzet kijelölve</string>
+    <string name="selected_one">1 jegyzet kijelölve</string>
     <string name="selected_other">%d jegyzet kijelölve</string>
     <string name="background_sync">Szinkronizálás a háttérben</string>
     <string name="background_sync_info">Óránként egyszer szinkronizál</string>

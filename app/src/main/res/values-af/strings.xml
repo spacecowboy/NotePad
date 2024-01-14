@@ -133,11 +133,11 @@
     <string name="loading_widget">Laai widget…</string>
     <string name="default_list">Versteklys</string>
     <string name="please_type_before_reminder">Tik iets voor jy \'n alarm stel</string>
-    <string name="notecopied_one">%d nota gekopieer</string>
+    <string name="notecopied_one">1 nota gekopieer</string>
     <string name="notecopied_other">%d notas gekopieer</string>
-    <string name="notedeleted_one">%d nota uitgevee</string>
+    <string name="notedeleted_one">1 nota uitgevee</string>
     <string name="notedeleted_other">%d notas uitgevee</string>
-    <string name="selected_one">%d nota gekies</string>
+    <string name="selected_one">1 nota gekies</string>
     <string name="selected_other">%d notas gekies</string>
     <string name="background_sync">Sinkroniseer in die agtergrond</string>
     <string name="background_sync_info">Sinkroniseer uurliks</string>

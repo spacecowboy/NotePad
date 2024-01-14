@@ -134,11 +134,11 @@
     <string name="loading_widget">Đang tải widget…</string>
     <string name="default_list">Danh sách mặc định</string>
     <string name="please_type_before_reminder">Hãy nhập ghi chú trước khi đặt nhắc nhở</string>
-    <string name="notecopied_one">Đã sao chép %d ghi chú</string>
+    <string name="notecopied_one">Đã sao chép 1 ghi chú</string>
     <string name="notecopied_other">Đã sao chép %d ghi chú</string>
-    <string name="notedeleted_one">Đã xoá %d ghi chú</string>
+    <string name="notedeleted_one">Đã xoá 1 ghi chú</string>
     <string name="notedeleted_other">Đã xoá %d ghi chú</string>
-    <string name="selected_one">Đã chọn %d ghi chú</string>
+    <string name="selected_one">Đã chọn 1 ghi chú</string>
     <string name="selected_other">Đã chọn %d ghi chú</string>
     <string name="background_sync">Đồng bộ hoá nền</string>
     <string name="background_sync_info">Đồng bộ mỗi giờ một lần</string>

@@ -127,11 +127,11 @@
     <string name="loading_widget">Načítam widget…</string>
     <string name="default_list">Predvolený zoznam</string>
     <string name="please_type_before_reminder">Napíšte text pred nastavením pripomienky</string>
-    <string name="notecopied_one">Skopírovaná %d poznámka</string>
+    <string name="notecopied_one">Skopírovaná 1 poznámka</string>
     <string name="notecopied_other">Skopírované %d poznámky</string>
-    <string name="notedeleted_one">Vymazaná %d poznámka</string>
+    <string name="notedeleted_one">Vymazaná 1 poznámka</string>
     <string name="notedeleted_other">Vymazane %d poznámky</string>
-    <string name="selected_one">Vybraná %d poznámka</string>
+    <string name="selected_one">Vybraná 1 poznámka</string>
     <string name="selected_other">Vybrané %d poznámky</string>
     <string name="background_sync">Synchronizácia na pozadí</string>
     <string name="background_sync_info">Synchronizovať raz za hodinu</string>

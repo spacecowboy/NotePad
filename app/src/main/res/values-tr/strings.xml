@@ -80,7 +80,7 @@
     <string name="settings_list">Liste</string>
     <string name="drag_to_timetravel">Zamanda yolculuk sürükleyin</string>
     <string name="import_data_question">Veri aktarılsın mı?</string>
-    <string name="import_started">Veriler aktarılıyor. Bu bir kaç saniye sürebilir.</string>
+    <string name="import_started">Veriler aktarılıyor. Bu birkaç saniye sürebilir.</string>
     <string name="imported_result">Listelerden%1$d içe aktarılan%2$dnotlar</string>
     <string name="import_error">Bir şeyler yanlış gitti: %s</string>
     <!--
@@ -120,7 +120,7 @@
     <string name="next_5_days">Sonraki 5 gün</string>
     <string name="next_n_days">Sonraki %d günler</string>
     <string name="this_week">Bu hafta</string>
-    <string name="please_select_note">Lütfen bir not seçin yada oluşturun</string>
+    <string name="please_select_note">Lütfen bir not seçin ya da oluşturun</string>
     <string name="please_create_note">Lütfen bir not oluşturun</string>
     <string name="hide_checkbox">İşaretleme kutusunu gizle</string>
     <string name="hide_checkbox_summary_on">İşaretleme kutusu gizlenecektir</string>
@@ -138,12 +138,12 @@
     <string name="shortcut_help1">İşaretlendiği taktirde, kısayol seçilen listede yeni bir not yaratacak ve editörü açacaktır. İşaretlenmediği taktirde, kısayol seçilen listeyi açacaktır.</string>
     <string name="loading_widget">Widget yükleniyor</string>
     <string name="default_list">Varsayılan liste</string>
-    <string name="please_type_before_reminder">Lütfen bir hatırlatıcı ayarlamadan önce bir kaç metin yazın</string>
-    <string name="notecopied_one">%d not kopyalandı</string>
+    <string name="please_type_before_reminder">Lütfen bir hatırlatıcı ayarlamadan önce birkaç metin yazın</string>
+    <string name="notecopied_one">1 not kopyalandı</string>
     <string name="notecopied_other">%d tane not kopyalandı</string>
-    <string name="notedeleted_one">%d not silindi</string>
+    <string name="notedeleted_one">1 not silindi</string>
     <string name="notedeleted_other">%d tane not silindi</string>
-    <string name="selected_one">%d not seçildi</string>
+    <string name="selected_one">1 not seçildi</string>
     <string name="selected_other">%d tane not seçildi</string>
     <string name="background_sync">Arkaplan senkronizasyonu</string>
     <string name="background_sync_info">Saatte bir defa senkronize et</string>

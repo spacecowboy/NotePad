@@ -134,11 +134,11 @@
     <string name="loading_widget">Cargando o widget…</string>
     <string name="default_list">Listaxe predefinida</string>
     <string name="please_type_before_reminder">Por favor, escribe algo antes de definir un recordatorio</string>
-    <string name="notecopied_one">%d nota copiada</string>
+    <string name="notecopied_one">1 nota copiada</string>
     <string name="notecopied_other">%d notas copiadas</string>
-    <string name="notedeleted_one">%d nota eliminada</string>
+    <string name="notedeleted_one">1 nota eliminada</string>
     <string name="notedeleted_other">%d notas eliminadas</string>
-    <string name="selected_one">%d nota seleccionada</string>
+    <string name="selected_one">1 nota seleccionada</string>
     <string name="selected_other">%d notas seleccionadas</string>
     <string name="background_sync">Sincronizar en segundo plano</string>
     <string name="background_sync_info">Sincronización a cada hora</string>

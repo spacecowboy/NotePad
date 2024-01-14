@@ -135,11 +135,11 @@
     <string name="loading_widget">Φόρτωση Widget…</string>
     <string name="default_list">Προεπιλεγμένη λίστα</string>
     <string name="please_type_before_reminder">Παρακαλώ πληκτρολογήστε κάποιο κείμενο πριν να ορίσετε μια υπενθύμιση</string>
-    <string name="notecopied_one">Αντιγραφή %d σημείωσης</string>
+    <string name="notecopied_one">Αντιγραφή 1 σημείωσης</string>
     <string name="notecopied_other">Αντιγραφή %d σημειώσεων</string>
-    <string name="notedeleted_one">Διαγραφή %d σημείωσης</string>
+    <string name="notedeleted_one">Διαγραφή 1 σημείωσης</string>
     <string name="notedeleted_other">Διαγράφηκαν %d σημειώσεις</string>
-    <string name="selected_one">Επιλέχτηκε %d σημείωση</string>
+    <string name="selected_one">Επιλέχτηκε 1 σημείωση</string>
     <string name="selected_other">Επιλέχτηκαν %d σημειώσεις</string>
     <string name="background_sync">Συγχρονισμός στο παρασκήνιο</string>
     <string name="background_sync_info">Συγχρονίζεται κάθε μία ώρα</string>

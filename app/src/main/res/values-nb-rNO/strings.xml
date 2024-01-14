@@ -73,10 +73,10 @@
     <string name="transparency">Gjennomsiktighet</string>
     <string name="notes_shortcut">Notatsnarvei</string>
     <string name="loading_widget">Laster inn miniprogram …</string>
-    <string name="notecopied_one">Kopierte %d notat</string>
+    <string name="notecopied_one">Kopierte 1 notat</string>
     <string name="notecopied_other">Kopierte %d notater</string>
     <string name="notedeleted_other">Slettet %d notater</string>
-    <string name="notedeleted_one">Slettet %d notat</string>
+    <string name="notedeleted_one">Slettet 1 notat</string>
     <string name="priority">Prioritet</string>
     <string name="all_tasks">Alle gjøremål</string>
     <string name="dashclock_anytime">Når som helst</string>
@@ -156,7 +156,7 @@
     <string name="app_about_dev_team">Laget av Jonas Kalderstam og vedlikeholdt av Campello Manuel</string>
     <string name="disable_battery_optimizations">Skru av batterioptimaliseringer</string>
     <string name="app_about_git_repo">Gemenfrihetslig programvare, tilgjengelig på https://github.com/spacecowboy/NotePad</string>
-    <string name="selected_one">%d notat valgt</string>
+    <string name="selected_one">1 notat valgt</string>
     <string name="selected_other">%d notater valgt</string>
     <string name="title_style">Navnestil</string>
     <string name="backup">Sikkerhetskopiering</string>

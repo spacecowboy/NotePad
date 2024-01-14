@@ -135,11 +135,11 @@
     <string name="loading_widget">Se încarcă...</string>
     <string name="default_list">Listă implicită</string>
     <string name="please_type_before_reminder">Te rugăm să introduci un text înainte de a stabili un memento</string>
-    <string name="notecopied_one">Notiță %d copiată</string>
+    <string name="notecopied_one">Notiță 1 copiată</string>
     <string name="notecopied_other">Notițe %d copiate</string>
-    <string name="notedeleted_one">Notița %d ștearsă</string>
+    <string name="notedeleted_one">Notița 1 ștearsă</string>
     <string name="notedeleted_other">Notițe %d șterse</string>
-    <string name="selected_one">Notiță %d selectată</string>
+    <string name="selected_one">Notiță 1 selectată</string>
     <string name="selected_other">Notițe %d selectate</string>
     <string name="background_sync">Fundal sincronizat</string>
     <string name="background_sync_info">Se sincronizează o dată pe oră</string>

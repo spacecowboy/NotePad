@@ -134,11 +134,11 @@
     <string name="loading_widget">Laden widget…</string>
     <string name="default_list">Standaard lijst</string>
     <string name="please_type_before_reminder">Typ een tekst voordat je een herinnering plaatst</string>
-    <string name="notecopied_one">%d notitie gekopieerd</string>
+    <string name="notecopied_one">1 notitie gekopieerd</string>
     <string name="notecopied_other">%d notities gekopieerd</string>
-    <string name="notedeleted_one">%d notitie verwijderd</string>
+    <string name="notedeleted_one">1 notitie verwijderd</string>
     <string name="notedeleted_other">%d notities verwijderd</string>
-    <string name="selected_one">%d notitie geselecteerd</string>
+    <string name="selected_one">1 notitie geselecteerd</string>
     <string name="selected_other">%d notities geselecteerd</string>
     <string name="background_sync">Achtergrondsynchronisatie</string>
     <string name="background_sync_info">Synchoniseert een keer per uur</string>

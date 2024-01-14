@@ -135,9 +135,9 @@
     <string name="please_type_before_reminder">Bitte gebe einen Text ein, bevor Du eine Erinnerung hinzufügst</string>
     <string name="notecopied_one">1 Notiz kopiert</string>
     <string name="notecopied_other">%d Notizen kopiert</string>
-    <string name="notedeleted_one">%d Notiz gelöscht</string>
+    <string name="notedeleted_one">1 Notiz gelöscht</string>
     <string name="notedeleted_other">%d Notizen gelöscht</string>
-    <string name="selected_one">%d Notiz ausgewählt</string>
+    <string name="selected_one">1 Notiz ausgewählt</string>
     <string name="selected_other">%d Notizen ausgewählt</string>
     <string name="background_sync">Im Hintergrund synchronisieren</string>
     <string name="background_sync_info">Synchronisiert einmal pro Stunde</string>

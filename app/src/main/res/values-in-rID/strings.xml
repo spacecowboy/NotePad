@@ -135,9 +135,9 @@
     <string name="loading_widget">Memuat widget…</string>
     <string name="default_list">Daftar default</string>
     <string name="please_type_before_reminder">Harap ketik beberapa teks sebelum menyetel pengingat</string>
-    <string name="notecopied_one">Disalin %d catatan</string>
+    <string name="notecopied_one">Disalin 1 catatan</string>
     <string name="notecopied_other">Disalin %d catatan</string>
-    <string name="notedeleted_one">Dihapus %d catatan</string>
+    <string name="notedeleted_one">Dihapus 1 catatan</string>
     <string name="notedeleted_other">Dihapus %d catatan</string>
     <string name="selected_one">Terpilih satu catatan</string>
     <string name="selected_other">Dipilih %d catatan</string>
