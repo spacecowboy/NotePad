@@ -17,21 +17,16 @@ jobs:
     continue-on-error: true # finish for all configurations, even if one fails
     strategy:
       matrix:
-        # test on emulators with these Android API versions.
-        # api-level: [ 23, 25, 27, 29, 31, 33 ] # test on 6 versions, from minSdk to targetSdk
-        api-level: [ 30, 32, 34 ] # test on 3 api versions that have ATD images
-        # target: [ default, google_apis ] # user-friendly OS images without, or with, google apps
-        target: [ aosp_atd, google_atd ] # test-friendly OS images without, or with, google apps
+        # test on emulators with these Android API versions. They all have ATD images.
+        api-level: [ 30, 31, 32, 33, 34 ]
+        # use stripped-down, test-friendly Android OS images without, or with, google apps
+        target: [ aosp_atd, google_atd ]
         # profile: [ 5.1in WVGA, 10.1in WXGA ] # TODO you can also test with phones and tablets!
         exclude:
             # the images for these configurations do not exist
-          - api-level: 33
-            target: default
-          - api-level: 27
-            target: google_apis
           - api-level: 34
             target: google_atd
-    # Windows is unsupported. Ubuntu is slow so the emulators crash. List of installed software:
+    # Windows is not supported. Ubuntu is slow so the emulators crash. List of installed software:
     # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
     runs-on: macos-latest
     permissions:
@@ -100,13 +95,6 @@ jobs:
 
       - name: run custom tasks for additional checks
         run: ./gradlew checkLanguages checkFastlane
-
-# useless, since the ATD images have a black screen
-#      - name: install ffmpeg
-#        run: brew install ffmpeg
-
-#      - name: check ffmpeg
-#        run: ffmpeg -version
 
       - name: make the emulator script executable
         run: chmod +x github_on_emu_started.sh
