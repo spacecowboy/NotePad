@@ -60,8 +60,8 @@ import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.ListHelper;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.PreferencesHelper;
-import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.activities.main.ActivityMain_;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentTaskListBinding;
@@ -472,6 +472,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			return true;
 		});
 
+		// TODO this MultiChoiceModeListener occupies the next 220 lines.
+		//  It handles the logic for when multiple notes are selected and a button on
+		//  the action bar is pressed. Put this class in its own java file
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
 			final HashMap<Long, Task> tasks = new HashMap<>();
@@ -582,6 +585,10 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				return true;
 			}
 
+			/**
+			 * When the user presses a button on the action bar, this function decides what to do
+			 * with the selected notes: copy, delete, share, or move to another list
+			 */
 			@Override
 			public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
 				// Respond to clicks on the actions in the CAB
@@ -683,13 +690,17 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				return result.length() > 0 ? result.substring(2) : result;
 			}
 
+			/**
+			 * When you select multiple notes, and presses 'share' on the menu,
+			 * this function creates the intent to call Android's app picker to choose
+			 * who will receive the shared notes' content
+			 */
 			Intent getShareIntent() {
 				final Intent shareIntent = new Intent(Intent.ACTION_SEND);
 				shareIntent.setType("text/plain");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
 				shareIntent.putExtra(Intent.EXTRA_SUBJECT, getShareSubject());
-				shareIntent
-						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+				shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
 				return shareIntent;
 			}
 		});
