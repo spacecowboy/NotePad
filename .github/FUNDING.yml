@@ -1,4 +1,5 @@
-# setup is explained in 
+# multiple github accounts are allowed, but only one of everything else. Setup is explained in:
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
 github: [spacecowboy, CampelloManuel]
-ko_fi: [spacecowboy, campellomanuel]
+ko_fi: spacecowboy
+custom: https://www.paypal.com/paypalme/campellomanuel
