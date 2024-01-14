@@ -1,9 +1,6 @@
 package com.nononsenseapps.notepad.widget.shortcut;
 
-import android.app.LoaderManager.LoaderCallbacks;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,6 +14,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.ThemeHelper;
@@ -118,7 +118,7 @@ public class ShortcutConfig extends AppCompatActivity {
 
 		listSpinner.setAdapter(mSpinnerAdapter);
 
-		getLoaderManager().restartLoader(0, null, new LoaderCallbacks<Cursor>() {
+		LoaderManager.getInstance(this).restartLoader(0, null, new LoaderManager.LoaderCallbacks<Cursor>() {
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle args) {

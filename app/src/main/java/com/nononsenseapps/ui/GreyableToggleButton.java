@@ -23,6 +23,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatToggleButton;
+import androidx.core.content.ContextCompat;
 
 import com.nononsenseapps.notepad.R;
 
@@ -42,7 +43,7 @@ public class GreyableToggleButton extends AppCompatToggleButton {
 	public GreyableToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		primaryColor = getTextColorPrimary(context);
-		secondaryColor = getResources().getColor(R.color.uncheckedGrey);
+		secondaryColor = ContextCompat.getColor(this.getContext(), R.color.uncheckedGrey);
 	}
 
 	/**
