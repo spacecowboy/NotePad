@@ -20,7 +20,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdk 34
-    buildToolsVersion "34.0.0"
     namespace "com.nononsenseapps.notepad" // for R.*
 
     buildFeatures {
@@ -162,7 +161,7 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    // kotlinOptions { jvmTarget = 17 } // compile kotlin to java 11, for compatibility
+    // kotlinOptions { jvmTarget = 17 } // compile kotlin to the same JAVA 17
 
     // control which types of configuration APKs you want your
     // app bundle to support
@@ -183,7 +182,7 @@ dependencies {
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     // yes we need both
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.2"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
