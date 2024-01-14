@@ -120,7 +120,7 @@
 		<!-- Search activity -->
 		<activity
 			android:name="com.nononsenseapps.notepad.activities.ActivitySearch"
-			android:exported="true"
+			android:exported="false"
 			android:label="@string/search_hint"
 			android:launchMode="singleTop"
 			android:theme="@style/ThemeNnnLight">
@@ -264,7 +264,7 @@
 			android:name="com.nononsenseapps.notepad.database.MyContentProvider"
 			android:authorities="@string/NnnAuthority_1"
 			android:enabled="true"
-			android:exported="true"
+			android:exported="false"
 			android:grantUriPermissions="true"/>
 
 		<!-- Time Machine -->
@@ -296,7 +296,7 @@
 			android:name=".android.provider.TextFileProvider"
 			android:authorities="${applicationId}.TESTPROVIDER.AUTHORITY"
 			android:enabled="true"
-			android:exported="true"
+			android:exported="false"
 			android:icon="@drawable/ic_sd_storage_24dp"
 			android:label="SD-card files">
 			<intent-filter>
@@ -330,7 +330,7 @@
 			android:name=".android.provider.DummyProvider"
 			android:authorities="${applicationId}.DUMMYPROVIDER.AUTHORITY"
 			android:enabled="true"
-			android:exported="true"
+			android:exported="false"
 			android:icon="@drawable/app_icon"
 			android:label="Dummy items">
 			<intent-filter>
