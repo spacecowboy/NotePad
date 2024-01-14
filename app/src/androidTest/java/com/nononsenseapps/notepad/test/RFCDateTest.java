@@ -55,7 +55,7 @@ public class RFCDateTest extends TestCase {
 		// String neutral
 		final String string1 = RFC3339Date.asRFC3339(long1);
 
-		Log.d(TAG, "" + long1 + " = " + string1);
+		Log.d(TAG, long1 + " = " + string1);
 
 		try {
 			// utc
@@ -64,7 +64,7 @@ public class RFCDateTest extends TestCase {
 			// utc again
 			final long long3 = RFC3339Date.parseRFC3339Date(string2).getTime();
 
-			Log.d(TAG, "" + long2 + " = " + string2);
+			Log.d(TAG, long2 + " = " + string2);
 
 			assertEquals("TimeInMilli did not match", long1 / 1000, long3 / 1000);
 			//assertEquals("RFC String did not match", string1, string2);

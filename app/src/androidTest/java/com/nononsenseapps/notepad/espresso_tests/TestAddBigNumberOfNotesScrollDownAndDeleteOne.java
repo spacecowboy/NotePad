@@ -40,14 +40,13 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 	};
 
 	/**
-	 * credit to Chemouna @ GitHub https://gist.github.com/chemouna/00b10369eb1d5b00401b
+	 * credit to <a href="https://gist.github.com/chemouna/00b10369eb1d5b00401b">Chemouna @ GitHub</a>
 	 */
 	private static ViewAssertion doesNotHaveViewWithText(final String text) {
 		return (view, e) -> {
-			if (!(view instanceof ListView)) {
+			if (!(view instanceof ListView rv)) {
 				throw e;
 			}
-			ListView rv = (ListView) view;
 			ArrayList<View> outviews = new ArrayList<>();
 			for (int index = 0; index < rv.getAdapter().getCount(); index++) {
 				rv

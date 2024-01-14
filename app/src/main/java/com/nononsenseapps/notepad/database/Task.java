@@ -25,7 +25,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.text.format.Time;
 
 import androidx.annotation.NonNull;
 
@@ -542,9 +541,19 @@ public class Task extends DAO {
 	public String title = null;
 	public String note = null;
 
-	// All milliseconds since 1970-01-01 UTC
+	/**
+	 * When this Task was completed, in milliseconds since 1970-01-01 UTC
+	 */
 	public Long completed = null;
+
+	/**
+	 * When this Task is due, in milliseconds since 1970-01-01 UTC
+	 */
 	public Long due = null;
+
+	/**
+	 * When this Task was last updated, in milliseconds since 1970-01-01 UTC
+	 */
 	public Long updated = null;
 
 	/**
@@ -569,14 +578,14 @@ public class Task extends DAO {
 	}
 
 	/**
-	 * Set task as completed. Returns the time stamp that is set.
+	 * Set task as completed. Only used when importing from the legacy DB.
+	 * It seems the intent was to initialize the completed notes imported from the legacy DB
+	 * with a completed timestamp
 	 */
-	public Long setAsCompleted() {
-
-		final Time time = new Time(Time.TIMEZONE_UTC);
-		time.setToNow();
-		completed = new Time().toMillis(false);
-		return completed;
+	public void setAsCompletedForLegacy() {
+		// TODO functions dealing with the legacy DB, including this one, should just be deleted:
+		//  the legacy DB probably dates back to 2012 !
+		completed = Calendar.getInstance().getTimeInMillis();
 	}
 
 	/**
@@ -720,7 +729,6 @@ public class Task extends DAO {
 	 * Compares this task to another and returns true if their contents are the
 	 * same. Content is defined as: title, note, duedate, completed != null
 	 * Returns false if title or note are null.
-	 *
 	 * The intended usage is the editor where content and not id's or position
 	 * are of importance.
 	 */
@@ -933,8 +941,7 @@ public class Task extends DAO {
 
 	/**
 	 * If moving left, then edgeCol is left and vice-versa. Values should come
-	 * from getMoveValues
-	 *
+	 * from getMoveValues.
 	 * 1 = table name 2 = left 3 = right 4 = edgecol 5 = old.left 6 = old.right
 	 * 7 = target.pos (actually target.edgecol) 8 = dblist 9 = old.dblist
 	 */

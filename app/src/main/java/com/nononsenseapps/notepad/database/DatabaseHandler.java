@@ -176,6 +176,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			final SQLiteDatabase legacyDB = legacyDBHelper.getReadableDatabase();
 
 			// First copy lists
+			// if there's no legacy DB, this call crashes and the whole try-block is skipped
 			Cursor c = getLegacyLists(legacyDB);
 
 			while (!c.isClosed() && c.moveToNext()) {
@@ -228,7 +229,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					// completed must be converted
 					if (c.getString(4) != null
 							&& "completed".equals(c.getString(4))) {
-						t.setAsCompleted();
+						t.setAsCompletedForLegacy();
 					}
 					t.dblist = listIDMap.get(c.getLong(5));
 

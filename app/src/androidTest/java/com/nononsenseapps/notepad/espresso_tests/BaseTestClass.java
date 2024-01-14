@@ -8,9 +8,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import android.Manifest;
 import android.content.Context;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
-import androidx.annotation.RequiresApi;
+import androidx.preference.PreferenceManager;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
