@@ -208,4 +208,18 @@
     <string name="delete_completed_tasks_question">Hapus semua tugas yang sudah selesai\?</string>
     <string name="navigation_drawer_open">Membuka laci navigasi</string>
     <string name="navigation_drawer_close">Tutup laci navigasi</string>
+    <string name="notification_channel_description">Menampilkan konten catatan pada saat pengingat yang dipilih</string>
+    <string name="permission_denied">Tidak dapat melanjutkan: Anda menolak izin</string>
+    <string name="sorting">Penyortiran</string>
+    <string name="notification_channel_name">Pengingat untuk catatan</string>
+    <string name="feature_is_WIP">Fitur ini adalah W.I.P.</string>
+    <string name="file_picker_not_available">Pemilih file tidak tersedia</string>
+    <string name="no_sync_method_chosen">Anda tidak memilih metode sinkronisasi</string>
+    <string name="choose_backup_folder">Pilih folder cadangan</string>
+    <string name="exact_alarms_summary">Menggunakan lebih banyak baterai untuk menampilkan pengingat notifikasi dengan cara yang lebih andal</string>
+    <string name="use_exact_alarms">Gunakan alarm yang tepat</string>
+    <string name="disable_battery_optimizations">Matikan pengoptimalan baterai</string>
+    <string name="battery_optimizations_active">Pengoptimalan baterai aktif</string>
+    <string name="battery_optimizations_inactive">Pengoptimalan baterai nonaktif</string>
+    <string name="allow_exact_reminders">Izinkan pengingat yang serupa</string>
 </resources>
