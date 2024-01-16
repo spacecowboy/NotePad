@@ -7,12 +7,14 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import androidx.preference.PreferenceManager;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -27,22 +29,19 @@ public class BaseTestClass {
 
 	/**
 	 * A JUnit {@link Rule @Rule} to launch your activity under test. This replaces
-	 * for ActivityInstrumentationTestCase2.
-	 * Rules are executed for each test method and will run before
-	 * any of your setup code in the @Before method.
-	 * This will create and launch of the activity for you and also expose
-	 * the activity under test. To get a reference to the activity you can use:
-	 * {@link IntentsTestRule#getActivity()}
+	 * ActivityInstrumentationTestCase2. Rules are executed for each test method and will run
+	 * before any of your setup code in the @Before method. To get a reference to the activity
+	 * you can use: {@link IntentsTestRule#getActivity()}
 	 * <br/>
-	 * NOTE: the alternative, {@link ActivityScenarioRule}, <b>DOES NOT WORK</b>
+	 * NOTE: the newer alternative, {@link ActivityScenarioRule}, <b>DOES NOT WORK</b>
 	 */
 	@SuppressWarnings("deprecation")
 	@Rule
-	public final IntentsTestRule<ActivityMain_> mActRule =
-			new IntentsTestRule<>(ActivityMain_.class);
+	public IntentsTestRule<ActivityMain_> mActRule;
+
 
 	/**
-	 * API 33 requires permission for notifications, older APIs crash if you run this
+	 * Since API 33 we need permission for notifications
 	 */
 	@Rule
 	public GrantPermissionRule mNotifRule;
@@ -64,6 +63,28 @@ public class BaseTestClass {
 	}
 
 	/**
+	 * Tries in many ways to give notification permission for OS versions that need it
+	 */
+	private void giveNotifyPermission() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+			// this permission works only on API >= 33, it crashes on older versions!
+			mNotifRule = GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS);
+
+			String command = "pm grant " +
+					ApplicationProvider.getApplicationContext().getPackageName() + " " +
+					Manifest.permission.POST_NOTIFICATIONS;
+
+			// this one is more likely to work
+			InstrumentationRegistry
+					.getInstrumentation()
+					.getUiAutomation()
+					.executeShellCommand(command);
+		} else {
+			mNotifRule = null;
+		}
+	}
+
+	/**
 	 * Many times, on the github VM, the tests fail with RootViewWithoutFocusException,
 	 * I think it's due to the emulator being slow. Let's launch the activity and wait
 	 * for it to load before starting the real test
@@ -73,11 +94,13 @@ public class BaseTestClass {
 		// ensure that this is called BEFORE trying to start the activity
 		clearAppData();
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-			// this permission works only on API >= 33, it crashes on older versions!
-			mNotifRule = GrantPermissionRule.grant(Manifest.permission.POST_NOTIFICATIONS);
-		} else
-			mNotifRule = null;
+		// first, acquire all the required permissions ...
+		giveNotifyPermission();
+
+		// ... then, create and run the entry point to the app
+		mActRule = new IntentsTestRule<>(ActivityMain_.class);
+		Intent launchApp = new Intent(ApplicationProvider.getApplicationContext(), ActivityMain_.class);
+		mActRule.launchActivity(launchApp);
 
 		try {
 			// it responds => we can return now
