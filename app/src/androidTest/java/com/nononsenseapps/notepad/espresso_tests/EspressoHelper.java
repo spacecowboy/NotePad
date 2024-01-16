@@ -181,6 +181,7 @@ public class EspressoHelper {
 	 * can then interact with the app.
 	 */
 	public static void hideShowCaseViewIfShown() {
+		waitUi();
 		if (!EspressoHelper.isShowCaseOverlayVisible()) return;
 
 		// click anywhere to dismiss it
