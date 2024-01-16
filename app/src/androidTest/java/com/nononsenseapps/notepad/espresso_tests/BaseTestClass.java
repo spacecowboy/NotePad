@@ -55,6 +55,7 @@ public class BaseTestClass {
 
 	@After
 	public void clearAppData() {
+		if (mActRule != null) mActRule.finishActivity();
 		Context context = ApplicationProvider.getApplicationContext();
 
 		// clear the app's data as the test is starting & finishing
