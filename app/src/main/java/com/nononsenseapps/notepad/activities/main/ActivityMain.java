@@ -659,6 +659,10 @@ public class ActivityMain extends AppCompatActivity
 				}
 			};
 
+			// this controls only the arrow that rotates on the corner
+			boolean animate = PreferencesHelper.areAnimationsEnabled(this);
+			mDrawerToggle.setDrawerSlideAnimationEnabled(animate);
+
 			// Set the drawer toggle as the DrawerListener
 			drawerLayout.setDrawerListener(mDrawerToggle);
 		}
