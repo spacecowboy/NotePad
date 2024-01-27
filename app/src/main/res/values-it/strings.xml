@@ -102,7 +102,7 @@
     <string name="confirm_new_password">Conferma la nuova password</string>
     <string name="apply">Applica</string>
     <string name="clear_password">Azzera password</string>
-    <string name="password_info">Puoi impostare una password per bloccare le note. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate. Nel caso ti dimenticassi la password, puoi ripulirla e impostarne un\'altra</string>
+    <string name="password_info">Puoi impostare una password per bloccare le note. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate.</string>
     <string name="about">Informazioni</string>
     <string name="sync_failed">Sincronizzazione non riuscita</string>
     <string name="sync_login_failed">Login non riuscito, non è possibile connettersi a Google Tasks</string>

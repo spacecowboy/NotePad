@@ -27,6 +27,7 @@
     <string name="completed">Finia</string>
     <string name="about">Informasiòn</string>
     <string name="clear_password">Càva a pasword</string>
+    <string name="password_info">Te poi blocare ogni nota, cosita la vede soeo chi che sa a pasword. A rimane comunque accesibie su chialtri dispositivi</string>
     <string name="done">Finio</string>
     <string name="menu_delete">Cansea</string>
     <string name="menu_deletelist">Cansea a lista</string>
