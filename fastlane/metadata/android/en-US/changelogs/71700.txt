@@ -1,0 +1,12 @@
+﻿NoNonsense Notes v7.1.7
+
+Highlights:
+- Translated using Weblate
+- updated app and libraries to target android 14
+- show app animations only if enabled in system settings
+- make drawer menu rows more compact
+
+Details:
+- Use java 17 in github actions
+- bug fixes and stability improvements
+- improved stability of tests

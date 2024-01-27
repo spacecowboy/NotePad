@@ -74,8 +74,8 @@ android {
 
         // If these values remain static, incremental builds are optimized and faster.
         // Also, FDROID is happier. Update them only with ./release.sh
-        versionCode 71600
-        versionName "7.1.6"
+        versionCode 71700
+        versionName "7.1.7"
 
         vectorDrawables.useSupportLibrary = true
 
