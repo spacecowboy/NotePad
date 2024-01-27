@@ -37,10 +37,6 @@ adb shell pm uninstall --user 0 com.nononsenseapps.notepad
 # by mistake
 adb shell settings put secure long_press_timeout 3000
 
-# Take a screenshot of the emulator. See also
-# https://developer.android.com/studio/run/advanced-emulator-usage#screenshots
-adb emu screenrecord screenshot ./screenshot-emu-tests-starting.png
-
 # disable animations once again, for safety
 adb shell settings put global window_animation_scale 0
 adb shell settings put global transition_animation_scale 0
@@ -68,8 +64,8 @@ function getScreenStreamFromEmu() {
 }
 
 # save the video stream to a file
-{ getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
- -nostats -hide_banner -framerate 15 -bufsize 1M emu-video.mp4 ; } &
+# { getScreenStreamFromEmu | ffmpeg -i - -s 480x854 -loglevel error \
+# -nostats -hide_banner -framerate 15 -bufsize 1M emu-video.mp4 ; } &
 
 # press "HOME" to close any "system UI not responding" popups still showing.
 # Notice that these popups appear when the host PC is too slow, so the best solution
