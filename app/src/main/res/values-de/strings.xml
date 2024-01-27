@@ -113,7 +113,7 @@
     <string name="date_header_none">Kein Datum</string>
     <string name="date_header_completed">Erledigt</string>
     <string name="next_5_days">nächste 5 Tage</string>
-    <string name="next_n_days">nächste % Tage</string>
+    <string name="next_n_days">nächste %d Tage</string>
     <string name="this_week">Diese Woche</string>
     <string name="please_select_note">Bitte wähle oder erstelle eine Notiz</string>
     <string name="please_create_note">Bitte erstelle eine Notiz</string>
