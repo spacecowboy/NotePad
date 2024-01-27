@@ -117,7 +117,7 @@
 	<string name="libraries_used">Libraries</string>
 	<string name="app_about_dev_team">Created by Jonas Kalderstam and maintained by Campello Manuel</string>
 	<string name="app_about_git_repo">This app is copylefted libre software, available at https://github.com/spacecowboy/NotePad</string>
-	<string name="app_about_license">Licensed GPLv3+, https://www.gnu.org/licenses.</string>
+	<string name="app_about_license">Licensed GPLv3+, https://www.gnu.org/licenses</string>
 	<string name="app_about_bugreports">Report bugs and issues at https://github.com/spacecowboy/NotePad/issues</string>
 	<string name="app_about_translations">Help translate the app at https://hosted.weblate.org/engage/no-nonsense-notes/</string>
 	<string name="sponsor_this_project" translatable="false">\"Sponsor this project\"</string>
