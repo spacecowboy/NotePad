@@ -124,6 +124,12 @@ public class ActivityMain extends AppCompatActivity
 	boolean mAnimateExit = false;
 
 	/**
+	 * If transitions in this activity should be animated.
+	 * The value is regularly updated by {@link ActivityMain#onResume()}
+	 */
+	boolean mShouldAnimate = true;
+
+	/**
 	 * Changes depending on what we're showing since the started activity can receive new intents
 	 */
 	@InstanceState
@@ -262,7 +268,7 @@ public class ActivityMain extends AppCompatActivity
 	public void finish() {
 		super.finish();
 		// Only animate when specified. Should be when it was animated "in"
-		if (mAnimateExit && PreferencesHelper.areAnimationsEnabled(this)) {
+		if (mAnimateExit && mShouldAnimate) {
 			overridePendingTransition(R.anim.activity_slide_in_right,
 					R.anim.activity_slide_out_right_full);
 		}
@@ -422,10 +428,8 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void onBackPressed() {
 		if (drawerLayout.isDrawerOpen(leftDrawer)) {
-			boolean animate = PreferencesHelper.areAnimationsEnabled(this);
-
 			// close the drawer on the left if it's open
-			drawerLayout.closeDrawer(leftDrawer,animate);
+			drawerLayout.closeDrawer(leftDrawer, mShouldAnimate);
 			return;
 		}
 
@@ -473,6 +477,8 @@ public class ActivityMain extends AppCompatActivity
 			syncStatusReceiver.startMonitoring(this, this);
 		}
 		OrgSyncService.start(this);
+
+		mShouldAnimate = PreferencesHelper.areAnimationsEnabled(this);
 	}
 
 	/**
@@ -531,13 +537,13 @@ public class ActivityMain extends AppCompatActivity
 		final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 		if (mReverseAnimation) {
 			mReverseAnimation = false;
-			if (PreferencesHelper.areAnimationsEnabled(this)) {
+			if (mShouldAnimate) {
 				transaction.setCustomAnimations(
 						R.anim.slide_in_bottom, R.anim.slide_out_top,
 						R.anim.slide_in_top, R.anim.slide_out_bottom);
 			}
 		} else {
-			if (PreferencesHelper.areAnimationsEnabled(this)) {
+			if (mShouldAnimate) {
 				transaction.setCustomAnimations(
 						R.anim.slide_in_top, R.anim.slide_out_bottom,
 						R.anim.slide_in_bottom, R.anim.slide_out_top);
@@ -662,8 +668,7 @@ public class ActivityMain extends AppCompatActivity
 			};
 
 			// this controls only the arrow that rotates on the corner
-			boolean animate = PreferencesHelper.areAnimationsEnabled(this);
-			mDrawerToggle.setDrawerSlideAnimationEnabled(animate);
+			mDrawerToggle.setDrawerSlideAnimationEnabled(mShouldAnimate);
 
 			// Set the drawer toggle as the DrawerListener
 			drawerLayout.setDrawerListener(mDrawerToggle);
@@ -801,8 +806,9 @@ public class ActivityMain extends AppCompatActivity
 			// Set the intent here also so rotations open the same item
 			setIntent(intent);
 			var tmp1 = getSupportFragmentManager().beginTransaction();
-			if (PreferencesHelper.areAnimationsEnabled(this))
+			if (mShouldAnimate) {
 				tmp1.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom);
+			}
 			tmp1.replace(R.id.fragment2, TaskDetailFragment_.getInstance(taskUri))
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
@@ -830,8 +836,9 @@ public class ActivityMain extends AppCompatActivity
 			setIntent(intent);
 			// Replace editor fragment
 			var tmp1 = getSupportFragmentManager().beginTransaction();
-			if (PreferencesHelper.areAnimationsEnabled(this))
+			if (mShouldAnimate) {
 				tmp1.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom);
+			}
 			tmp1.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId), DETAILTAG)
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
@@ -845,12 +852,15 @@ public class ActivityMain extends AppCompatActivity
 	public void closeFragment(final Fragment fragment) {
 		if (fragment2 != null) {
 			var tmp1 = getSupportFragmentManager().beginTransaction();
-			if (PreferencesHelper.areAnimationsEnabled(this))
+			if (mShouldAnimate) {
 				tmp1.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom);
+			}
 			tmp1.remove(fragment).commitAllowingStateLoss();
 			taskHint.setAlpha(0f);
 			taskHint.setVisibility(View.VISIBLE);
-			taskHint.animate().alpha(1f).setStartDelay(500);
+			taskHint.animate()
+					.alpha(1f)
+					.setStartDelay(500);
 		} else {
 			// Phone case, simulate back button
 			simulateBack();
