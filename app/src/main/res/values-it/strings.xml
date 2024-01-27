@@ -35,7 +35,7 @@
     <string name="delete_question">Eliminare?</string>
     <string name="delete_items_message">Vuoi veramente eliminare questi elementi\?</string>
     <string name="delete_item_message">Vuoi veramente eliminare questo elemento\?</string>
-    <string name="delete_list_message">Vuoi veramente eliminare l\'elenco\? Le note verranno archiviate</string>
+    <string name="delete_list_message">Vuoi veramente eliminare l\'elenco, archiviando le note ?</string>
     <string name="editor_due_date_hint">Data di scadenza</string>
     <string name="editor_title_hint">Titolo</string>
     <string name="editor_note_hint">Nota</string>
