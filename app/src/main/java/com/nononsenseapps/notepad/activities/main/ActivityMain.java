@@ -535,15 +535,13 @@ public class ActivityMain extends AppCompatActivity
 
 		// Load stuff
 		final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		if (mReverseAnimation) {
-			mReverseAnimation = false;
-			if (mShouldAnimate) {
+		if (mShouldAnimate) {
+			if (mReverseAnimation) {
+				mReverseAnimation = false;
 				transaction.setCustomAnimations(
 						R.anim.slide_in_bottom, R.anim.slide_out_top,
 						R.anim.slide_in_top, R.anim.slide_out_bottom);
-			}
-		} else {
-			if (mShouldAnimate) {
+			} else {
 				transaction.setCustomAnimations(
 						R.anim.slide_in_top, R.anim.slide_out_bottom,
 						R.anim.slide_in_bottom, R.anim.slide_out_top);
@@ -556,7 +554,8 @@ public class ActivityMain extends AppCompatActivity
 				right = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteId(intent));
 			} else if (ActivityMainHelper.isNoteIntent(intent)) {
 				// some text was shared to this app
-				right = TaskDetailFragment_.getInstance(ActivityMainHelper.getNoteShareText(intent),
+				right = TaskDetailFragment_.getInstance(
+						ActivityMainHelper.getNoteShareText(intent),
 						ActivityMainHelper.getListIdToShow(intent, this));
 			}
 		} else if (ActivityMainHelper.isNoteIntent(intent)) {
