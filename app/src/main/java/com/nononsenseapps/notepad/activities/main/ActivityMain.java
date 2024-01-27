@@ -422,8 +422,10 @@ public class ActivityMain extends AppCompatActivity
 	@Override
 	public void onBackPressed() {
 		if (drawerLayout.isDrawerOpen(leftDrawer)) {
+			boolean animate = PreferencesHelper.areAnimationsEnabled(this);
+
 			// close the drawer on the left if it's open
-			drawerLayout.closeDrawer(leftDrawer);
+			drawerLayout.closeDrawer(leftDrawer,animate);
 			return;
 		}
 
