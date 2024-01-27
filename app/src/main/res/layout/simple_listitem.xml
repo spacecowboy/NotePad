@@ -18,43 +18,43 @@
 
 <!-- This represents a "list of notes" shown in the drawer menu on the left.
  See also drawer_layout.xml which hosts these list items.
- Minimum height is set to 64dp by the 2° Textview, but this item will
- enlarge to show all the text of the notelist name -->
+ This item will enlarge to show all the text of the notelist name -->
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	xmlns:tools="http://schemas.android.com/tools"
 	android:background="?android:attr/selectableItemBackground"
-	android:orientation="horizontal">
+	android:orientation="horizontal"
+	android:paddingVertical="8dp">
 
 	<!-- shows the list's name. Uses as many lines as the note-list needs,
-	or else the name is cut (on devices with bigger text size) -->
+	or else, on devices with bigger text size setting, the name would be cut -->
 	<TextView
-		android:drawablePadding="8dp"
+		android:drawablePadding="16dp"
 		android:id="@android:id/text1"
 		android:background="?android:attr/selectableItemBackground"
 		android:layout_width="0dp"
-		android:paddingHorizontal="16dp"
+		android:paddingHorizontal="8dp"
 		android:layout_height="wrap_content"
 		android:layout_gravity="start|center_vertical"
 		android:layout_weight="1"
 		tools:text="note list name note list name note list name note list name "
 		android:fontFamily="sans-serif-light"
 		android:textColor="?android:attr/textColorPrimary"
-		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:textAppearance="?android:attr/textAppearanceMedium"
 		app:drawableLeftCompat="@drawable/folder_move_24dp"/>
 
-	<!-- Shows the number of notes in this list -->
+	<!-- Shows the number of notes in this list, on the right -->
 	<TextView
 		android:id="@android:id/text2"
 		android:paddingHorizontal="16dp"
 		android:background="?android:attr/selectableItemBackground"
 		android:textColor="?android:attr/textColorSecondary"
-		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:layout_width="wrap_content"
-		android:layout_height="64dp"
+		android:layout_height="wrap_content"
 		android:gravity="center_vertical"
 		android:layout_gravity="end|center_vertical"
 		android:ellipsize="end"
