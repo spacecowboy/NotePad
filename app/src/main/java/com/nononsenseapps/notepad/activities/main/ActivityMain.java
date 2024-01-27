@@ -38,6 +38,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -198,8 +199,8 @@ public class ActivityMain extends AppCompatActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Pass the event to ActionBarDrawerToggle, if it returns
-		// true, then it has handled the app icon touch event
+		// Pass the event to ActionBarDrawerToggle. If it returns true, then it has handled the
+		// drawer icon touch event
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -300,7 +301,7 @@ public class ActivityMain extends AppCompatActivity
 
 		// And then close drawer
 		if (drawerLayout != null && leftDrawer != null) {
-			drawerLayout.closeDrawer(leftDrawer);
+			drawerLayout.closeDrawer(leftDrawer, mShouldAnimate);
 		}
 	}
 
@@ -640,30 +641,66 @@ public class ActivityMain extends AppCompatActivity
 			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
 					R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
+
+				/** custom implementation of
+				 * {@link ActionBarDrawerToggle#onOptionsItemSelected(MenuItem)} from AndroidX
+				 * where we can disable sliding animations
+				 */
+				@Override
+				public boolean onOptionsItemSelected(MenuItem item) {
+					if (item == null) return false;
+					if (item.getItemId() != android.R.id.home) return false;
+					if (!this.isDrawerIndicatorEnabled()) return false;
+
+					int drawerLockMode = drawerLayout.getDrawerLockMode(GravityCompat.START);
+					if (drawerLayout.isDrawerVisible(GravityCompat.START)
+							&& (drawerLockMode != DrawerLayout.LOCK_MODE_LOCKED_OPEN)) {
+						// drawer menu is open --> close it
+						drawerLayout.closeDrawer(GravityCompat.START, mShouldAnimate);
+						// mandatory callback, to update menu items
+						onDrawerClosed(leftDrawer);
+					} else if (drawerLockMode != DrawerLayout.LOCK_MODE_LOCKED_CLOSED) {
+						// drawer menu is closed --> open it
+						drawerLayout.openDrawer(GravityCompat.START, mShouldAnimate);
+						// mandatory callback, to update menu items
+						onDrawerOpened(leftDrawer);
+					}
+
+					return true;
+				}
+
 				/**
 				 * Called when a drawer has settled in a completely closed state.
 				 */
 				@Override
 				public void onDrawerClosed(View view) {
-					// hide 'Notes' (R.string.app_name_short) from the toolbar
-					getSupportActionBar().setDisplayShowTitleEnabled(false);
+					if (getSupportActionBar() != null) {
+						// hide 'Notes' (R.string.app_name_short) from the toolbar
+						getSupportActionBar().setDisplayShowTitleEnabled(false);
+					}
 					isDrawerClosed = true;
-					invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+
+					// creates call to onPrepareOptionsMenu()
+					invalidateOptionsMenu();
+
+					super.onDrawerClosed(view);
 				}
 
 				@Override
-				public void onDrawerStateChanged(int newState) {
-					super.onDrawerStateChanged(newState);
-
-					// If it's not idle, it isn't closed
-					if (DrawerLayout.STATE_IDLE != newState) {
+				public void onDrawerOpened(View drawerView) {
+					if (getSupportActionBar() != null) {
+						// show title "all lists" when drawer is opened
 						getSupportActionBar().setDisplayShowTitleEnabled(true);
 						getSupportActionBar().setTitle(R.string.show_from_all_lists);
-						// Is in motion, hide action items
-						isDrawerClosed = false;
-						invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
 					}
+					// controls which actionbar items are presented to the user
+					isDrawerClosed = false;
+					// creates call to onPrepareOptionsMenu()
+					invalidateOptionsMenu();
+
+					super.onDrawerOpened(drawerView);
 				}
+
 			};
 
 			// this controls only the arrow that rotates on the corner
