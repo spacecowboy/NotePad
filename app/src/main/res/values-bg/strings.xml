@@ -36,7 +36,7 @@
     <string name="delete_question">Изтриване?</string>
     <string name="delete_items_message">Искате ли да изтриете тези обекти?</string>
     <string name="delete_item_message">Искате ли да изтриете този обект?</string>
-    <string name="delete_list_message">Сигурни ли сте, че искате да изтриете списъка? Бележките ще бъдат архивирани.</string>
+    <string name="delete_list_message">Сигурни ли сте, че искате да изтриете списъка?</string>
     <string name="editor_due_date_hint">Дата за изпълнение</string>
     <string name="editor_title_hint">Заглавие</string>
     <string name="editor_note_hint">Бележка</string>
