@@ -100,7 +100,7 @@
     <string name="confirm_new_password">Confirme la nueva contraseña</string>
     <string name="apply">Aplicar</string>
     <string name="clear_password">Borrar contraseña</string>
-    <string name="password_info"> Establecer una contraseña requerirá que la introduzca para que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, por lo que seguirá habiendo acceso libre al título y a la fecha. No encripta la nota de ningún modo, así que se podrá seguir viendoen Google mail/calendar. Si olvida la contraseña, sincronice con Google ydespués reinstale la aplicación.</string>
+    <string name="password_info">Establecer una contraseña requerirá que la introduzca para que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, por lo que seguirá habiendo acceso libre al título y a la fecha. No encripta la nota de ningún modo, así que se podrá seguir viendoen Google mail/calendar. Si olvida la contraseña, sincronice con Google ydespués reinstale la aplicación.</string>
     <string name="about">Créditos</string>
     <string name="sync_failed">Error de sincronización</string>
     <string name="sync_login_failed">Error en el inicio de sesión, no se ha podido conectar a Google Tasks</string>
