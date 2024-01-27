@@ -207,11 +207,13 @@ public class ActivityMain extends AppCompatActivity
 		// Handle your other action bar items...
 		int itemId = item.getItemId();
 		if (itemId == android.R.id.home) {
+			// the <- arrow was pressed, maybe from the "task detail" page
 			if (isShowingEditor) {
 				// Only true in portrait mode
 				final View focusView = ActivityMain.this.getCurrentFocus();
 				InputMethodManager inputManager = this.getSystemService(InputMethodManager.class);
 				if (inputManager != null && focusView != null) {
+					// hide soft keyboard
 					inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
 							InputMethodManager.HIDE_NOT_ALWAYS);
 				}
@@ -227,17 +229,13 @@ public class ActivityMain extends AppCompatActivity
 					intent.setData(TaskList.getUri(listId));
 				}
 
-				// Set the intent before, so we set the correct
-				// action bar
+				// Set the intent before, so we set the correct action bar
 				setIntent(intent);
 				while (getSupportFragmentManager().popBackStackImmediate()) {
 					// Need to pop the entire stack and then load
 				}
 
 				mReverseAnimation = true;
-				NnnLogger.debug(ActivityMain.class,
-						"starting activity from android.R.id.home");
-
 				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 			} else {
