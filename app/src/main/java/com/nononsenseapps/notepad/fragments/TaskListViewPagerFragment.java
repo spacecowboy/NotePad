@@ -46,13 +46,14 @@ import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.activities.main.ActivityMain;
-import com.nononsenseapps.notepad.interfaces.ListOpener;
-import com.nononsenseapps.notepad.activities.ActivitySearchDeleted;
+import com.nononsenseapps.helpers.PreferencesHelper;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.activities.ActivitySearchDeleted;
+import com.nononsenseapps.notepad.activities.main.ActivityMain;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentTasklistViewpagerBinding;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
+import com.nononsenseapps.notepad.interfaces.ListOpener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.ViewsHelper;
 
@@ -80,6 +81,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 	// boolean firstLoad = true;
 
 	private long mListIdToSelect = -1;
+
+	/**
+	 * If transitions between note lists should be animated, with smooth scrolling
+	 * The value is regularly updated by {@link TaskListViewPagerFragment#onResume()}
+	 */
+	private boolean mShouldAnimate = true;
 
 	/**
 	 * for {@link R.layout#fragment_tasklist_viewpager}
@@ -127,6 +134,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
+	public void onResume() {
+		super.onResume();
+		mShouldAnimate = PreferencesHelper.areAnimationsEnabled(this.getContext());
+	}
+
+	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		setHasOptionsMenu(true);
@@ -168,13 +181,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 				mTaskListsAdapter.swapCursor(c);
 				final int pos;
 				if (mListIdToSelect != -1) {
-					pos = mSectionsPagerAdapter
-							.getItemPosition(mListIdToSelect);
+					pos = mSectionsPagerAdapter.getItemPosition(mListIdToSelect);
 				} else {
 					pos = -1;
 				}
 				if (pos >= 0) {
-					pager.setCurrentItem(pos);
+					pager.setCurrentItem(pos, mShouldAnimate);
 					mListIdToSelect = -1;
 				}
 			}
@@ -290,7 +302,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 				pos = mSectionsPagerAdapter.getItemPosition(id);
 
 			if (pos > -1) {
-				pager.setCurrentItem(pos, true);
+				pager.setCurrentItem(pos, mShouldAnimate);
 				mListIdToSelect = -1;
 			}
 		}
@@ -370,9 +382,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 				wrappedAdapter.unregisterDataSetObserver(subObserver);
 			}
 			if (prefListener != null) {
-				PreferenceManager.getDefaultSharedPreferences(getActivity())
-						.unregisterOnSharedPreferenceChangeListener(
-								prefListener);
+				PreferenceManager
+						.getDefaultSharedPreferences(getActivity())
+						.unregisterOnSharedPreferenceChangeListener(prefListener);
 			}
 		}
 
