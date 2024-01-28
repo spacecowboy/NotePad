@@ -1,0 +1,13 @@
+v7.0.0: NoNonsense Notes
+
+Önemli noktalar:
+- şimdi Android 12 ile uyumlu
+- Google Görevler eşitlemesi bırakıldı
+- ORG ve JSON dosyaları artık seçilen birkaç yere kaydedilebilir. Hangisi olduğunu seçebilirsiniz.
+
+Ayrıntılar:
+- hedef SDK sürümü 32'ye yükseltildi
+- AndroidX kütüphanelerine yükseltildi
+- tüm testler düzeltildi
+- bağımlılıklar ve Gradle yükseltildi
+- genel kod temizliği

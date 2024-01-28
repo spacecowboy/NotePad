@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.2
+
+Önemli noktalar:
+- Weblate kullanılarak çevrildi
+- sesli arama tekrar çalışıyor
+- aralarından seçim yapabileceğiniz daha fazla tarih biçimi
+- görevler tarihe göre sıralandığında "gelecek ay" ve yılı göster
+- android otomatik yedekleme desteği
+
+Ayrıntılar:
+- İletişim kutuları için kullanıcı arayüzü iyileştirmeleri
+- hata düzeltmeleri
+- tüm eski google görevleri kodu kaldırıldı, bu can sıkıcı google hesabı iletişim kutusunu gizleyecektir

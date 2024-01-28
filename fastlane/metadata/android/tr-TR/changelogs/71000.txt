@@ -1,0 +1,11 @@
+NoNonsense Notes v7.1.0
+
+Önemli noktalar:
+- Yedekleme dosyaları için dosya seçici iyileştirildi
+- ORG dosyaları öntanımlı bir klasöre taşındı
+- Çeviriler Weblate kullanılarak güncellendi
+- Notları yeniden açarken hatırlatıcıları klonlayan bir hata düzeltildi
+
+Ayrıntılar:
+- Android 13 hedeflendi
+- Kullanıcı arayüzü iyileştirmeleri

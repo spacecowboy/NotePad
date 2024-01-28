@@ -1,0 +1,10 @@
+NoNonsense Notes v7.1.3
+
+Önemli noktalar:
+- Weblate kullanılarak çevrildi
+- çevrim içi eğitim eklendi
+- google hesabına erişim isteme bırakıldı
+
+Ayrıntılar:
+- kullanıcı arayüzü iyileştirmeleri
+- kod temizliği

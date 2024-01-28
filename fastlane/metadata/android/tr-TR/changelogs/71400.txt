@@ -1,0 +1,15 @@
+NoNonsense Notes v7.1.4
+
+Önemli noktalar:
+- çeviriler güncellendi
+- animasyonları yalnızca sistem ayarlarında etkinleştirilmişlerse göster #501
+- Ertelenen hatırlatıcının yeniden görünmesine neden olan hata düzeltildi
+- not türleri için bildirimlerde tamamlandı gizlendi, #312'yi düzeltir
+- widget'ta tamamlanan notları göster
+- aynı anda birçok uygulama mağazasından uygulama kurmaya izin ver
+- arama önerilerini gizleme hatası düzeltildi
+
+Ayrıntılar:
+- Play Store'a fastlane dağıtım iş hattı eklendi. İş hattı yalnızca etiketler üzerinde çalışır
+- bağımlılıklar güncellendi
+- kod temizliği
