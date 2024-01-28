@@ -102,7 +102,7 @@
     <string name="confirm_new_password">确认新密码</string>
     <string name="apply">应用</string>
     <string name="clear_password">清除密码</string>
-    <string name="password_info">任何一则笔记都可以被锁定，限制查看和修改。 仍然可以在其他设备上对其进行完全访问。如果你忘记了，可以清除它并新设一个</string>
+    <string name="password_info">任何一则笔记都可以被锁定，限制查看和修改。 仍然可以在其他设备上对其进行完全访问。</string>
     <string name="about">关于</string>
     <string name="sync_failed">同步失败</string>
     <string name="sync_login_failed">无法登录以使用 Google Tasks</string>
