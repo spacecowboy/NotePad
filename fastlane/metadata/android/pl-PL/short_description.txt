@@ -1,1 +1,1 @@
-Aplikacja notatnika i listy rzeczy do zrobienia z obsługą synchronizacji
+Prosty notatnik i aplikacja z doskonałą nawigacją

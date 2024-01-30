@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Najważniejsze funkcje:
+- Naprawiono synchronizację zadań Google.
+- Naprawiono błąd powodujący usuwanie wszystkich notatek podczas synchronizacji z Google Tasks.

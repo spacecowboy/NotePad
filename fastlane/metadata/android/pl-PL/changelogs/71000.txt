@@ -1,0 +1,11 @@
+NoNonsense Notes v7.1.0
+
+Najważniejsze funkcje:
+- Ulepszona wyszukiwarka plików kopii zapasowych
+- Przeniesiono pliki ORG do domyślnego folderu
+- Zaktualizowano tłumaczenia przy użyciu Weblate
+- Naprawiono błąd powodujący klonowanie przypomnień podczas ponownego otwierania notatek.
+
+Szczegóły:
+- Docelowy Android 13
+- Poprawki interfejsu użytkownika
