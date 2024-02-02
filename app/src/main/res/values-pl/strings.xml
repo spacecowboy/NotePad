@@ -161,17 +161,17 @@
     <string name="dashclock_show_overdue_tasks">Wyświetl zaległe zadania</string>
     <string name="dashclock_overdue_tasks_show">Wyświetlanie zaległych zadań</string>
     <string name="dashclock_overdue_tasks_hide">Zaległe zadania nie będą wyświetlane</string>
-    <string name="dashclock_title_activity_tasks_settings">Ustawienia notesu NoNonsense</string>
+    <string name="dashclock_title_activity_tasks_settings">Ustawienia</string>
     <string name="dashclock_pref_header_general">Ogólny</string>
     <string name="dashclock_due_upper_limit_title">Ogranicz do zadań występujących</string>
     <string name="dashclock_today">Dziś</string>
     <string name="dashclock_tomorrow">Jutro</string>
     <string name="dashclock_next7">W następnych 7 dniach</string>
     <string name="dashclock_anytime">Kiedykolwiek</string>
-    <string name="dashclock_will_show_as_many_as_possible">Wyświetlanych będzie tak wiele jak to możliwe</string>
+    <string name="dashclock_will_show_as_many_as_possible">Pokaż jak najwięcej</string>
     <string name="dashclock_show_only_the_next_task">Wyświetlaj tylko nastepne zadanie</string>
-    <string name="dashclock_header_shown">Nazwa listy będzie pogrubiona</string>
-    <string name="dashclock_first_task_shown">Tytuł pierwszego zadania będzie pogrubiony</string>
+    <string name="dashclock_header_shown">Pogrubiona nazwa listy</string>
+    <string name="dashclock_first_task_shown">Pogrubiony tytuł pierwszego zadania</string>
     <string name="dashclock_display_header">Wyświetlaj nagłówek</string>
     <string name="editor">Edytor</string>
     <string name="bold">Pogrubienie</string>
@@ -192,14 +192,14 @@
     <string name="backup_export">Eksportuj kopię zapasową</string>
     <string name="backup_import_msg">Spróbować zaimportować kopię zapasową z %1$s? Spowoduje to wyczyszczenie bierzącej bazy danych.</string>
     <string name="backup_export_msg">Eksportować wszystkie notatki do %1$s?</string>
-    <string name="backup_import_success">Kopia zapasowa pomyślnie zaimportowana</string>
-    <string name="backup_file_not_found">Plik kopi zapasowej nie został znaleziony</string>
+    <string name="backup_import_success">Kopia zapasowa zaimportowana</string>
+    <string name="backup_file_not_found">Nie można znaleźć pliku kopii zapasowej</string>
     <string name="backup_import_failed">Nie można odczytać pliku kopi zapasowej</string>
-    <string name="backup_export_success">Kopia zapasowa została pomyslnie zaimportowana</string>
-    <string name="backup_export_failed">Nie\można zapisać do pliku kopii zapasowej.</string>
+    <string name="backup_export_success">Kopia zapasowa wyeksportowana</string>
+    <string name="backup_export_failed">Nie można zapisać pliku kopii zapasowej</string>
     <string name="sd_card">Karta SD</string>
-    <string name="sd_card_sync">Synchronizacja Karty SD</string>
-    <string name="sd_card_summary">Zadania są dublowane na karcie SD. Zmiany są synchronizowane w obie strony. Należy pamiętać, że usunięcie plików usunie zadania w aplikacji!</string>
+    <string name="sd_card_sync">Synchronizacja karty SD</string>
+    <string name="sd_card_summary">Zadania są takie same w aplikacji i na karcie SD. Usunięcie plików powoduje zatem usunięcie zadań w aplikacji!</string>
     <string name="directory">Katalog</string>
     <string name="cannot_write_to_directory">Nie można zapisać do katalogu</string>
     <string name="delete_completed_tasks_question">Usunąć wszystkie ukończone zadania\?</string>
@@ -221,7 +221,7 @@
     <string name="prefs_improved_reliability">Preferencje w zakresie poprawy niezawodności</string>
     <string name="changelog_online">Lista zmian (online)</string>
     <string name="enable_sync_desc">Włącza funkcje synchronizacji i pozwala wybrać źródło synchronizacji. Nie ma to wpływu na kopie zapasowe</string>
-    <string name="order_notes_by">Zamów notatki przez:</string>
+    <string name="order_notes_by">Uszereguj notatki przez:</string>
     <string name="canceled_note_locked">Anulowano: notatka jest zablokowana</string>
     <string name="allow_exact_reminders_summary">Otwórz stronę, aby umożliwić aplikacji bardziej niezawodne wysyłanie przypomnień. Wymagane od wersji Androida 12 Snow Cone</string>
     <string name="unavailable_chose_directory">Niedostępne. Najpierw wybierz katalog</string>
@@ -260,4 +260,10 @@
     <string name="welcome_note_row_3">Ta aplikacja zawiera szczegółowy samouczek. Można go znaleźć pod adresem</string>
     <string name="show_elements_as">Pokaż pozycje jako:</string>
     <string name="show_completed_notes">Pokaż uzupełnione notatki</string>
+    <string name="directory_summary_msg">Pliki są zapisywane w %s
+\ndo którego można uzyskać dostęp za pomocą aplikacji do zarządzania plikami. Odinstalowanie aplikacji spowoduje również usunięcie tych plików: aby zachować notatki, wykonaj kopię zapasową</string>
+    <string name="bigger_titles">Duże tytuły</string>
+    <string name="bigger_titles_summary">Tytuł to pierwsza linia</string>
+    <string name="sorting">Sortowanie</string>
+    <string name="undo">Cofnij</string>
 </resources>
