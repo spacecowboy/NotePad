@@ -1,0 +1,10 @@
+NoNonsense Notes v7.1.3
+
+Najważniejsze informacje:
+- Przetłumaczone przy użyciu Weblate
+- dodano samouczek online
+- przestał prosić o dostęp do konta Google
+
+Szczegóły:
+- Poprawki interfejsu użytkownika
+- czyszczenie kodu

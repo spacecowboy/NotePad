@@ -1,0 +1,5 @@
+NoNonsense Notes v7.1.5
+
+Najważniejsze informacje:
+- Poprawka dotycząca publikacji w sklepie Play
+- Zaktualizowano zależności

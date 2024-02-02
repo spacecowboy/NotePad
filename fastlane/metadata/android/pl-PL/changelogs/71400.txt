@@ -1,0 +1,15 @@
+NoNonsense Notes v7.1.4
+
+Najważniejsze:
+- aktualizacja tłumaczeń
+- wyświetlanie animacji tylko wtedy, gdy są włączone w ustawieniach systemowych #501
+- naprawiono błąd powodujący pojawienie się odłożonego przypomnienia
+- ukrywanie ukończonych powiadomień dla typów notatek #312
+- notatki na widżecie
+- instalowanie aplikacji z wielu sklepów
+- naprawiono błąd ukrywający sugestie wyszukiwania
+
+Szczegóły:
+- dodano potok wdrażania fastlane do sklepu Play.
+- aktualizacja zależności
+- czyszczenie kodu
