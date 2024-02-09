@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Önemli noktalar:
+- Google Görevler eşitlemesi düzeltildi.
+- Google Görevler eşitlemesi sırasında tüm notların silinmesine neden olan hata düzeltildi.

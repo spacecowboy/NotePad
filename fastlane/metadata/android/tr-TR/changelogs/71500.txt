@@ -1,0 +1,5 @@
+NoNonsense Notes v7.1.5
+
+Önemli noktalar:
+- Play Store yayını için düzeltme
+- bağımlılıklar güncellendi

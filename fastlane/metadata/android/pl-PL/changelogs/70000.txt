@@ -1,0 +1,13 @@
+v7.0.0: Notatki NoNonsense
+
+Najważniejsze funkcje:
+- teraz kompatybilny z Androidem 12
+- synchronizacja z Drop Google Tasks
+- Pliki ORG i JSON można teraz zapisywać w kilku wybranych miejscach. Możesz wybrać, które.
+
+Szczegóły:
+- podniesiono docelowe SDK do wersji 32
+- zaktualizowano do bibliotek AndroidX
+- poprawiono wszystkie testy
+- zaktualizowane zależności i Gradle
+- ogólne czyszczenie kodu

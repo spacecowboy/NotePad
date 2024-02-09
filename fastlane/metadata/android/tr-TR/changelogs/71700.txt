@@ -1,0 +1,12 @@
+﻿NoNonsense Notes v7.1.7
+
+Önemli noktalar:
+- Weblate kullanılarak çevrildi
+- android 14'ü hedeflemek için uygulama ve kütüphaneler güncellendi
+- uygulama animasyonlarını yalnızca sistem ayarlarında etkinleştirilmişse göster
+- çekmece menü satırları daha derli toplu hale getirildi
+
+Ayrıntılar:
+- Github eylemlerinde java 17 kullan
+- hata düzeltmeleri ve kararlılık iyileştirmeleri
+- testlerin kararlılığının iyileştirilmesi

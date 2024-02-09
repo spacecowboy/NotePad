@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.2
+
+Najważniejsze informacje:
+- Przetłumaczone przy użyciu Weblate
+- wyszukiwanie głosowe znów działa
+- więcej formatów daty do wyboru
+- wyświetlanie "następnego miesiąca" i roku, gdy zadania są uporządkowane według daty
+- wsparcie dla automatycznej kopii zapasowej Android
+
+Szczegóły:
+- Poprawki interfejsu użytkownika dla okien dialogowych
+- poprawki błędów
+- usunięto cały przestarzały kod zadań Google, powinno to ukryć irytujące okno dialogowe konta Google

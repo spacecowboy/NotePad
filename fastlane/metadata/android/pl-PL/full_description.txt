@@ -1,17 +1,19 @@
-Open source notepad and to-do list app using the latest Android technologies.
+Notatnik open source i aplikacja z listą rzeczy do zrobienia wykorzystująca najnowsze technologie Androida.
 
-* Dash clock support (yes, it still works)
-* Notifications: set reminders at a certain time, with optional repetition on certain weekdays
-* Language selection
-* Widget, with lockscreen support, resizeable and configurable
-* Password-protect important notes
-* Move tasks between different lists
-* Drag to reorder tasks
-* Integration with Android Agenda widget
-* Search
-* Light and dark themes
-* Back up (import and export) notes to a JSON file
-* Sync with an ORG file on the local storage
+* Obsługa zegara Dash (tak, nadal działa)
+* Powiadomienia: ustawianie przypomnień o określonej godzinie, z opcjonalnym powtarzaniem w określone dni tygodnia
+* Wybór języka
+* Widżet z obsługą ekranu blokady, z możliwością zmiany rozmiaru i konfiguracji
+* Ochrona hasłem ważnych notatek
+* Przenoszenie zadań między różnymi listami
+* Przeciągnij, aby zmienić kolejność zadań
+* Integracja z widżetem Android Agenda
+* Wyszukiwanie
+* Jasne i ciemne motywy
+* Tworzenie kopii zapasowych (import i eksport) notatek do pliku JSON
+* Synchronizacja z plikiem ORG w lokalnej pamięci masowej
+* Historia notatek ze wszystkimi poprzednimi wersjami
+* kosz na usunięte notatki
 
-To improve this app, make a donation, or simply share ideas,
-come visit at https://github.com/spacecowboy/NotePad
+Aby ulepszyć tę aplikację, przekazać darowiznę lub po prostu podzielić się pomysłami,
+odwiedź stronę https://github.com/spacecowboy/NotePad

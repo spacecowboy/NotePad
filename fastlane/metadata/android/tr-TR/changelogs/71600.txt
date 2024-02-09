@@ -1,0 +1,8 @@
+NoNonsense Notes v7.1.6
+
+Önemli noktalar:
+- Weblate kullanılarak çevrildi
+- f-droid için uygulama kimliği düzeltildi
+
+Ayrıntılar:
+- gradle güncellendi

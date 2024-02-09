@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.1
+
+Najważniejsze informacje:
+- Przetłumaczone przy użyciu Weblate
+- dodano globalne preferencje synchronizacji, które mogą w ogóle uniemożliwić uruchamianie kodu synchronizacji
+- zmienione uprawnienia
+- ikona skrótu jest teraz widoczna w "prostym programie uruchamiającym"
+- zablokowano przypomnienia o edycji notatek, gdy są zablokowane
+- naprawiono błąd pokazujący pustą notatkę podczas udostępniania linku
+
+Szczegóły:
+- drobne usprawnienia interfejsu użytkownika
+- usunięto nieużywany kod

@@ -1,0 +1,13 @@
+﻿NoNonsense Notes v7.1.1
+
+Önemli noktalar:
+- Weblate kullanılarak çevrildi
+- genel eşitleme tercihi eklendi, eşitleme kodunun hiç çalışmasını engelleyebilir
+- izinler değiştirildi
+- kısayol simgesi artık "basit başlatıcıda" görülebilir
+- kilitli olduğunda not hatırlatıcılarının düzenlenmesi engellendi
+- bağlantı paylaşırken boş not gösterme hatası düzeltildi
+
+Ayrıntılar:
+- küçük kullanıcı arayüzü iyileştirmeleri
+- kullanılmayan kodlar kaldırıldı
