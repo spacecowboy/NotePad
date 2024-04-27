@@ -102,10 +102,10 @@
     <string name="confirm_new_password">Konfirmasi sandi baru</string>
     <string name="apply">Terapkan</string>
     <string name="clear_password">Hapus sandi</string>
-    <string name="password_info">Pengaturan password akan meminta Anda untuk memasukkan password untuk menunjukkan catatan yang terkunci. Ini hanya akan melindungi isi catatan sehingga Anda masih memiliki akses ke judul dan tanggal yang tidak terproteksi . Ini tidak mengenkripsi catatan dengan cara apapun sehingga dapat stillbe dilihat di Google mail / calendar. Jika Anda lupa password Anda, sinkron dengan Google dan kemudian menginstal ulang aplikasi.</string>
+    <string name="password_info">Setiap catatan dapat dikunci, dibatasi tampilan dan memodifikasinya. Catatan tersebut tetap dapat diakses sepenuhnya di perangkat lain.</string>
     <string name="about">Tentang</string>
     <string name="sync_failed">Snkronisasi gagal</string>
-    <string name="sync_login_failed">Login gagal, tidak dapat terhubung ke Google Tasks</string>
+    <string name="sync_login_failed">Tidak dapat masuk untuk menggunakan Google Task</string>
     <string name="completed">Selesai</string>
     <string name="date_header_overdue">Terlambat</string>
     <string name="date_header_today">Hari ini</string>
@@ -119,22 +119,22 @@
     <string name="please_select_note">Harap pilih atau buat catatan</string>
     <string name="please_create_note">Harap membuat catatan</string>
     <string name="hide_checkbox">Sembunyikan kotak centang</string>
-    <string name="hide_checkbox_summary_on">Kotak centang akan disembunyikan</string>
-    <string name="hide_checkbox_summary_off">Kotak centang akan ditampilkan</string>
+    <string name="hide_checkbox_summary_on">Kotak centang disembunyikan</string>
+    <string name="hide_checkbox_summary_off">Kotak centang ditampilkan</string>
     <string name="hide_date">Sembunyikan tanggal jatuh tempo</string>
     <string name="item_max_height">Tinggi maksimal catatan / tugas</string>
-    <string name="long_date_format">Format tanggal yang panjang</string>
-    <string name="short_date_format">Format tanggal pendek</string>
+    <string name="long_date_format">Format tanggal panjang, untuk panel</string>
+    <string name="short_date_format">Format tanggal pendek, untuk daftar</string>
     <string name="select_date">Pilih tanggal</string>
     <string name="localedefault">Lokal standar</string>
     <!-- settings string keys -->
     <string name="hide_header">Sembunyikan seluruh header pada widget</string>
     <string name="transparency">Transparansi</string>
     <string name="notes_shortcut">Catatan pintas</string>
-    <string name="shortcut_help1">Jika dicentang, shortcut akan membuat catatan baru di daftar yang dipilih dan buka editornya. Jika tidak dicentang, shortcut akan membuka daftar yang dipilih.</string>
+    <string name="shortcut_help1">Membuat pintasan membuka catatan baru dalam daftar yang dipilih dengan editor teks terbuka.</string>
     <string name="loading_widget">Memuat widget…</string>
     <string name="default_list">Daftar default</string>
-    <string name="please_type_before_reminder">Harap ketik beberapa teks sebelum menyetel pengingat</string>
+    <string name="please_type_before_reminder">Harap ketik beberapa teks sebelum menambahkan pengingat</string>
     <string name="notecopied_one">Disalin 1 catatan</string>
     <string name="notecopied_other">Disalin %d catatan</string>
     <string name="notedeleted_one">Dihapus 1 catatan</string>
@@ -198,11 +198,11 @@
     <string name="backup_file_not_found">Tidak dapat menemukan file cadangan</string>
     <string name="backup_import_failed">Tidak dapat membaca file cadangan</string>
     <string name="backup_export_success">Cadangan diekspor</string>
-    <string name="backup_export_failed">Tidak bisa menulis ke file backup</string>
+    <string name="backup_export_failed">Tidak dapat menulis ke file cadangan</string>
     <string name="sd_card">Kartu SD</string>
     <string name="sd_card_sync">Sinkronkan Kartu SD</string>
-    <string name="sd_card_summary">Tugas dicerminkan pada kartu SD. Perubahan disinkronisasi dua arah. Perhatikan bahwa menghapus file akan menghapus tugas di aplikasi!</string>
-    <string name="directory">Direktori</string>
+    <string name="sd_card_summary">Tugas tetap sama antara aplikasi dan kartu SD. Menghapus file berarti menghapus tugas dalam aplikasi!</string>
+    <string name="directory">Folder</string>
     <string name="cannot_write_to_directory">Tidak bisa menulis ke direktori</string>
     <string name="undo">Batalkan</string>
     <string name="delete_completed_tasks_question">Hapus semua tugas yang sudah selesai\?</string>
@@ -222,4 +222,10 @@
     <string name="battery_optimizations_active">Pengoptimalan baterai aktif</string>
     <string name="battery_optimizations_inactive">Pengoptimalan baterai nonaktif</string>
     <string name="allow_exact_reminders">Izinkan pengingat yang serupa</string>
+    <string name="show_completed_notes">Tampilkan catatan yang sudah selesai</string>
+    <string name="account">Akun</string>
+    <string name="directory_summary_msg">File disimpan dalam %s 
+\ndapat Anda akses dengan aplikasi pengelola file Anda. Menghapus instalan aplikasi juga akan menghapus file-file ini: untuk menyimpan catatan Anda, buatlah cadangan</string>
+    <string name="bigger_titles_summary">Judul adalah baris pertama</string>
+    <string name="bigger_titles">Judul yang lebih besar</string>
 </resources>
