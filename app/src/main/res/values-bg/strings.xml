@@ -29,7 +29,7 @@
     <string name="menu_preferences">Настройки</string>
     <string name="menu_createlist">Създаване на списък</string>
     <string name="menu_clearcompleted">Изтриване на изпълнените</string>
-    <string name="menu_setdefaultlist">Задаване списък по подразб.</string>
+    <string name="menu_setdefaultlist">Задаване списък по подразб</string>
     <string name="new_default_set">Нов набор по подразбиране</string>
     <string name="menu_managelists">Управление на списъците</string>
     <string name="add_item">Добавяне на обект</string>
@@ -75,7 +75,7 @@
     <string name="permission_read_label">четене на бележки и списъци</string>
     <string name="permission_read_desc">Разрешава на приложението да чете вашите бележки и свързаните с тях списъци.</string>
     <string name="permission_write_label">промяна на бележки и списъци</string>
-    <string name="permission_write_desc">Разрешава на приложението да вмъква, актуализира и изтрива бележки и списъци.</string>
+    <string name="permission_write_desc">Разрешава на приложението да вмъква, актуализира и изтрива бележки и списъци</string>
     <string name="settings_list_dialog">Изберете списък</string>
     <string name="settings_list">Списък</string>
     <string name="drag_to_timetravel">Влачете за промяна на времето</string>
@@ -130,7 +130,7 @@
     <string name="transparency">Прозрачност</string>
     <string name="notes_shortcut">Пряк път</string>
     <string name="shortcut_help1">Ако е избрано, прекият път ще създаде нова бележка в избрания списък и ще отвори редактора. Ако не е избрано,  ще отвори избрания списък.</string>
-    <string name="loading_widget">Зареждане на джаджата</string>
+    <string name="loading_widget">Зареждане на джаджата…</string>
     <string name="default_list">Списък по подразбиране</string>
     <string name="please_type_before_reminder">Моля, напишете някакъв текст, преди да зададете напомняне</string>
     <string name="notecopied_one">Копирана е една бележка</string>
