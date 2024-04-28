@@ -184,10 +184,10 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.google.android.material:material:1.11.0'
     // yes we need both
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.6.2"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.7.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
     // Time library, open source & up to date
-    implementation 'joda-time:joda-time:2.12.2'
+    implementation 'joda-time:joda-time:2.12.7'
     // Dashclock API, open source & abandoned, but it still works
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // Writes org files, open source & abandoned, but it still works
