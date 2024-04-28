@@ -22,10 +22,6 @@ jobs:
         # use stripped-down, test-friendly Android OS images without, or with, google apps
         target: [ aosp_atd, google_atd ]
         # profile: [ 5.1in WVGA, 10.1in WXGA ] # TODO you can also test with phones and tablets!
-        exclude:
-            # the images for these configurations do not exist
-          - api-level: 34
-            target: google_atd
     # Windows is not supported. Ubuntu is slow so the emulators crash. List of installed software:
     # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
     runs-on: macos-latest
@@ -33,20 +29,20 @@ jobs:
       contents: read
     steps:
       - name: perform the checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: perform the validation
         continue-on-error: true
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: perform the set up for the JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: temurin
 
       - name: perform Gradle setup & caching
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Check for hardware acceleration availability
         continue-on-error: true
@@ -55,7 +51,7 @@ jobs:
         run: $ANDROID_HOME/emulator/emulator -accel-check
 
       - name: perform AVD caching
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: avd-cache
         # they appear in
         # https://github.com/spacecowboy/NotePad/actions/caches?query=sort%3Asize-desc
@@ -115,7 +111,7 @@ jobs:
           script: bash ./github_on_emu_started.sh
 
       - name: upload the generated files
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: files-api${{ matrix.api-level }}-${{ matrix.target }}
