@@ -15,23 +15,23 @@ jobs:
       contents: read
     steps:
     - name: perform the checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: 'recursive'
         fetch-depth: 0
 
     - name: perform the validation
-      uses: gradle/wrapper-validation-action@v1
+      uses: gradle/actions/wrapper-validation@v3
 
     - name: perform the JDK setup
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
-        java-version: '17'
+        java-version: '21'
         distribution: 'temurin'
         cache: 'gradle'
 
     - name: perform Gradle caching
-      uses: gradle/gradle-build-action@v2
+      uses: gradle/actions/setup-gradle@v3
 
     - name: run custom tasks to ensure app can be published on play store
       run: ./gradlew checkLanguages checkFastlane
