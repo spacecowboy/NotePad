@@ -220,29 +220,21 @@ public class TaskListViewPagerFragment extends Fragment implements
 		if (menu.findItem(R.id.menu_search) == null) {
 			return;
 		}
-		SearchView searchView = (SearchView) menu
-				.findItem(R.id.menu_search)
-				.getActionView();
+		SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+		if (searchView == null) {
+			return;
+		}
 		// Assumes current activity is the searchable activity
-		SearchManager sMan = this.getActivity().getSystemService(SearchManager.class);
-		searchView.setSearchableInfo(sMan.getSearchableInfo(getActivity().getComponentName()));
+		SearchManager sMan = this.requireActivity().getSystemService(SearchManager.class);
+		searchView.setSearchableInfo(sMan.getSearchableInfo(requireActivity().getComponentName()));
 		// expand the searchview by default when the user clicks on the icon
 		searchView.setIconifiedByDefault(false);
 		searchView.setQueryRefinementEnabled(false);
 		searchView.setSubmitButtonEnabled(false);
 
-		// enlarge the suggestions box so that it occupies the whole screen
+		// widen the suggestions popup so that it occupies the whole screen
 		var autoCompTxtVi = (AutoCompleteTextView) searchView
 				.findViewById(androidx.appcompat.R.id.search_src_text);
-
-		// TODO in some devices, the default layout for the search suggestions cuts the text
-		//  horizontally. To fix this, you need a custom layout for the search suggestion list
-		//  item. To use it, you must make a custom adapter, instead of using setSearchableInfo().
-		//  Start here:
-		// CursorAdapter xx1 = searchView.getSuggestionsAdapter();
-		// ListAdapter xx2 = autoCompTxtVi.getAdapter();
-		// assert xx1 == xx2;
-
 		final View dropDownSugg = searchView.findViewById(autoCompTxtVi.getDropDownAnchor());
 		if (dropDownSugg == null) return;
 		dropDownSugg.addOnLayoutChangeListener(
