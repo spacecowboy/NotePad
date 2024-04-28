@@ -84,9 +84,13 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                // you need this to make org.androidannotations:androidannotations compile
-                // in "playStore" build type. Once you get rid of the library, delete this
-                arguments = ["resourcePackageName": android.defaultConfig.applicationId]
+                // you need these to make org.androidannotations:androidannotations compile
+                // in "playStore" build type.
+                // TODO get rid of androidannotations and delete this javaCompileOptions {...}
+                arguments = [
+                        "resourcePackageName": android.defaultConfig.applicationId,
+                        "androidManifestFile": "$projectDir/src/main/AndroidManifest.xml".toString()
+                ]
             }
         }
     }
