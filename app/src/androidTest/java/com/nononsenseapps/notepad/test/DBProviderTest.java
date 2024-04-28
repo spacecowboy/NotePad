@@ -45,6 +45,7 @@ public class DBProviderTest extends TestCase {
 										final String[] whereArgs, final int count) {
 		final Cursor c = mResolver
 				.query(uri, fields, where, whereArgs, null);
+		assertNotNull(c);
 		if (count == 6 && c.getCount() == 7) {
 			// TODO sometimes tests on github (not on a fast PC) crash here. Investigate why
 			NnnLogger.debug(DBProviderTest.class, "cursor info:");

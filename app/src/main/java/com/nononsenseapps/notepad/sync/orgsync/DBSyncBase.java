@@ -344,7 +344,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 */
 	protected void renameFile(final TaskList list,
 							  final RemoteTaskList dbEntry, final OrgFile file) {
-		if (list.title != null && list.title.length() > 0) {
+		if (list.title != null && !list.title.isEmpty()) {
 			file.setFilename(OrgConverter.getTitleAsFilename(list));
 		}
 		dbEntry.remoteId = file.getFilename();

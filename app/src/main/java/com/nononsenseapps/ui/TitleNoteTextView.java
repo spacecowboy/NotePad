@@ -116,7 +116,7 @@ public class TitleNoteTextView extends AppCompatTextView {
 											 final String rest, final float titleRelSize, final int face,
 											 final int font) {
 		final StringBuilder textBuilder = new StringBuilder(title);
-		if (rest.length() > 0) {
+		if (!rest.isEmpty()) {
 			textBuilder.append("\n").append(rest);
 		}
 		return getStyledText(textBuilder.toString(), titleRelSize, face, font);
@@ -371,7 +371,7 @@ public class TitleNoteTextView extends AppCompatTextView {
 		if (rest != null) {
 			this.mRest = rest;
 			// Make sure it starts with a new line
-			if (mRest.length() > 0) {
+			if (!mRest.isEmpty()) {
 				mRest = (rest.startsWith("\n") ? "" : "\n") + rest;
 			}
 

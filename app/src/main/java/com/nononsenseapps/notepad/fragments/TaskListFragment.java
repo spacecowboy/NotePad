@@ -682,12 +682,15 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				return sb.toString();
 			}
 
+			// when sharing many notes from the list view,
+			// we send a list of their titles as subject
 			String getShareSubject() {
-				String result = "";
+				StringBuilder result = new StringBuilder();
 				for (Task t : tasks.values()) {
-					result += ", " + t.title;
+					result.append(", ").append(t.title);
 				}
-				return result.length() > 0 ? result.substring(2) : result;
+				// if necessary, remove the first ", "
+				return (result.length() == 0) ? "" : result.substring(2);
 			}
 
 			/**

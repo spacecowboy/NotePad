@@ -107,7 +107,7 @@ public class NotificationPrefs extends PreferenceFragmentCompat {
 					.getDefaultSharedPreferences(this.getContext())
 					.getString(ringtonePrefKey, null);
 			if (existingValue != null) {
-				Uri existing = existingValue.length() == 0
+				Uri existing = existingValue.isEmpty()
 						? null // Select "Silent"
 						: Uri.parse(existingValue);
 				intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, existing);
