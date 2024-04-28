@@ -3,8 +3,10 @@
 
 	<!-- When users increase the text size in the accessibility settings, the search suggestions
 	 popup cuts the text (it only shows the top half of the letters), because the height of the
-	 "dropdown menu list item" is fixed somewhere. We solve the bug with this override of the style
-	 used by "dropdown list items" such as the search suggestions -->
+	 "dropdown menu list item" is fixed in:
+	 androidx.appcompat.R.layout.abc_search_dropdown_item_icons_2line
+	 We solve the bug with this override of the style used by "dropdown list items"
+	  such as the search suggestions -->
 	<style name="ReadableSearchSuggestionListItem" parent="android:Widget.Material.DropDownItem">
 		<!-- we force the text to resize in order to fit the fixed height of the list item -->
 		<item name="android:autoSizeTextType">uniform</item>
