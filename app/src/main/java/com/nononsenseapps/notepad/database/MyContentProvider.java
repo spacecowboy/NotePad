@@ -35,6 +35,7 @@ import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.BuildConfig;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MyContentProvider extends ContentProvider {
 
@@ -119,28 +120,15 @@ public class MyContentProvider extends ContentProvider {
 		db.beginTransaction();
 		// Do not add legacy URIs
 		try {
-			final DAO item;
-			switch (sURIMatcher.match(uri)) {
-				case TaskList.BASEURICODE:
-					item = new TaskList(values);
-					break;
-				case Task.BASEURICODE:
-					item = new Task(values);
-					break;
-				case Notification.BASEURICODE:
-				case Notification.WITHTASKQUERYITEMCODE:
-					item = new Notification(values);
-					break;
-				case RemoteTaskList.BASEURICODE:
-					item = new RemoteTaskList(values);
-					break;
-				case RemoteTask.BASEURICODE:
-					item = new RemoteTask(values);
-					break;
-				default:
-					throw new IllegalArgumentException(
-							"Faulty insertURI provided: " + uri.toString());
-			}
+			final DAO item = switch (sURIMatcher.match(uri)) {
+				case TaskList.BASEURICODE -> new TaskList(values);
+				case Task.BASEURICODE -> new Task(values);
+				case Notification.BASEURICODE, Notification.WITHTASKQUERYITEMCODE ->
+						new Notification(values);
+				case RemoteTaskList.BASEURICODE -> new RemoteTaskList(values);
+				case RemoteTask.BASEURICODE -> new RemoteTask(values);
+				default -> throw new IllegalArgumentException("Faulty insertURI provided: " + uri);
+			};
 
 			result = item.insert(getContext(), db);
 			db.setTransactionSuccessful();
@@ -151,6 +139,7 @@ public class MyContentProvider extends ContentProvider {
 		}
 
 		if (result != null) {
+			Objects.requireNonNull(getContext());
 			DAO.notifyProviderOnChange(getContext(), uri);
 			DAO.notifyProviderOnChange(getContext(), TaskList.URI_WITH_COUNT);
 			UpdateNotifier.updateWidgets(getContext());
@@ -259,8 +248,7 @@ public class MyContentProvider extends ContentProvider {
 					);
 					break;
 				default:
-					throw new IllegalArgumentException("Faulty URI provided: "
-							+ uri.toString());
+					throw new IllegalArgumentException("Faulty URI provided: " + uri);
 			}
 
 			if (result >= 0) {
@@ -282,7 +270,9 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	synchronized private int safeDeleteItem(final SQLiteDatabase db,
-											final String tableName, final Uri uri, final String selection,
+											final String tableName,
+											final Uri uri,
+											final String selection,
 											final String[] selectionArgs) {
 		db.beginTransaction();
 		int result = 0;
@@ -356,11 +346,11 @@ public class MyContentProvider extends ContentProvider {
 						selection, selectionArgs);
 				break;
 			default:
-				throw new IllegalArgumentException("Faulty delete-URI provided: "
-						+ uri.toString());
+				throw new IllegalArgumentException("Faulty delete-URI provided: " + uri);
 		}
 
 		if (result > 0) {
+			Objects.requireNonNull(getContext());
 			DAO.notifyProviderOnChange(getContext(), uri);
 			DAO.notifyProviderOnChange(getContext(), TaskList.URI_WITH_COUNT);
 			UpdateNotifier.updateWidgets(getContext());
@@ -374,6 +364,7 @@ public class MyContentProvider extends ContentProvider {
 									 String[] selectionArgs, String sortOrder) {
 		Cursor result;
 		final long id;
+		Objects.requireNonNull(getContext());
 		switch (sURIMatcher.match(uri)) {
 			case TaskList.BASEURICODE:
 				result = DatabaseHandler
@@ -639,8 +630,7 @@ public class MyContentProvider extends ContentProvider {
 			case Task.LEGACYBASEITEMCODE:
 			case Task.LEGACYVISIBLEITEMCODE:
 			default:
-				NnnLogger.debug(MyContentProvider.class,
-						"Faulty queryURI provided: " + uri.toString());
+				NnnLogger.debug(MyContentProvider.class, "Faulty queryURI provided: " + uri);
 				return null;
 		}
 
