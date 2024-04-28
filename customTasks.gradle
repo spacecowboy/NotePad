@@ -12,7 +12,10 @@ tasks.register('checkLanguages') {
     var readFromFolders = () -> {
         // Read res/values/ folders, add their codes to localesInFolders
         File resDir = new File(projectDir, "app/src/main/res")
-        FileFilter theFilter = (file) -> file.name.toLowerCase().startsWith("values")
+        FileFilter theFilter = (file) -> {
+                return file.name.toLowerCase().startsWith("values")
+                        && file.name.toLowerCase() != "values-v26"
+        }
         File[] dirs = resDir.listFiles(theFilter)
 
         var localesInFolders = new ArrayList<String>()
