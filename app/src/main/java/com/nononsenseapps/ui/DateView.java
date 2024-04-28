@@ -28,6 +28,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -48,7 +49,6 @@ public class DateView extends AppCompatTextView {
 		// TODO if you want to also show a "due time" on the note, use this instead:
 		//  mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
 		//  as of now we only show the date, which for me is good enough.
-		//  (note that this line is called many times in this file)
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 
@@ -58,8 +58,8 @@ public class DateView extends AppCompatTextView {
 		try {
 			mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 		} catch (Exception e) {
-			// Just to function in view
-			mDateFormatter = new SimpleDateFormat();
+			// return a simple fallback formatter, just to show something in the view
+			mDateFormatter = new SimpleDateFormat("E d MMM yyyy, HH:ss", Locale.US);
 		}
 	}
 

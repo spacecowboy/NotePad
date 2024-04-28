@@ -72,7 +72,7 @@ public class PasswordPrefs extends Fragment {
 					.getDefaultSharedPreferences(this.getContext());
 			String currentPassword = settings.getString(KEY_PASSWORD, "");
 
-			if ("".equals(currentPassword)) {
+			if (currentPassword.isEmpty()) {
 				// it's new => Save the password directly
 				settings.edit()
 						.putString(KEY_PASSWORD, passw1)
@@ -100,7 +100,7 @@ public class PasswordPrefs extends Fragment {
 				.getDefaultSharedPreferences(this.getContext());
 		String currentPassword = settings.getString(KEY_PASSWORD, "");
 
-		if ("".equals(currentPassword)) {
+		if (currentPassword.isEmpty()) {
 			// Save the (empty) password directly
 			settings.edit()
 					.putString(KEY_PASSWORD, "")

@@ -198,7 +198,7 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		// Pass the event to ActionBarDrawerToggle. If it returns true, then it has handled the
 		// drawer icon touch event
 		if (mDrawerToggle.onOptionsItemSelected(item)) {

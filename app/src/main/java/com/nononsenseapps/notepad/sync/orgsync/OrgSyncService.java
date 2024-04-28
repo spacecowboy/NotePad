@@ -29,6 +29,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -192,7 +193,7 @@ public class OrgSyncService extends Service {
 		}
 
 		@Override
-		public void handleMessage(Message msg) {
+		public void handleMessage(@NonNull Message msg) {
 
 			if (synchronizers.isEmpty()) {
 				synchronizers.addAll(getSynchronizers());

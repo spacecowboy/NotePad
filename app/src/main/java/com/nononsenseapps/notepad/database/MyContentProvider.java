@@ -28,6 +28,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 
+import androidx.annotation.NonNull;
+
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.BuildConfig;
@@ -59,7 +61,7 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	public String getType(Uri uri) {
+	public String getType(@NonNull Uri uri) {
 		switch (sURIMatcher.match(uri)) {
 			case Notification.BASEITEMCODE:
 			case Notification.BASEURICODE:
@@ -108,7 +110,7 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public Uri insert(Uri uri, ContentValues values) {
+	synchronized public Uri insert(@NonNull Uri uri, ContentValues values) {
 		final SQLiteDatabase db = DatabaseHandler.getInstance(getContext())
 				.getWritableDatabase();
 
@@ -159,7 +161,7 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public int update(Uri uri, ContentValues values,
+	synchronized public int update(@NonNull Uri uri, ContentValues values,
 								   String selection, String[] selectionArgs) {
 		final SQLiteDatabase db = DatabaseHandler.getInstance(getContext())
 				.getWritableDatabase();
@@ -299,7 +301,7 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public int delete(Uri uri, String selection,
+	synchronized public int delete(@NonNull Uri uri, String selection,
 								   String[] selectionArgs) {
 		final SQLiteDatabase db = DatabaseHandler.getInstance(getContext())
 				.getWritableDatabase();
@@ -368,7 +370,7 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public Cursor query(Uri uri, String[] projection, String selection,
+	synchronized public Cursor query(@NonNull Uri uri, String[] projection, String selection,
 									 String[] selectionArgs, String sortOrder) {
 		Cursor result;
 		final long id;
