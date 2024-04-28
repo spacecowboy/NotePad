@@ -3,8 +3,8 @@ name: Android tests
 on:
   push:
     branches: [ "master" ]
-    # runs when you commit to the master branch, so also when merging pull requests.
-    # Not on receiving pull requests: it would be a waste.
+    # runs when you commit to the master branch and when merging pull requests.
+    # Not on receiving pull requests, as it would be a waste.
     paths-ignore:
       - '**.md'
       - '.github/**'
@@ -22,24 +22,23 @@ jobs:
         # use stripped-down, test-friendly Android OS images without, or with, google apps
         target: [ aosp_atd, google_atd ]
         # profile: [ 5.1in WVGA, 10.1in WXGA ] # TODO you can also test with phones and tablets!
-    # Windows is not supported. Ubuntu is slow so the emulators crash. List of installed software:
-    # https://github.com/actions/runner-images/blob/main/images/macos/macos-12-Readme.md
-    runs-on: macos-latest
+    runs-on: ubuntu-latest # List of installed software:
+    # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2204-Readme.md
     permissions:
       contents: read
     steps:
       - name: perform the checkout
         uses: actions/checkout@v4
 
-      - name: perform the validation
-        continue-on-error: true
-        uses: gradle/actions/wrapper-validation@v3
-
       - name: perform the set up for the JDK
         uses: actions/setup-java@v4
         with:
           java-version: 21
           distribution: temurin
+
+      - name: perform the validation
+        continue-on-error: true
+        uses: gradle/actions/wrapper-validation@v3
 
       - name: perform Gradle setup & caching
         uses: gradle/actions/setup-gradle@v3
@@ -49,6 +48,12 @@ jobs:
         # Read the console logs for the result. The android emulator can't use
         # acceleration, according to the logs. No you can't install HAXM.
         run: $ANDROID_HOME/emulator/emulator -accel-check
+
+      - name: Enable KVM group perms as required by reactivecircus/android-emulator-runner
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm  
 
       - name: perform AVD caching
         uses: actions/cache@v4
@@ -81,10 +86,7 @@ jobs:
           disable-animations: true
           disable-spellchecker: true
           # starts the emulator, runs this script, then closes the emulator
-          script: |
-            # wait for it to finish booting, then take a screenshot
-            sleep 30
-            adb emu screenrecord screenshot ./screenshot-made-cache.png
+          script: echo "Generated AVD snapshot for caching."
 
       - name: perform the Gradle build
         run: ./gradlew build
