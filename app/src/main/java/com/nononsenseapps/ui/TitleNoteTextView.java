@@ -405,15 +405,12 @@ public class TitleNoteTextView extends AppCompatTextView {
 	 */
 	public void setTheTextSize(final int size) {
 		switch (size) {
-			case 0 ->
-				// small
-					super.setTextSize(12.0f);
-			case 2 ->
-				// large
-					super.setTextSize(18.0f);
-			default ->
-				// medium
-					super.setTextSize(14.0f);
+			// small
+			case 0 -> super.setTextSize(12.0f);
+			// large
+			case 2 -> super.setTextSize(18.0f);
+			// medium
+			default -> super.setTextSize(14.0f);
 		}
 	}
 }
