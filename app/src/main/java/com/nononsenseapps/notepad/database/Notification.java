@@ -163,34 +163,23 @@ public class Notification extends DAO {
 	 * View that joins relevant data from tasks and lists tables
 	 */
 	public static final String CREATE_JOINED_VIEW = "CREATE TEMP VIEW IF NOT EXISTS " +
-			WITH_TASK_VIEW_NAME +
-			" AS " +
-			" SELECT " +
+			WITH_TASK_VIEW_NAME + " AS " + " SELECT " +
 			// Notifications as normal column names
-			arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS) +
-			"," +
+			arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS) + "," +
 			// Rest gets prefixed
-			arrayToCommaString("t.",
-					Task.Columns.SHALLOWFIELDS,
-					" AS "
-							+ ColumnsWithTask.taskPrefix
-							+ "%1$s") +
-			"," +
-			arrayToCommaString("l.",
-					TaskList.Columns.SHALLOWFIELDS,
-					" AS "
-							+ ColumnsWithTask.listPrefix
-							+ "%1$s") +
-			" FROM " + TABLE_NAME + "," +
-			Task.TABLE_NAME + " AS t," +
-			TaskList.TABLE_NAME + " AS l " + " WHERE " +
-			TABLE_NAME + "." + Columns.TASKID +
-			" = t." + Task.Columns._ID + " AND t." +
-			Task.Columns.DBLIST + " = l." +
+			arrayToCommaString("t.", Task.Columns.SHALLOWFIELDS, " AS "
+					+ ColumnsWithTask.taskPrefix + "%1$s") + "," +
+			arrayToCommaString("l.", TaskList.Columns.SHALLOWFIELDS, " AS "
+					+ ColumnsWithTask.listPrefix + "%1$s") +
+			" FROM " + TABLE_NAME + "," + Task.TABLE_NAME + " AS t," + TaskList.TABLE_NAME
+			+ " AS l " + " WHERE " + TABLE_NAME + "." + Columns.TASKID + " = t."
+			+ Task.Columns._ID + " AND t." + Task.Columns.DBLIST + " = l." +
 			TaskList.Columns._ID + ";";
 
 	/**
-	 * milliseconds since 1970-01-01 UTC, or NULL in location-based reminders
+	 * A {@link Task} can have reminders, which are {@link Notification} objects.
+	 * They are used to show (android) notifications at a user-provided day and time.
+	 * Here it is expressed in milliseconds since 1970-01-01 UTC.
 	 */
 	public Long time = null;
 
@@ -274,7 +263,7 @@ public class Notification extends DAO {
 		final Cursor c = context
 				.getContentResolver()
 				.query(uri, Columns.FIELDS, null, null, null);
-
+		assert c != null;
 		Notification n = null;
 		if (c.getCount() == 1) {
 			c.moveToFirst();
@@ -461,7 +450,7 @@ public class Notification extends DAO {
 				.getContentResolver()
 				.query(URI, Columns.FIELDS, Columns.TASKID + " IN " + idStrings,
 						null, null);
-
+		assert c != null;
 		while (c.moveToNext()) {
 			// Yes dont just call delete in database
 			// We have to remove geofences (in delete)
@@ -480,7 +469,7 @@ public class Notification extends DAO {
 		final Cursor c = context
 				.getContentResolver()
 				.query(uri, Columns.FIELDS, null, null, null);
-
+		assert c != null;
 		while (c.moveToNext()) {
 			Notification n = new Notification(c);
 			n.deleteOrReschedule(context);
@@ -532,12 +521,13 @@ public class Notification extends DAO {
 	 *
 	 * @param newTime from {@link NotificationHelper#getSnoozedReminderNewTimeMillis}
 	 */
-	public static int setTime(final Context context, final Uri uri, final long newTime) {
+	public static void setTime(final Context context, final Uri uri, final long newTime) {
 		final ContentValues values = new ContentValues();
 		values.put(Columns.TIME, newTime);
 		// Use base ID to bypass type checks
-		return context.getContentResolver().update(URI, values, Columns._ID + " IS ?",
-				new String[] { uri.getLastPathSegment() });
+		context.getContentResolver()
+				.update(URI, values, Columns._ID + " IS ?",
+						new String[] { uri.getLastPathSegment() });
 	}
 
 	/**
@@ -555,7 +545,7 @@ public class Notification extends DAO {
 									+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
 									+ " IS NULL", new String[] { Long.toString(listId) },
 							null);
-
+			assert c != null;
 			String idStrings = "(";
 			while (c.moveToNext()) {
 				idStrings += c.getLong(0) + ",";
@@ -606,27 +596,33 @@ public class Notification extends DAO {
 
 		// Need to set the correct time, but using today as the date
 		// Because no sense in setting reminders in the past
-		GregorianCalendar gcOrgTime = new GregorianCalendar();
-		gcOrgTime.setTimeInMillis(time);
+		GregorianCalendar gcWasFired = new GregorianCalendar();
+		gcWasFired.setTimeInMillis(time);
 		// Use today's date
-		GregorianCalendar gc = new GregorianCalendar();
-		final long now = gc.getTimeInMillis();
+		GregorianCalendar gcToSchedule = new GregorianCalendar();
+		final long now = gcToSchedule.getTimeInMillis();
 		// With original time
-		gc.set(GregorianCalendar.HOUR_OF_DAY, gcOrgTime.get(GregorianCalendar.HOUR_OF_DAY));
-		gc.set(GregorianCalendar.MINUTE, gcOrgTime.get(GregorianCalendar.MINUTE));
-		// Save as base
-		final long base = gc.getTimeInMillis();
+		gcToSchedule.set(GregorianCalendar.HOUR_OF_DAY, gcWasFired.get(GregorianCalendar.HOUR_OF_DAY));
+		gcToSchedule.set(GregorianCalendar.MINUTE, gcWasFired.get(GregorianCalendar.MINUTE));
+		// this variable saves a moment in unix milliseconds:
+		// * the day is today, when this function runs
+		// * the hour & minute are those in which the Notification was scheduled to appear
+		final long base = gcToSchedule.getTimeInMillis();
 
-		// Check today if the time is actually in the future
+		// Check today if the time is actually in the future.
+		// For example if this function runs at "now" = 19:30 to reschedule a reminder that was
+		// planned for "base" = 19:15, then "now" is > "base", therefore start = 1
 		final int start = now < base ? 0 : 1;
-		final long oneDay = 24 * 60 * 60 * 1000;
+		final long oneDay = 24 * 60 * 60 * 1000; // = 1 day, in milliseconds
 		boolean done = false;
 		for (int i = start; i <= 7; i++) {
-			gc.setTimeInMillis(base + i * oneDay);
+			gcToSchedule.setTimeInMillis(base + i * oneDay);
 
-			if (repeatsOn(gc.get(GregorianCalendar.DAY_OF_WEEK))) {
+			if (repeatsOn(gcToSchedule.get(GregorianCalendar.DAY_OF_WEEK))) {
+				// we found the 1° day in which the reminder needs to repeat: save that as the
+				// new "due time" in the database, and we're done.
 				done = true;
-				time = gc.getTimeInMillis();
+				time = gcToSchedule.getTimeInMillis();
 				save(context);
 				break;
 			}
@@ -686,6 +682,7 @@ public class Notification extends DAO {
 				.query(TaskList.URI, null, TaskList.Columns._ID + " IS ?",
 						new String[] { Long.toString(this.listID) }, null);
 		TaskList result = null;
+		assert cc != null;
 		if (cc.moveToFirst()) result = new TaskList(cc);
 		cc.close();
 		if (result == null) return null;

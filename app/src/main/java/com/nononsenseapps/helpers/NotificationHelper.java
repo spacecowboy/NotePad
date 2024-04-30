@@ -82,7 +82,6 @@ public final class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Fires notifications that have elapsed and sets an alarm to be woken at
 	 * the next notification.
-	 *
 	 * If the intent action is ACTION_DELETE, will delete the notification with
 	 * the indicated ID, and cancel it from any active notifications.
 	 */
@@ -374,8 +373,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Configures and shows an android notification for the given reminder
-	 *
+	 * Configures and shows an android notification for the given reminder.
 	 * Needs the builder that contains non-note specific values.
 	 *
 	 * @param note the reminder that triggered this android notification
@@ -605,8 +603,7 @@ public final class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Deletes the indicated notification from the notification tray (does not touch database)
-	 *
+	 * Deletes the indicated notification from the notification tray. Does not touch database.
 	 * Called by {@link com.nononsenseapps.notepad.database.Notification#delete}
 	 */
 	public static void cancelNotification(final Context context,
