@@ -10,8 +10,8 @@
 	<style name="ReadableSearchSuggestionListItem" parent="android:Widget.Material.DropDownItem">
 		<!-- we force the text to resize in order to fit the fixed height of the list item -->
 		<item name="android:autoSizeTextType">uniform</item>
-		<item name="android:autoSizeMinTextSize">1sp</item>
+		<item name="android:autoSizeMinTextSize">5sp</item>
 		<item name="android:autoSizeStepGranularity">0.1sp</item>
-		<item name="android:autoSizeMaxTextSize">50sp</item>
+		<item name="android:autoSizeMaxTextSize">40sp</item>
 	</style>
 </resources>
