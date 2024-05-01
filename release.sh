@@ -14,7 +14,7 @@ current_default="$(git describe --tags --abbrev=0 "${TARGET}")"
 echo >&2 -n "Current version is ${current_default}, "
 # read -r current_in
 
-next_default="$(grep "versionName" ./app/build.gradle | sed "s|\s*versionName \"\(.*\)\"|\\1|")"
+next_default="$(grep "versionName " ./app/build.gradle | sed "s|\s*versionName \"\(.*\)\"|\\1|")"
 echo >&2 -n "next version [press 'enter' for ${next_default}]: "
 read -r next_in
 
