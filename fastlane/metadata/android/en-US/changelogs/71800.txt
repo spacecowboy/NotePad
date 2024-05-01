@@ -1,0 +1,9 @@
+﻿NoNonsense Notes v7.1.8
+
+Highlights:
+- Updated translations using Weblate
+- Updated dependencies and build tools
+- Resize text in some UI elements to avoid it being cut
+- Updated automated testing infrastructure
+- General stability improvements
+- Fixed #509 so now repeating remindes can handle the switch between DST and ST when they are rescheduled
