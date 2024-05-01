@@ -211,40 +211,42 @@ public class MyContentProvider extends ContentProvider {
 					updateUris.add(TaskList.URI);
 					updateUris.add(TaskList.URI_WITH_COUNT);
 					// Batch. No checks made
-					result += db.update(Task.TABLE_NAME, values, selection,
-							selectionArgs);
+					result += db.update(Task.TABLE_NAME, values, selection, selectionArgs);
 					break;
 				case Notification.BASEITEMCODE:
 				case Notification.WITHTASKQUERYITEMCODE:
 					updateUris.add(Notification.URI);
 					updateUris.add(Notification.URI_WITH_TASK_PATH);
 					// final Notification n = new Notification(uri, values);
-					result += db.update(Notification.TABLE_NAME, values,
-							Notification.whereIdIs(selection), Notification
-									.whereIdArg(Long.parseLong(uri
-											.getLastPathSegment()), selectionArgs));
+					result += db.update(
+							Notification.TABLE_NAME,
+							values,
+							Notification.whereIdIs(selection),
+							Notification.whereIdArg(
+									Long.parseLong(uri.getLastPathSegment()), selectionArgs));
 					break;
 				case Notification.BASEURICODE:
 					updateUris.add(Notification.URI);
 					updateUris.add(Notification.URI_WITH_TASK_PATH);
 					// No checks
-					result += db.update(Notification.TABLE_NAME, values, selection,
-							selectionArgs);
+					result += db.update(Notification.TABLE_NAME, values, selection, selectionArgs);
 					break;
 				case RemoteTaskList.BASEITEMCODE:
 					updateUris.add(RemoteTaskList.URI);
 					result += db.update(RemoteTaskList.TABLE_NAME, values,
 							RemoteTaskList.whereIdIs(selection),
-							RemoteTaskList.whereIdArg(Long.parseLong(uri
-									.getLastPathSegment()), selectionArgs)
+							RemoteTaskList.whereIdArg(
+									Long.parseLong(uri.getLastPathSegment()), selectionArgs)
 					);
 					break;
 				case RemoteTask.BASEITEMCODE:
 					updateUris.add(RemoteTask.URI);
-					result += db.update(RemoteTask.TABLE_NAME, values,
+					result += db.update(
+							RemoteTask.TABLE_NAME,
+							values,
 							RemoteTask.whereIdIs(selection),
-							RemoteTask.whereIdArg(Long.parseLong(uri
-									.getLastPathSegment()), selectionArgs)
+							RemoteTask.whereIdArg(
+									Long.parseLong(uri.getLastPathSegment()), selectionArgs)
 					);
 					break;
 				default:

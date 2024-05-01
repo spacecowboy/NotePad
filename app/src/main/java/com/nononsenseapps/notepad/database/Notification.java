@@ -317,7 +317,6 @@ public class Notification extends DAO {
 		values.put(Columns.RADIUS, radius);
 
 		return values;
-
 	}
 
 	@Override
@@ -613,11 +612,15 @@ public class Notification extends DAO {
 		// For example if this function runs at "now" = 19:30 to reschedule a reminder that was
 		// planned for "base" = 19:15, then "now" is > "base", therefore start = 1
 		final int start = now < base ? 0 : 1;
-		final long oneDay = 24 * 60 * 60 * 1000; // = 1 day, in milliseconds
 		boolean done = false;
 		for (int i = start; i <= 7; i++) {
-			gcToSchedule.setTimeInMillis(base + i * oneDay);
+			if (i!=0) {
+				// add a day to the hypotized new due date.
+				// It automatically handles the transitions between ST and DST
+				gcToSchedule.add(Calendar.DAY_OF_MONTH, 1);
+			}
 
+			// check if the reminder should repeat on this day
 			if (repeatsOn(gcToSchedule.get(GregorianCalendar.DAY_OF_WEEK))) {
 				// we found the 1° day in which the reminder needs to repeat: save that as the
 				// new "due time" in the database, and we're done.
