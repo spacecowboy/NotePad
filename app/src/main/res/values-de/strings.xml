@@ -101,7 +101,7 @@
     <string name="confirm_new_password">Neues Passwort bestätigen</string>
     <string name="apply">Übernehmen</string>
     <string name="clear_password">Passwort löschen</string>
-    <string name="password_info">Jede einzelne Notiz kann gesperrt werden, so dass sie nur eingeschränkt angezeigt und geändert werden kann. Sie bleibt auf anderen Geräten voll zugänglich. Wenn Sie sie vergessen, können Sie sie löschen und eine neue einstellen</string>
+    <string name="password_info">Jede einzelne Notiz kann gesperrt werden, so dass sie nur eingeschränkt angezeigt und geändert werden kann. Sie bleibt auf anderen Geräten voll zugänglich.</string>
     <string name="about">Infos</string>
     <string name="sync_failed">Synchronisation fehlgeschlagen</string>
     <string name="sync_login_failed">Konnte mich nicht anmelden, um Google Tasks zu verwenden</string>
@@ -133,7 +133,7 @@
     <string name="loading_widget">Widget wird geladen...</string>
     <string name="default_list">Standard Liste</string>
     <string name="please_type_before_reminder">Bitte gebe einen Text ein, bevor Du eine Erinnerung hinzufügst</string>
-    <string name="notecopied_one">1 Notiz kopiert</string>
+    <string name="notecopied_one">Eine Notiz kopiert</string>
     <string name="notecopied_other">%d Notizen kopiert</string>
     <string name="notedeleted_one">1 Notiz gelöscht</string>
     <string name="notedeleted_other">%d Notizen gelöscht</string>
@@ -260,4 +260,10 @@
     <string name="disable_android_hibernation_desc">Das ist eine Funktion, die App weniger zuverlässig macht.Es kann Ihre Benachrichtigungen blockieren.Öffnen Sie diese, suchen Sie nach so etwas wie \"Suspend App -Aktivität, wenn sie nicht genutzt werden\" und schalten Sie es aus</string>
     <string name="welcome_note_title">Willkommen!</string>
     <string name="welcome_note_row_3">Diese App hat eine detaillierte Anleitung, zu finden unter</string>
+    <string name="app_about_donations">Wir akzeptieren Spenden. Um unsere Arbeit zu unterstützen schaue nach %1$s in %2$s</string>
+    <string name="show_completed_notes">Abgeschlossene Notizen anzeigen</string>
+    <string name="showcase_tutorial_description">Wir haben ein Online Tutorial. Sie können es in den Einstellungen finden</string>
+    <string name="showcase_tutorial_title">Verwirrt ?</string>
+    <string name="welcome_note_row_2">Zum anfangen das hier öffnen.</string>
+    <string name="unsupported_readonly_file">Nicht unterstützte nur-lesen Datei: %s</string>
 </resources>
