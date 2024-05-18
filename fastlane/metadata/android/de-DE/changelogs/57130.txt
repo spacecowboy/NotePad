@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Höhepunkte:
+- Google Tasks Synronisierung repariert.
+- Fehler behoben welcher alle Notizen beim syncronisieren mit Google Tasks gelöscht hätte.
