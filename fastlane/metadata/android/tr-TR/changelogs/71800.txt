@@ -1,0 +1,9 @@
+﻿NoNonsense Notes v7.1.8
+
+Önemli noktalar:
+- Çeviriler Weblate kullanılarak güncellendi
+- Bağımlılıklar ve derleme araçları güncellendi
+- Kesilmesini önlemek için bazı kullanıcı arayüzü ögelerindeki metin yeniden boyutlandırıldı
+- Otomatik test altyapısı güncellendi
+- Genel kararlılık iyileştirmeleri
+- #509 düzeltildi, böylece artık tekrar eden hatırlatmalar yeniden planlandıklarında DST ve ST arasındaki geçişi gerçekleştirebiliyor
