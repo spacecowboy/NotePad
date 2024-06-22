@@ -181,15 +181,12 @@ android {
 dependencies {
     // AndroidX
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
-    implementation 'androidx.fragment:fragment:1.6.2'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.fragment:fragment:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.startup:startup-runtime:1.1.1"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    implementation 'com.google.android.material:material:1.11.0'
-    // yes we need both
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.7.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0"
+    implementation 'com.google.android.material:material:1.12.0'
     // Time library, open source & up to date
     implementation 'joda-time:joda-time:2.12.7'
     // Dashclock API, open source & abandoned, but it still works
