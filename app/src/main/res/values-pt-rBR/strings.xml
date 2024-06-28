@@ -212,4 +212,20 @@
     <string name="large">Grande</string>
     <string name="text_size">Tamanho do texto</string>
     <string name="enable_sync">Ativar sincronização</string>
+    <string name="navigation_drawer_open">Abrir barra de navegação</string>
+    <string name="navigation_drawer_close">Fechar barra de navegação</string>
+    <string name="no_sync_method_chosen">Você não escolheu um método de sincronização</string>
+    <string name="choose_backup_folder">Escolha uma pasta para backup</string>
+    <string name="disable_battery_optimizations">Desativar otimização da bateria</string>
+    <string name="libraries_used">Bibliotecas</string>
+    <string name="feature_is_WIP">Estamos trabalhando neste recurso.</string>
+    <string name="notification_channel_name">Lembretes para notas</string>
+    <string name="notification_channel_description">Mostra o conteúdo da nota no momento escolhido no lembrete</string>
+    <string name="for_older_devices">Para dispositivos Android mais antigos</string>
+    <string name="permission_denied">Não foi possível prosseguir: você negou a permissão</string>
+    <string name="app_about_translations">Ajude a traduzir o aplicativo em https://hosted.weblate.org/engage/no-nonsense-notes/</string>
+    <string name="app_about_git_repo">Este aplicativo é um software de código aberto, disponível em https://github.com/spacecowboy/NotePad</string>
+    <string name="new_default_set">Novo padrão definido</string>
+    <string name="lists">Listas</string>
+    <string name="always">Sempre</string>
 </resources>
