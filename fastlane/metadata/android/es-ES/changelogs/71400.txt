@@ -1,0 +1,15 @@
+NoNonsense Notes v7.1.4
+
+Lo más destacado:
+- traducciones actualizadas
+- mostrar animaciones sólo si están habilitadas en la configuración del sistema #501
+- corregido error que causaba la reaparición del recordatorio snoozed
+- ocultar completo en las notificaciones para los tipos de notas, corrige #312
+- mostrar notas completadas en el widget
+- permitir la instalación de aplicaciones desde varias tiendas de aplicaciones simultáneamente
+- corregir error al ocultar las sugerencias de búsqueda
+
+Detalles:
+- añadido canal de despliegue fastlane a Play store. Pipeline sólo se ejecuta en las etiquetas
+- actualización de dependencias
+- limpieza del código

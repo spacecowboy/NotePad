@@ -1,0 +1,9 @@
+﻿NoNonsense Notes v7.1.8
+
+Destacados:
+- Traducciones actualizadas usando Weblate
+- Dependencias y herramientas de compilación actualizadas
+- Redimensionado del texto en algunos elementos de la interfaz de usuario para evitar que se corte
+- Infraestructura de pruebas automatizadas actualizada
+- Mejoras generales de estabilidad
+- Corregido el #509 para que ahora los recordatorios repetitivos puedan manejar el cambio entre DST y ST cuando son reprogramados
