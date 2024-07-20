@@ -1,0 +1,5 @@
+Notas NoNonsense v7.1.5
+
+Destacados:
+- Hotfix para la publicación en play store
+- Dependencias actualizadas

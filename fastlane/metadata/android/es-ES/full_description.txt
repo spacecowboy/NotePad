@@ -1,17 +1,19 @@
-Bloc de notas de código abierto y aplicación de lista de tareas con las últimas tecnologías de Android.
+Bloc de notas de código abierto y aplicación de lista de tareas utilizando las últimas tecnologías de Android.
 
-* Soporte de reloj Dash (sí, todavía funciona)
-* Notificaciones: configure recordatorios en un momento determinado, con repetición opcional en ciertos días de la semana
+* Soporte para reloj (sí, todavía funciona)
+* Notificaciones: establece recordatorios a una hora determinada, con repetición opcional en determinados días de la semana.
 * Selección de idioma
-* Widget, con soporte para pantalla de bloqueo, redimensionable y configurable
-* Notas importantes protegidas con contraseña
+* Widget, compatible con la pantalla de bloqueo, redimensionable y configurable.
+* Proteger con contraseña las notas importantes
 * Mover tareas entre diferentes listas
-* Arrastre para reordenar tareas
-* Integración con widget de Agenda Android
-* Buscar
+* Arrastrar para reordenar tareas
+* Integración con el widget Agenda de Android
+* Búsqueda
 * Temas claros y oscuros
-* Copia de seguridad (importar y exportar) notas a un archivo JSON
+* Copia de seguridad (importación y exportación) de notas a un archivo JSON
 * Sincronización con un archivo ORG en el almacenamiento local
+* Historial de notas con todas las versiones anteriores
+* papelera de reciclaje para notas borradas
 
-Para mejorar esta aplicación, hacer una donación o simplemente compartir ideas,
-ven a visitarnos en https://github.com/spacecowboy/NotePad
+Para mejorar esta aplicación, hacer una donación, o simplemente compartir ideas,
+visítanos en https://github.com/spacecowboy/NotePad

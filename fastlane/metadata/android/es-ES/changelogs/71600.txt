@@ -1,0 +1,8 @@
+NoNonsense Notes v7.1.6
+
+Lo más destacado:
+- Traducido usando Weblate
+- ID de aplicación fija para f-droid
+
+Detalles:
+- gradle actualizado

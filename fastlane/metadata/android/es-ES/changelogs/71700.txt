@@ -1,0 +1,12 @@
+﻿NoNonsense Notes v7.1.7
+
+Lo más destacado:
+- Traducido usando Weblate
+- app y librerias actualizadas para android 14
+- mostrar animaciones de aplicaciones sólo si está habilitado en la configuración del sistema
+- hacer filas de menú cajón más compacto
+
+Detalles:
+- Utilice java 17 en las acciones de github
+- correcciones de errores y mejoras de estabilidad
+- mejora de la estabilidad de las pruebas
