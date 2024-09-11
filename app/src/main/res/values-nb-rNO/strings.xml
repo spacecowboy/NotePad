@@ -232,4 +232,23 @@
     <string name="notifications_visibility">Merknadssynlighet</string>
     <string name="msg_hibernation_already_off">Android-dvalgang er allerede avslått. Du trenger ikke dette.</string>
     <string name="password">Passord</string>
+    <string name="canceled_note_locked">Avbrutt: Notatet er låst</string>
+    <string name="select_all">Velg alt</string>
+    <string name="tutorial_online">Veiledning (nettbasert)</string>
+    <string name="welcome_note_title">Velkommen</string>
+    <string name="welcome_note_row_2">Åpne dette for å begynne</string>
+    <string name="show_completed_notes">Vis fullførte notater</string>
+    <string name="order_notes_by">Sorter notater etter:</string>
+    <string name="showcase_tutorial_title">Fortapt?</string>
+    <string name="showcase_tutorial_description">Du finner en nettbasert veiledning i innstillingene.</string>
+    <string name="app_about_donations">Du kan donere. Støtt arbeidet ved å finne %1$s i %2$s</string>
+    <string name="welcome_note_row_3">Dette programmet har en detaljert veiledning du finner i</string>
+    <string name="next_year">Neste år</string>
+    <string name="unsupported_readonly_file">Ustøttet skrivebeskyttet fil: %s</string>
+    <string name="show_elements_as">Vis elementer som</string>
+    <string name="version">Versjon: %s</string>
+    <string name="next_month">Neste måned</string>
+    <string name="enable_sync">Skru på synkroniseing</string>
+    <string name="enable_sync_desc">Skrur på synkroniseringsfunksjoner og lar deg velge en synkroniseringskilde. Sikkerhetskopier blir ikke påvirket.</string>
+    <string name="changelog_online">Endringslogg (nettbasert)</string>
 </resources>
