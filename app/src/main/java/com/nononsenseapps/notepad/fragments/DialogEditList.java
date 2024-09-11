@@ -240,66 +240,60 @@ public class DialogEditList extends DialogFragment {
 	}
 
 	String getSortValue() {
+		// Default from global prefs
 		String result = null;
-		if (mBinding.sortSpinner != null) {
-			final String key = (String) mBinding.sortSpinner.getSelectedItem();
-			if (key.equals(getString(R.string.sort_list_alphabetical))) {
-				result = getString(R.string.const_alphabetic);
-			} else if (key.equals(getString(R.string.sort_list_due))) {
-				result = getString(R.string.const_duedate);
-			} else if (key.equals(getString(R.string.sort_list_manual))) {
-				result = getString(R.string.const_possubsort);
-			} else if (key.equals(getString(R.string.sort_list_updated))) {
-				result = getString(R.string.const_modified);
-			} else {
-				// Default from global prefs
-				result = null;
-			}
+
+		final String key = (String) mBinding.sortSpinner.getSelectedItem();
+		if (key.equals(getString(R.string.sort_list_alphabetical))) {
+			result = getString(R.string.const_alphabetic);
+		} else if (key.equals(getString(R.string.sort_list_due))) {
+			result = getString(R.string.const_duedate);
+		} else if (key.equals(getString(R.string.sort_list_manual))) {
+			result = getString(R.string.const_possubsort);
+		} else if (key.equals(getString(R.string.sort_list_updated))) {
+			result = getString(R.string.const_modified);
 		}
 		return result;
 	}
 
 	void selectSortKey() {
-		if (mBinding.sortSpinner != null && mTaskList != null) {
-			if (mTaskList.sorting == null) {
-				mBinding.sortSpinner.setSelection(0);
-			} else if (mTaskList.sorting.equals(getString(R.string.const_alphabetic))) {
-				mBinding.sortSpinner.setSelection(1);
-			} else if (mTaskList.sorting.equals(getString(R.string.const_modified))) {
-				mBinding.sortSpinner.setSelection(2);
-			} else if (mTaskList.sorting.equals(getString(R.string.const_duedate))) {
-				mBinding.sortSpinner.setSelection(3);
-			} else if (mTaskList.sorting.equals(getString(R.string.const_possubsort))) {
-				mBinding.sortSpinner.setSelection(4);
-			}
+		if (mTaskList == null) return;
+
+		if (mTaskList.sorting == null) {
+			mBinding.sortSpinner.setSelection(0);
+		} else if (mTaskList.sorting.equals(getString(R.string.const_alphabetic))) {
+			mBinding.sortSpinner.setSelection(1);
+		} else if (mTaskList.sorting.equals(getString(R.string.const_modified))) {
+			mBinding.sortSpinner.setSelection(2);
+		} else if (mTaskList.sorting.equals(getString(R.string.const_duedate))) {
+			mBinding.sortSpinner.setSelection(3);
+		} else if (mTaskList.sorting.equals(getString(R.string.const_possubsort))) {
+			mBinding.sortSpinner.setSelection(4);
 		}
 	}
 
 	String getListTypeValue() {
+		// Default from global prefs
 		String result = null;
-		if (mBinding.modeSpinner != null) {
-			final String key = (String) mBinding.modeSpinner.getSelectedItem();
-			if (key.equals(getString(R.string.show_items_as_notes))) {
-				result = getString(R.string.const_listtype_notes);
-			} else if (key.equals(getString(R.string.show_items_as_tasks))) {
-				result = getString(R.string.const_listtype_tasks);
-			} else {
-				// Default from global prefs
-				result = null;
-			}
+
+		final String key = (String) mBinding.modeSpinner.getSelectedItem();
+		if (key.equals(getString(R.string.show_items_as_notes))) {
+			result = getString(R.string.const_listtype_notes);
+		} else if (key.equals(getString(R.string.show_items_as_tasks))) {
+			result = getString(R.string.const_listtype_tasks);
 		}
 		return result;
 	}
 
 	void selectListTypeKey() {
-		if (mBinding.modeSpinner != null && mTaskList != null) {
-			if (mTaskList.listtype == null) {
-				mBinding.modeSpinner.setSelection(0);
-			} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_tasks))) {
-				mBinding.modeSpinner.setSelection(1);
-			} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_notes))) {
-				mBinding.modeSpinner.setSelection(2);
-			}
+		if (mTaskList == null) return;
+
+		if (mTaskList.listtype == null) {
+			mBinding.modeSpinner.setSelection(0);
+		} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_tasks))) {
+			mBinding.modeSpinner.setSelection(1);
+		} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_notes))) {
+			mBinding.modeSpinner.setSelection(2);
 		}
 	}
 
