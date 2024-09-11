@@ -663,12 +663,26 @@ public final class NotificationHelper extends BroadcastReceiver {
 
 	private static class ContextObserver extends ContentObserver {
 
-		// TODO can we please delete this class ?
+		// TODO can we please delete this class ? It causes problems & does nothing useful
 
 		private final Context context;
 
 		public ContextObserver(final Context context, Handler h) {
+
+			// TODO Issue #543 is caused by this function
+			//  If you call the constructor like this, a java.lang.SecurityException will block
+			//  its execution, because the ContextObserver is being called by the OS,
+			//  not by our app, as explained in https://stackoverflow.com/a/36694250/6307322
+			//  So this function doesn't have the permission to run, but the notifications still
+			//  appear, because this ContextObserver class is redundand and the notifications
+			//  were actually already shown somewhere else in the codebase.
+			//  SOLUTION: delete ContextObserver once & for all!
 			super(h);
+
+			// If we make our own Handler, as shown here,
+			// the notifications reappear every time the user dismisses them!
+			// super(new Handler(Looper.getMainLooper()));
+
 			this.context = context.getApplicationContext();
 		}
 
