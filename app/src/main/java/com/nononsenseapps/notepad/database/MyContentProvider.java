@@ -47,8 +47,7 @@ public class MyContentProvider extends ContentProvider {
 	public static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".MyContentAuthority";
 
 	public static final String SCHEME = "content://";
-	private static final UriMatcher sURIMatcher = new UriMatcher(
-			UriMatcher.NO_MATCH);
+	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
 	static {
 		TaskList.addMatcherUris(sURIMatcher);
