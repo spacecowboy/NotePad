@@ -400,6 +400,13 @@ public class Task extends DAO {
 	 * @return a SQL query to create this view
 	 */
 	public static String CREATE_SECTIONED_DATE_VIEW(final String listId) {
+
+		// TODO on the API 35 emulator (and on the Google Pixel 8a), this function creates a view
+		//  where the "dblist" column is (erroneously) of type BLOB, while on the API 34 emulator
+		//  (and in previous android versions) "dblist" correctly maintains the INTEGER TYPE.
+		//  I think it's because we supply sListId and listId with arrayToCommaString(), so
+		//	 we get '1' instead of 1. On older android versions this is ignored, but since API 35
+		//   it becomes a problem.
 		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
 
 		String beginning = "CREATE TEMP VIEW IF NOT EXISTS " + getSECTION_DATE_VIEW_NAME(listId) +
@@ -505,7 +512,7 @@ public class Task extends DAO {
 				" BETWEEN " + OVERDUE + " AND " + TODAY_START + ") ";
 
 		// Later. As of now, later = "after the end of the next year"
-		String later = " UNION ALL " + " SELECT '-1'," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+		String later = " UNION ALL " + " SELECT -1," + asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 				Columns.DUE, TODAY_PLUS(toEndOfNextYear), Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST,
 				listId) + ",0,0" +
 				// Only show header if there are tasks under it
