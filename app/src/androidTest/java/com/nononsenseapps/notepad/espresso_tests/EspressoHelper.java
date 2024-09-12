@@ -33,14 +33,13 @@ import org.junit.Assert;
 public class EspressoHelper {
 
 	/**
-	 * Wait for 500ms to work around timing issues on slow emulators. Every time
-	 * this function is called was to solve issues with flaky tests on github runners.
-	 * Keep it: sometime tests need it, sometimes they don't, but you can't know.
-	 * Ideally, it should go after every call to {@link ViewInteraction#perform}
+	 * Wait for 350ms to work around timing issues on slow emulators. It's called to solve issues
+	 * with flaky tests on github runners. Sometime tests need it, sometimes they don't,
+	 * but you can't know. It should go after every call to {@link ViewInteraction#perform}
 	 */
 	public static void waitUi() {
 		InstrumentationRegistry.getInstrumentation().waitForIdleSync();
-		SystemClock.sleep(500);
+		SystemClock.sleep(400);
 	}
 
 	/**
@@ -86,6 +85,9 @@ public class EspressoHelper {
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		onView(withId(R.id.drawer_menu_createlist)).check(matches(isDisplayed()));
+		// sometimes the automator will hold the button too long. This will show the tooltip,
+		// and the test will fail because the button did not get the click to show the dialog.
+		// It's a matter of luck: retry the test and it will work
 		onView(withId(R.id.drawer_menu_createlist)).perform(click());
 		waitUi(); // the popup may need time to load
 
