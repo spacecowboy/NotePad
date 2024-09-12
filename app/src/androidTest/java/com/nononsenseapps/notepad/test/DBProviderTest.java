@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.test;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.os.SystemClock;
 
@@ -46,22 +47,10 @@ public class DBProviderTest extends TestCase {
 		final Cursor c = mResolver
 				.query(uri, fields, where, whereArgs, null);
 		assertNotNull(c);
-		if (count == 6 && c.getCount() == 7) {
-			// TODO sometimes tests on github (not on a fast PC) crash here. Investigate why
-			NnnLogger.debug(DBProviderTest.class, "cursor info:");
-			// will crash. Let's get more info
-			try {
-				NnnLogger.debug(DBProviderTest.class,
-						"Columns: " + String.join(",", c.getColumnNames()));
-				while (c.moveToNext()) {
-					for (int i = 0; i < c.getColumnCount(); i++) {
-						NnnLogger.debug(DBProviderTest.class, c.getString(i));
-					}
-				}
-			} catch (Exception e) {
-				NnnLogger.exception(e);
-			}
-		}
+
+		String READABLE_CURSOR_DUMP = DatabaseUtils.dumpCursorToString(c);
+		NnnLogger.debug(DBProviderTest.class, READABLE_CURSOR_DUMP);
+
 		final int cursorCount = c.getCount();
 		c.close();
 		if (count < 0) {
@@ -115,9 +104,15 @@ public class DBProviderTest extends TestCase {
 		SystemClock.sleep(500);
 
 		// Sectioned Date query
-		assertUriReturnsResult(Task.URI_SECTIONED_BY_DATE, Task.Columns.FIELDS,
-				Task.Columns.DBLIST + " IS ?",
-				new String[] { Long.toString(list._id) }, taskCount + 1);
+		assertUriReturnsResult(
+				Task.URI_SECTIONED_BY_DATE,
+				Task.Columns.FIELDS,
+				// see issue #525: on some android devices, "dblist" is a column of type BLOB,
+				// but we expect it to always be INTEGER. On older devices this cast is redundant,
+				// but on newer OS versions it fixes the bug when selecting notes by due date
+				"CAST(" + Task.Columns.DBLIST + " AS INTEGER) IS ?",
+				new String[] { Long.toString(list._id) },
+				taskCount + 1);
 
 		// History query
 		Task t = tasks.get(0);
