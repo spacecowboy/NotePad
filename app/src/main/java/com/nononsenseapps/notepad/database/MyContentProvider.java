@@ -442,6 +442,8 @@ public class MyContentProvider extends ContentProvider {
 				result.setNotificationUri(getContext().getContentResolver(), uri);
 				break;
 			case Task.SECTIONEDDATEQUERYCODE:
+				// this branch runs when the user sorts notes by due date
+
 				// Add list null because that's what the headers will have
 				final String listId;
 				if (selectionArgs == null || selectionArgs.length == 0) {
@@ -450,10 +452,20 @@ public class MyContentProvider extends ContentProvider {
 				} else {
 					listId = selectionArgs[0];
 				}
-				// Create view if not exists
-				DatabaseHandler.getInstance(getContext()).getWritableDatabase()
-						.execSQL(Task.CREATE_SECTIONED_DATE_VIEW(listId));
 
+				// Create view if not exists
+				// TODO as explained in issue #525, on older OS versions (API 34 emulator, ...)
+				//  this function returns a query to make a view with a column "dblist" of type
+				//  INTEGER, as expected. On the Google Pixel 8a with android 14, and on API 35
+				//  emulators, the column "dblist" is of type BLOB, which is not correct
+				String NNN_DATE_VIEW_QUERY = Task.CREATE_SECTIONED_DATE_VIEW(listId);
+				DatabaseHandler
+						.getInstance(getContext())
+						.getWritableDatabase()
+						.execSQL(NNN_DATE_VIEW_QUERY);
+
+				// this cursor contains the real notes (read from the database)
+				// and some "artificial" records used as headers for the groups of notes
 				result = DatabaseHandler
 						.getInstance(getContext())
 						.getReadableDatabase()
@@ -465,6 +477,10 @@ public class MyContentProvider extends ContentProvider {
 								null,
 								Task.SECRET_TYPEID + "," + Task.Columns.DUE + ","
 										+ Task.SECRET_TYPEID2);
+
+				// You can see that the cursor contains both fake records like "today+1"
+				// and real notes taken from the database
+				// String DBG_READABLE_CURSOR_DUMP = DatabaseUtils.dumpCursorToString(result);
 
 				result.setNotificationUri(getContext().getContentResolver(),
 						Task.URI);

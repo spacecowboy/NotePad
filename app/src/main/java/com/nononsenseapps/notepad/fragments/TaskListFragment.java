@@ -353,7 +353,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				String[] whereArgs;
 
 				if (mListId > 0) {
-					where = Task.Columns.DBLIST + " IS ?";
+					// Fix for issue #525 which is caused by some android versions (API 35
+					// emulator, Google Pixel 8a on Android 14, ...) incorrectly generating
+					// the dblist column (=Task.Columns.DBLIST) as BLOB instead of INTEGER.
+					// So we cast its value to INTEGER to restore the (expected) behavior
+					// of older android versions
+					where = "CAST(" + Task.Columns.DBLIST + " AS INTEGER) IS ?";
 					whereArgs = new String[] { Long.toString(mListId) };
 				} else {
 					targetUri = Task.URI;
