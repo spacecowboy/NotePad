@@ -14,7 +14,7 @@ jobs:
   job_tests:
     if: github.repository == 'spacecowboy/NotePad' # no need to run it on forks    
     timeout-minutes: 45 # test jobs take ~11 minutes each. We give time to download the AVD images
-    continue-on-error: false # failing the test on ONE configuration makes them ALL fail
+    continue-on-error: true # run tests for ALL configurations, don't stop at the 1° failure
     strategy:
       matrix:
         # test on emulators with these Android API versions. They all have ATD images.
