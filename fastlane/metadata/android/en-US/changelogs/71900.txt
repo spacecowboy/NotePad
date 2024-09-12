@@ -1,0 +1,6 @@
+﻿NoNonsense Notes v7.1.9
+
+Highlights:
+- Translated using Weblate
+- updated dependencies and gradle
+- fixed a bug causing the notes to disappear when sorting by date, see #525
