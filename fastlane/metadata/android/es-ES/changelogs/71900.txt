@@ -1,0 +1,6 @@
+﻿NoNonsense Notes v7.1.9
+
+Reflejos:
+- Traducido mediante Weblate
+- Dependencias y gradle actualizados
+- Se corrigió un error que causaba que las notas desaparecieran al ordenarlas por fecha, consulte el n.° 525

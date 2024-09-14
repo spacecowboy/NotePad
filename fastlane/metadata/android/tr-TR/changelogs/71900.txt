@@ -1,0 +1,6 @@
+﻿NoNonsense Notes v7.1.9
+
+Önemli noktalar:
+- Weblate kullanılarak çevrildi
+- bağımlılıklar ve gradle güncellendi
+- tarihe göre sıralama yaparken notların kaybolmasına neden olan bir hata düzeltildi, bkz: #525
