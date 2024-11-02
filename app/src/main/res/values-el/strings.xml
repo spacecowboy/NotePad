@@ -73,14 +73,14 @@
     <string name="once">Μια φορά</string>
     <string name="always">Πάντα</string>
     <string name="permission_read_label">ανάγνωση σημειώσεων και λιστών</string>
-    <string name="permission_read_desc">Επιτρέπει στην εφαρμογή να διαβάζει τις σημειώσεις σας και σχετικές λίστες.</string>
+    <string name="permission_read_desc">Επιτρέπει στην εφαρμογή να διαβάζει τις σημειώσεις σας και σχετικές λίστες</string>
     <string name="permission_write_label">τροποποίηση σημειώσεων και λιστών</string>
-    <string name="permission_write_desc">Επιτρέπει στην εφαρμογή την εισαγωγή, ενημέρωση και διαγραφή σημειώσεων και λιστών.</string>
+    <string name="permission_write_desc">Επιτρέπει στην εφαρμογή την εισαγωγή, ενημέρωση και διαγραφή σημειώσεων και λιστών</string>
     <string name="settings_list_dialog">Επιλογή λίστας</string>
     <string name="settings_list">Λίστα</string>
     <string name="drag_to_timetravel">Σύρετε για πλοήγηση στο χρόνο</string>
     <string name="import_data_question">Εισαγωγή δεδομένων;</string>
-    <string name="import_started">Γίνεται εισαγωγή δεδομένων. Μπορεί να διαρκέσει μερικα δευτερόλεπτα</string>
+    <string name="import_started">Γίνεται εισαγωγή δεδομένων…</string>
     <string name="imported_result">Εισήχθησαν %1$d σημειώσεις σε %2$d λίστες</string>
     <string name="import_error">Κάτι πήγε στραβά: %s</string>
     <string name="move">Μετακίνηση</string>
