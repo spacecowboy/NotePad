@@ -73,14 +73,14 @@
     <string name="once">Веднъж</string>
     <string name="always">Винаги</string>
     <string name="permission_read_label">четене на бележки и списъци</string>
-    <string name="permission_read_desc">Разрешава на приложението да чете вашите бележки и свързаните с тях списъци.</string>
+    <string name="permission_read_desc">Разрешава на приложението да чете вашите бележки и свързаните с тях списъци</string>
     <string name="permission_write_label">промяна на бележки и списъци</string>
     <string name="permission_write_desc">Разрешава на приложението да вмъква, актуализира и изтрива бележки и списъци</string>
     <string name="settings_list_dialog">Изберете списък</string>
     <string name="settings_list">Списък</string>
     <string name="drag_to_timetravel">Влачете за промяна на времето</string>
     <string name="import_data_question">Внасяне на данни?</string>
-    <string name="import_started">Данните се внасят. ..</string>
+    <string name="import_started">Данните се внасят…</string>
     <string name="imported_result">Внесени %1$d бележки в %2$d списъка</string>
     <string name="import_error">Нещо се обърка: %s</string>
     <string name="move">Преместване</string>
@@ -170,8 +170,8 @@
     <string name="dashclock_anytime">По всяко време</string>
     <string name="dashclock_will_show_as_many_as_possible">Ще покаже възможно най-много</string>
     <string name="dashclock_show_only_the_next_task">Покажи само следващата задача</string>
-    <string name="dashclock_header_shown">Името на списъка ще бъде показвано с удебелен шрифт.</string>
-    <string name="dashclock_first_task_shown">Името на първата задача ще бъде показвано с удебелен шрифт.</string>
+    <string name="dashclock_header_shown">Името на списъка ще бъде показвано с удебелен шрифт</string>
+    <string name="dashclock_first_task_shown">Името на първата задача ще бъде показвано с удебелен шрифт</string>
     <string name="dashclock_display_header">Показване на заглавната област</string>
     <string name="battery_optimizations_inactive">Оптимизациите на батерията са изключени</string>
     <string name="app_about_translations">Помогнете за превода на приложението на https://hosted.weblate.org/engage/no-nonsense-notes/</string>
