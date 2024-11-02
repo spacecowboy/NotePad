@@ -76,7 +76,7 @@
     <string name="settings_list_dialog">選擇一個清單</string>
     <string name="settings_list">清單</string>
     <string name="import_data_question">匯入數據？</string>
-    <string name="import_started">正在匯入數據。這可能需要幾秒。</string>
+    <string name="import_started">正在匯入數據…</string>
     <string name="imported_result">已匯入 %1$d 條便箋至 %2$d 清單</string>
     <string name="import_error">出現了一些問題：%s</string>
     <string name="lock_note">鎖定便箋</string>
@@ -120,7 +120,7 @@
     <string name="transparency">透明度</string>
     <string name="notes_shortcut">便箋捷徑</string>
     <string name="shortcut_help1">如果選定，快捷方式將會在選中的清單創建一個便箋並打開編輯器。如果不選中，快捷方式只打開選定的清單。</string>
-    <string name="loading_widget">正在加載小部件...</string>
+    <string name="loading_widget">正在加載小部件…</string>
     <string name="default_list">默認清單</string>
     <string name="please_type_before_reminder">請在設定提醒前輸入一些文字</string>
     <string name="notecopied_other">已複製 %d 個便箋</string>
