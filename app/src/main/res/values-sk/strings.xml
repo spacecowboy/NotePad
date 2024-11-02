@@ -78,7 +78,7 @@
     <string name="settings_list">Zoznam</string>
     <string name="drag_to_timetravel">Ťahať pre cestovanie časom</string>
     <string name="import_data_question">Importovať dáta?</string>
-    <string name="import_started">Importujem dáta. Môže to chvíľu trvať.</string>
+    <string name="import_started">Importujem dáta…</string>
     <string name="move">Presunúť</string>
     <string name="move_to">Presunúť do</string>
     <string name="moved_x_to_list">Presunuté %1$d do %2$s</string>
