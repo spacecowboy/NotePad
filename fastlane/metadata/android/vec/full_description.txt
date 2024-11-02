@@ -12,6 +12,8 @@ Stà applicasion la xè open source e adata ale pì recenti versioni del Android
 * i coeori a tema ciaro o scuro, a seconda dei to gusti
 * backup par salvarse i dati importanti
 * sincronisasion sua memoria del teefono cui file .org
+* se poe recuperar e versioni vecie dee note coa cronologia
+* cestino pae note canceae
 
 Pàr migliorare sta app, o par contarme qualche to idea, vien trovarme su
 https://github.com/spacecowboy/NotePad
