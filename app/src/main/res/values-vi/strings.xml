@@ -73,9 +73,9 @@
     <string name="once">Một lần</string>
     <string name="always">Luôn luôn</string>
     <string name="permission_read_label">đọc các ghi chú và danh sách</string>
-    <string name="permission_read_desc">Cho phép ứng dụng đọc ghi chú của bạn và các danh sách có liên quan.</string>
+    <string name="permission_read_desc">Cho phép ứng dụng đọc ghi chú của bạn và các danh sách có liên quan</string>
     <string name="permission_write_label">sửa các ghi chú và danh sách</string>
-    <string name="permission_write_desc">Cho phép ứng dụng tạo mới, cập nhật và xoá bỏ ghi chú, danh sách.</string>
+    <string name="permission_write_desc">Cho phép ứng dụng tạo mới, cập nhật và xoá bỏ ghi chú, danh sách</string>
     <string name="settings_list_dialog">Chọn danh sách</string>
     <string name="settings_list">Danh sách</string>
     <string name="drag_to_timetravel">Thả vào máy thời gian</string>
