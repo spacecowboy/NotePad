@@ -73,9 +73,9 @@
     <string name="once">En gång</string>
     <string name="always">Alltid</string>
     <string name="permission_read_label">läsa anteckningar och listor</string>
-    <string name="permission_read_desc">Tillåter appen att läsa dina anteckningar och listor.</string>
+    <string name="permission_read_desc">Tillåter appen att läsa dina anteckningar och listor</string>
     <string name="permission_write_label">modifiera anteckningar och listor</string>
-    <string name="permission_write_desc">Tillåter programmet att lägga till, ändra och ta bort anteckningar och listor.</string>
+    <string name="permission_write_desc">Tillåter programmet att lägga till, ändra och ta bort anteckningar och listor</string>
     <string name="settings_list_dialog">Välj en lista</string>
     <string name="settings_list">Lista</string>
     <string name="drag_to_timetravel">Dra för att se tidigare versioner</string>
