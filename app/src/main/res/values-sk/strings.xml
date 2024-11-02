@@ -137,7 +137,7 @@
     <string name="background_sync_info">Synchronizovať raz za hodinu</string>
     <string name="sync_on_change">Synchronizovať po zmene</string>
     <string name="sync_on_change_info">Naplánovať synchronizáciu krátko po zmene poznámky</string>
-    <string name="sync_on_start">Synchronizovať aplikáciu po štarte.</string>
+    <string name="sync_on_start">Synchronizovať aplikáciu po štarte</string>
     <string name="sync_on_start_info">Najčastejšie sa bude synchronizovať každých 5 minút</string>
     <string name="snooze">Odložiť</string>
     <string name="silent">Ticho</string>
