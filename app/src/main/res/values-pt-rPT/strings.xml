@@ -47,7 +47,7 @@
     <string name="permission_read_label">ler as notas e as listas</string>
     <string name="permission_read_desc">Permite que a aplicação leia as suas notas e listas</string>
     <string name="permission_write_label">modificar as notas e as listas</string>
-    <string name="permission_write_desc">Permite que a aplicação insira, atualize e apague notas e listas.</string>
+    <string name="permission_write_desc">Permite que a aplicação insira, atualize e apague notas e listas</string>
     <string name="settings_list_dialog">Selecione uma lista</string>
     <string name="settings_list">Lista</string>
     <!--
