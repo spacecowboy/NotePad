@@ -73,14 +73,14 @@
     <string name="once">Unha vez</string>
     <string name="always">Sempre</string>
     <string name="permission_read_label">ler notas e listaxes</string>
-    <string name="permission_read_desc">Permite ao aplicativo ler as túas notas e as listaxes relacionadas.</string>
+    <string name="permission_read_desc">Permite ao aplicativo ler as túas notas e as listaxes relacionadas</string>
     <string name="permission_write_label">modificar notas e listaxes</string>
-    <string name="permission_write_desc">Permite ao aplicativo inserir, actualizar e eliminar notas e listaxes.</string>
+    <string name="permission_write_desc">Permite ao aplicativo inserir, actualizar e eliminar notas e listaxes</string>
     <string name="settings_list_dialog">Seleccionar unha listaxe</string>
     <string name="settings_list">Listaxe</string>
     <string name="drag_to_timetravel">Arrastra para viaxares no tempo</string>
     <string name="import_data_question">Importar datos?</string>
-    <string name="import_started">Importando datos. Isto pode tardar uns segundiños.</string>
+    <string name="import_started">Importando datos…</string>
     <string name="imported_result">Importáronse %1$d notas de %2$d listaxes</string>
     <string name="import_error">Algo foi mal: %s</string>
     <string name="move">Mover</string>
