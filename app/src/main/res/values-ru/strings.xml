@@ -79,7 +79,7 @@
     <string name="settings_list_dialog">Выберите список</string>
     <string name="settings_list">Список</string>
     <string name="import_data_question">Импортировать данные?</string>
-    <string name="import_started">Импорт данных. Это может занять несколько секунд.</string>
+    <string name="import_started">Импорт данных…</string>
     <string name="move">Переместить</string>
     <string name="move_to">Переместить в</string>
     <string name="moved_x_to_list">Переместить %1$d в%2$s</string>
@@ -127,7 +127,7 @@
     <string name="transparency">Прозрачность</string>
     <string name="notes_shortcut">Ярлыки заметки</string>
     <string name="shortcut_help1">Если отмечено, ярлык будет создать новую заметку в выбранном списке и открывать редактор. Если флажок не установлен, ярлык будет открыть выбранный список.</string>
-    <string name="loading_widget">Загрузка виджета</string>
+    <string name="loading_widget">Загрузка виджета…</string>
     <string name="default_list">Список по умолчанию</string>
     <string name="please_type_before_reminder">Пожалуйста, введите текст, чтобы установить напоминание</string>
     <string name="notecopied_one">Скопирована одна заметка</string>
