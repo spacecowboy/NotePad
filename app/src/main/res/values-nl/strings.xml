@@ -130,7 +130,7 @@
     <string name="hide_header">Hele widget-kop verbergen</string>
     <string name="transparency">Transparantie</string>
     <string name="notes_shortcut">Notities snelkoppeling</string>
-    <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst</string>
+    <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst.</string>
     <string name="loading_widget">Laden widget…</string>
     <string name="default_list">Standaard lijst</string>
     <string name="please_type_before_reminder">Typ een tekst voordat je een herinnering plaatst</string>
