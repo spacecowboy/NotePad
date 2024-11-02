@@ -80,7 +80,7 @@
     <string name="settings_list">Seznam</string>
     <string name="drag_to_timetravel">Povlecite čas potovanja</string>
     <string name="import_data_question">Uvoz podatkov?</string>
-    <string name="import_started">Uvažanje podatkov. To lahko traja nekaj sekund.</string>
+    <string name="import_started">Uvažanje podatkov…</string>
     <string name="imported_result">Uvoženi %1$d opombe v %2$d seznami</string>
     <string name="import_error">Nekaj je šlo narobe: %s</string>
     <string name="move">Premakni</string>
