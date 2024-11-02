@@ -10,4 +10,3 @@ Najważniejsze informacje:
 
 Szczegóły:
 - drobne usprawnienia interfejsu użytkownika
-- usunięto nieużywany kod
