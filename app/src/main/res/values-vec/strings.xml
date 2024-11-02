@@ -27,7 +27,7 @@
     <string name="completed">Finia</string>
     <string name="about">Informasiòn</string>
     <string name="clear_password">Càva a pasword</string>
-    <string name="password_info">Te poi blocare ogni nota, cosita la vede soeo chi che sa a pasword. A rimane comunque accesibie su chialtri dispositivi</string>
+    <string name="password_info">Te poi blocare ogni nota, cosita la vede soeo chi che sa a pasword. A rimane comunque accesibie su chialtri dispositivi.</string>
     <string name="done">Finio</string>
     <string name="menu_delete">Cansea</string>
     <string name="menu_deletelist">Cansea a lista</string>
@@ -90,7 +90,7 @@
     <string name="overwritten_in_newer_systems">Le impostasion del canae gà la precedensa su queste</string>
     <string name="app_about_dev_team">Fàta da Jonas Kalderstam e tegnua in pie da Campello Manuel</string>
     <string name="app_about_bugreports">Se la gà problemi, vien dirmeo qua https://github.com/spacecowboy/NotePad/issues</string>
-    <string name="app_about_license">Licensa GPLv3+, https://www.gnu.org/licenses.</string>
+    <string name="app_about_license">Licensa GPLv3+, https://www.gnu.org/licenses</string>
     <string name="disable_android_hibernation">Spegni l\'ibernasion de Android</string>
     <string name="msg_hibernation_already_off">L\'ibernasion de Android a xè sà SPENTA, no ti gà da far niente</string>
     <string name="app_about_translations">Dame na man a tradure sta aplicasion https://hosted.weblate.org/engage/no-nonsense-notes/</string>
