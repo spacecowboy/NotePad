@@ -73,14 +73,14 @@
     <string name="once">Eenmaal</string>
     <string name="always">Altyd</string>
     <string name="permission_read_label">lees notas en lyste</string>
-    <string name="permission_read_desc">Laat die toepassing toe om jou notas en verwante lyste te lees.</string>
+    <string name="permission_read_desc">Laat die toepassing toe om jou notas en verwante lyste te lees</string>
     <string name="permission_write_label">redigeer notas en lyste</string>
-    <string name="permission_write_desc">Laat die toepassing toe om notas en lyste te skep, redigeer en uit te vee.</string>
+    <string name="permission_write_desc">Laat die toepassing toe om notas en lyste te skep, redigeer en uit te vee</string>
     <string name="settings_list_dialog">Kies \'n lys</string>
     <string name="settings_list">Lys</string>
     <string name="drag_to_timetravel">Gebruik handvatsel vir tyd-reis</string>
     <string name="import_data_question">Lees data in?</string>
-    <string name="import_started">Lees data in. Dit mag \'n paar sekondes duur.</string>
+    <string name="import_started">Lees data in…</string>
     <string name="imported_result">%1$d notas in %2$d lyste ingelees</string>
     <string name="import_error">Iets het skeefgeloop: %s</string>
     <string name="move">Verskuif</string>
