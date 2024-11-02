@@ -209,7 +209,7 @@
     <string name="prefs_improved_reliability">提高可靠性的首选项</string>
     <string name="notification_channel_settings">通知渠道设置</string>
     <string name="open_channel_settings_description">打开页面以编辑此应用的通知设置。这些将覆盖其他地方选择的任何设置</string>
-    <string name="feature_is_WIP">此功能仍在进行中</string>
+    <string name="feature_is_WIP">此功能仍在进行中.</string>
     <string name="notifications_blocked">通知不可见，因此您将看不到提醒。点击此处，找到权限类别，并为此应用启用通知</string>
     <string name="next_year">下一年</string>
     <string name="select_all">全选</string>
