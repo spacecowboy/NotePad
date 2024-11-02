@@ -54,9 +54,9 @@
     <string name="show_from_all_lists">كل القوائم</string>
     <string name="deleted">حُذِفت</string>
     <string name="permission_read_label">قراءة الملاحظات والقوائم</string>
-    <string name="permission_read_desc">السماح للتطبيق بقراءة ملاحظاتك والقوائم المتعلقة.</string>
+    <string name="permission_read_desc">السماح للتطبيق بقراءة ملاحظاتك والقوائم المتعلقة</string>
     <string name="permission_write_label">تعديل الملاحظات والقوائم</string>
-    <string name="permission_write_desc">السماح للتطبيق بالإدراج، التحديث وحذف الملاحظات والقوائم.</string>
+    <string name="permission_write_desc">السماح للتطبيق بالإدراج، التحديث وحذف الملاحظات والقوائم</string>
     <string name="settings_list_dialog">أختر قائمة</string>
     <string name="settings_list">قائمة</string>
     <string name="lock_note">قفل ملاحظة</string>
