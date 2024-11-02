@@ -33,7 +33,7 @@
     <string name="new_default_set">Nowe ustawienie domyślne</string>
     <string name="menu_managelists">Zarządzaj listą</string>
     <string name="add_item">Dodaj</string>
-    <string name="delete_question">Usuwanie</string>
+    <string name="delete_question">Usuwanie?</string>
     <string name="delete_items_message">Usunąć te elementy\?</string>
     <string name="delete_item_message">Usunąć ten element\?</string>
     <string name="delete_list_message">Usunąć tę listę\?</string>
