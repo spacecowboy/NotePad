@@ -80,7 +80,7 @@
     <string name="settings_list">Lista</string>
     <string name="drag_to_timetravel">Dra för att se tidigare versioner</string>
     <string name="import_data_question">Importera data?</string>
-    <string name="import_started">Importerar data. Detta kan ta några sekunder.</string>
+    <string name="import_started">Importerar data…</string>
     <string name="imported_result">Importerade %1$d anteckningar i %2$d listor</string>
     <string name="import_error">Något gick fel: %s</string>
     <string name="move">Flytta</string>
