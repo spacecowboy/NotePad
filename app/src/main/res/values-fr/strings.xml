@@ -32,9 +32,9 @@
     <string name="menu_managelists">Gérer les listes</string>
     <string name="add_item">Ajouter un élément</string>
     <string name="delete_question">Supprimer ?</string>
-    <string name="delete_items_message">Êtes-vous sûr de vouloir supprimer ces éléments?</string>
-    <string name="delete_item_message">Êtes-vous sûr de vouloir supprimer cet élément?</string>
-    <string name="delete_list_message">Êtes-vous sûr de vouloir supprimer cette liste?</string>
+    <string name="delete_items_message">Supprimer ces éléments ?</string>
+    <string name="delete_item_message">Supprimer cet élément ?</string>
+    <string name="delete_list_message">Supprimer cette liste ?</string>
     <string name="editor_due_date_hint">Échéance</string>
     <string name="editor_title_hint">Titre</string>
     <string name="resolve_edit">Éditer la note</string>
@@ -76,7 +76,7 @@
     <string name="settings_list">Liste</string>
     <string name="drag_to_timetravel">Glisser pour revenir en arrière</string>
     <string name="import_data_question">Importer les données ?</string>
-    <string name="import_started">Importation des données. Ceci prendra quelques secondes.</string>
+    <string name="import_started">Importation des données…</string>
     <string name="imported_result">%1$d notes importées dans %2$d listes</string>
     <string name="import_error">Quelque chose n\'a pas fonctionné : %s</string>
     <string name="move">Déplacer</string>
