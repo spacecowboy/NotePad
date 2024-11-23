@@ -40,7 +40,7 @@
     <string name="editor_due_date_hint">Datum zapadlosti</string>
     <string name="editor_title_hint">Naslov</string>
     <string name="editor_note_hint">Opomba</string>
-    <string name="resolve_edit">Uredi opombo.</string>
+    <string name="resolve_edit">Uredi opombo</string>
     <string name="default_style">Privzeti slog</string>
     <string name="show_items_as_tasks">Pokaži elemente kot opravila</string>
     <string name="show_items_as_notes">Pokaži elemente, kot opombe</string>
@@ -73,14 +73,14 @@
     <string name="once">Enkrat</string>
     <string name="always">Vedno</string>
     <string name="permission_read_label">Preberite opombe in seznami</string>
-    <string name="permission_read_desc">Omogoča uporabo preberite opombe in sorodnih seznamov.</string>
+    <string name="permission_read_desc">Omogoča uporabo preberite opombe in sorodnih seznamov</string>
     <string name="permission_write_label">Spreminjanje opombe in seznami</string>
-    <string name="permission_write_desc">Omogoča uporabo za vstavljanje, posodabljanje in brisanje opombe in sezname.</string>
+    <string name="permission_write_desc">Omogoča uporabo za vstavljanje, posodabljanje in brisanje opombe in sezname</string>
     <string name="settings_list_dialog">Izberite seznam</string>
     <string name="settings_list">Seznam</string>
     <string name="drag_to_timetravel">Povlecite čas potovanja</string>
     <string name="import_data_question">Uvoz podatkov?</string>
-    <string name="import_started">Uvažanje podatkov. To lahko traja nekaj sekund.</string>
+    <string name="import_started">Uvažanje podatkov…</string>
     <string name="imported_result">Uvoženi %1$d opombe v %2$d seznami</string>
     <string name="import_error">Nekaj je šlo narobe: %s</string>
     <string name="move">Premakni</string>

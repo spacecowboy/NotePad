@@ -73,14 +73,14 @@
     <string name="once">Jednou</string>
     <string name="always">Vždy</string>
     <string name="permission_read_label">číst poznámky a seznamy</string>
-    <string name="permission_read_desc">Povolit aplikaci čtení vašich poznámek a souvisejících seznamů.</string>
+    <string name="permission_read_desc">Povolit aplikaci čtení vašich poznámek a souvisejících seznamů</string>
     <string name="permission_write_label">upravovat poznámky a seznamy</string>
-    <string name="permission_write_desc">Povolit aplikaci vkládat, upravovat a odstraňovat poznámky a seznamy.</string>
+    <string name="permission_write_desc">Povolit aplikaci vkládat, upravovat a odstraňovat poznámky a seznamy</string>
     <string name="settings_list_dialog">Vyberte seznam</string>
     <string name="settings_list">Seznam</string>
     <string name="drag_to_timetravel">Táhnout pro posun v čase</string>
     <string name="import_data_question">Importovat údaje?</string>
-    <string name="import_started">Importuji data. Chvilku to zabere.</string>
+    <string name="import_started">Importuji data…</string>
     <string name="imported_result">Importováno %1$d poznámek z %2$d seznamů</string>
     <string name="import_error">Něco se pokazilo: %s</string>
     <string name="move">Přesunout</string>
@@ -102,7 +102,7 @@
     <string name="confirm_new_password">Potvrďte nové heslo</string>
     <string name="apply">Nastavit</string>
     <string name="clear_password">Zrušit heslo</string>
-    <string name="password_info">Po nastavení hesla bude potřeba pro uzamčené poznámkyzadat před jejich zobrazením heslo. Týká se to jenom textu poznámky, takže bude stálenechráněn nadpis a datum. Nic se nešifruje, takže bude stále čitelná na webu GMail akalendáři. Pokud zapomenete heslo, stačí synchronizovat s účtem Google a přeinstalovataplikaci</string>
+    <string name="password_info">Po nastavení hesla bude potřeba pro uzamčené poznámkyzadat před jejich zobrazením heslo. Týká se to jenom textu poznámky, takže bude stálenechráněn nadpis a datum. Nic se nešifruje.</string>
     <string name="about">O aplikaci</string>
     <string name="sync_failed">Synchronizace selhala</string>
     <string name="sync_login_failed">Přihlášení se nezdařilo, nelze se spojit s Google Tasks</string>

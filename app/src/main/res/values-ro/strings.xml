@@ -73,14 +73,14 @@
     <string name="once">O dată</string>
     <string name="always">Întotdeauna</string>
     <string name="permission_read_label">citește notele și listele</string>
-    <string name="permission_read_desc">Permite aplicației să citească notele și listele aferente.</string>
+    <string name="permission_read_desc">Permite aplicației să citească notele și listele aferente</string>
     <string name="permission_write_label">modifică notele și litele</string>
-    <string name="permission_write_desc">Permite aplicației să adauge, actualizeze și șteargă note și liste.</string>
+    <string name="permission_write_desc">Permite aplicației să adauge, actualizeze și șteargă note și liste</string>
     <string name="settings_list_dialog">Alege o listă</string>
     <string name="settings_list">Listă</string>
     <string name="drag_to_timetravel">Trage pentru a călatori în timp</string>
     <string name="import_data_question">Importă datele?</string>
-    <string name="import_started">Se importă datele. Ar putea dura câteva secunde.</string>
+    <string name="import_started">Se importă datele…</string>
     <string name="imported_result">S-a importat %1$d notițe în %2$d liste</string>
     <string name="import_error">Ceva nu a funcționat corect: %s</string>
     <string name="move">Mută</string>
@@ -132,7 +132,7 @@
     <string name="transparency">Transparență</string>
     <string name="notes_shortcut">Scurtăturile notițelor</string>
     <string name="shortcut_help1">Dacă bifezi, scurtătura va crea o notă nouă în lista aleasă și va deschide editorul. Dacă nu bifezi, scurtătura va deschide lista aleasă.</string>
-    <string name="loading_widget">Se încarcă...</string>
+    <string name="loading_widget">Se încarcă…</string>
     <string name="default_list">Listă implicită</string>
     <string name="please_type_before_reminder">Te rugăm să introduci un text înainte de a stabili un memento</string>
     <string name="notecopied_one">Notiță 1 copiată</string>

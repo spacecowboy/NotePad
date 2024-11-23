@@ -8,8 +8,3 @@ Lo más destacado:
 - mostrar notas completadas en el widget
 - permitir la instalación de aplicaciones desde varias tiendas de aplicaciones simultáneamente
 - corregir error al ocultar las sugerencias de búsqueda
-
-Detalles:
-- añadido canal de despliegue fastlane a Play store. Pipeline sólo se ejecuta en las etiquetas
-- actualización de dependencias
-- limpieza del código

@@ -71,14 +71,14 @@
     <string name="once">یک بار</string>
     <string name="always">همیشه</string>
     <string name="permission_read_label">یادداشت ها و لیست ها را بخوان</string>
-    <string name="permission_read_desc">به برنامه اجازه می دهد تا یادداشت های شما و لیست های مربوط به آن را بخواند.</string>
+    <string name="permission_read_desc">به برنامه اجازه می دهد تا یادداشت های شما و لیست های مربوط به آن را بخواند</string>
     <string name="permission_write_label">یادداشت ها و لیست ها را تغییر بده</string>
-    <string name="permission_write_desc">به برنامه اجازه می دهد تا یادداشت و لیست اضافه  کند، یا آنها را بروز کرده یا پاک کند.</string>
+    <string name="permission_write_desc">به برنامه اجازه می دهد تا یادداشت و لیست اضافه کند، یا آنها را بروز کرده یا پاک کند</string>
     <string name="settings_list_dialog">یک لیست انتخاب کن</string>
     <string name="settings_list">لیست</string>
     <string name="drag_to_timetravel">برای سفر در زمان این دسته رو جابجا کن</string>
     <string name="import_data_question">داده ها رو وارد کنم؟</string>
-    <string name="import_started">دارم داده ها رو وارد می کنم. شاید چند ثانیه ای طول بکشه.</string>
+    <string name="import_started">دارم داده ها رو وارد می کنم…</string>
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>

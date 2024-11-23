@@ -7,6 +7,7 @@ Aggiornata per supportare la Android 13, quest'applicazione open source vanta le
 * Protezione delle note con password
 * Liste personalizzate tra le quali si possono spostare le note
 * Liste dove si possono riordinare a piacere le note
+* Integrazione con il widget Android Agenda
 * Ricerca tra le note
 * Disponibili temi chiari e scuri
 * Importazione & esportazione delle note su file JSON

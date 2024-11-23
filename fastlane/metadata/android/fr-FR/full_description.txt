@@ -1,7 +1,7 @@
 Open source notepad and to-do list app using the latest Android technologies.
 
 * Dash clock support (yes, it still works)
-* Notifications: set reminders at a certain time, with optional repetition on certain weekdays
+* Notifications : set reminders at a certain time, with optional repetition on certain weekdays
 * Language selection
 * Widget, with lockscreen support, resizeable and configurable
 * Password-protect important notes
@@ -12,6 +12,8 @@ Open source notepad and to-do list app using the latest Android technologies.
 * Light and dark themes
 * Back up (import and export) notes to a JSON file
 * Sync with an ORG file on the local storage
+* note history with all previous versions
+* recycle bin for deleted notes
 
 To improve this app, make a donation, or simply share ideas,
 come visit at https://github.com/spacecowboy/NotePad

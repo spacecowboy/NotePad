@@ -36,7 +36,7 @@
     <string name="delete_question">Slet?</string>
     <string name="delete_items_message">Er du sikker på du vil slette disse elementer?</string>
     <string name="delete_item_message">Er du sikker på du vil slette dette element?</string>
-    <string name="delete_list_message">Er du sikker på du vil slette denne liste? Noterne vil blive arkiveret</string>
+    <string name="delete_list_message">Er du sikker på du vil slette denne liste?</string>
     <string name="editor_due_date_hint">Forfaldsdato</string>
     <string name="editor_title_hint">Titel</string>
     <string name="resolve_edit">Rediger note</string>
@@ -79,7 +79,7 @@
     <string name="settings_list">Liste</string>
     <string name="drag_to_timetravel">Træk for at rejse i tiden</string>
     <string name="import_data_question">Importer data?</string>
-    <string name="import_started">Importerer data. Dette kan tage et par sekunder.</string>
+    <string name="import_started">Importerer data…</string>
     <string name="imported_result">Importeret %1$d noter i %2$d lister</string>
     <string name="import_error">Noget gik galt: %s</string>
     <string name="move">Flyt</string>
@@ -130,7 +130,7 @@
     <string name="transparency">Gennemsigtighed</string>
     <string name="notes_shortcut">Noter genvej</string>
     <string name="shortcut_help1">Hvis afkrydset, vil genvejen oprette en ny note i den valgte liste og åbne editoren. Hvis ikke afkrydset, vil genvejen åbne den valgte liste.</string>
-    <string name="loading_widget">Indlæser widget...</string>
+    <string name="loading_widget">Indlæser widget…</string>
     <string name="default_list">Standard liste</string>
     <string name="please_type_before_reminder">Skriv venligst noget tekst inden du indstiller en påmindelse</string>
     <string name="notecopied_one">En note kopieret</string>

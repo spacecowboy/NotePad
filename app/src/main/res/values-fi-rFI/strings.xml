@@ -36,7 +36,7 @@
     <string name="delete_question">Poista?</string>
     <string name="delete_items_message">Haluatko varmasti poistaa nämä kohteet?</string>
     <string name="delete_item_message">Haluatko varmasti poistaa tämän kohteen?</string>
-    <string name="delete_list_message">Haluatko varmasti poistaa listan? Muistiinpanot arkistoidaan.</string>
+    <string name="delete_list_message">Haluatko varmasti poistaa listan?</string>
     <string name="editor_due_date_hint">Eräpäivä</string>
     <string name="editor_title_hint">Otsikko</string>
     <string name="editor_note_hint">Muistiinpano</string>
@@ -73,14 +73,14 @@
     <string name="once">Kerran</string>
     <string name="always">Aina</string>
     <string name="permission_read_label">Lue muistiinpanoja ja listoja</string>
-    <string name="permission_read_desc">Sallii sovelluksen lukea muistiinpanojasi ja niihin liittyviä listoja.</string>
+    <string name="permission_read_desc">Sallii sovelluksen lukea muistiinpanojasi ja niihin liittyviä listoja</string>
     <string name="permission_write_label">Muokkaa muistiinpanoja ja listoja</string>
-    <string name="permission_write_desc">Sallii sovelluksen lisätä, päivittää ja poistaa muistiinpanoja ja listoja.</string>
+    <string name="permission_write_desc">Sallii sovelluksen lisätä, päivittää ja poistaa muistiinpanoja ja listoja</string>
     <string name="settings_list_dialog">Valitse lista</string>
     <string name="settings_list">Lista</string>
     <string name="drag_to_timetravel">Raahaa aikamatkustaaksesi</string>
     <string name="import_data_question">Tuo tietoja?</string>
-    <string name="import_started">Tietoja tuodaan. Tämä voi viedä muutaman sekunnin.</string>
+    <string name="import_started">Tietoja tuodaan…</string>
     <string name="imported_result">Tuotiin %1$d muistiinpanoa %2$d listasta</string>
     <string name="import_error">Jokin meni vikaan: %s</string>
     <string name="move">Siirrä</string>
@@ -131,7 +131,7 @@
     <string name="transparency">Läpinäkyvyys</string>
     <string name="notes_shortcut">Muistiinpanojen pikakuvake</string>
     <string name="shortcut_help1">Jos valittu, pikakuvake luo uuden muistiinpanon valittuun listaan ja avaa editorin. Muuten pikakuvake avaa valitun listan.</string>
-    <string name="loading_widget">Ladataan lisäohjelmaa</string>
+    <string name="loading_widget">Ladataan lisäohjelmaa…</string>
     <string name="default_list">Oletuslista</string>
     <string name="please_type_before_reminder">Kirjoita jotakin ennen muistutuksen asettamista</string>
     <string name="notecopied_one">Muistiinpano kopioitu</string>

@@ -53,9 +53,9 @@
     <string name="show_from_all_lists">모든 목록</string>
     <string name="deleted">삭제됨</string>
     <string name="permission_read_label">노트와 목록을 읽기</string>
-    <string name="permission_read_desc">애플리케이션이 사용자의 노트와 목록을 읽게 합니다.</string>
+    <string name="permission_read_desc">애플리케이션이 사용자의 노트와 목록을 읽게 합니다</string>
     <string name="permission_write_label">노트와 목록을 수정</string>
-    <string name="permission_write_desc">애플리케이션이 노트와 목록을 추가, 수정, 삭제하게 합니다.</string>
+    <string name="permission_write_desc">애플리케이션이 노트와 목록을 추가, 수정, 삭제하게 합니다</string>
     <string name="settings_list_dialog">목록 선택</string>
     <string name="settings_list">목록</string>
     <!--

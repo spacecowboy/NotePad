@@ -73,14 +73,14 @@
     <string name="once">Eenmalig</string>
     <string name="always">Altijd</string>
     <string name="permission_read_label">lees notities en lijsten</string>
-    <string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
+    <string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen</string>
     <string name="permission_write_label">notities en lijsten bewerken</string>
-    <string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
+    <string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen</string>
     <string name="settings_list_dialog">Selecteer een lijst</string>
     <string name="settings_list">Lijst</string>
     <string name="drag_to_timetravel">Sleep om te tijdreizen</string>
     <string name="import_data_question">Importeer gegevens?</string>
-    <string name="import_started">Gegevens aan het importeren. Dit kan een paar seconden duren.</string>
+    <string name="import_started">Gegevens aan het importeren…</string>
     <string name="imported_result">%1$d notities in %2$d lijsten geïmporteerd</string>
     <string name="import_error">Er ging iets verkeerd: %s</string>
     <string name="move">Verplaats</string>
@@ -130,7 +130,7 @@
     <string name="hide_header">Hele widget-kop verbergen</string>
     <string name="transparency">Transparantie</string>
     <string name="notes_shortcut">Notities snelkoppeling</string>
-    <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst,</string>
+    <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst.</string>
     <string name="loading_widget">Laden widget…</string>
     <string name="default_list">Standaard lijst</string>
     <string name="please_type_before_reminder">Typ een tekst voordat je een herinnering plaatst</string>

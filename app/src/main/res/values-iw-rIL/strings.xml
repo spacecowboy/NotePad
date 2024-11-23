@@ -35,16 +35,16 @@
     <string name="settings_summary_theme_dark">כהה</string>
     <string name="settings_summary_theme_light">בהיר</string>
     <string name="settings_cat_appearance">מראה</string>
-    <string name="preference_preview_text">כך הטקסט יופיע בעת עריכה.</string>
+    <string name="preference_preview_text">כך הטקסט יופיע בעת עריכה</string>
     <string name="settings_account_title">בחר חשבון</string>
     <string name="settings_account_summary">בחר להחלפת חשבון</string>
     <string name="settings_cat_syncing">סינכרון</string>
     <string name="show_from_all_lists">כל הרשימות</string>
     <string name="deleted">נמחק</string>
     <string name="permission_read_label">קרא פתקים ורשימות</string>
-    <string name="permission_read_desc">מאפשר ליישום לקרוא את הפתקים והרשימות הקשורות.</string>
+    <string name="permission_read_desc">מאפשר ליישום לקרוא את הפתקים והרשימות הקשורות</string>
     <string name="permission_write_label">ערוך פתקים ורשימות</string>
-    <string name="permission_write_desc">מאפשר ליישום להוסיף, לעדכן ולמחוק פתקים ורשימות.</string>
+    <string name="permission_write_desc">מאפשר ליישום להוסיף, לעדכן ולמחוק פתקים ורשימות</string>
     <string name="settings_list_dialog">בחר רשימה</string>
     <string name="settings_list">רשימה</string>
     <!--

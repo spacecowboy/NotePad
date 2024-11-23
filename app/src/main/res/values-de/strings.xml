@@ -130,7 +130,7 @@
     <string name="transparency">Transparenz</string>
     <string name="notes_shortcut">Notizen Shortcut</string>
     <string name="shortcut_help1">Die Verknüpfung öffnet eine neue Notiz in der ausgewählten Liste mit einem geöffneten Texteditor.</string>
-    <string name="loading_widget">Widget wird geladen...</string>
+    <string name="loading_widget">Widget wird geladen…</string>
     <string name="default_list">Standard Liste</string>
     <string name="please_type_before_reminder">Bitte gebe einen Text ein, bevor Du eine Erinnerung hinzufügst</string>
     <string name="notecopied_one">Eine Notiz kopiert</string>
@@ -142,7 +142,7 @@
     <string name="background_sync">Im Hintergrund synchronisieren</string>
     <string name="background_sync_info">Synchronisiert einmal pro Stunde</string>
     <string name="sync_on_change">Bei Änderungen synchronisieren</string>
-    <string name="sync_on_change_info">Synchronisiert, kurz nachdem eine Notiz geändert wurde.</string>
+    <string name="sync_on_change_info">Synchronisiert, kurz nachdem eine Notiz geändert wurde</string>
     <string name="sync_on_start">Beim App-Start synchronisieren</string>
     <string name="sync_on_start_info">Begrenzt die Synchronisierung auf einmal alle 5 Minuten</string>
     <string name="snooze">Schlummern</string>
@@ -206,11 +206,11 @@
     <string name="notifications_enabled">Benachrichtigungen sind sichtbar</string>
     <string name="account">Konto</string>
     <string name="notification_channel_name">Erinnerungen für Notizen</string>
-    <string name="feature_is_WIP">Diese Funktion ist noch in Arbeit</string>
+    <string name="feature_is_WIP">Diese Funktion ist noch in Arbeit.</string>
     <string name="notification_channel_settings">Einstellungen des Benachrichtigungskanals</string>
     <string name="delete_completed_tasks_question">Alle abgeschlossenen Aufgaben löschen\?</string>
     <string name="for_older_devices">Für ältere Android-Geräte</string>
-    <string name="app_about_license">Lizenziert GPLv3+, https://www.gnu.org/licenses.</string>
+    <string name="app_about_license">Lizenziert GPLv3+, https://www.gnu.org/licenses</string>
     <string name="not_selected_yet">Noch nicht ausgewählt</string>
     <string name="no_sync_method_chosen">Du hast keine Synchronisationsmethode ausgewählt</string>
     <string name="file_picker_not_available">Die Dateiauswahl ist nicht verfügbar</string>

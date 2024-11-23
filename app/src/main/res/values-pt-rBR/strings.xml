@@ -72,11 +72,11 @@
     <string name="permission_read_label">ler as notas e as listas</string>
     <string name="permission_read_desc">Permite que o aplicativo leia as suas notas e listas</string>
     <string name="permission_write_label">modificar as notas e as listas</string>
-    <string name="permission_write_desc">Permite que a aplicação insira, atualize e apague notas e listas.</string>
+    <string name="permission_write_desc">Permite que a aplicação insira, atualize e apague notas e listas</string>
     <string name="settings_list_dialog">Selecione uma lista</string>
     <string name="settings_list">Lista</string>
     <string name="import_data_question">Importar dados?</string>
-    <string name="import_started">Importando dados. Isto pode levar alguns segundos.</string>
+    <string name="import_started">Importando dados…</string>
     <string name="imported_result">Importado %1$d notas de %2$d listas</string>
     <string name="import_error">Algo deu errado: %s</string>
     <string name="lock_note">Bloquear nota</string>

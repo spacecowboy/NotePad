@@ -13,5 +13,7 @@ Fri notatblokk og gjøremålspåminner som bruker de siste Android-teknologiene.
 * Sikkerhetskopier (import og eksport) notater til JSON-fil
 * Synkroniser med en ORG-fil i lokalt lager
 
+
+
 Forbedre programmet, eller del idéer.
 Besøk på https://github.com/spacecowboy/NotePad

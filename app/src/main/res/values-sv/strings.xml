@@ -73,14 +73,14 @@
     <string name="once">En gång</string>
     <string name="always">Alltid</string>
     <string name="permission_read_label">läsa anteckningar och listor</string>
-    <string name="permission_read_desc">Tillåter appen att läsa dina anteckningar och listor.</string>
+    <string name="permission_read_desc">Tillåter appen att läsa dina anteckningar och listor</string>
     <string name="permission_write_label">modifiera anteckningar och listor</string>
-    <string name="permission_write_desc">Tillåter programmet att lägga till, ändra och ta bort anteckningar och listor.</string>
+    <string name="permission_write_desc">Tillåter programmet att lägga till, ändra och ta bort anteckningar och listor</string>
     <string name="settings_list_dialog">Välj en lista</string>
     <string name="settings_list">Lista</string>
     <string name="drag_to_timetravel">Dra för att se tidigare versioner</string>
     <string name="import_data_question">Importera data?</string>
-    <string name="import_started">Importerar data. Detta kan ta några sekunder.</string>
+    <string name="import_started">Importerar data…</string>
     <string name="imported_result">Importerade %1$d anteckningar i %2$d listor</string>
     <string name="import_error">Något gick fel: %s</string>
     <string name="move">Flytta</string>

@@ -61,7 +61,7 @@
     <string name="settings_summary_theme_light">淺色</string>
     <string name="settings_summary_theme_classic">經典</string>
     <string name="settings_cat_appearance">外觀</string>
-    <string name="preference_preview_text">我能吞下玻璃而不傷身體。</string>
+    <string name="preference_preview_text">我能吞下玻璃而不傷身體</string>
     <string name="settings_account_title">選定一個帳戶</string>
     <string name="settings_account_summary">點擊切換帳戶</string>
     <string name="settings_cat_syncing">同步</string>
@@ -70,13 +70,13 @@
     <string name="repeat">重複</string>
     <string name="once">一次性</string>
     <string name="permission_read_label">閱讀便箋與清單</string>
-    <string name="permission_read_desc">允許本應用讀取您的便箋及相關清單。</string>
+    <string name="permission_read_desc">允許本應用讀取您的便箋及相關清單</string>
     <string name="permission_write_label">修改便箋和清單</string>
-    <string name="permission_write_desc">允許本應用新增，更新及刪除便箋和清單。</string>
+    <string name="permission_write_desc">允許本應用新增，更新及刪除便箋和清單</string>
     <string name="settings_list_dialog">選擇一個清單</string>
     <string name="settings_list">清單</string>
     <string name="import_data_question">匯入數據？</string>
-    <string name="import_started">正在匯入數據。這可能需要幾秒。</string>
+    <string name="import_started">正在匯入數據…</string>
     <string name="imported_result">已匯入 %1$d 條便箋至 %2$d 清單</string>
     <string name="import_error">出現了一些問題：%s</string>
     <string name="lock_note">鎖定便箋</string>
@@ -120,7 +120,7 @@
     <string name="transparency">透明度</string>
     <string name="notes_shortcut">便箋捷徑</string>
     <string name="shortcut_help1">如果選定，快捷方式將會在選中的清單創建一個便箋並打開編輯器。如果不選中，快捷方式只打開選定的清單。</string>
-    <string name="loading_widget">正在加載小部件...</string>
+    <string name="loading_widget">正在加載小部件…</string>
     <string name="default_list">默認清單</string>
     <string name="please_type_before_reminder">請在設定提醒前輸入一些文字</string>
     <string name="notecopied_other">已複製 %d 個便箋</string>
@@ -155,7 +155,7 @@
     <string name="dashclock_anytime">所有時間</string>
     <string name="dashclock_will_show_as_many_as_possible">將會顯示更多內容</string>
     <string name="dashclock_show_only_the_next_task">只顯示下一任務</string>
-    <string name="dashclock_header_shown">清單名稱將以粗體顯示。如果“所有清單”被選中，將會顯示為“任務”。</string>
+    <string name="dashclock_header_shown">清單名稱將以粗體顯示</string>
     <string name="dashclock_first_task_shown">第一個任務的標題將加粗顯示</string>
     <string name="dashclock_display_header">顯示標題</string>
 </resources>
