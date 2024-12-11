@@ -22,7 +22,8 @@
 	style="?attr/ListMarginStyle"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:orientation="vertical">
+	android:orientation="vertical"
+	android:fitsSystemWindows="true">
 
 	<!-- Layout file for the "archive" activity of deleted notes. Shows a list of those.
 	 See FragmentSearchDeleted, which decides what gets shown in the listitem -->

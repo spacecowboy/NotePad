@@ -5,6 +5,7 @@
 	android:layout_height="wrap_content"
 	android:paddingTop="8dp"
 	android:orientation="vertical"
+	android:fitsSystemWindows="true"
 	tools:context=".widget.shortcut.ShortcutConfig">
 
 	<TextView

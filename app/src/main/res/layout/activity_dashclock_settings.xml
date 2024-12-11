@@ -21,4 +21,5 @@
 	android:id="@+id/fragment"
 	android:name="com.nononsenseapps.notepad.dashclock.DashclockPrefsFragment"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"/>
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"/>
