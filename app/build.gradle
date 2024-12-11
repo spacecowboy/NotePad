@@ -66,7 +66,7 @@ android {
 
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
-        targetSdkVersion 34
+        targetSdkVersion 35
 
         // most people have at least android 7.1 anyway: https://apilevels.com/
         // 90% of users are on API>=27 => don't write special code for 23<=API<=26, it's worthless
