@@ -69,16 +69,6 @@ public final class NotificationHelper extends BroadcastReceiver {
 	private static final String ACTION_SNOOZE = "com.nononsenseapps.notepad.ACTION.SNOOZE";
 	private static final String ACTION_RESCHEDULE = "com.nononsenseapps.notepad.ACTION.RESCHEDULE";
 
-	private static ContextObserver observer = null;
-
-	private static ContextObserver getObserver(final Context context) {
-		// TODO may be useless. delete ?
-		if (observer == null) {
-			observer = new ContextObserver(context, null);
-		}
-		return observer;
-	}
-
 	/**
 	 * Fires notifications that have elapsed and sets an alarm to be woken at
 	 * the next notification.
@@ -191,15 +181,6 @@ public final class NotificationHelper extends BroadcastReceiver {
 		// notification channel pref. page, which can be opened through our NotificationPrefs
 		// fragment. And that's better than us rewriting android code!
 		nm.createNotificationChannel(channel);
-	}
-
-	private static void monitorUri(final Context context) {
-		// TODO useless ? delete ?
-		context.getContentResolver().unregisterContentObserver(getObserver(context));
-		context.getContentResolver().registerContentObserver(
-				com.nononsenseapps.notepad.database.Notification.URI,
-				true,
-				getObserver(context));
 	}
 
 	public static void clearNotification(@NonNull final Context context,
@@ -533,7 +514,8 @@ public final class NotificationHelper extends BroadcastReceiver {
 						getTimeForAlarm(thingToNotify), pendingIntent);
 			}
 		}
-		monitorUri(context);
+		// old function deleted in december 2024. It was causing issue #543
+		// monitorUri(context);
 	}
 
 	/**
@@ -659,47 +641,5 @@ public final class NotificationHelper extends BroadcastReceiver {
 		}
 
 		return subList;
-	}
-
-	private static class ContextObserver extends ContentObserver {
-
-		// TODO can we please delete this class ? It causes problems & does nothing useful
-
-		private final Context context;
-
-		public ContextObserver(final Context context, Handler h) {
-
-			// TODO Issue #543 is caused by this function
-			//  If you call the constructor like this, a java.lang.SecurityException will block
-			//  its execution, because the ContextObserver is being called by the OS,
-			//  not by our app, as explained in https://stackoverflow.com/a/36694250/6307322
-			//  So this function doesn't have the permission to run, but the notifications still
-			//  appear, because this ContextObserver class is redundand and the notifications
-			//  were actually already shown somewhere else in the codebase.
-			//  SOLUTION: delete ContextObserver once & for all!
-			super(h);
-
-			// If we make our own Handler, as shown here,
-			// the notifications reappear every time the user dismisses them!
-			// super(new Handler(Looper.getMainLooper()));
-
-			this.context = context.getApplicationContext();
-		}
-
-		@Override
-		public void onChange(boolean selfChange, Uri uri) {
-			// Handle change but don't spam
-
-			// TODO when clicking "completed" on a notification, sometimes it goes away
-			//  but then reappears a 2° time. It's because the code here runs too soon
-			//  (it's in its own thread) and does not yet see that the notification got
-			//  canceled. This is a design flaw, and probably this whole "ContextObserver" class
-			//  is useless: NotificationHelper.onReceive() should be enough. The temporary
-			//  fix is to just wait for the main thread to delete the notification from
-			//  the db (1,2 seconds are enough), but please try to solve this.
-			SystemClock.sleep(1200);
-
-			notifyPast(context);
-		}
 	}
 }
