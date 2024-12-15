@@ -1,0 +1,6 @@
+﻿NoNonsense Notes v7.2.0
+
+Highlights:
+- Updated translations using Weblate
+- Added official support for Android 15 (API 35)
+- Tweaked the layout of the "note history" page
