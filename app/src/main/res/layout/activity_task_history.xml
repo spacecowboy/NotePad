@@ -19,6 +19,7 @@
 		android:layout_height="wrap_content"
 		android:text="@string/drag_to_timetravel"
 		android:textAppearance="?android:attr/textAppearanceLarge"
+		android:layout_margin="4dp"
 		android:textColor="@color/accent"/>
 
 	<SeekBar
