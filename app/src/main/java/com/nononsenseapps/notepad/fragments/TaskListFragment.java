@@ -656,9 +656,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				}
 
 				try {
-					// Only show the title string on screens that are wide
-					// enough
-					// E.g. large screens or if you are in landscape
+					// Only show the title string on screens that are wide enough,
+					// for example large screens or if you are in landscape
 					final Configuration conf = getResources()
 							.getConfiguration();
 					if (conf.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
