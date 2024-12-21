@@ -17,7 +17,7 @@
   --><resources>
     <string name="app_name_short">Заметки</string>
     <string name="title_create">Новая запись</string>
-    <string name="timemachine">Машина времени</string>
+    <string name="timemachine">Запланировать</string>
     <string name="time">Время</string>
     <string name="done">Готово</string>
     <string name="saved">Сохранено</string>
