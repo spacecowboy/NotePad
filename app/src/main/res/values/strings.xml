@@ -310,8 +310,8 @@
 	<string name="backup_import_msg">Try to import backup from %1$s? This will clear the current database.</string>
 	<string name="backup_export_msg">Export all notes to %1$s?</string>
 	<string name="backup_import_success">Backup imported</string>
-	<string name="backup_file_not_found">Could not find the backup file</string>
-	<string name="backup_import_failed">Could not read the backup file</string>
+	<string name="backup_file_not_found">Could not find a backup file named NoNonsenseNotes_Backup.json</string>
+	<string name="backup_import_failed">Could not read the backup file NoNonsenseNotes_Backup.json</string>
 	<string name="backup_export_success">Backup exported</string>
 	<string name="backup_export_failed">Could not write to the backup file</string>
 	<string name="sd_card">SD card</string>
