@@ -193,7 +193,7 @@
     <string name="medium">Среден</string>
     <string name="backup_import">Възтановяване резервно копие</string>
     <string name="backup_export">Изнасяне на резервно копие</string>
-    <string name="backup_import_failed">Не може да се прочете резервният файл</string>
+    <string name="backup_import_failed">Не може да се прочете резервният файл NoNonsenseNotes_Backup.json</string>
     <string name="backup_export_success">Резервното копие е изнесено</string>
     <string name="sd_card">SD карта</string>
     <string name="directory">Папка</string>
@@ -229,7 +229,7 @@
     <string name="app_about_donations">Приемаме дарения. За да подкрепите работата ни, потърсете %1$s в %2$s</string>
     <string name="disable_android_hibernation">Деактивирайте хибернацията на Android</string>
     <string name="msg_enable_notifications">Отидете на настройки -&gt; известия, за да активирате известията</string>
-    <string name="disable_android_hibernation_desc">Това е функция, която прави приложението по-малко надеждно. Може да блокира вашите напомняния. Отворете това, потърсете нещо като „спиране на активността на приложението, ако не се използва“ и го изключете</string>
+    <string name="disable_android_hibernation_desc">Това е функция, която прави приложението по-малко надеждно. Може да блокира вашите напомняния. Отворете това, потърсете нещо като спиране на активността на приложението, ако не се използва и го изключете</string>
     <string name="msg_hibernation_already_off">Хибернацията на Android вече е ИЗКЛЮЧЕНА, нямате нужда от това</string>
     <string name="notifications_blocked">Известията не се виждат, така че няма да виждате напомнянията. Докоснете тук, намерете категорията с разрешения и активирайте известията за това приложение</string>
     <string name="notifications_visibility">Видимост на известията</string>
@@ -258,7 +258,7 @@
     <string name="body_font">Основен шрифт</string>
     <string name="add_a_reminder">Добавяне на напомняне</string>
     <string name="backup_import_success">Резервното копие е внесено</string>
-    <string name="backup_file_not_found">Не може да се намери резервният файл</string>
+    <string name="backup_file_not_found">Не може да се намери резервният файл с име NoNonsenseNotes_Backup.json</string>
     <string name="navigation_drawer_open">Отворете чекмеджето за навигация</string>
     <string name="navigation_drawer_close">Затворете чекмеджето за навигация</string>
     <string name="use_exact_alarms">Използвайте точни аларми</string>
