@@ -17,7 +17,7 @@
   --><resources>
     <string name="app_name_short">Заметки</string>
     <string name="title_create">Новая запись</string>
-    <string name="timemachine">Запланировать</string>
+    <string name="timemachine">Машина времени</string>
     <string name="time">Время</string>
     <string name="done">Готово</string>
     <string name="saved">Сохранено</string>
@@ -169,7 +169,7 @@
     <string name="delete_completed_tasks_question">Удалить все выполненные задачи\?</string>
     <string name="import_error">Что-то пошло не так: %s</string>
     <string name="notification_channel_name">Напоминания для заметок</string>
-    <string name="feature_is_WIP">Эта функция находится в разработке</string>
+    <string name="feature_is_WIP">Эта функция находится в разработке.</string>
     <string name="permission_denied">Нельзя продолжить: вы отказали в разрешении</string>
     <string name="use_exact_alarms">Использовать точные напоминания</string>
     <string name="for_older_devices">Для старых устройств Android</string>
@@ -238,12 +238,12 @@
     <string name="text">Текст</string>
     <string name="add_a_reminder">Добавить напоминание</string>
     <string name="backup_export_msg">Экспортировать все заметки в %1$s?</string>
-    <string name="backup_file_not_found">Не удалось найти файл резервной копии</string>
-    <string name="backup_import_failed">Не удалось прочитать файл резервной копии</string>
+    <string name="backup_file_not_found">Не удалось найти файл резервной копии с именем NoNonsenseNotes_Backup.json</string>
+    <string name="backup_import_failed">Не удалось прочитать файл резервной копии NoNonsenseNotes_Backup.json</string>
     <string name="backup_export_success">Резервная копия экспортирована</string>
     <string name="backup_export_failed">Не удалось записать в файл резервной копии</string>
     <string name="directory">Папка</string>
-    <string name="directory_summary_msg">Файлы сохраняются в %s \n\nк которым вы можете получить доступ с помощью приложения менеджера файлов. Удаление приложения также приведет к удалению этих файлов: чтобы сохранить ваши заметки, создайте резервную копию.</string>
+    <string name="directory_summary_msg">Файлы сохраняются в %s \nк которым вы можете получить доступ с помощью приложения менеджера файлов. Удаление приложения также приведет к удалению этих файлов: чтобы сохранить ваши заметки, создайте резервную копию</string>
     <string name="cannot_write_to_directory">Не удаётся записать в папку</string>
     <string name="bigger_titles">Огромные заголовки</string>
     <string name="sorting">Сортировка</string>
