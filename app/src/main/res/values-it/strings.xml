@@ -199,8 +199,8 @@
     <string name="backup_import_msg">Provo a importare il backup da %1$s\? Questo sovrascriverà tutte le note attuali.</string>
     <string name="backup_export_msg">Esportare tutte le note in %1$s?</string>
     <string name="backup_import_success">Backup importato correttamente</string>
-    <string name="backup_file_not_found">File di backup non trovato</string>
-    <string name="backup_import_failed">Impossibile leggere il file di backup</string>
+    <string name="backup_file_not_found">File di backup NoNonsenseNotes_Backup.json non trovato</string>
+    <string name="backup_import_failed">Impossibile leggere il file di backup NoNonsenseNotes_Backup.json</string>
     <string name="backup_export_success">Backup esportato correttamente</string>
     <string name="backup_export_failed">Impossibile scrivere sul file di backup</string>
     <string name="sd_card">Scheda SD</string>
