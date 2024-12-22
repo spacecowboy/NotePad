@@ -194,8 +194,8 @@
     <string name="backup_import_msg">是否尝试从 %1$s 导入备份？这将清除当前数据库。</string>
     <string name="backup_export_msg">是否将所有笔记导出到 %1$s？</string>
     <string name="backup_import_success">备份已导入</string>
-    <string name="backup_file_not_found">无法找到备份文件</string>
-    <string name="backup_import_failed">无法读取备份文件</string>
+    <string name="backup_file_not_found">无法找到名为 NoNonsenseNotes_Backup.json 的备份文件</string>
+    <string name="backup_import_failed">无法读取名为 NoNonsenseNotes_Backup.json 的备份文件</string>
     <string name="backup_export_success">备份已导出</string>
     <string name="backup_export_failed">无法写入备份文件</string>
     <string name="sd_card">SD 卡</string>
@@ -251,7 +251,7 @@
     <string name="app_about_license">许可 GPLV3+，https://www.gnu.org/licenses</string>
     <string name="app_about_bugreports">在 https://github.com/spacecowboy/NotePad/issues 报告错误和问题</string>
     <string name="notifications_enabled">通知可见</string>
-    <string name="disable_android_hibernation_desc">这一功能使本应用不太可靠。它可能会阻止您的提醒。打开此页面，查找类似“未使用时暂停应用活动”的内容，然后将其关闭</string>
+    <string name="disable_android_hibernation_desc">这一功能使本应用不太可靠。它可能会阻止您的提醒。打开此页面，查找类似未使用时暂停应用活动的内容，然后将其关闭</string>
     <string name="unavailable_chose_directory">不可用。请先选择一个目录</string>
     <string name="not_selected_yet">尚未选择</string>
     <string name="bigger_titles_summary">标题是第一行</string>
