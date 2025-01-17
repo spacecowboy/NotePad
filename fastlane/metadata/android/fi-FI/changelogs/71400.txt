@@ -1,0 +1,15 @@
+NoNonsense Notes v7.1.4
+
+Kohokohdat:
+- päivitetyt käännökset
+- näytä animaatioita vain, jos ne on otettu käyttöön järjestelmäasetuksissa #501
+- korjaa vian, joka aiheuttaa torkkumuistutuksen ilmestymisen uudelleen
+- piilota täydellinen muistiinpanotyyppien ilmoituksissa, korjaukset #312
+- näytä valmiit muistiinpanot vimpaimessa
+- mahdollistaa sovellusten asentamisen useista sovelluskaupoista samanaikaisesti
+- Korjaa vika piilottamalla hakuehdotukset
+
+Yksityiskohdat:
+- lisätty fastlanen käyttöönottoputki Play-kauppaan. Putkilinja toimii vain tunnisteilla
+- päivitä riippuvuudet
+- koodin puhdistus
