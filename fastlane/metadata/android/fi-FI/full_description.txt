@@ -1,0 +1,19 @@
+Avoimen lähdekoodin muistilehtiö ja tehtävälistasovellus uusimmilla Android-tekniikoilla.
+
+* Kojelaudan kellon tuki (kyllä, se toimii edelleen)
+* Ilmoitukset: aseta muistutuksia tiettyyn aikaan ja valinnainen toisto tiettyinä arkipäivinä
+* Kielen valinta
+* Vimpain, lukitusnäytön tuella, kokoa muutettava ja konfiguroitavissa
+* Suojaa tärkeät huomautukset salasanalla
+* Siirrä tehtäviä eri luetteloiden välillä
+* Järjestä tehtäviä vetämällä
+* Integrointi Android Agenda -vimpaimeen
+* Haku
+* Vaaleat ja tummat teemat
+* Varmuuskopioi (tuonti ja vienti) muistiinpanot JSON-tiedostoon
+* Synkronoi paikallisessa tallennustilassa olevan ORG-tiedoston kanssa
+* Huomaa historia kaikkien aiempien versioiden kanssa
+* roskakori poistetuille muistiinpanoille
+
+Parantaaksesi tätä sovellusta, tee lahjoitus tai yksinkertaisesti jaa ideoita,
+tule käymään osoitteessa https://github.com/spacecowboy/NotePad
