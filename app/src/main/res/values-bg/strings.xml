@@ -247,7 +247,7 @@
     <string name="prefs_improved_reliability">Предпочитания за подобряване на надеждността</string>
     <string name="notification_channel_settings">Настройки на канала за известяване</string>
     <string name="not_selected_yet">Все още не е избрано</string>
-    <string name="account">Акаунт</string>
+    <string name="account">Профил</string>
     <string name="clickable_links">Връзки с възможност за кликване</string>
     <string name="large">Голям</string>
     <string name="text_size">Размер на текста</string>
