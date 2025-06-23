@@ -37,7 +37,7 @@
     <string name="search_description">குறிப்புகள் மற்றும் பணிகள்</string>
     <string name="archive">காப்பகம்</string>
     <string name="restore">மீட்டமை</string>
-    <string name="restore_to">மீட்டமை</string>
+    <string name="restore_to">இதற்கு மீட்டமை</string>
     <string name="search_hint">தேடல்</string>
     <string name="settings_theme">தற்போதைய கருப்பொருள்</string>
     <string name="settings_theme_dialog">கருப்பொருள் பயன்படுத்தவும்</string>
@@ -50,7 +50,7 @@
     <string name="settings_account_title">ஒரு கணக்கைத் தேர்ந்தெடுக்கவும்</string>
     <string name="settings_cat_appearance">தோற்றம்</string>
     <string name="settings_account_summary">கணக்கை மாற்றத் தொடவும்</string>
-    <string name="settings_cat_syncing">ஒத்திசைவு</string>
+    <string name="settings_cat_syncing">ஒத்திசைக்கிறது</string>
     <string name="show_from_all_lists">அனைத்து பட்டியல்களும்</string>
     <string name="permission_read_desc">உங்கள் குறிப்புகள் மற்றும் தொடர்புடைய பட்டியல்களை முட்டாள்தனமான குறிப்புகளில் படிக்க பயன்பாட்டை அனுமதிக்கிறது</string>
     <string name="lists">பட்டியல்கள்</string>
