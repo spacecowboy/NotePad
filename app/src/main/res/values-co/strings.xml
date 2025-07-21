@@ -107,7 +107,7 @@
     <string name="unavailable_chose_directory">Indispunibule. Prima, ci vole à sceglie un cartulare</string>
     <string name="not_selected_yet">Ùn hè ancu selezziunatu</string>
     <string name="enable_sync">Attivà a sincrunizazione</string>
-    <string name="enable_sync_desc">Permette e funzioni di sincrunizazione è di sceglie una fonte cù quelle sincrunizassi. E salvaguardie ùn sò micca tocche.</string>
+    <string name="enable_sync_desc">Permette e funzioni di sincrunizazione è di sceglie una fonte cù quelle sincrunizassi. E salvaguardie ùn sò micca tocche</string>
     <string name="changelog_online">Lista di i cambiamenti (in linea)</string>
     <string name="canceled_note_locked">Abbandunatu : a nota hè ammarchjunata</string>
     <string name="order_notes_by">Ordinà e note da :</string>
@@ -193,7 +193,7 @@
     <string name="sound">Suneria</string>
     <string name="vibrate">Vibradore</string>
     <string name="reminders">Ramenti</string>
-    <string name="standard">Classicu</string>
+    <string name="standard">Nurmale</string>
     <string name="notification_prio_high">Alta : in altu, allargata</string>
     <string name="notification_prio_low">Bassa : piattata, minimizata</string>
     <string name="priority">Priurità</string>
