@@ -1,6 +1,6 @@
 NoNonsense Notes v7.2.0
 
-Generalità :
+Generalità:
 - Messa à livellu di e traduzzioni impieghendu Weblate
 - Aghjuntu di l’incaricu d’Android 15 (API 35)
-- Accunciamentu minore di a pagina di « cronolugia di nota »
+- Accunciamentu minore di a pagina di «cronolugia di nota»

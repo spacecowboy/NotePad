@@ -1,7 +1,7 @@
 Appiecazione libera di fuglittaghju è di lista di cose à fà impieghendu l’ultime tecnolugie Android
 
 * Adopru pussibule di Dash clock (chì funziuneghja sempre)
-* Nutificazioni : definizione di ramenti à un’ora particulare, cù una ripetizione ozzionale per certi ghjorni di a settimana
+* Nutificazioni: definizione di ramenti à un’ora particulare, cù una ripetizione ozzionale per certi ghjorni di a settimana
 * Selezzione di a lingua preferita
 * Oggettu graficu, cù adopru pussibule di u screnu d’ammarchjunata, ridimensionevule è chì si pò cunfigurà
 * Prutezzione di e note impurtante cù una parolla d’intesa
