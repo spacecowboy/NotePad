@@ -1,0 +1,5 @@
+v5.7.1: NoNonsense Notes
+
+Generalità :
+- Currege a sincrunizazione Google Tasks
+- Currege un prublema chì squasseria tutte e note durante a sincrunizazione Google Tasks.
