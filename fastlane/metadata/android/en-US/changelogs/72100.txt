@@ -1,0 +1,7 @@
+NoNonsense Notes v7.2.1
+
+Highlights:
+- updated dependencies
+- added new languages
+- updated translations using Weblate
+- added the required backup file name in the import error message
