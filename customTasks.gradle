@@ -84,8 +84,19 @@ tasks.register('checkFastlane') {
         File flDir = new File(projectDir, "fastlane/metadata/android")
 
         for (File langSubDir : flDir.listFiles()) {
-            // check that each sub-folder has the 3 mandatory files
 
+            // the Google Play Store only accepts some languages for the store description.
+            // therefore some locales cannot exist in fastlane, or it will crash.
+            // Venetian (vec) can exist, even though it is not a valid Play Store language.
+            // But Corsican (co) can not exist. Here we fail the check if invalid languages
+            // are used in fastlane folders.
+            String[] forbiddenPlayStoreLocales = [ 'co' ]
+            String localeBeingTested = langSubDir.getName()
+            if (Arrays.asList(forbiddenPlayStoreLocales).contains(localeBeingTested)) {
+                throw new GradleException(localeBeingTested+" is not accepted by fastlane")
+            }
+
+            // check that each sub-folder has the 3 mandatory files
             var onlyTxtFilesFilter = new FilenameFilter() {
                 @Override
                 boolean accept(File dir, String fname) {
