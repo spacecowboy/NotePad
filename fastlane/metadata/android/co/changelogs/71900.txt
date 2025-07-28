@@ -1,6 +1,0 @@
-NoNonsense Notes v7.1.9
-
-Generalità:
-- Traduzzioni impieghendu Weblate
-- messa à livellu di e dipendenze è «gradle»
-- currezzione d’un prublema chì face smarisce tutte e note quand’ella s’impiegha a classificazione per data, fighjate #525
