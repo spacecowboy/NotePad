@@ -10,7 +10,7 @@ bigger screens.
 ```mermaid
 graph TD
     A[Main view] -->|swipe right| B(Drawer menu)
-    B --> C{Choose \n action}
+    B --> C{Choose action}
     C -->|1 of 3 lists on top| D[fa:fa-list abstract view]
     C -->|long press a list| E[edit dialog]
     C -->|press a list| F[show list]
@@ -317,6 +317,13 @@ You have to:
 
 With that you have the minimal view shown in the picture. You can click the note to open a page to
 edit it. To re-configure the widget, you will have to delete it and make a new one.
+
+## Emoji tags 🏷️
+
+You can use emojis as tags. Use the emoji panel on your keyboard app to write an emoji on a note.
+When you search the emoji, only notes that contain it will appear in the results.
+You have complete controls on what tags you use for finance 💵, purchases 🛒, medical ⚕️, ideas 💭, and so on.
+These tags are easy to add, remove and combine as you see fit.
 
 ## Learn more
 
