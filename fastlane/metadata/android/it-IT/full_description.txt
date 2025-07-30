@@ -9,6 +9,7 @@ Aggiornata per supportare la Android 13, quest'applicazione open source vanta le
 * Liste dove si possono riordinare a piacere le note
 * Integrazione con il widget Android Agenda
 * Ricerca tra le note
+* Usa le emoji come tag 🏷️
 * Disponibili temi chiari e scuri
 * Importazione & esportazione delle note su file JSON
 * Sincronizzazione con file ORG nella memoria locale
