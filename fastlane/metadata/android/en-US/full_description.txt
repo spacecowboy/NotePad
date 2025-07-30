@@ -9,6 +9,7 @@ Open source notepad and to-do list app using the latest Android technologies.
 * Drag to reorder tasks
 * Integration with Android Agenda widget
 * Search
+* Use emojis as tags 🏷️
 * Light and dark themes
 * Back up (import and export) notes to a JSON file
 * Sync with an ORG file on the local storage
