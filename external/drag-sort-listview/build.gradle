@@ -22,29 +22,29 @@ tasks.withType(Javadoc).configureEach {
 }
 
 android {
-    compileSdk 36
-    namespace "com.mobeta.android.dslv"
+    compileSdk = 36
+    namespace = "com.mobeta.android.dslv"
 
     defaultConfig {
-        targetSdk 35
+        targetSdk = 35
         minSdkVersion 23
     }
 
     lint {
-        htmlReport false
-        textReport false
-        abortOnError false
-        explainIssues true
-        checkTestSources true
+        htmlReport = false
+        textReport = false
+        abortOnError = false
+        explainIssues = true
+        checkTestSources = true
         // turn off checking the given issue id's
         // disable += ['RtlHardcoded', 'MissingSuperCall']
     }
 
     compileOptions {
         // enable support for new language APIs in old devices
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled = true
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     sourceSets {

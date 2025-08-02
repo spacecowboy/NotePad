@@ -19,28 +19,28 @@ apply plugin: 'com.android.application'
 // apply plugin: 'kotlin-android' we don't use kotlin for this app
 
 android {
-    compileSdk 36
-    namespace "com.nononsenseapps.notepad" // for R.*
+    compileSdk = 36
+    namespace = "com.nononsenseapps.notepad" // for R.*
 
     buildFeatures {
-        buildConfig true
+        buildConfig = true
         // replaces part of the androidannotations library. See mBinding in java classes
-        viewBinding true
+        viewBinding = true
         // allow declaring different string resources for different buildTypes
-        resValues true
+        resValues = true
         // these features are useless for us
-        compose false
-        aidl false
-        renderScript false
-        shaders false
+        compose = false
+        aidl = false
+        renderScript = false
+        shaders = false
     }
 
     lint {
-        htmlReport false // TODO re-enable and fix all warnings reported in the html file
-        textReport false
-        abortOnError false
-        explainIssues true
-        checkTestSources true
+        htmlReport = false // TODO re-enable and fix all warnings reported in the html file
+        textReport = false
+        abortOnError = false
+        explainIssues = true
+        checkTestSources = true
         // turn off checking the given issue id's
         disable += ['RtlHardcoded', 'ApplySharedPref']
     }
@@ -103,9 +103,9 @@ android {
             applicationIdSuffix ".debug"
             versionNameSuffix "-Debug"
 
-            minifyEnabled false
-            shrinkResources false
-            pseudoLocalesEnabled true
+            minifyEnabled = false
+            shrinkResources = false
+            pseudoLocalesEnabled = true
             // TODO test https://developer.android.com/guide/topics/resources/pseudolocales
             // just to make gradle shut up about missing classes
             proguardFiles 'proguard.pro'
@@ -119,7 +119,7 @@ android {
 
             // enable R8
             minifyEnabled true
-            shrinkResources true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
             if (project.hasProperty('STORE_FILE')) {
                 signingConfig signingConfigs.release
@@ -136,7 +136,7 @@ android {
             versionNameSuffix "-Play"
             // enable R8
             minifyEnabled true
-            shrinkResources true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
             if (project.hasProperty('STORE_FILE')) {
                 signingConfig signingConfigs.release
@@ -155,12 +155,12 @@ android {
 
     testOptions {
         // androidx espresso tests require this
-        animationsDisabled true
+        animationsDisabled = true
     }
 
     compileOptions {
         // enable support for new language APIs in old devices
-        coreLibraryDesugaringEnabled true
+        coreLibraryDesugaringEnabled = true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }

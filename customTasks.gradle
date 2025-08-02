@@ -6,8 +6,8 @@ tasks.register('checkLanguages') {
     // TODO Feeder has a better version of this, but you need to change the locales code. See:
     //  https://gitlab.com/spacecowboy/Feeder/-/blob/master/app/build.gradle.kts#L344
 
-    group 'NoNonsenseNotes custom'
-    description 'Ensure all languages in res/values-*/strings.xml are selectable in the spinner'
+    group = 'NoNonsenseNotes custom'
+    description = 'Ensure all languages in res/values-*/strings.xml are selectable in the spinner'
 
     var readFromFolders = () -> {
         // Read res/values/ folders, add their codes to localesInFolders
@@ -76,8 +76,8 @@ tasks.register('checkFastlane') {
     // stores. This function checks if the 'fastlane/' sub-directories are
     // configured correctly
 
-    group 'NoNonsenseNotes custom'
-    description 'Ensure all languages in fastlane/metadata/android folders are configured correctly'
+    group = 'NoNonsenseNotes custom'
+    description = 'Ensure all languages in fastlane/metadata/android folders are configured correctly'
 
     doLast {
         // folder containing all languages sub-directories
