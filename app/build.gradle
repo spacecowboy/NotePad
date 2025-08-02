@@ -186,6 +186,9 @@ dependencies {
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.startup:startup-runtime:1.2.0"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    // the logcat complained once because we didn't have this
+    implementation 'androidx.tracing:tracing:1.3.0'
+    // pretty widgets
     implementation 'com.google.android.material:material:1.12.0'
     // Time library, open source & up to date
     implementation 'joda-time:joda-time:2.14.0'
@@ -206,12 +209,12 @@ dependencies {
     implementation "org.androidannotations:androidannotations-api:4.8.0"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     // Tests libraries
-    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
-    androidTestImplementation 'androidx.test:rules:1.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.6.1'
-    androidTestImplementation "androidx.test.espresso:espresso-intents:3.6.1"
-    androidTestUtil "androidx.test.services:test-services:1.5.0"
+    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.7.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.7.0'
+    androidTestImplementation "androidx.test.espresso:espresso-intents:3.7.0"
+    androidTestUtil "androidx.test.services:test-services:1.6.0"
     // no kotlin!
     // implementation "org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
 }
