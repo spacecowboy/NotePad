@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.ui.TitleNoteTextView;
@@ -34,7 +35,8 @@ public class TestPasswords extends BaseTestClass {
 		EspressoHelper.createNoteWithName(fullNoteText1);
 		EspressoHelper.navigateUp();
 
-		onView(withText(fullNoteText1)).perform(click());
+		onView(withText(equalToIgnoringCase(fullNoteText1))).check(matches(isDisplayed()));
+		onView(withText(equalToIgnoringCase(fullNoteText1))).perform(click());
 		openContextualActionModeOverflowMenu();
 
 		String MENU_TEXT = getStringResource(R.string.lock_note);
@@ -66,7 +68,8 @@ public class TestPasswords extends BaseTestClass {
 				.perform(click());
 
 		// the note on the (custom) edittext should appear correctly
-		onView(withId(R.id.taskText)).check(matches(withText(fullNoteText1)));
+		onView(withId(R.id.taskText))
+				.check(matches(withText(equalToIgnoringCase(fullNoteText1))));
 		EspressoHelper.navigateUp();
 
 		// in the list view, only the title is shown
