@@ -1,9 +1,9 @@
 # No Nonsense Notes app tutorial
 
-Over time, this app developed to be its own thing, so it can feel disorientating for new users. This
-document will explain every unintuitive feature of the app, to turn you into a pro in no time!
-This guide is written for the phone layout. The tablet layout is a bit different, it's optimized for
-bigger screens.
+Over time, this app developed to be its own thing, so it can feel disorienting for new users. 
+
+This document will explain every unintuitive feature of the app, to turn you into a pro in no time!
+This guide is written for the phone layout. The tablet layout is a bit different.
 
 ## Summary
 
@@ -11,14 +11,32 @@ bigger screens.
 graph TD
     A[Main view] -->|swipe right| B(Drawer menu)
     B --> C{Choose action}
-    C -->|1 of 3 lists on top| D[fa:fa-list abstract view]
-    C -->|long press a list| E[edit dialog]
+    C -->|1 of 3 lists on top| D[fa:fa-list set an abstract view]
+    C -->|long press a list| E[edit dialog for note lists]
     C -->|press a list| F[show list]
-    C -->|fa:fa-folder button| G[add list]
+    C -->|fa:fa-folder folder button| G[add a new list]
 
     A --> H[fa:fa-dots overflow menu]
-    H --> I[fa:fa-archive archive view]
-    H --> |clear completed| J[send completed \n notes to archive]
+    H --> |view archive| I[fa:fa-archive see a list of all deleted notes]
+    H --> |clear completed| J[send completed notes to archive]
+
+    A --> |tap + | K[note detail page]
+    A --> |tap a note | K
+    K --> |use the back button or gesture| L[the note is automatically saved]
+    L --> A
+    K --> |overflow menu| M[note history]
+
+    M --> |drag the line| N[see an old version of the note]
+    N --> |press DONE| O[restore the old version of the note]
+    O --> K
+
+    K --> |press the checkbox| P[mark the note as completed, for your own convenience]
+    K --> |press the dropdown menu| Q[choose a due date]
+    Q --> |X button| R[remove the due date]
+
+    K --> |add a reminder| S[a new panel appears, to configure the reminder: date, hour, repeating week days and X to delete it]
+
+    
 
 %% comment: you should finish this chart
 %% https://mermaid.live/ is very helpful
@@ -33,8 +51,8 @@ graph TD
 
 Here you see:
 
-* all your lists: you can swipe left and right to navigate between them
-* 2 tasks, ordered by due date: the 2° one is "completed" or "done"
+* 3 note lists (Next 5 days, Agenda, Ideas): you can swipe left and right to navigate between them
+* 2 tasks, ordered by due date: the 2° one is marked as "completed"
 * the due date of each task, in the corner on the right
     * you can choose how it is displayed
 * a `+` button to create a new note
@@ -42,7 +60,7 @@ Here you see:
     * it supports voice search
     * if you type, you get suggestions. click on one to open that note
 * the hamburger menu `☰` which can open the drawer menu on the left
-* the 3 dots menu `⋮` which has many options
+* the overflow menu `⋮` which has many options
     * "Sync" forces an update of the files on the SD card
     * archive opens the "deleted tasks page", also called "note archive"
     * "clear completed" can delete all tasks marked as completed from the current list only
@@ -54,13 +72,13 @@ Here you see:
 
 Here you see:
 
-* the "folder+" icon on the action bar: press it to create a new list
+* the `📁+` icon on the action bar: press it to create a new list
 * the "tasks" section, which has 3 views that you can use to quickly see some of your notes
     * For example, click "today" to see tasks due today
     * hold your finger on one of those 3 items to select it as default view
         * it will be always on the left of every other list
-        * in the 1° photo you saw that I choose "next 5 days" as my default view
-* the "lists" section has all the note lists you made
+        * in the first image you saw "next 5 days" as the default view
+* the "lists" section has all the note lists you created
     * Since "agenda" has 4 un-checked (incomplete) tasks, you see "4" next to it
     * hold your finger on one of those lists to open a popup to edit it
 
@@ -70,11 +88,13 @@ Here you see:
 
 In this dialog you can:
 
-* choose any name for the list
-    * They are sorted alphabetically. If you want it to appear first, put a `_`, like "_zebra"
+* choose a name for the list
+    * They are sorted alphabetically
+    * If you want it to appear first, put a `_`, like "_zebra"
+    * I name my lists `1 Ideas`, `2 Useless` and `3 Agenda` to get a custom order
 * set one list as default
     * the app will open on that list
-    * links you share to this app from your browser will go into this list
+    * links you share to this app from your web browser will go into this list
 * choose how notes are ordered on this list in particular
     * "latest updated" shows first the notes that you edited more recently
     * "due date" also groups the notes by week, month and year
@@ -102,8 +122,9 @@ Here you can:
 
 Here you can see all our settings. They are laid out linearly. I recommend checking all of them, but
 in particular the **notification settings**, where you can customize the behavior of notifications
-and bypass some android design flaws to **make reminders appear more reliably**. The **backup**
-settings are also very useful: you can save the notes as a json file, and restore them if you
+and bypass some android design flaws to **make reminders appear more reliably**. 
+
+The **backup** settings are also useful: you can save the notes as a json file, and restore them if you
 re-install the app even on another phone.
 
 ### The task detail panel
@@ -143,7 +164,7 @@ Here you can:
 
 Here you can:
 
-* drag the indicator to see all previous version of the note. Only the ones that you saved
+* drag the indicator to see all previous version of the note (but only the ones that you saved)
 * press "cancel" to undo and go back
 * find a version you like, press "done", and overwrite the current note with that content
 
@@ -214,9 +235,9 @@ them by mistake and find it irritating.
 
 ### Backups
 
-Since this app can export all the notes as a json file, you can elaborate them on a computer. For
-example, the following is a short script that outputs the content of a list as a plain text file
-with a list of links:
+Since this app can export all the notes as a json file, you can elaborate them on a computer.
+
+The following is a short powershell script that outputs the content of a list as a plain text file with a list of links:
 
 ```powershell
 $json = Get-Content D:\Desktop\NoNonsenseNotes_Backup.json | ConvertFrom-Json 
