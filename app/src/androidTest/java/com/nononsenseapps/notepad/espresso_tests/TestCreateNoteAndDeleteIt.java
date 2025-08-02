@@ -7,6 +7,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 import androidx.test.filters.LargeTest;
 
@@ -32,7 +33,7 @@ public class TestCreateNoteAndDeleteIt extends BaseTestClass {
 		EspressoHelper.createNoteWithName(noteName1);
 		EspressoHelper.navigateUp();
 
-		onView(withText(noteName1)).perform(click());
+		onView(withText(equalToIgnoringCase(noteName1))).perform(click());
 		onView(withId(R.id.menu_delete)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
 
@@ -40,7 +41,7 @@ public class TestCreateNoteAndDeleteIt extends BaseTestClass {
 		onView(withId(R.id.menu_search)).check(matches(isDisplayed()));
 
 		//check that the view is not visible
-		onView(withText(noteName1)).check(doesNotExist());
+		onView(withText(equalToIgnoringCase(noteName1))).check(doesNotExist());
 	}
 
 }

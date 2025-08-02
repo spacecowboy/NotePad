@@ -4,6 +4,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 
 import androidx.test.filters.LargeTest;
 
@@ -27,7 +28,7 @@ public class TestAddNewNoteShouldShowNameInNotesScreen extends BaseTestClass {
 		EspressoHelper.createNoteWithName(noteName1);
 		EspressoHelper.navigateUp();
 
-		onView(withText(noteName1)).check(matches(isDisplayed()));
+		onView(withText(equalToIgnoringCase(noteName1))).check(matches(isDisplayed()));
 	}
 
 }

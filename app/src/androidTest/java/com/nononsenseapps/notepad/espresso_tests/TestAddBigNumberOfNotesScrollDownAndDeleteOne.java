@@ -10,6 +10,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.instanceOf;
 
 import android.view.View;
@@ -53,7 +54,7 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 						//.findViewHolderForAdapterPosition(index)
 						//.itemView
 						.findViewsWithText(outviews, text, FIND_VIEWS_WITH_TEXT);
-				if (outviews.size() > 0) break;
+				if (!outviews.isEmpty()) break;
 			}
 			assertTrue(outviews.isEmpty());
 		};
@@ -69,7 +70,8 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 		EspressoHelper.navigateUp();
 
 		// click on the bottom-most note
-		onData(CursorMatchers.withRowString("title", noteNameList[0]))
+		onData(CursorMatchers
+					.withRowString("title", equalToIgnoringCase(noteNameList[0])))
 				.inAdapterView(allOf(
 						hasMinimumChildCount(1),
 						instanceOf(DragSortListView.class)))

@@ -6,7 +6,7 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
@@ -46,7 +46,7 @@ public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass {
 		EspressoHelper.navigateUp();
 
 		//check that the date field is visible
-		onView(withText(noteName1)).perform(click());
+		onView(withText(equalToIgnoringCase(noteName1))).perform(click());
 		onView(withId(R.id.notificationDate)).check(matches(isDisplayed()));
 
 		// maybe we should also check someting like

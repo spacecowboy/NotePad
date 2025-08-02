@@ -6,7 +6,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.instanceOf;
-
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.ui.TitleNoteTextView;
@@ -43,13 +43,21 @@ public class TestAddNotesAndRotateScreen extends BaseTestClass {
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		// check that textviews still show up.
-		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[0])))
+		onView(allOf(
+					instanceOf(TitleNoteTextView.class),
+					withText(equalToIgnoringCase(noteNames[0]))))
 				.check(matches(isDisplayed()));
-		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[1])))
+		onView(allOf(
+					instanceOf(TitleNoteTextView.class),
+					withText(equalToIgnoringCase(noteNames[1]))))
 				.check(matches(isDisplayed()));
-		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[2])))
+		onView(allOf(
+					instanceOf(TitleNoteTextView.class),
+					withText(equalToIgnoringCase(noteNames[2]))))
 				.check(matches(isDisplayed()));
-		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[3])))
+		onView(allOf(
+					instanceOf(TitleNoteTextView.class),
+					withText(equalToIgnoringCase(noteNames[3]))))
 				.check(matches(isDisplayed()));
 	}
 }

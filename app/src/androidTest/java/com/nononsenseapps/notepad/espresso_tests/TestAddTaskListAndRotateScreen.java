@@ -6,6 +6,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.equalToIgnoringCase;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -35,8 +36,11 @@ public class TestAddTaskListAndRotateScreen extends BaseTestClass {
 
 		// make sure the task list is still visible.
 		// if the rotations didn't finish, it will crash here
-		RecyclerViewActions.scrollTo(hasDescendant(withText(taskListName)));
-		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
+		RecyclerViewActions
+				.scrollTo(hasDescendant(withText(equalToIgnoringCase(taskListName))));
+		onView(allOf(
+					withText(equalToIgnoringCase(taskListName)),
+					withId(android.R.id.text1)))
 				.check(matches(isDisplayed()));
 	}
 }

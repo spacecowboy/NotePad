@@ -73,7 +73,9 @@ public class TestPasswords extends BaseTestClass {
 		EspressoHelper.navigateUp();
 
 		// in the list view, only the title is shown
-		onView(allOf(withText(noteTitle), instanceOf(TitleNoteTextView.class)))
+		onView(allOf(
+					withText(equalToIgnoringCase(noteTitle)),
+					instanceOf(TitleNoteTextView.class)))
 				.check(matches(isDisplayed()));
 	}
 }

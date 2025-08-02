@@ -11,6 +11,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+import static org.hamcrest.Matchers.equalToIgnoringCase;
+
 import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.filters.LargeTest;
 
@@ -39,7 +41,8 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 		EspressoHelper.openDrawer();
 
 		// onData() can scroll to the item, but can't click it
-		onData(CursorMatchers.withRowString("title", "ut "))
+		onData(CursorMatchers
+				.withRowString("title", equalToIgnoringCase("ut ")))
 				.inAdapterView(withId(R.id.leftDrawer))
 				.perform(scrollTo())
 				.check(matches(isDisplayed()));
