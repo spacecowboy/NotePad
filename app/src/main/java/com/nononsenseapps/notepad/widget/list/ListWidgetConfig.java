@@ -307,8 +307,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 					// if user does not want to also show completed tasks in widget, the query
 					// will filter away database records with a "completed" unix time
 					listWhere = isShowingCompleted
-							? Task.Columns.DBLIST + " IS ?"
-							: Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED + " IS NULL";
+							? "CAST(" + Task.Columns.DBLIST + " AS INTEGER) IS ?"
+							: "CAST(" + Task.Columns.DBLIST + " AS INTEGER) IS ? AND " + Task.Columns.COMPLETED + " IS NULL";
 				} else {
 					// all list ids
 					listArg = null;
