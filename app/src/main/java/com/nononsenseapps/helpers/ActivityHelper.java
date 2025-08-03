@@ -71,6 +71,11 @@ public final class ActivityHelper {
 		Configuration config = context.getResources().getConfiguration();
 
 		String lang = prefs.getString(context.getString(R.string.pref_locale), "");
+		if (lang.isEmpty()) {
+			// usually the user doesn't use a custom language, avoid running useless code
+			return;
+		}
+
 		boolean localeExists = Arrays.asList(Locale.getISOLanguages()).contains(lang);
 		if (!localeExists) {
 			NnnLogger.warning(ActivityHelper.class,
