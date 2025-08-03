@@ -48,7 +48,9 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 				.check(matches(isDisplayed()));
 
 		// onView() can click on the item, but can't scroll to it
-		onView(allOf(withText("ut "), withId(android.R.id.text1)))
+		onView(allOf(
+					withText(equalToIgnoringCase("ut ")),
+					withId(android.R.id.text1)))
 				.perform(click());
 
 		EspressoHelper.openDrawer();

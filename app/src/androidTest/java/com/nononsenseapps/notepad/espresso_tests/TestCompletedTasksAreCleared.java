@@ -14,6 +14,8 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.PerformException;
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
@@ -64,7 +66,11 @@ public class TestCompletedTasksAreCleared extends BaseTestClass {
 	 */
 	private void clickCheckBoxAt(int position) {
 		// the keyboard may cover the notes, which makes the next lines crash!
-		onView(isRoot()).perform(closeSoftKeyboard());
+		try {
+			Espresso.closeSoftKeyboard();
+		} catch (PerformException ignored) {
+			// keyboard was already closed
+		}
 		DataInteraction di = onData(anything())
 				.inAdapterView(allOf(withId(android.R.id.list), hasChildCount(5)))
 				.atPosition(position)
