@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.activities.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -34,10 +35,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -190,10 +193,19 @@ public class ActivityMain extends AppCompatActivity
 		return true;
 	}
 
+	/**
+	 * Need a reference to close it when pressing the back button
+	 */
+	MenuItem mSearchViewMenuItem;
+
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
 		menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
+
+		// save a reference so we can close it when pressing the back button
+		mSearchViewMenuItem = menu.findItem(R.id.menu_search);
+
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -407,6 +419,14 @@ public class ActivityMain extends AppCompatActivity
 		// Sync if appropriate
 		OrgSyncService.start(this);
 
+		// Android 13 enforces a more complicated way to call the back button handler
+		getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+			@Override
+			public void handleOnBackPressed() {
+				newOnBackPressed();
+			}
+		});
+
 		// keep showing the popup to ask for notification permissions on startup.
 		// The callback function doesn't matter. Android will stop showing it if
 		// the user denies the permission twice.
@@ -424,11 +444,21 @@ public class ActivityMain extends AppCompatActivity
 		OrgSyncService.stop(this);
 	}
 
-	@Override
-	public void onBackPressed() {
+	/**
+	 * Updated for android 13+
+	 */
+	void newOnBackPressed() {
 		if (drawerLayout.isDrawerOpen(leftDrawer)) {
 			// close the drawer on the left if it's open
 			drawerLayout.closeDrawer(leftDrawer, mShouldAnimate);
+			return;
+		}
+
+		// If search view is expanded, collapse it instead of closing the activity
+		SearchView mSearchVi = (SearchView) mSearchViewMenuItem.getActionView();
+		if (mSearchVi != null && !mSearchVi.isIconified()) {
+			mSearchViewMenuItem.collapseActionView();
+			invalidateOptionsMenu();
 			return;
 		}
 
@@ -439,7 +469,12 @@ public class ActivityMain extends AppCompatActivity
 			setIntent(new Intent(this, ActivityMain_.class));
 		}
 
-		super.onBackPressed();
+		// replicate super.onBackPressed() behavior
+		if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+			getSupportFragmentManager().popBackStack();
+		} else {
+			finish();
+		}
 	}
 
 	@Override
