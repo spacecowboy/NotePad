@@ -93,7 +93,7 @@ public class ShortcutConfig extends AppCompatActivity {
 					NnnLogger.error(ShortcutConfig.class, "Unexpected null in listName in ShortcutConfig.java");
 				}
 
-				shortcutTitle = listName + " - " + ShortcutConfig.this.getString(R.string.title_create);
+				shortcutTitle = ShortcutConfig.this.getString(R.string.title_create) + " - " + listName;
 
 				intent.setClass(ShortcutConfig.this, ActivityMain_.class)
 						.setData(Task.URI)
