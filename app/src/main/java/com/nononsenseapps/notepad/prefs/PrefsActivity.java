@@ -21,6 +21,7 @@ import android.app.backup.BackupManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -80,6 +81,21 @@ public class PrefsActivity extends AppCompatActivity implements
 						"unexpected numActiveFrags = " + numActiveFrags);
 			}
 		});
+
+		// when pressing the physical back button, navigate between fragments by removing the
+		// subtitle
+		getOnBackPressedDispatcher().addCallback(this,
+				new OnBackPressedCallback(true) {
+					@Override
+					public void handleOnBackPressed() {
+						// replicate super.onBackPressed() behavior
+						if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+							getSupportFragmentManager().popBackStack();
+						} else {
+							finish();
+						}
+					}
+				});
 	}
 
 	/**
@@ -140,7 +156,7 @@ public class PrefsActivity extends AppCompatActivity implements
 			// To get a consistent behavior, both pressing "back" and clicking the Up arrow
 			// will navigate back, so if a preference category is shown, pressing the Up
 			// button won't close the settings, it will go back to the Index
-			super.onBackPressed();
+			getOnBackPressedDispatcher().onBackPressed();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
