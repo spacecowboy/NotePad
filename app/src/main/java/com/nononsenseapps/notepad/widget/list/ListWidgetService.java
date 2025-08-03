@@ -89,7 +89,9 @@ public class ListWidgetService extends RemoteViewsService {
 			// Get widget settings
 			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
 			if (!widgetPrefs.isPresent()) {
-				return null;
+				// basically "return null", but that started crashing reccently,
+				// so we return an empty meaningless view
+				return new RemoteViews(mContext.getPackageName(), R.layout.widgetlist_header);
 			}
 
 			// load date formatter if not present
