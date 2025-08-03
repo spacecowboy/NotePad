@@ -23,7 +23,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 import com.nononsenseapps.helpers.NnnLogger;
@@ -162,13 +161,7 @@ public abstract class DAO {
 			if (colName.equals(exceptCol2)) {
 				result.append("'").append(asValue2).append("'");
 			} else if (colName.equals(exceptCol3)) {
-				if (colName.equals("dblist")) {
-					// values of dblist must be INTEGERs in SQLite
-					result.append(asValue3);
-				} else {
-					NnnLogger.error(DAO.class, "Unexpected column: " + colName);
-					result.append("'").append(asValue3).append("'");
-				}
+				result.append("'").append(asValue3).append("'");
 			} else if (colName.equals(exceptCol1)) {
 				result.append(asValue1);
 			} else {
