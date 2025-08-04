@@ -69,7 +69,7 @@ android {
         targetSdkVersion 36
 
         // most people have at least android 7.1 anyway: https://apilevels.com/
-        // 90% of users are on API>=27 => don't write special code for 23<=API<=26, it's worthless
+        // 93% of users are on API>=27 => don't write special code for 23<=API<=26, it's worthless
         minSdkVersion 23
 
         // If these values remain static, incremental builds are optimized and faster.

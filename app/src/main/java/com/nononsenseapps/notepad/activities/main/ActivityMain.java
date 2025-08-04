@@ -454,16 +454,11 @@ public class ActivityMain extends AppCompatActivity
 			return;
 		}
 
-		if (mSearchViewMenuItem != null) {
-			// If search view is expanded, collapse it instead of closing the activity
-			SearchView mSearchVi = (SearchView) mSearchViewMenuItem.getActionView();
-			if (mSearchVi != null && !mSearchVi.isIconified()) {
-				mSearchViewMenuItem.collapseActionView();
-				invalidateOptionsMenu();
-				return;
-			}
-		} else {
-			// cannot fetch the searchview. Therefore, don't try to close it
+		// If search view is expanded, collapse it instead of closing the activity
+		if (mSearchViewMenuItem != null && mSearchViewMenuItem.isActionViewExpanded()) {
+			mSearchViewMenuItem.collapseActionView();
+			invalidateOptionsMenu();
+			return;
 		}
 
 		// Reset intent so we get proper fragment handling when the stack pops
