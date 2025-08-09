@@ -213,6 +213,8 @@ public class FragmentSearch extends Fragment {
 				null,
 				new String[] { Task.Columns.TITLE, Task.Columns.NOTE, Task.Columns.DUE,
 						Task.Columns.COMPLETED, Task.Columns.LEFT, Task.Columns.RIGHT },
+				// in tasklist_idem_card_selection.xml, the due date is displayed in a DateView
+				// with ID = "date", so here Task.Columns.DUE is bound to R.id.date
 				new int[] { android.R.id.text1, android.R.id.text1, R.id.date, R.id.checkbox,
 						R.id.drag_handle, R.id.dragpadding },
 				0);
@@ -242,7 +244,7 @@ public class FragmentSearch extends Fragment {
 				// Matches order in Task.Columns.Fields
 				case 1 -> {
 					// Title
-					String sTemp = c.getString(colIndex);
+					String sTemp = c.getString(1);
 
 					// Set height of text for non-headers
 					if (rowCount == 1) {
@@ -266,8 +268,21 @@ public class FragmentSearch extends Fragment {
 					}
 					return true;
 				}
+				case 4 -> {
+					// DateView
+					if (!c.isNull(4)) {
+						// there IS a due date saved in the dabase for this note
+						long dueDate = c.getLong(4);
+						((com.nononsenseapps.ui.DateView) view).setTimeText(dueDate);
+						view.setVisibility(View.VISIBLE);
+					} else {
+						// visibility of the DateView defaults to GONE
+						// in tasklist_idem_card_selection.xml
+					}
+					return true;
+				}
 				default -> {
-					// Checkbox
+					// Checkbox, DragGripView, DragPadding; as defined in getAdapter() in this file
 					view.setVisibility(View.GONE);
 					return true;
 				}

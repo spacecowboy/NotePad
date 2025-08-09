@@ -18,6 +18,7 @@
 package com.nononsenseapps.helpers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.preference.PreferenceManager;
 
@@ -182,8 +183,7 @@ public final class TimeFormatter {
 				context.getString(R.string.dateformat_just_date));
 	}
 
-	public static SimpleDateFormat getLocalFormatterLongDateOnly(
-			final Context context) {
+	public static SimpleDateFormat getLocalFormatterLongDateOnly(final Context context) {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
@@ -211,18 +211,21 @@ public final class TimeFormatter {
 				withSuitableTime(context, userDateFormat)); // <-- notice this
 	}
 
+	/**
+	 * Returns the format chosen by the user to show dates in the list view. For example,
+	 * a timestamp 1754752027 could be displayed as "sat 9 aug 2025" or "sat, 9 aug"
+	 */
 	public static SimpleDateFormat getLocalFormatterShortDateOnly(final Context context) {
-		return getLocalFormatter(
-				context,
-				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		String userFavLocale = pref.getString(context.getString(R.string.pref_locale), "");
+		String userFavShortDateFormat = pref.getString(
+				context.getString(R.string.key_pref_dateformat_short),
+				context.getString(R.string.dateformat_short_2));
+
+		return getLocalFormatter(context, userFavLocale,
 				withSuitableDateOnly( // <-- notice this!
-						context,
-						PreferenceManager
-								.getDefaultSharedPreferences(context)
-								.getString(
-										context.getString(R.string.key_pref_dateformat_short),
-										context.getString(R.string.dateformat_short_1))));
+						context, userFavShortDateFormat));
 	}
 
 	public static SimpleDateFormat getLocalFormatterMicro(final Context context) {
