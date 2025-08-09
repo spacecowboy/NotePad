@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         # test on emulators with these Android API versions. They all have ATD images.
-        api-level: [ 30, 32, 34, 36 ]
+        api-level: [ 30, 32, 34, 35 ]
         # use stripped-down, test-friendly Android OS images without, or with, google apps
         target: [ aosp_atd, google_atd ]
         # profile: [ 5.1in WVGA, 10.1in WXGA ] # tests on tablets don't work anyway...
