@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
@@ -791,13 +792,17 @@ public class Task extends DAO {
 	}
 
 	/**
+	 * A reusable background thread
+	 */
+	private static final ExecutorService mTaskExecutor = Executors.newSingleThreadExecutor();
+
+	/**
 	 * Convenience method to complete tasks in list view for example. Works in the background.
 	 */
 	public static void setCompleted(final Context context, final boolean completed,
 									final Long... ids) {
 		if (ids.length < 1) return;
-		Executors.newSingleThreadExecutor()
-				.execute(() -> setCompletedSynced(context, completed, ids));
+		mTaskExecutor.execute(() -> setCompletedSynced(context, completed, ids));
 	}
 
 	/**
