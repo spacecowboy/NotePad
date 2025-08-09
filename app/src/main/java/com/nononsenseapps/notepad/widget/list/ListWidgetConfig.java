@@ -354,9 +354,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 	}
 
 	/**
-	 * Calling {@link SimpleWidgetPreviewAdapter#notifyDataSetChanged} on {@link #mNotesAdapter}
-	 * can only refresh the views, but it doesn't change the cursor, so it can't toggle between
-	 * "do/dont show completed notes". This function can, because it updates the underlying cursor
+	 * Calling {@link SimpleWidgetPreviewAdapter#notifyDataSetChanged} on
+	 * {@link #mNotesAdapter} can only refresh the views, but it doesn't change the
+	 * cursor, so it can't toggle between "do/dont show completed notes". This function
+	 * can, because it updates the underlying cursor
 	 */
 	void reloadTasks() {
 		LoaderManager.getInstance(this).restartLoader(0, null, mCallback);

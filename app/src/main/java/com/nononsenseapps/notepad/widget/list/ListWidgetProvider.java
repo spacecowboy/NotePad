@@ -231,6 +231,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		PendingIntent openConfigPendingIntent = getThePendingIntentForActivity(configIntent, context);
 		rv.setOnClickPendingIntent(R.id.widgetConfigButton, openConfigPendingIntent);
 
+		// + button to create a new note from the widget
 		final Intent createIntent = new Intent();
 		createIntent
 				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
@@ -240,8 +241,15 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				.setData(Uri.withAppendedPath(Task.URI, "/widget/" + appWidgetId + "/-1"))
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 
-		PendingIntent createPendingIntent = getThePendingIntentForActivity(createIntent, context);
-		rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);
+		if (listId > 0) {
+			rv.setViewVisibility(R.id.createNoteButton, View.VISIBLE);
+			PendingIntent createPendingIntent = getThePendingIntentForActivity(createIntent, context);
+			rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);
+		} else {
+			// the widget is showing notes from all lists: hide the + button,
+			// because it would not find a valid list to add a note to
+			rv.setViewVisibility(R.id.createNoteButton, View.GONE);
+		}
 
 		return rv;
 	}
