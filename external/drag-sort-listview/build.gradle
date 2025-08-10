@@ -26,7 +26,7 @@ android {
     namespace = "com.mobeta.android.dslv"
 
     defaultConfig {
-        targetSdk = 35
+        targetSdk = 36
         minSdkVersion 23
     }
 
