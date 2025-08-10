@@ -40,7 +40,7 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import java.util.Objects;
 
 /**
- * The widget's AppWidgetProvider.
+ * The note-list widget's AppWidgetProvider.
  */
 public class ListWidgetProvider extends AppWidgetProvider {
 
