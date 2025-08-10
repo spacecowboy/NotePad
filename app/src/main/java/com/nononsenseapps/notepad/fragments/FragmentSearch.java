@@ -200,7 +200,7 @@ public class FragmentSearch extends Fragment {
 	 * Override to give different search behaviour
 	 */
 	protected String getSortOrder() {
-		return Task.Columns.TITLE;
+		return Task.Columns.DUE;
 	}
 
 	/**
