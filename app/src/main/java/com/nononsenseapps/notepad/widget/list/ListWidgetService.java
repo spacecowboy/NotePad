@@ -325,6 +325,10 @@ public class ListWidgetService extends RemoteViewsService {
 						: Task.Columns.COMPLETED + " IS NULL";
 			}
 
+			// TODO this is a very slow query, it takes 40 seconds. See #574. Of these, 20
+			//  can be shaved off by removing CAST() from listWhere in this function, but
+			//  that would cause notes to disappear from the list widget when sorting by
+			//  due date and showing only one note list, see #560
 			mCursor = mContext
 					.getContentResolver()
 					.query(targetUri, Task.Columns.FIELDS, listWhere, listArg, sortSpec);
