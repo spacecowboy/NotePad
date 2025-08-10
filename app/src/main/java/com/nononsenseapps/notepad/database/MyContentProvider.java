@@ -263,7 +263,6 @@ public class MyContentProvider extends ContentProvider {
 			for (Uri u : updateUris) {
 				DAO.notifyProviderOnChange(getContext(), u);
 			}
-			UpdateNotifier.updateWidgets(getContext());
 			UpdateNotifier.notifyChangeList(getContext());
 		}
 
