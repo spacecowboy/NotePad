@@ -271,7 +271,7 @@ public class FragmentSearch extends Fragment {
 				case 4 -> {
 					// DateView
 					if (!c.isNull(4)) {
-						// there IS a due date saved in the dabase for this note
+						// there IS a due date saved in the database for this note
 						long dueDate = c.getLong(4);
 						((com.nononsenseapps.ui.DateView) view).setTimeText(dueDate);
 						view.setVisibility(View.VISIBLE);

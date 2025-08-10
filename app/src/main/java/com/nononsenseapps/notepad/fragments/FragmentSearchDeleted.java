@@ -277,9 +277,21 @@ public class FragmentSearchDeleted extends FragmentSearch {
 					((TitleNoteTextView) view).setTextRest(noteContent);
 					return true;
 				}
+				case 4 -> {
+					// DateView
+					if (!c.isNull(4)) {
+						// there IS a due date saved in the database for this note
+						long dueDate = c.getLong(4);
+						((com.nononsenseapps.ui.DateView) view).setTimeText(dueDate);
+						view.setVisibility(View.VISIBLE);
+					} else {
+						// visibility of the DateView defaults to GONE
+						// in tasklist_idem_card_selection.xml
+					}
+					return true;
+				}
 				default -> {
-					// we won't show any other field of the note. Maybe it would be nice to show
-					// the due date ? But it's an archived note, so I guess the user does not care?
+					// Checkbox, DragGripView, DragPadding; as defined in getAdapter() in this file
 					view.setVisibility(View.GONE);
 					return true;
 				}
