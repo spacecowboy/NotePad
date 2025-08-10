@@ -98,13 +98,10 @@ public final class UpdateNotifier {
 		// Tell the widgets that the list items should be invalidated and refreshed!
 		// Will call onDatasetChanged in ListWidgetService, doing a new requery
 
-		// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.notes_list);
-
 		// Only update widgets that exist
 		for (int widgetId : appWidgetIds) {
 			final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
 			if (prefs.isPresent()) {
-				// TODO very slow, makes the app unresponsive when the user taps a checkbox
 				appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.notesList);
 			}
 		}
