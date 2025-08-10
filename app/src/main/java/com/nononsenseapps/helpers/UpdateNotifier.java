@@ -29,6 +29,9 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.widget.list.ListWidgetProvider;
 import com.nononsenseapps.notepad.widget.list.WidgetPrefs;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * The purpose here is to make it easy for other classes to notify that
  * something has changed in the database. Will also call update on the widgets
@@ -85,6 +88,11 @@ public final class UpdateNotifier {
 	}
 
 	/**
+	 * Runs code in a separate thread
+	 */
+	private static final ExecutorService mExecutor = Executors.newSingleThreadExecutor();
+
+	/**
 	 * Instead of doing this in a service which might be killed, simply call
 	 * this whenever something is changed in here
 	 *
@@ -95,16 +103,21 @@ public final class UpdateNotifier {
 		int[] appWidgetIds = appWidgetManager.getAppWidgetIds(
 				new ComponentName(context, ListWidgetProvider.class));
 
-		// Tell the widgets that the list items should be invalidated and refreshed!
-		// Will call onDatasetChanged in ListWidgetService, doing a new requery
-
-		// Only update widgets that exist
-		for (int widgetId : appWidgetIds) {
-			final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
-			if (prefs.isPresent()) {
-				appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.notesList);
+		// .notifyAppWidgetViewDataChanged() is a very slow function that takes 40 seconds for
+		// each list widget present in the launcher. We run it in a background thread. This way,
+		// we ensure that, when the user taps a checkbox in the app, the note is recognized as
+		// completed right away, without waiting for every list-widget to update. This fixes #574.
+		// See onDataSetChanged() in ListWidgetService.java, where the slow query is located.
+		mExecutor.execute(() -> {
+			for (int widgetId : appWidgetIds) { // Only update widgets that exist
+				final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
+				if (prefs.isPresent()) {
+					// Tell the widgets that the list items should be invalidated and refreshed!
+					// Will call onDatasetChanged in ListWidgetService, doing a new requery
+					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.notesList);
+				}
 			}
-		}
+		});
 
 	}
 }
