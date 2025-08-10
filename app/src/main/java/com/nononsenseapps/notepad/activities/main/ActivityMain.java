@@ -433,6 +433,9 @@ public class ActivityMain extends AppCompatActivity
 		if (!PermissionsHelper.hasPermissions(this, PermissionsHelper.FOR_NOTIFICATIONS))
 			this.requestPermissions(PermissionsHelper.FOR_NOTIFICATIONS,
 					PermissionsHelper.REQCODE_NOTIFICATIONS);
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		prefs.registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
