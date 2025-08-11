@@ -122,7 +122,7 @@ android {
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
             if (project.hasProperty('STORE_FILE')) {
-                signingConfig signingConfigs.release
+                signingConfig = signingConfigs.release
             }
 
             /// to install the play store and fdroid versions simultaneously, content provider
@@ -139,7 +139,7 @@ android {
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
             if (project.hasProperty('STORE_FILE')) {
-                signingConfig signingConfigs.release
+                signingConfig = signingConfigs.release
             } else {
                 println "STORE_FILE property is not set: cannot sign release build for the play store!"
             }
