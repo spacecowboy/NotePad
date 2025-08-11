@@ -1,0 +1,9 @@
+NoNonsense Notes v7.2.5
+
+Highlights:
+- finished the tutorial at https://github.com/spacecowboy/NotePad/blob/master/documents/TUTORIAL.md
+- fixed the shortcut widget for newer android versions
+- fixed bugs related to the note list widget
+- added official support for Android 16
+- improved how dates are shown in the "search results" and "archived notes" views
+- update app build infrastructure
