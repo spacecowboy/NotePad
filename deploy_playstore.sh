@@ -45,6 +45,9 @@ rm -rf fastlane/metadata/android/bs-BA \
    fastlane/metadata/android/is \
    app/src/main/res/values-is
 
+# to check if gradle actually receives the properties
+cat gradle.properties
+
 if [[ "${1:-}" == "--dry-run" ]] && [[ "${LATEST_TAG}" == "${CURRENT_VERSION}" ]]; then
   echo "${CURRENT_VERSION} is a tag but --dry-run was specified - not doing anything"
 elif [[ "${1:-}" == "--dry-run" ]] || [[ "${LATEST_TAG}" != "${CURRENT_VERSION}" ]]; then

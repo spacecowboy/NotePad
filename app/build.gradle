@@ -140,6 +140,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard.pro'
             if (project.hasProperty('STORE_FILE')) {
                 signingConfig signingConfigs.release
+            } else {
+                println "STORE_FILE property is not set: cannot sign release build for the play store!"
             }
             // This is a sorted list of fallback build types used when a dependency does not
             // include a "playStore" build type. The plugin selects the first build type available
