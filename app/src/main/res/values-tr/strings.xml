@@ -199,8 +199,8 @@
     <string name="backup_import_msg">Yedeklemeyi içe aktarın %1$s Bu, mevcut veri tabanını temizleyecektir.</string>
     <string name="backup_export_msg">Bütün notları dışa aktar%1$s?</string>
     <string name="backup_import_success">Yedekleme içe aktarıldı</string>
-    <string name="backup_file_not_found">Yedek dosyası bulunamadı</string>
-    <string name="backup_import_failed">Yedek dosyası okunamadı</string>
+    <string name="backup_file_not_found">NoNonsenseNotes_Backup.json adında yedek dosyası bulunamadı</string>
+    <string name="backup_import_failed">NoNonsenseNotes_Backup.json yedek dosyası okunamadı</string>
     <string name="backup_export_success">Yedek dışa aktarıldı</string>
     <string name="backup_export_failed">Yedek dosyasına yazılamıyor</string>
     <string name="sd_card">SD kart</string>
