@@ -1,0 +1,6 @@
+NoNonsense Notes v7.2.0
+
+Önemli noktalar:
+- Weblate kullanılarak çeviriler güncellendi
+- Android 15 (API 35) için resmi destek eklendi
+- "Not geçmişi" sayfasının düzeni değiştirildi

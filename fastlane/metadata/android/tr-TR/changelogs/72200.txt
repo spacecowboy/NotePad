@@ -1,0 +1,10 @@
+NoNonsense Notes v7.2.2
+
+Düzeltme:
+* Play Store desteklemediği için fastlane'den co dili silindi. Korsikaca, uygulamada dil olarak kullanılabilir.
+
+Ve v7.2.1'deki her şey
+* bağımlılıklar güncellendi
+* yeni diller eklendi
+* Weblate kullanılarak çeviriler güncellendi
+* içe aktarma hata mesajına gerekli yedekleme dosyası adı eklendi
