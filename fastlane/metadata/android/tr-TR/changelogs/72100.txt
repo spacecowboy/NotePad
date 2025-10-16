@@ -1,0 +1,7 @@
+NoNonsense Notes v7.2.1
+
+Önemli noktalar:
+- bağımlılıklar güncellendi
+- yeni diller eklendi
+- Weblate kullanılarak çeviriler güncellendi
+- içe aktarma hata mesajına gerekli yedekleme dosyası adı eklendi

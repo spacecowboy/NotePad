@@ -1,0 +1,8 @@
+NoNonsense Notes v7.2.3
+
+Önemli noktalar:
+- https://github.com/spacecowboy/NotePad/blob/master/documents/TUTORIAL.md adresindeki eğitim tamamlandı
+- Yeni Android sürümleri için kısayol widget'ı düzeltildi
+- Not listesi widget'ıyla ilgili hatalar düzeltildi
+- Android 16 için resmi destek eklendi
+- "Arama sonuçları" ve "arşivlenen notlar" görünümlerinde tarihlerin gösterilme şekli iyileştirildi

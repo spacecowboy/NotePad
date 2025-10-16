@@ -9,6 +9,7 @@ En son Android teknolojilerini kullanan açık kaynaklı not defteri ve yapılac
 * Görevleri yeniden sıralamak için sürükleme
 * Android Ajanda widget'ı ile bütünleşme
 * Arama
+* Emojileri etiket olarak kullanma 🏷️
 * Açık ve koyu temalar
 * Notları bir JSON dosyasına yedekleme (içe ve dışa aktarma)
 * Yerel depolama alanındaki bir ORG dosyası ile eşitleme
