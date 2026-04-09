@@ -1,2 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name_short">Нотатки</string>
+    <string name="timemachine">Машина часу</string>
+    <string name="time">Час</string>
+    <string name="done">Готово</string>
+    <string name="saved">Збережено</string>
+    <string name="menu_save_and_add">Зберегти й створити нову нотатку</string>
+    <string name="menu_delete">Видалити</string>
+    <string name="menu_deletelist">Видалити список</string>
+    <string name="menu_sync">Синхронізувати</string>
+    <string name="menu_share">Поділитися</string>
+    <string name="menu_preferences">Налаштування</string>
+    <string name="menu_createlist">Створити список</string>
+    <string name="menu_clearcompleted">Прибрати виконане</string>
+    <string name="menu_setdefaultlist">Зробити усталеним списком</string>
+    <string name="new_default_set">Нову категорію усталено</string>
+    <string name="menu_managelists">Редагування списків</string>
+    <string name="add_item">Додати запис</string>
+    <string name="delete_question">Видалити?</string>
+    <string name="delete_items_message">Видалити ці записи?</string>
+    <string name="delete_item_message">Видалити цей запис?</string>
+    <string name="delete_list_message">Видалити цей список?</string>
+    <string name="delete_completed_tasks_question">Видалити всі виконані справи?</string>
+</resources>
