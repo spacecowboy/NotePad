@@ -1,0 +1,6 @@
+NoNonsense Notes v7.1.9
+
+Sorotan:
+- Diterjemahkan menggunakan Weblate
+- memperbarui dependensi dan Gradle
+- memperbaiki bug yang menyebabkan catatan menghilang saat diurutkan berdasarkan tanggal, lihat #525

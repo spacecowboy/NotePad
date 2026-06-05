@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.1
+
+Sorotan:
+- Diterjemahkan menggunakan Weblate
+- menambahkan preferensi sinkronisasi global, dapat mencegah kode sinkronisasi berjalan sama sekali
+- mengubah izin
+- ikon pintasan kini terlihat di "simple launcher"
+- memblokir pengeditan pengingat catatan saat terkunci
+- memperbaiki bug yang menampilkan catatan kosong saat membagikan tautan
+
+Detail:
+- peningkatan kecil pada UI
+- menghapus kode yang tidak digunakan

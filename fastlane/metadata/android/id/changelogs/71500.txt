@@ -1,0 +1,5 @@
+NoNonsense Notes v7.1.5
+
+Sorotan:
+- Hotfix untuk publikasi Play Store
+- Memperbarui dependensi

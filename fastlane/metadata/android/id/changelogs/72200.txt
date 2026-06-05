@@ -1,0 +1,10 @@
+NoNonsense Notes v7.2.2
+
+Hotfix:
+* menghapus co dari fastlane karena Play Store tidak mendukungnya. Corsican tersedia sebagai bahasa di aplikasi
+
+Dan semua yang ada di v7.2.1
+* memperbarui dependensi
+* menambahkan bahasa baru
+* memperbarui terjemahan menggunakan Weblate
+* menambahkan nama file cadangan yang diwajibkan pada pesan kesalahan impor

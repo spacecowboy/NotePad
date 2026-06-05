@@ -1,19 +1,20 @@
-Open source notepad and to-do list app using the latest Android technologies.
+Aplikasi catatan dan daftar to-do open source yang menggunakan teknologi Android terbaru.
 
-* Dash clock support (yes, it still works)
-* Notifications: set reminders at a certain time, with optional repetition on certain weekdays
-* Language selection
-* Widget, with lockscreen support, resizeable and configurable
-* Password-protect important notes
-* Move tasks between different lists
-* Drag to reorder tasks
-* Integration with Android Agenda widget
-* Search
-* Light and dark themes
-* Back up (import and export) notes to a JSON file
-* Sync with an ORG file on the local storage
-* note history with all previous versions
-* recycle bin for deleted notes
+* Dukungan dash clock (ya, masih berfungsi)
+* Notifikasi: atur pengingat pada waktu tertentu, dengan pengulangan opsional pada hari kerja tertentu
+* Pemilihan bahasa
+* Widget, dengan dukungan layar kunci, dapat diubah ukurannya dan dikonfigurasi
+* Lindungi catatan penting dengan kata sandi
+* Pindahkan tugas antar daftar yang berbeda
+* Seret untuk mengurutkan ulang tugas
+* Integrasi dengan widget Agenda Android
+* Pencarian
+* Gunakan emoji sebagai tag 🏷️
+* Tema terang dan gelap
+* Cadangkan (impor dan ekspor) catatan ke file JSON
+* Sinkronkan dengan file ORG di penyimpanan lokal
+* Riwayat catatan dengan semua versi sebelumnya
+* Tempat sampah untuk catatan yang dihapus
 
-To improve this app, make a donation, or simply share ideas,
-come visit at https://github.com/spacecowboy/NotePad
+Untuk meningkatkan aplikasi ini, berdonasilah, atau sekadar berbagi ide,
+kunjungi https://github.com/spacecowboy/NotePad
