@@ -1,0 +1,9 @@
+NoNonsense Notes v7.2.6
+
+Sorotan:
+- menyelesaikan tutorial di https://github.com/spacecowboy/NotePad/blob/master/documents/TUTORIAL.md
+- memperbaiki widget pintasan untuk versi Android yang lebih baru
+- memperbaiki bug yang terkait dengan widget daftar catatan
+- menambahkan dukungan resmi untuk Android 16
+- meningkatkan cara tanggal ditampilkan pada tampilan "hasil pencarian" dan "catatan yang diarsipkan"
+- memperbarui infrastruktur build aplikasi
