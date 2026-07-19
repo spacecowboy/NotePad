@@ -8,3 +8,9 @@ Lo más destacado:
 - mostrar notas completadas en el widget
 - permitir la instalación de aplicaciones desde varias tiendas de aplicaciones simultáneamente
 - corregir error al ocultar las sugerencias de búsqueda
+
+Detalles:
+- se agregó la canalización de implementación de fastlane a la Play Store. La canalización solo
+   se ejecuta en etiquetas.
+- actualización de dependencias
+- limpieza de código

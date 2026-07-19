@@ -1,0 +1,9 @@
+NoNonsense Notes v7.2.6
+
+Resaltando:
+- finalizado el tutorial en https://github.com/spacecowboy/NotePad/blob/master/documents/TUTORIAL.md
+- resuelto el atajo de widget para versiones android más nuevas
+- corrigieron errores relacionados con el widget de lista de notas.
+- se agregó soporte oficial para Android 16
+- se mejoró la forma en que se muestran las fechas en las vistas de "resultados de búsqueda" y "notas archivadas".
+- actualizar la infraestructura de compilación de la aplicación

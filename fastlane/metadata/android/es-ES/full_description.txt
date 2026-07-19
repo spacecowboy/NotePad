@@ -9,6 +9,7 @@ Bloc de notas de código abierto y aplicación de lista de tareas utilizando las
 * Arrastrar para reordenar tareas
 * Integración con el widget Agenda de Android
 * Búsqueda
+* Uso de emojis como etiquetas 🏷️
 * Temas claros y oscuros
 * Copia de seguridad (importación y exportación) de notas a un archivo JSON
 * Sincronización con un archivo ORG en el almacenamiento local
