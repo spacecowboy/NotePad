@@ -236,7 +236,7 @@
     <string name="backup_import_msg">¿Intentar importar la copia de seguridad de %1$s? Esto borrará la base de datos actual.</string>
     <string name="backup_export_msg">¿Exportar todas las notas a %1$s?</string>
     <string name="backup_import_success">Copia de seguridad importada</string>
-    <string name="backup_file_not_found">No se ha podido encontrar el archivo de la copia de seguridad</string>
+    <string name="backup_file_not_found">No se pudo encontrar un archivo de respaldo con el nombre NoNonsenseNotes_Backup.json</string>
     <string name="backup_export_success">Copia de seguridad exportada</string>
     <string name="directory_summary_msg">Los archivos se guardan en %s
 \na los que puedes acceder con tu aplicación de gestión de archivos. Al desinstalar la aplicación también se eliminarán estos archivos: para conservar tus notas, haz una copia de seguridad</string>
@@ -265,5 +265,5 @@
     <string name="app_about_bugreports">Informe de errores y problemas en https://github.com/spacecowboy/NotePad/issues</string>
     <string name="app_about_translations">Ayuda a traducir la aplicación en https://hosted.weblate.org/engage/no-nonsense-notes/</string>
     <string name="disable_android_hibernation_desc">Es una característica que hace que la aplicación sea menos fiable. Puede bloquear tus recordatorios. Ábrelo, busca algo como «suspender la actividad de la aplicación si no se utiliza» y desactívalo</string>
-    <string name="backup_import_failed">No se ha podido leer el archivo de la copia de seguridad</string>
+    <string name="backup_import_failed">No se ha podido leer el respaldo NoNonsenseNotes_Backup.json</string>
 </resources>
