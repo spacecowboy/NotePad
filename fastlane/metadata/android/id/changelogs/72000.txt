@@ -1,0 +1,6 @@
+NoNonsense Notes v7.2.0
+
+Sorotan:
+- Memperbarui terjemahan menggunakan Weblate
+- Menambahkan dukungan resmi untuk Android 15 (API 35)
+- Menyesuaikan tata letak halaman "riwayat catatan"

@@ -1,0 +1,10 @@
+NoNonsense Notes v7.1.3
+
+Sorotan:
+- Diterjemahkan menggunakan Weblate
+- menambahkan tutorial online
+- berhenti meminta akses akun Google
+
+Detail:
+- penyesuaian UI
+- pembersihan kode

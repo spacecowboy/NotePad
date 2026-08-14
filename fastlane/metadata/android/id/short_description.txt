@@ -1,1 +1,1 @@
-Aplikasi notepad dan daftar tugas yang sederhana dengan navigasi yang luar biasa
+Aplikasi catatan dan to-do sederhana dengan navigasi yang sangat baik

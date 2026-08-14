@@ -1,0 +1,13 @@
+v7.0.0: NoNonsense Notes
+
+Sorotan:
+- kini kompatibel dengan Android 12
+- menghentikan sinkronisasi Google Tasks
+- file ORG dan JSON kini dapat disimpan di beberapa lokasi yang dipilih. Anda dapat memilihnya.
+
+Detail:
+- menaikkan target SDK ke versi 32
+- meningkatkan pustaka AndroidX
+- memperbaiki semua pengujian
+- meningkatkan dependensi dan Gradle
+- pembersihan kode umum

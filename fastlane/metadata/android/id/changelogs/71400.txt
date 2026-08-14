@@ -1,0 +1,15 @@
+NoNonsense Notes v7.1.4
+
+Sorotan:
+- memperbarui terjemahan
+- menampilkan animasi hanya jika diaktifkan di pengaturan sistem #501
+- memperbaiki bug yang menyebabkan pengingat yang ditunda muncul kembali
+- menyembunyikan status selesai pada notifikasi untuk tipe catatan, memperbaiki #312
+- menampilkan catatan yang selesai pada widget
+- memungkinkan pemasangan aplikasi dari banyak app store secara bersamaan
+- memperbaiki bug yang menyembunyikan saran pencarian
+
+Detail:
+- menambahkan pipeline deployment fastlane ke Play Store. Pipeline hanya berjalan pada tag
+- memperbarui dependensi
+- pembersihan kode

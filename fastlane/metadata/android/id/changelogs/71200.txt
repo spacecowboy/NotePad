@@ -1,0 +1,13 @@
+NoNonsense Notes v7.1.2
+
+Sorotan:
+- Diterjemahkan menggunakan Weblate
+- pencarian suara berfungsi lagi
+- lebih banyak format tanggal untuk dipilih
+- menampilkan "bulan depan" dan tahun saat tugas diurutkan berdasarkan tanggal
+- mendukung android auto backup
+
+Detail:
+- penyesuaian UI untuk dialog
+- perbaikan bug
+- menghapus semua kode Google Tasks yang usang, ini seharusnya menyembunyikan dialog akun Google yang mengganggu

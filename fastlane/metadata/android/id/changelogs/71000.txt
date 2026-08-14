@@ -1,0 +1,11 @@
+NoNonsense Notes v7.1.0
+
+Sorotan:
+- Pemilih file yang ditingkatkan untuk file cadangan
+- Memindahkan file ORG ke folder default
+- Memperbarui terjemahan menggunakan Weblate
+- Memperbaiki bug yang menggandakan pengingat saat membuka kembali catatan
+
+Detail:
+- Target Android 13
+- Penyesuaian UI

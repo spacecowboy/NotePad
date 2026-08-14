@@ -1,0 +1,8 @@
+NoNonsense Notes v7.1.6
+
+Sorotan:
+- Diterjemahkan menggunakan Weblate
+- Memperbaiki app ID untuk F-Droid
+
+Detail:
+- memperbarui Gradle

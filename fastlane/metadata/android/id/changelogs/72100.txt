@@ -1,0 +1,7 @@
+NoNonsense Notes v7.2.1
+
+Sorotan:
+- memperbarui dependensi
+- menambahkan bahasa baru
+- memperbarui terjemahan menggunakan Weblate
+- menambahkan nama file cadangan yang diwajibkan pada pesan kesalahan impor

@@ -1,0 +1,9 @@
+NoNonsense Notes v7.1.8
+
+Sorotan:
+- Memperbarui terjemahan menggunakan Weblate
+- Memperbarui dependensi dan build tools
+- Mengubah ukuran teks pada beberapa elemen UI agar tidak terpotong
+- Memperbarui infrastruktur pengujian otomatis
+- Peningkatan stabilitas umum
+- Memperbaiki #509 sehingga kini pengingat berulang dapat menangani perpindahan antara DST dan ST saat dijadwalkan ulang

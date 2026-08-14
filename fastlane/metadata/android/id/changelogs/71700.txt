@@ -1,0 +1,12 @@
+NoNonsense Notes v7.1.7
+
+Sorotan:
+- Diterjemahkan menggunakan Weblate
+- memperbarui aplikasi dan pustaka agar menargetkan Android 14
+- menampilkan animasi aplikasi hanya jika diaktifkan di pengaturan sistem
+- membuat baris menu drawer lebih ringkas
+
+Detail:
+- Menggunakan Java 17 di GitHub Actions
+- perbaikan bug dan peningkatan stabilitas
+- meningkatkan stabilitas pengujian
