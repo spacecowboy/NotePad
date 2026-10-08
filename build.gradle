@@ -25,6 +25,7 @@ buildscript {
     }
     dependencies {
         // we can't compile on newer versions of Gradle because of the AndroidAnnotations library
+        //noinspection AndroidGradlePluginVersion
         classpath 'com.android.tools.build:gradle:8.13.2'
         // no kotlin: this is an old project, it's easier to keep java
         // classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
