@@ -1,0 +1,5 @@
+NoNonsense Notes v7.2.7
+
+Highlights:
+* updated translations using Weblate
+* updated build tools and dependencies
