@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     namespace = "com.nononsenseapps.notepad.providercontract" // for R.*
-    compileSdk = 36
+    compileSdk = 36.1
 
     defaultConfig {
         minSdkVersion 23
@@ -30,6 +30,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.annotation:annotation:1.10.0'
+    implementation 'androidx.annotation:annotation:1.11.0'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
 }

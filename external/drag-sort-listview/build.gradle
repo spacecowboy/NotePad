@@ -22,7 +22,7 @@ tasks.withType(Javadoc).configureEach {
 }
 
 android {
-    compileSdk = 36
+    compileSdk = 36.1
     namespace = "com.mobeta.android.dslv"
 
     defaultConfig {
