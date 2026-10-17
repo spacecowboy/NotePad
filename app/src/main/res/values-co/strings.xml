@@ -73,7 +73,7 @@
     <string name="import_error">Un sbagliu hè accadutu : %s</string>
     <string name="notification_channel_name">Ramenti per e note</string>
     <string name="notification_channel_description">Affissà u cuntenutu di a nota à u mumentu di u ramentu sceltu</string>
-    <string name="feature_is_WIP">Sta funzione hè in corsu di sviluppu</string>
+    <string name="feature_is_WIP">Sta funzione hè in corsu di sviluppu.</string>
     <string name="permission_denied">Ùn si pò cuntinuà : avete ricusatu u permessu</string>
     <string name="no_sync_method_chosen">Ùn avete sceltu una metoda di sincrunizazione</string>
     <string name="file_picker_not_available">U selettore di schedariu ùn hè micca dispunibule</string>

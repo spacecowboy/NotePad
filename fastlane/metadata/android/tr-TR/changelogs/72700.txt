@@ -1,0 +1,5 @@
+NoNonsense Notes v7.2.7
+
+Önemli noktalar:
+* Weblate kullanılarak çeviriler güncellendi
+* derleme araçları ve bağımlılıkları güncellendi

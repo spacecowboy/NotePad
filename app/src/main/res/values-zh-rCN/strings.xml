@@ -27,17 +27,17 @@
     <string name="menu_sync">同步</string>
     <string name="menu_share">分享</string>
     <string name="menu_preferences">设置</string>
-    <string name="menu_createlist">开始新列表</string>
+    <string name="menu_createlist">创建新列表</string>
     <string name="menu_clearcompleted">清除已完成</string>
     <string name="menu_setdefaultlist">设为默认列表</string>
     <string name="new_default_set">新默认设置</string>
     <string name="menu_managelists">编辑列表</string>
     <string name="add_item">添加项目</string>
-    <string name="delete_question">删除？</string>
-    <string name="delete_items_message">删除这些项目？</string>
-    <string name="delete_item_message">删除此项目？</string>
-    <string name="delete_list_message">删除此列表？</string>
-    <string name="editor_due_date_hint">到期日</string>
+    <string name="delete_question">是否删除？</string>
+    <string name="delete_items_message">是否删除这些项目？</string>
+    <string name="delete_item_message">是否删除此项目？</string>
+    <string name="delete_list_message">是否删除此列表？</string>
+    <string name="editor_due_date_hint">截止日期</string>
     <string name="editor_title_hint">标题</string>
     <string name="editor_note_hint">笔记</string>
     <string name="resolve_edit">编辑笔记</string>
@@ -46,7 +46,7 @@
     <string name="show_items_as_notes">简单笔记</string>
     <string name="sort_list_default">默认排序方式</string>
     <string name="sort_list_alphabetical">A-Z</string>
-    <string name="sort_list_due">到期日</string>
+    <string name="sort_list_due">截止日期</string>
     <string name="sort_list_updated">最近更新</string>
     <string name="sort_list_manual">手动</string>
     <string name="search_description">笔记与任务</string>
@@ -55,7 +55,7 @@
     <string name="restore_to">还原至</string>
     <string name="search_hint">搜索</string>
     <string name="settings_theme">当前主题</string>
-    <string name="settings_theme_dialog">使用主题</string>
+    <string name="settings_theme_dialog">选择主题</string>
     <string name="settings_lang">语言</string>
     <string name="settings_summary_theme_black">黑色</string>
     <string name="settings_summary_theme_dark">深色</string>
@@ -65,7 +65,7 @@
     <string name="preference_preview_text">这是编辑器文本的显示方式</string>
     <string name="settings_account_title">选择账号</string>
     <string name="settings_account_summary">点击切换账号</string>
-    <string name="settings_cat_syncing">正在同步</string>
+    <string name="settings_cat_syncing">同步</string>
     <string name="show_from_all_lists">所有列表</string>
     <string name="lists">列表</string>
     <string name="deleted">已删除</string>
@@ -121,7 +121,7 @@
     <string name="hide_checkbox">隐藏复选框</string>
     <string name="hide_checkbox_summary_on">复选框已隐藏</string>
     <string name="hide_checkbox_summary_off">复选框已显示</string>
-    <string name="hide_date">隐藏到期日</string>
+    <string name="hide_date">隐藏截止日期</string>
     <string name="item_max_height">笔记/任务的最大高度（行）</string>
     <string name="long_date_format">长日期格式，面板</string>
     <string name="short_date_format">短日期格式，列表</string>
@@ -170,14 +170,14 @@
     <string name="dashclock_next7">未来 7 天</string>
     <string name="dashclock_anytime">所有时间</string>
     <string name="dashclock_will_show_as_many_as_possible">显示尽可能多的内容</string>
-    <string name="dashclock_show_only_the_next_task">仅显示下一任务</string>
+    <string name="dashclock_show_only_the_next_task">仅显示下一个任务</string>
     <string name="dashclock_header_shown">加粗列表名</string>
     <string name="dashclock_first_task_shown">加粗第一个任务的标题</string>
     <string name="dashclock_display_header">显示列表名</string>
     <string name="editor">编辑</string>
     <string name="bold">加粗</string>
     <string name="italic">倾斜</string>
-    <string name="normal">正常</string>
+    <string name="normal">常规</string>
     <string name="title_style">标题样式</string>
     <string name="title_font">标题字体</string>
     <string name="body_font">正文字体</string>
@@ -258,12 +258,12 @@
     <string name="sorting">排序</string>
     <string name="undo">撤销</string>
     <string name="enable_sync">启用同步</string>
-    <string name="changelog_online">变更日志（在线）</string>
+    <string name="changelog_online">更新日志（在线）</string>
     <string name="order_notes_by">笔记顺序：</string>
     <string name="canceled_note_locked">已取消：笔记已锁定</string>
     <string name="directory_summary_msg">文件保存在 %s
 \n您可以使用文件管理器访问。卸载应用也会删除这些文件：要保存笔记，请备份</string>
-    <string name="delete_completed_tasks_question">删除所有已完成的任务？</string>
+    <string name="delete_completed_tasks_question">是否删除所有已完成的任务？</string>
     <string name="navigation_drawer_open">打开导航抽屉</string>
     <string name="navigation_drawer_close">关闭导航抽屉</string>
 </resources>
